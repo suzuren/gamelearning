@@ -2,7 +2,7 @@
 root_dir=$(cd `dirname $0`; pwd)
 # echo "root_dir:" ${root_dir}
 
-clean_dir=("helloworld" "./MultiplayerBook/")
+clean_dir=("helloworld" "./MultiplayerBook/" "./3rd/templog/")
 
 clean_len=${#clean_dir[@]}
 

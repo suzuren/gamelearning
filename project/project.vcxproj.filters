@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="3rd">
+      <UniqueIdentifier>{bee86181-f91c-48d3-a382-abfbd33e8cfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GeneralHashFunctions_-_C">
+      <UniqueIdentifier>{942a930f-8fe8-49b6-bf16-5557d7c5843a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GeneralHashFunctions_-_CPP">
+      <UniqueIdentifier>{699f1859-a6c5-4c2c-aa0f-b58284af368f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="helloworld">
+      <UniqueIdentifier>{accab2d9-0709-4b1c-8e72-383b88c1acc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{d9416bb7-f93c-4efa-8ef2-4ed25c6383a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MultiplayerBook">
+      <UniqueIdentifier>{e63c1455-1dd0-4227-83e9-d18e934594b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="proxy_epoll">
+      <UniqueIdentifier>{b0fe6c19-9fa0-4bef-ae22-ff7966259252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="referlib">
+      <UniqueIdentifier>{e2a61e81-21ee-45fb-859f-cc8b6a125dfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\templog">
+      <UniqueIdentifier>{ff49d082-a9c2-4af9-968e-a45e6a31da78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\templog\imp">
+      <UniqueIdentifier>{aa9e40a6-048a-460f-bfe4-5c1c1b0e4dc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\templog\test">
+      <UniqueIdentifier>{3f9bf5f7-713a-4cbd-93d2-b66c466a0c61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="proxy_epoll\subproxy">
+      <UniqueIdentifier>{5feadeea-a5f0-4f8b-94e0-ebfede7711f9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\3rd\templog\config.h">
+      <Filter>3rd\templog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\templog\logging.h">
+      <Filter>3rd\templog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\templog\templ_meta.h">
+      <Filter>3rd\templog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\templog\tuples.h">
+      <Filter>3rd\templog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\templog\type_lists.h">
+      <Filter>3rd\templog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.h">
+      <Filter>GeneralHashFunctions_-_C</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.h">
+      <Filter>GeneralHashFunctions_-_CPP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MultiplayerBook\ByteSwap.h">
+      <Filter>MultiplayerBook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MultiplayerBook\LinkingContext.h">
+      <Filter>MultiplayerBook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h">
+      <Filter>MultiplayerBook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MultiplayerBook\RoboMath.h">
+      <Filter>MultiplayerBook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\proxy_epoll\proxy_epoll.h">
+      <Filter>proxy_epoll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\referlib\barrier.h">
+      <Filter>referlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\referlib\eventmanager.h">
+      <Filter>referlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\referlib\future.h">
+      <Filter>referlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\referlib\iobuffer.h">
+      <Filter>referlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\referlib\notification.h">
+      <Filter>referlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\referlib\tcp.h">
+      <Filter>referlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\3rd\templog\doxygen.conf">
+      <Filter>3rd\templog</Filter>
+    </None>
+    <None Include="..\3rd\templog\makefile">
+      <Filter>3rd\templog</Filter>
+    </None>
+    <None Include="..\GeneralHashFunctions_-_C\Makefile">
+      <Filter>GeneralHashFunctions_-_C</Filter>
+    </None>
+    <None Include="..\GeneralHashFunctions_-_CPP\Makefile">
+      <Filter>GeneralHashFunctions_-_CPP</Filter>
+    </None>
+    <None Include="..\helloworld\Makefile">
+      <Filter>helloworld</Filter>
+    </None>
+    <None Include="..\lua\helloworld.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\MultiplayerBook\Makefile">
+      <Filter>MultiplayerBook</Filter>
+    </None>
+    <None Include="..\proxy_epoll\Makefile">
+      <Filter>proxy_epoll</Filter>
+    </None>
+    <None Include="..\proxy_epoll\Readme.md">
+      <Filter>proxy_epoll</Filter>
+    </None>
+    <None Include="..\proxy_epoll\start_proxy.sh">
+      <Filter>proxy_epoll</Filter>
+    </None>
+    <None Include="..\proxy_epoll\stop_proxy.sh">
+      <Filter>proxy_epoll</Filter>
+    </None>
+    <None Include="..\proxy_epoll\subproxy\start_proxy.sh">
+      <Filter>proxy_epoll\subproxy</Filter>
+    </None>
+    <None Include="..\proxy_epoll\subproxy\stop_proxy.sh">
+      <Filter>proxy_epoll\subproxy</Filter>
+    </None>
+    <None Include="..\referlib\Makefile">
+      <Filter>referlib</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\3rd\templog\imp\logging.cpp">
+      <Filter>3rd\templog\imp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\templog\test\test_logging.cpp">
+      <Filter>3rd\templog\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.c">
+      <Filter>GeneralHashFunctions_-_C</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GeneralHashFunctions_-_C\HashTest.c">
+      <Filter>GeneralHashFunctions_-_C</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.cpp">
+      <Filter>GeneralHashFunctions_-_CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GeneralHashFunctions_-_CPP\HashTest.cpp">
+      <Filter>GeneralHashFunctions_-_CPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\helloworld\helloworld.cpp">
+      <Filter>helloworld</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MultiplayerBook\Main.cpp">
+      <Filter>MultiplayerBook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp">
+      <Filter>MultiplayerBook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\proxy_epoll\proxy_epoll.c">
+      <Filter>proxy_epoll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\eventmanager.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\tcp.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\eventmanager_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\future_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\iobuffer_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\tcp_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\referlib\readme.txt">
+      <Filter>referlib</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

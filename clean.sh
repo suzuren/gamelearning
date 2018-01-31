@@ -2,7 +2,11 @@
 root_dir=$(cd `dirname $0`; pwd)
 # echo "root_dir:" ${root_dir}
 
-clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_CPP" "helloworld" "./MultiplayerBook/" "proxy_epoll")
+echo ""
+echo `pwd`
+rm -rf ./project/Debug/ ./project/x64/ ./project/.vs ./project/project.opensdf ./project/project.sdf
+
+clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_CPP" "helloworld" "./MultiplayerBook/" "proxy_epoll" "referlib")
 
 clean_len=${#clean_dir[@]}
 

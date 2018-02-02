@@ -1,30 +1,30 @@
 /*
- Copyright (c) 2011 Aaron Drew
- All rights reserved.
+Copyright (c) 2011 Aaron Drew
+All rights reserved.
 
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
- 3. Neither the name of the copyright holders nor the names of its
-    contributors may be used to endorse or promote products derived from
-    this software without specific prior written permission.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holders nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
 
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- THE POSSIBILITY OF SUCH DAMAGE.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
 */
 //#include "gtest/gtest.h"
 
@@ -52,9 +52,7 @@ using namespace std::tr1::placeholders;
 #include <stdio.h>
 #include <assert.h>
 
-
-
-shared_ptr<TcpListenSocket> createListenSocket(	EventManager *em, int &port)
+shared_ptr<TcpListenSocket> createListenSocket(EventManager *em, int &port)
 {
 	shared_ptr<TcpListenSocket> s;
 	while (!s)
@@ -63,43 +61,6 @@ shared_ptr<TcpListenSocket> createListenSocket(	EventManager *em, int &port)
 		s = TcpListenSocket::create(em, port);
 	}
 	return s;
-}
-
-// Code coverage - test basic creation and listening functionality.
-void TEST_TCPTest_ListenTest()
-{
-	EventManager em;
-	em.start(4);
-	int port = 0;
-	shared_ptr<TcpListenSocket> s = createListenSocket(&em, port);
-	assert(s != NULL);
-}
-
-// Code coverage - test connect and failed connect code paths.
-void TEST_TCPTest_ListenConnectTest()
-{
-	EventManager em;
-	em.start(4);
-
-	int port = 0;
-	shared_ptr<TcpListenSocket> s = createListenSocket(&em, port);
-	// TODO(aarond10): Add TcpListenSocket::start() to avoid a race issue?
-	shared_ptr<TcpSocket> c = TcpSocket::connect(&em, "127.0.0.1", port);
-	assert(s);
-	assert(c);
-
-	// Expect this to fail and return NULL. On occasions we will hit a port in 
-	// use so we try a few times before failing
-	bool found = false;
-	for (int i = 1; i < 4 && !found; i++)
-	{
-		shared_ptr<TcpSocket> c2 = TcpSocket::connect(&em, "127.0.0.1", port + i);
-		if (c2 != NULL)
-		{
-			found = true;
-		}
-	}
-	assert(found);
 }
 
 void receiveChecker(Notification *n, string expected, IOBuffer *data)
@@ -123,6 +84,7 @@ void acceptHandler(Notification *n, string expected, shared_ptr<TcpSocket> *ps, 
 	s->setReceiveCallback(std::tr1::bind(&receiveChecker, n, expected, _1));
 	s->start();
 }
+
 
 // Code coverage - tests we can accept data from a newly connected client
 void TEST_TCPTest_ListenConnectSendDataTest()
@@ -154,6 +116,45 @@ void TEST_TCPTest_ListenConnectSendDataTest()
 
 	c->disconnect();
 	ps->disconnect();
+}
+
+void OnConnect(EventManager & em, shared_ptr<TcpSocket> & c)
+{
+	em.start(1);
+	int port = 96587;
+	c = TcpSocket::connect(&em, "127.0.0.1", port);
+	assert(c != NULL);
+	c->start();
+
+}
+
+// Code coverage - tests we can accept data from a newly connected client
+void OnSendData(EventManager em,shared_ptr<TcpSocket> c)
+{
+	EventManager::WallTime t = EventManager::currentTime();
+
+	static int iCount = 0;
+
+	char buf[128] = { 0 };
+
+	sprintf(buf,"%5d - some test data",iCount++);
+	if (iCount == 99999)
+	{
+		iCount = 0;
+	}
+
+	const char *data = buf;
+	uint64_t size = strlen(buf);
+
+	Notification n;
+
+
+	assert(!n.tryWait(t + 0.001));
+	c->write(new IOBuffer((char *)&size, sizeof(size)));
+	assert(!n.tryWait(t + 0.002));
+	c->write(new IOBuffer(data, size));
+	assert(n.tryWait(t + 10.0));
+
 }
 
 void disconnectChecker(Notification *n)
@@ -291,37 +292,27 @@ void TEST_TCPTest_WriteAfterDisconnect()
 	t->write(new IOBuffer(data, sizeof(data)));
 }
 
-
-
-
-// TODO: Order of operations - disconnect after disconnect
-// TODO: Order of operations - start after disconnect
-// TODO: Order of operations - disconnect from receive handler
-// TODO: Order of operations - write from receive handler
-// TODO: Destruction - destroy while receiving
-// TODO: Destruction - destroy before start
-// TODO: Destruction - destroy before disconnect
-// TODO: Destruction - destroy after disconnect
-
-
-
 int main(int argc, const char** argv)
 {
-	printf("hello world! tcp_test.cc\n");
+	printf("hello world! client.cc\n");
 
-	TEST_TCPTest_ListenTest();
 
-	TEST_TCPTest_ListenConnectTest();
+	//Á´½Ó
+	EventManager em;
+	shared_ptr<TcpSocket> c;
+	OnConnect(em, c);
 
-	TEST_TCPTest_ListenConnectSendDataTest();
+	Notification n;
+	EventManager::WallTime t = EventManager::currentTime();
 
-	TEST_TCPTest_ListenConnectDisconnectTest();
+	while (true)
+	{
+		assert(!n.tryWait(t + 0.001));
+		//·¢ËÍ
+		sleep(128);
+		OnSendData(em, c);
 
-	TEST_TCPTest_WriteBeforeStartedClient();
-
-	TEST_TCPTest_FillWriteBuffer();
-
-	TEST_TCPTest_WriteAfterDisconnect();
+	}
 
 	return 0;
 }

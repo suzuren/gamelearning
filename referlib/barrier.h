@@ -48,50 +48,59 @@ using std::tr1::function;
  * a std::tr1::function<void()> a fixed number of times before triggering
  * a callback and destroying itself.
  */
-class Barrier {
- private:
-  pthread_mutex_t _mutex;
-  int _n;
-  function<void()> _callback;
+class Barrier
+{
+private:
+	pthread_mutex_t _mutex;
+	int _n;
+	function<void()> _callback;
 
- public:
-  Barrier(int n, function<void()> callback)
-      : _n(n), _callback(callback) {
-    pthread_mutex_init(&_mutex, 0);
-  }
-  virtual ~Barrier() {
-    pthread_mutex_destroy(&_mutex);
-  }
+public:
+	Barrier(int n, function<void()> callback): _n(n), _callback(callback)
+	{
+		pthread_mutex_init(&_mutex, 0);
+	}
+	virtual ~Barrier()
+	{
+		pthread_mutex_destroy(&_mutex);
+	}
 
-  function<void()> callback() {
-    return bind(&Barrier::signal, this);
-  }
-  /*operator function<void()>() {
-    return bind(&Barrier::signal, this);
-  }*/
+	function<void()> callback()
+	{
+		return bind(&Barrier::signal, this);
+	}
+	/*operator function<void()>() {
+	  return bind(&Barrier::signal, this);
+	}*/
 
- private:
+private:
 
-  void signal() {
-    pthread_mutex_lock(&_mutex);
-    --_n;
-    if (_n > 0) {
-      pthread_mutex_unlock(&_mutex);
+	void signal()
+	{
+		pthread_mutex_lock(&_mutex);
+		--_n;
+		if (_n > 0)
+		{
+			pthread_mutex_unlock(&_mutex);
 #ifdef NDEBUG
-    } else if(_n < 0) {
-      DLOG(ERROR) << "Barrier " << this << " called too many times (" << _n << ").";
+		}
+		else if (_n < 0)
+		{
+			DLOG(ERROR) << "Barrier " << this << " called too many times (" << _n << ").";
 #endif
-    } else {
-      pthread_mutex_unlock(&_mutex);
-      _callback();
-      delete this;
-    }
-  }
+		}
+		else
+		{
+			pthread_mutex_unlock(&_mutex);
+			_callback();
+			delete this;
+		}
+	}
 
- private:
+private:
 
-  Barrier(const Barrier& b); // No copying
-  Barrier& operator=(const Barrier& b); // No copying
+	Barrier(const Barrier& b); // No copying
+	Barrier& operator=(const Barrier& b); // No copying
 };
 
 }

@@ -1,30 +1,30 @@
 /*
- Copyright (c) 2011 Aaron Drew
- All rights reserved.
+Copyright (c) 2011 Aaron Drew
+All rights reserved.
 
- Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions
- are met:
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
- 3. Neither the name of the copyright holders nor the names of its
-    contributors may be used to endorse or promote products derived from
-    this software without specific prior written permission.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+3. Neither the name of the copyright holders nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
 
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- THE POSSIBILITY OF SUCH DAMAGE.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
 */
 //#include "gtest/gtest.h"
 
@@ -54,7 +54,7 @@ using namespace std::tr1::placeholders;
 
 
 
-shared_ptr<TcpListenSocket> createListenSocket(	EventManager *em, int &port)
+shared_ptr<TcpListenSocket> createListenSocket(EventManager *em, int &port)
 {
 	shared_ptr<TcpListenSocket> s;
 	while (!s)
@@ -154,6 +154,19 @@ void TEST_TCPTest_ListenConnectSendDataTest()
 
 	c->disconnect();
 	ps->disconnect();
+}
+
+void OnListen(EventManager & em,shared_ptr<TcpListenSocket> & s,shared_ptr<TcpSocket> & ps)
+{
+	em.start(1);
+
+	int port = 96587;
+	s = createListenSocket(&em, port);
+	const char *data = "some test data";
+
+	Notification n;
+	s->setAcceptCallback(std::tr1::bind(&acceptHandler, &n, string(data), &ps, _1));
+
 }
 
 void disconnectChecker(Notification *n)
@@ -307,21 +320,25 @@ void TEST_TCPTest_WriteAfterDisconnect()
 
 int main(int argc, const char** argv)
 {
-	printf("hello world! tcp_test.cc\n");
+	printf("hello world! server.cc\n");
 
-	TEST_TCPTest_ListenTest();
+	//Á´½Ó
+	EventManager em;
+	shared_ptr<TcpListenSocket> s;
+	shared_ptr<TcpSocket> ps;
 
-	TEST_TCPTest_ListenConnectTest();
+	OnListen(em, s, ps);
 
-	TEST_TCPTest_ListenConnectSendDataTest();
 
-	TEST_TCPTest_ListenConnectDisconnectTest();
+	Notification n;
+	EventManager::WallTime t = EventManager::currentTime();
 
-	TEST_TCPTest_WriteBeforeStartedClient();
-
-	TEST_TCPTest_FillWriteBuffer();
-
-	TEST_TCPTest_WriteAfterDisconnect();
+	while (true)
+	{
+		assert(!n.tryWait(t + 0.001));
+		//·¢ËÍ
+		sleep(128);
+	}
 
 	return 0;
 }

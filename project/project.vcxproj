@@ -65,10 +65,12 @@
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
+    <ClCompile Include="..\referlib\client.cc" />
     <ClCompile Include="..\referlib\eventmanager.cc" />
     <ClCompile Include="..\referlib\eventmanager_test.cc" />
     <ClCompile Include="..\referlib\future_test.cc" />
     <ClCompile Include="..\referlib\iobuffer_test.cc" />
+    <ClCompile Include="..\referlib\server.cc" />
     <ClCompile Include="..\referlib\tcp.cc" />
     <ClCompile Include="..\referlib\tcp_test.cc" />
   </ItemGroup>

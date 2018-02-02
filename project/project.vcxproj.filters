@@ -187,6 +187,12 @@
     <ClCompile Include="..\referlib\tcp_test.cc">
       <Filter>referlib</Filter>
     </ClCompile>
+    <ClCompile Include="..\referlib\client.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\server.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\referlib\readme.txt">

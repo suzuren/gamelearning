@@ -1,10 +1,10 @@
 CPPFLAGS = -O3
-LDFLAGS = -lpthread -lstdc++
+LDFLAGS = -lpthread -lstdc++ -std=c++11
 
-all: iobuffer_test eventmanager_test future_test tcp_test lib include
+all: iobuffer_test eventmanager_test future_test tcp_test client server lib include
 
 clean:
-	rm -f *.o eventmanager_test future_test iobuffer_test tcp_test 
+	rm -f *.o eventmanager_test future_test iobuffer_test tcp_test client server
 	rm -rf lib include
 
 eventmanager_test: eventmanager.o eventmanager_test.o
@@ -17,6 +17,12 @@ iobuffer_test: iobuffer_test.o
 	g++ -o $@ $^ $(LDFLAGS)
 
 tcp_test: eventmanager.o tcp.o tcp_test.o
+	g++ -o $@ $^ $(LDFLAGS)
+
+client: eventmanager.o tcp.o client.o
+	g++ -o $@ $^ $(LDFLAGS)
+
+server: eventmanager.o tcp.o server.o
 	g++ -o $@ $^ $(LDFLAGS)
 
 .PHONY: lib

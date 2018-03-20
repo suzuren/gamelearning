@@ -161,7 +161,11 @@ void OnListen(EventManager & em,shared_ptr<TcpListenSocket> & s,shared_ptr<TcpSo
 	em.start(1);
 
 	int port = 96587;
-	s = createListenSocket(&em, port);
+
+	while (!s)
+	{
+		s = TcpListenSocket::create(&em, port);
+	}
 	const char *data = "some test data";
 
 	Notification n;
@@ -333,12 +337,15 @@ int main(int argc, const char** argv)
 	Notification n;
 	EventManager::WallTime t = EventManager::currentTime();
 
+	printf("start run ...\n");
+	//printf("s:%p,ps:%p",s, ps);
 	while (true)
 	{
 		assert(!n.tryWait(t + 0.001));
 		//·¢ËÍ
 		sleep(128);
 	}
+	em.start(1);
 
 	return 0;
 }

@@ -37,6 +37,9 @@
     <Filter Include="proxy_epoll\subproxy">
       <UniqueIdentifier>{5feadeea-a5f0-4f8b-94e0-ebfede7711f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{a8209389-5ac8-49d1-94a7-d19364837e3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -137,6 +140,10 @@
     <None Include="..\referlib\Makefile">
       <Filter>referlib</Filter>
     </None>
+    <None Include="..\test\Makefile">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\clean.sh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -192,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="..\referlib\server.cc">
       <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\helloworld.cpp">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

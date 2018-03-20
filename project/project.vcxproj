@@ -41,6 +41,7 @@
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf" />
     <None Include="..\3rd\templog\makefile" />
+    <None Include="..\clean.sh" />
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
@@ -53,6 +54,7 @@
     <None Include="..\proxy_epoll\subproxy\start_proxy.sh" />
     <None Include="..\proxy_epoll\subproxy\stop_proxy.sh" />
     <None Include="..\referlib\Makefile" />
+    <None Include="..\test\Makefile" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
@@ -73,6 +75,7 @@
     <ClCompile Include="..\referlib\server.cc" />
     <ClCompile Include="..\referlib\tcp.cc" />
     <ClCompile Include="..\referlib\tcp_test.cc" />
+    <ClCompile Include="..\test\helloworld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\referlib\readme.txt" />

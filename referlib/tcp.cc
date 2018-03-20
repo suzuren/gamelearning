@@ -83,22 +83,21 @@ namespace epoll_threadpool {
 		pthread_mutex_lock(&_mutex);
 		if (!_isStarted) {
 			_isStarted = true;
-			if (_fd > 0) {
-				_em->watchFd(_fd, EventManager::EM_READ,
-					bind(&TcpSocket::Internal::onReceive, shared_from_this()));
-				_em->watchFd(_fd, EventManager::EM_WRITE,
-					bind(&TcpSocket::Internal::onCanSend, shared_from_this()));
+			if (_fd > 0)
+			{
+				_em->watchFd(_fd, EventManager::EM_READ,bind(&TcpSocket::Internal::onReceive, shared_from_this()));
+				_em->watchFd(_fd, EventManager::EM_WRITE,bind(&TcpSocket::Internal::onCanSend, shared_from_this()));
 
 				// We trigger the receive handler to handle the case where we got
 				// disconnected before start() completed.
-				_em->enqueue(
-					bind(&TcpSocket::Internal::onReceive, shared_from_this()));
-				_em->enqueue(
-					bind(&TcpSocket::Internal::onCanSend, shared_from_this()));
+				_em->enqueue(bind(&TcpSocket::Internal::onReceive, shared_from_this()));
+				_em->enqueue(bind(&TcpSocket::Internal::onCanSend, shared_from_this()));
 			}
-			else {
+			else
+			{
 				//DLOG(INFO) << "disconnected in start()";
-				if (_disconnectCallback) {
+				if (_disconnectCallback)
+				{
 					_em->enqueue(_disconnectCallback);
 					_disconnectCallback = NULL;
 				}
@@ -107,8 +106,8 @@ namespace epoll_threadpool {
 		pthread_mutex_unlock(&_mutex);
 	}
 
-	shared_ptr<TcpSocket> TcpSocket::connect(
-		EventManager* em, string host, uint16_t port) {
+	shared_ptr<TcpSocket> TcpSocket::connect(EventManager* em, string host, uint16_t port)
+	{
 		struct sockaddr_in sa;
 		int fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 
@@ -163,8 +162,7 @@ namespace epoll_threadpool {
 		bool wasBufferEmpty = (_sendBuffer.size() == 0);
 		_sendBuffer.append(data);
 		if (_fd >= 0 && _isStarted && wasBufferEmpty) {
-			_em->watchFd(_fd, EventManager::EM_WRITE,
-				bind(&TcpSocket::Internal::onCanSend, shared_from_this()));
+			_em->watchFd(_fd, EventManager::EM_WRITE,bind(&TcpSocket::Internal::onCanSend, shared_from_this()));
 		}
 		pthread_mutex_unlock(&_mutex);
 	}
@@ -186,33 +184,39 @@ namespace epoll_threadpool {
 		pthread_mutex_unlock(&_mutex);
 	}
 
-	void TcpSocket::Internal::onReceive() {
+	void TcpSocket::Internal::onReceive()
+	{
 		pthread_mutex_lock(&_mutex);
-		while (_fd > 0) {
+		while (_fd > 0)
+		{
 			vector<char>* buf = new vector<char>();
 			buf->resize(_maxReceiveSize);
 
 			int r = ::recv(_fd, &(*buf)[0], buf->size(), 0);
-			if (r > 0) {
+			if (r > 0)
+			{
 				buf->resize(r);
 				_recvBuffer.append(buf);
-				if (_recvCallback) {
+				if (_recvCallback)
+				{
 					_recvCallback(&_recvBuffer);
 				}
 			}
-			else {
-				if (r < 0) {
+			else
+			{
+				if (r < 0)
+				{
 					delete buf;
-					if (errno != EAGAIN) {
+					if (errno != EAGAIN)
+					{
 						//LOG(INFO) << "Read error. (" << errno << "). Disconnecting fd " << _fd;
-						_em->enqueue(bind(
-							&TcpSocket::Internal::disconnect, shared_from_this()));
+						_em->enqueue(bind(&TcpSocket::Internal::disconnect, shared_from_this()));
 					}
 				}
-				else {
+				else
+				{
 					delete buf;
-					_em->enqueue(bind(
-						&TcpSocket::Internal::disconnect, shared_from_this()));
+					_em->enqueue(bind(&TcpSocket::Internal::disconnect, shared_from_this()));
 				}
 				break;
 			}
@@ -220,30 +224,35 @@ namespace epoll_threadpool {
 		pthread_mutex_unlock(&_mutex);
 	}
 
-	void TcpSocket::Internal::onCanSend() {
+	void TcpSocket::Internal::onCanSend()
+	{
 		pthread_mutex_lock(&_mutex);
-		if (_fd > 0) {
-			while (_sendBuffer.size()) {
-				int sz = (_sendBuffer.size() > _maxSendSize) ?
-					_maxSendSize : _sendBuffer.size();
+		if (_fd > 0)
+		{
+			while (_sendBuffer.size())
+			{
+				int sz = (_sendBuffer.size() > _maxSendSize) ? _maxSendSize : _sendBuffer.size();
 				const char* buf = _sendBuffer.pulldown(sz);
-				if (buf) {
+				if (buf)
+				{
 					int r = ::send(_fd, buf, sz, MSG_NOSIGNAL);
-					if (r > 0) {
+					if (r > 0)
+					{
 						_sendBuffer.consume(r);
 					}
-					else if (r < 0) {
-						if (errno != EAGAIN) {
+					else if (r < 0)
+					{
+						if (errno != EAGAIN)
+						{
 							//LOG(INFO) << "Write error. (" << errno << "). Disconnecting fd " << _fd;
-							_em->enqueue(bind(
-								&TcpSocket::Internal::disconnect, shared_from_this()));
+							_em->enqueue(bind(&TcpSocket::Internal::disconnect, shared_from_this()));
 						}
 						pthread_mutex_unlock(&_mutex);
 						return;
 					}
-					else {
-						_em->enqueue(bind(
-							&TcpSocket::Internal::disconnect, shared_from_this()));
+					else
+					{
+						_em->enqueue(bind(&TcpSocket::Internal::disconnect, shared_from_this()));
 					}
 				}
 			}
@@ -257,21 +266,24 @@ namespace epoll_threadpool {
 		em->watchFd(fd, EventManager::EM_READ, bind(&TcpListenSocket::Internal::onAccept, _internal));
 	}
 
-	TcpListenSocket::~TcpListenSocket() {
+	TcpListenSocket::~TcpListenSocket()
+	{
 		_internal->shutdown();
 	}
 
-	TcpListenSocket::Internal::Internal(EventManager* em, int fd)
-		: _em(em), _fd(fd) {
+	TcpListenSocket::Internal::Internal(EventManager* em, int fd) : _em(em), _fd(fd)
+	{
 		pthread_mutex_init(&_mutex, 0);
 		fcntl(_fd, F_SETFL, O_NONBLOCK);
 	}
 
-	TcpListenSocket::Internal::~Internal() {
+	TcpListenSocket::Internal::~Internal()
+	{
 		pthread_mutex_destroy(&_mutex);
 	}
 
-	void TcpListenSocket::Internal::shutdown() {
+	void TcpListenSocket::Internal::shutdown()
+	{
 		pthread_mutex_lock(&_mutex);
 		_em->removeFd(_fd, EventManager::EM_READ);
 		::shutdown(_fd, SHUT_RDWR);
@@ -313,21 +325,25 @@ namespace epoll_threadpool {
 		return shared_ptr<TcpListenSocket>(new TcpListenSocket(em, fd));
 	}
 
-	void TcpListenSocket::setAcceptCallback(
-		function<void(shared_ptr<TcpSocket>)> callback) {
+	void TcpListenSocket::setAcceptCallback(function<void(shared_ptr<TcpSocket>)> callback)
+	{
 		pthread_mutex_lock(&_internal->_mutex);
 		_internal->_callback = callback;
 		pthread_mutex_unlock(&_internal->_mutex);
 	}
 
-	void TcpListenSocket::Internal::onAccept() {
+	void TcpListenSocket::Internal::onAccept()
+	{
 		pthread_mutex_lock(&_mutex);
-		if (_fd > 0) {
+		if (_fd > 0)
+		{
 			int fd = ::accept(_fd, NULL, NULL);
 			pthread_mutex_unlock(&_mutex);
-			if (fd > 0) {
+			if (fd > 0)
+			{
 				shared_ptr<TcpSocket> s(new TcpSocket(_em, fd));
-				if (_callback) {
+				if (_callback)
+				{
 					_callback(s);
 					// We separate registration to give AcceptCallback a chance to set up
 					// receive / disconnect callbacks for the socket. The callback must
@@ -335,7 +351,8 @@ namespace epoll_threadpool {
 				}
 			}
 		}
-		else {
+		else
+		{
 			pthread_mutex_unlock(&_mutex);
 		}
 	}

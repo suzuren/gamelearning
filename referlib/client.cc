@@ -125,7 +125,6 @@ void OnConnect(EventManager & em, shared_ptr<TcpSocket> & c)
 	c = TcpSocket::connect(&em, "127.0.0.1", port);
 	assert(c != NULL);
 	c->start();
-
 }
 
 // Code coverage - tests we can accept data from a newly connected client

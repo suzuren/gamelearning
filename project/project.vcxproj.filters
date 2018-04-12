@@ -40,6 +40,9 @@
     <Filter Include="test">
       <UniqueIdentifier>{a8209389-5ac8-49d1-94a7-d19364837e3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cpp11">
+      <UniqueIdentifier>{010752af-4e25-43cd-a601-164494bbeda1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -96,6 +99,18 @@
     <ClInclude Include="..\referlib\tcp.h">
       <Filter>referlib</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp11\Timer.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp11\type_name.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp11\ThreadPool.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp11\SyncQueue.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -144,6 +159,9 @@
       <Filter>test</Filter>
     </None>
     <None Include="..\clean.sh" />
+    <None Include="..\cpp11\Makefile">
+      <Filter>cpp11</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -202,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="..\test\helloworld.cpp">
       <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp11\main.cpp">
+      <Filter>cpp11</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

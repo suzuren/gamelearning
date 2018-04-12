@@ -24,6 +24,10 @@
     <ClInclude Include="..\3rd\templog\templ_meta.h" />
     <ClInclude Include="..\3rd\templog\tuples.h" />
     <ClInclude Include="..\3rd\templog\type_lists.h" />
+    <ClInclude Include="..\cpp11\SyncQueue.hpp" />
+    <ClInclude Include="..\cpp11\ThreadPool.hpp" />
+    <ClInclude Include="..\cpp11\Timer.hpp" />
+    <ClInclude Include="..\cpp11\type_name.hpp" />
     <ClInclude Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.h" />
     <ClInclude Include="..\MultiplayerBook\ByteSwap.h" />
@@ -42,6 +46,7 @@
     <None Include="..\3rd\templog\doxygen.conf" />
     <None Include="..\3rd\templog\makefile" />
     <None Include="..\clean.sh" />
+    <None Include="..\cpp11\Makefile" />
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
@@ -59,6 +64,7 @@
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
     <ClCompile Include="..\3rd\templog\test\test_logging.cpp" />
+    <ClCompile Include="..\cpp11\main.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\HashTest.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.c" />

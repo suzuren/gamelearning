@@ -43,6 +43,9 @@
     <Filter Include="cpp11">
       <UniqueIdentifier>{010752af-4e25-43cd-a601-164494bbeda1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inicfg">
+      <UniqueIdentifier>{a81d4065-9549-4fbb-8b45-272b36c47c77}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -162,6 +165,9 @@
     <None Include="..\cpp11\Makefile">
       <Filter>cpp11</Filter>
     </None>
+    <None Include="..\inicfg\Makefile">
+      <Filter>inicfg</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -223,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="..\cpp11\main.cpp">
       <Filter>cpp11</Filter>
+    </ClCompile>
+    <ClCompile Include="..\inicfg\INIFileOP.c">
+      <Filter>inicfg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

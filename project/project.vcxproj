@@ -50,6 +50,7 @@
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
+    <None Include="..\inicfg\Makefile" />
     <None Include="..\lua\helloworld.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
@@ -70,6 +71,7 @@
     <ClCompile Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.c" />
     <ClCompile Include="..\GeneralHashFunctions_-_C\HashTest.c" />
     <ClCompile Include="..\helloworld\helloworld.cpp" />
+    <ClCompile Include="..\inicfg\INIFileOP.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />

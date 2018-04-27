@@ -46,6 +46,9 @@
     <Filter Include="inicfg">
       <UniqueIdentifier>{a81d4065-9549-4fbb-8b45-272b36c47c77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThreadPool">
+      <UniqueIdentifier>{707f1a3a-b12b-405b-b78f-361b2c1f1350}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -114,6 +117,9 @@
     <ClInclude Include="..\cpp11\SyncQueue.hpp">
       <Filter>cpp11</Filter>
     </ClInclude>
+    <ClInclude Include="..\ThreadPool\ThreadPool.h">
+      <Filter>ThreadPool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -167,6 +173,12 @@
     </None>
     <None Include="..\inicfg\Makefile">
       <Filter>inicfg</Filter>
+    </None>
+    <None Include="..\ThreadPool\Makefile">
+      <Filter>ThreadPool</Filter>
+    </None>
+    <None Include="..\ThreadPool\README.md">
+      <Filter>ThreadPool</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="..\inicfg\INIFileOP.c">
       <Filter>inicfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThreadPool\example.cpp">
+      <Filter>ThreadPool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

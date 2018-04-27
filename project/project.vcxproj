@@ -41,6 +41,7 @@
     <ClInclude Include="..\referlib\iobuffer.h" />
     <ClInclude Include="..\referlib\notification.h" />
     <ClInclude Include="..\referlib\tcp.h" />
+    <ClInclude Include="..\ThreadPool\ThreadPool.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf" />
@@ -61,6 +62,8 @@
     <None Include="..\proxy_epoll\subproxy\stop_proxy.sh" />
     <None Include="..\referlib\Makefile" />
     <None Include="..\test\Makefile" />
+    <None Include="..\ThreadPool\Makefile" />
+    <None Include="..\ThreadPool\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
@@ -84,6 +87,7 @@
     <ClCompile Include="..\referlib\tcp.cc" />
     <ClCompile Include="..\referlib\tcp_test.cc" />
     <ClCompile Include="..\test\helloworld.cpp" />
+    <ClCompile Include="..\ThreadPool\example.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\referlib\readme.txt" />

@@ -44,6 +44,7 @@ namespace epoll_threadpool {
 	 * The user can request these discontinuous blocks are pulled down into
 	 * continuous RAM for reading off.
 	 */
+	//在可能不连续的内存块中存储数据块 用户可以请求这些不连续的块被拉入连续RAM读取。
 	class IOBuffer {
 	public:
 		IOBuffer() : _size(0) {}

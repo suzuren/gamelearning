@@ -49,6 +49,9 @@
     <Filter Include="ThreadPool">
       <UniqueIdentifier>{707f1a3a-b12b-405b-b78f-361b2c1f1350}</UniqueIdentifier>
     </Filter>
+    <Filter Include="declare">
+      <UniqueIdentifier>{f477749b-1529-4cb6-8c46-fb0479e3ef58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -87,6 +90,21 @@
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h">
       <Filter>proxy_epoll</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp11\Timer.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp11\type_name.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp11\ThreadPool.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp11\SyncQueue.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ThreadPool\ThreadPool.h">
+      <Filter>ThreadPool</Filter>
+    </ClInclude>
     <ClInclude Include="..\referlib\barrier.h">
       <Filter>referlib</Filter>
     </ClInclude>
@@ -105,20 +123,11 @@
     <ClInclude Include="..\referlib\tcp.h">
       <Filter>referlib</Filter>
     </ClInclude>
-    <ClInclude Include="..\cpp11\Timer.hpp">
-      <Filter>cpp11</Filter>
+    <ClInclude Include="..\declare\helloworld.h">
+      <Filter>declare</Filter>
     </ClInclude>
-    <ClInclude Include="..\cpp11\type_name.hpp">
+    <ClInclude Include="..\cpp11\shared.hpp">
       <Filter>cpp11</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cpp11\ThreadPool.hpp">
-      <Filter>cpp11</Filter>
-    </ClInclude>
-    <ClInclude Include="..\cpp11\SyncQueue.hpp">
-      <Filter>cpp11</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ThreadPool\ThreadPool.h">
-      <Filter>ThreadPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -161,9 +170,6 @@
     <None Include="..\proxy_epoll\subproxy\stop_proxy.sh">
       <Filter>proxy_epoll\subproxy</Filter>
     </None>
-    <None Include="..\referlib\Makefile">
-      <Filter>referlib</Filter>
-    </None>
     <None Include="..\test\Makefile">
       <Filter>test</Filter>
     </None>
@@ -179,6 +185,21 @@
     </None>
     <None Include="..\ThreadPool\README.md">
       <Filter>ThreadPool</Filter>
+    </None>
+    <None Include="..\referlib\Makefile">
+      <Filter>referlib</Filter>
+    </None>
+    <None Include="..\declare\Makefile">
+      <Filter>declare</Filter>
+    </None>
+    <None Include="..\referlib\stop_server.sh">
+      <Filter>referlib</Filter>
+    </None>
+    <None Include="..\referlib\start_server.sh">
+      <Filter>referlib</Filter>
+    </None>
+    <None Include="..\referlib\stop_client.sh">
+      <Filter>referlib</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -212,30 +233,6 @@
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c">
       <Filter>proxy_epoll</Filter>
     </ClCompile>
-    <ClCompile Include="..\referlib\eventmanager.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\referlib\tcp.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\referlib\eventmanager_test.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\referlib\future_test.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\referlib\iobuffer_test.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\referlib\tcp_test.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\referlib\client.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\referlib\server.cc">
-      <Filter>referlib</Filter>
-    </ClCompile>
     <ClCompile Include="..\test\helloworld.cpp">
       <Filter>test</Filter>
     </ClCompile>
@@ -248,10 +245,32 @@
     <ClCompile Include="..\ThreadPool\example.cpp">
       <Filter>ThreadPool</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\referlib\readme.txt">
+    <ClCompile Include="..\referlib\eventmanager.cc">
       <Filter>referlib</Filter>
-    </Text>
+    </ClCompile>
+    <ClCompile Include="..\referlib\eventmanager_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\future_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\iobuffer_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\tcp.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\tcp_test.cc">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\declare\helloworld.cpp">
+      <Filter>declare</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\server.cpp">
+      <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\referlib\client.cpp">
+      <Filter>referlib</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

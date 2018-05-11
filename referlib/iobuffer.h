@@ -33,6 +33,7 @@
 #include <string.h>
 #include <deque>
 #include <vector>
+#include <stdio.h>
 
 namespace epoll_threadpool {
 
@@ -44,7 +45,6 @@ namespace epoll_threadpool {
 	 * The user can request these discontinuous blocks are pulled down into
 	 * continuous RAM for reading off.
 	 */
-	//在可能不连续的内存块中存储数据块 用户可以请求这些不连续的块被拉入连续RAM读取。
 	class IOBuffer {
 	public:
 		IOBuffer() : _size(0) {}
@@ -53,12 +53,15 @@ namespace epoll_threadpool {
 		 * Convenience constructor for creating an IOBuffer out of a character
 		 * array. This *will* copy the data so avoid it if possible.
 		 */
-		IOBuffer(const char *data, size_t len) : _size(0) {
+		IOBuffer(const char *data, size_t len) : _size(0)
+		{
 			append(data, len);
 		}
 
-		virtual ~IOBuffer() {
-			for (int i = 0; i < _blocks.size(); i++) {
+		virtual ~IOBuffer()
+		{
+			for (int i = 0; i < _blocks.size(); i++)
+			{
 				delete _blocks[i];
 			}
 		}
@@ -68,8 +71,10 @@ namespace epoll_threadpool {
 		 * first buffer will be appended to this buffer without memcpying the
 		 * data itself. This class will take ownership of the IOBuffer instance.
 		 */
-		void append(IOBuffer *data) {
-			for (int i = 0; i < data->_blocks.size(); i++) {
+		void append(IOBuffer *data)
+		{
+			for (int i = 0; i < data->_blocks.size(); i++)
+			{
 				_blocks.push_back(data->_blocks[i]);
 			}
 			_size += data->_size;
@@ -81,7 +86,8 @@ namespace epoll_threadpool {
 		 * Appends a given vector of data to the IOBuffer. Ownership of the vector
 		 * is taken by the class, avoiding any data copies.
 		 */
-		void append(vector<char> *data) {
+		void append(vector<char> *data)
+		{
 			_size += data->size();
 			_blocks.push_back(data);
 		}
@@ -92,7 +98,8 @@ namespace epoll_threadpool {
 		 * @param len the size of the array of data types T.
 		 */
 		template<class T>
-		void append(T *data, size_t len) {
+		void append(T *data, size_t len)
+		{
 			vector<char> *d = new vector<char>();
 			d->resize(sizeof(T)*len);
 			memcpy(&((*d)[0]), data, sizeof(T)*len);
@@ -103,10 +110,26 @@ namespace epoll_threadpool {
 		 * Equivalent to the previous append() method but required to use this class
 		 * as a destination buffer for msgpack::pack().
 		 */
-		void write(const char *data, int len) {
+		void write(const char *data, int len)
+		{
 			append(data, (size_t)len);
 		}
 
+		void print_data()
+		{
+			//deque<vector<char>*> _blocks;
+			char data[256] = { 0 };
+			for (int i = 0; i < _blocks.size(); i++)
+			{
+				vector<char> *pblock = _blocks[i];
+				for (int j = 0; j < pblock->size(); j++)
+				{
+					sprintf(data+j, "%c", pblock->at(j));
+				}
+				printf("_size:%d,_blocks.size:%d,i:%d,_blocks[i].size:%d,data:%s\n", _size, _blocks.size(), i, _blocks[i]->size(), data);
+			}
+		}
+		
 		/**
 		 * Returns the current length in bytes of all blocks combined.
 		 */
@@ -116,16 +139,19 @@ namespace epoll_threadpool {
 		 * Ensures that the first n bytes are stored in contiguous memory.
 		 * Returns a pointer to the start of the memory on success, NULL on error.
 		 */
-		const char *pulldown(size_t bytes) {
-			if (bytes > _size || _size == 0) {
+		const char *pulldown(size_t bytes)
+		{
+			if (bytes > _size || _size == 0)
+			{
 				return NULL;
 			}
-			if (bytes > _blocks[0]->size()) {
+			if (bytes > _blocks[0]->size())
+			{
 				vector<char> *pulldown_block = _blocks[0];
 				_blocks.pop_front();
-				while (pulldown_block->size() < bytes) {
-					pulldown_block->insert(
-						pulldown_block->end(), _blocks[0]->begin(), _blocks[0]->end());
+				while (pulldown_block->size() < bytes)
+				{
+					pulldown_block->insert(pulldown_block->end(), _blocks[0]->begin(), _blocks[0]->end());
 					delete _blocks[0];
 					_blocks.pop_front();
 				}
@@ -139,20 +165,25 @@ namespace epoll_threadpool {
 		 * Takes care of freeing memory, etc.
 		 * Returns false if asked to consume more data than is available.
 		 */
-		bool consume(size_t bytes) {
-			if (bytes > _size || _size == 0) {
+		bool consume(size_t bytes)
+		{
+			if (bytes > _size || _size == 0)
+			{
 				return false;
 			}
-			while (!_blocks.empty() && bytes >= _blocks[0]->size()) {
+			while (!_blocks.empty() && bytes >= _blocks[0]->size())
+			{
 				_size -= _blocks[0]->size();
 				bytes -= _blocks[0]->size();
 				delete _blocks[0];
 				_blocks.pop_front();
 			}
-			if (_blocks.empty()) {
+			if (_blocks.empty())
+			{
 				return true;
 			}
-			if (bytes) {
+			if (bytes)
+			{
 				memmove(&_blocks[0]->at(0), &_blocks[0]->at(bytes), _blocks[0]->size() - bytes);
 				_blocks[0]->resize(_blocks[0]->size() - bytes);
 				_size -= bytes;

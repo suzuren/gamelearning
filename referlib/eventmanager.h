@@ -50,7 +50,8 @@ namespace epoll_threadpool {
 	 * Tiny epoll based event manager with a configurable pool of threads.
 	 * Can watch on sockets and execute functions on event threads.
 	 */
-	class EventManager {
+	class EventManager
+	{
 	public:
 		typedef double WallTime;
 
@@ -59,7 +60,8 @@ namespace epoll_threadpool {
 		 * descriptor.
 		 * @see watchFd removeFd
 		 */
-		enum EventType {
+		enum EventType
+		{
 			EM_READ,
 			EM_WRITE,
 			EM_ERROR
@@ -70,35 +72,45 @@ namespace epoll_threadpool {
 		 * a call if it hasn't already started. Internally reference counted
 		 * to make passing the function object around easy to do.
 		 */
-		class Function {
+		class Function
+		{
 		public:
 			template<class T>
 			Function(T f) : _internal(new Internal(f)) { }
-			void cancel() {
+
+			void cancel()
+			{
 				_internal->cancel();
 			}
-			void operator()() {
+			void operator()()
+			{
 				_internal->run();
 			}
 		private:
-			class Internal {
+			class Internal
+			{
 			public:
-				Internal(function<void()> f) : _f(f) {
+				Internal(function<void()> f) : _f(f)
+				{
 					pthread_mutex_init(&_mutex, 0);
 				}
-				~Internal() {
+				~Internal()
+				{
 					pthread_mutex_destroy(&_mutex);
 				}
-				void cancel() {
+				void cancel()
+				{
 					pthread_mutex_lock(&_mutex);
 					_f = NULL;
 					pthread_mutex_unlock(&_mutex);
 				}
-				void run() {
+				void run()
+				{
 					pthread_mutex_lock(&_mutex);
 					function<void()> f(_f);
 					pthread_mutex_unlock(&_mutex);
-					if (f != NULL) {
+					if (f != NULL)
+					{
 						f();
 					}
 				}
@@ -137,7 +149,8 @@ namespace epoll_threadpool {
 		 * The function will be run on the first available thread.
 		 * It is safe to call this function from a worker thread itself.
 		 */
-		void enqueue(Function f) {
+		void enqueue(Function f)
+		{
 			enqueue(f, currentTime());
 		}
 
@@ -167,12 +180,14 @@ namespace epoll_threadpool {
 
 	private:
 		// Stores a scheduled task callback.
-		struct Task {
+		struct Task
+		{
 			WallTime when;
 			Function f;
 		};
 		// Used to sort heap with earliest time at the top
-		static bool compareTasks(const Task&a, const Task& b) {
+		static bool compareTasks(const Task&a, const Task& b)
+		{
 			return a.when > b.when;
 		}
 

@@ -24,10 +24,12 @@
     <ClInclude Include="..\3rd\templog\templ_meta.h" />
     <ClInclude Include="..\3rd\templog\tuples.h" />
     <ClInclude Include="..\3rd\templog\type_lists.h" />
+    <ClInclude Include="..\cpp11\shared.hpp" />
     <ClInclude Include="..\cpp11\SyncQueue.hpp" />
     <ClInclude Include="..\cpp11\ThreadPool.hpp" />
     <ClInclude Include="..\cpp11\Timer.hpp" />
     <ClInclude Include="..\cpp11\type_name.hpp" />
+    <ClInclude Include="..\declare\helloworld.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.h" />
     <ClInclude Include="..\MultiplayerBook\ByteSwap.h" />
@@ -48,6 +50,7 @@
     <None Include="..\3rd\templog\makefile" />
     <None Include="..\clean.sh" />
     <None Include="..\cpp11\Makefile" />
+    <None Include="..\declare\Makefile" />
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
@@ -61,6 +64,9 @@
     <None Include="..\proxy_epoll\subproxy\start_proxy.sh" />
     <None Include="..\proxy_epoll\subproxy\stop_proxy.sh" />
     <None Include="..\referlib\Makefile" />
+    <None Include="..\referlib\start_server.sh" />
+    <None Include="..\referlib\stop_client.sh" />
+    <None Include="..\referlib\stop_server.sh" />
     <None Include="..\test\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
@@ -69,6 +75,7 @@
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
     <ClCompile Include="..\3rd\templog\test\test_logging.cpp" />
     <ClCompile Include="..\cpp11\main.cpp" />
+    <ClCompile Include="..\declare\helloworld.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\HashTest.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.c" />
@@ -78,19 +85,16 @@
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
-    <ClCompile Include="..\referlib\client.cc" />
+    <ClCompile Include="..\referlib\client.cpp" />
     <ClCompile Include="..\referlib\eventmanager.cc" />
     <ClCompile Include="..\referlib\eventmanager_test.cc" />
     <ClCompile Include="..\referlib\future_test.cc" />
     <ClCompile Include="..\referlib\iobuffer_test.cc" />
-    <ClCompile Include="..\referlib\server.cc" />
+    <ClCompile Include="..\referlib\server.cpp" />
     <ClCompile Include="..\referlib\tcp.cc" />
     <ClCompile Include="..\referlib\tcp_test.cc" />
     <ClCompile Include="..\test\helloworld.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\referlib\readme.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9CE8AE1B-F8B0-478D-845D-E86CFC4F5882}</ProjectGuid>

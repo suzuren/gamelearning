@@ -31,6 +31,8 @@ void tets_memory_zero(stGangCardResult & GangCardResult)
 	printf("cbCardCount:%d,cbCardData:%d %d %d %d\n",	GangCardResult.cbCardCount, GangCardResult.cbCardData[0], GangCardResult.cbCardData[1], GangCardResult.cbCardData[2], GangCardResult.cbCardData[3]);
 }
 
+void func1();
+
 int main(int argc, const char** argv)
 {
 	printf("hello test!\n");
@@ -39,6 +41,19 @@ int main(int argc, const char** argv)
 
 	tets_memory_zero(GangCardResult);
 
+	func1();
+
 	return 0;
+}
+
+
+
+
+
+
+
+void func1()
+{
+	printf("hello world!\n");
 }
 

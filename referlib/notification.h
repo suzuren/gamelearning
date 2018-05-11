@@ -30,7 +30,7 @@
 #define _EPOLL_THREADPOOL_NOTIFICATION_H_
 
 #include "eventmanager.h"
-//#include "logging.h"
+//#include <glog/logging.h>
 
 namespace epoll_threadpool {
 

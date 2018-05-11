@@ -35,53 +35,60 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-//#include "logging.h"
+#include <stdio.h>
+
+//#include <glog/logging.h>
 
 namespace epoll_threadpool {
 
 	using std::tr1::function;
 	using std::tr1::bind;
 
-	TcpSocket::TcpSocket(EventManager* em, int fd)
-		: _internal(new Internal(em, fd)) {
+	TcpSocket::TcpSocket(EventManager* em, int fd) : _internal(new Internal(em, fd))
+	{
 	}
 
-	TcpSocket::~TcpSocket() {
+	TcpSocket::~TcpSocket()
+	{
 		_internal->_disconnectCallback = NULL;
 		_internal->disconnect();
 	}
 
-	TcpSocket::Internal::Internal(EventManager* em, int fd)
-		: _em(em), _fd(fd), _isStarted(false) {
+	TcpSocket::Internal::Internal(EventManager* em, int fd) : _em(em), _fd(fd), _isStarted(false)
+	{
 		pthread_mutex_init(&_mutex, 0);
 		fcntl(_fd, F_SETFL, O_NONBLOCK);
 		int err;
 		socklen_t size = sizeof(_maxSendSize);
-		if ((err = getsockopt(fd, SOL_SOCKET, SO_SNDBUF,
-			(char*)&_maxSendSize, &size)) != 0) {
+		if ((err = getsockopt(fd, SOL_SOCKET, SO_SNDBUF, (char*)&_maxSendSize, &size)) != 0)
+		{
 			//LOG(WARNING) << "Unable to determine maximum send size. Assuming 4k.";
-			_maxSendSize = 4096;
+			_maxSendSize = 4096 * 1024;
 		}
 		size = sizeof(_maxReceiveSize);
-		if ((err = getsockopt(fd, SOL_SOCKET, SO_RCVBUF,
-			(char*)&_maxReceiveSize, &size)) != 0) {
+		if ((err = getsockopt(fd, SOL_SOCKET, SO_RCVBUF, (char*)&_maxReceiveSize, &size)) != 0)
+		{
 			//LOG(WARNING) << "Unable to determine maximum receive size. Assuming 4k.";
-			_maxReceiveSize = 4096;
+			_maxReceiveSize = 4096 * 1024;
 		}
 	}
 
-	TcpSocket::Internal::~Internal() {
+	TcpSocket::Internal::~Internal()
+	{
 		disconnect();
 		pthread_mutex_destroy(&_mutex);
 	}
 
-	void TcpSocket::start() {
+	void TcpSocket::start()
+	{
 		_internal->start();
 	}
 
-	void TcpSocket::Internal::start() {
+	void TcpSocket::Internal::start()
+	{
 		pthread_mutex_lock(&_mutex);
-		if (!_isStarted) {
+		if (!_isStarted)
+		{
 			_isStarted = true;
 			if (_fd > 0)
 			{
@@ -96,6 +103,7 @@ namespace epoll_threadpool {
 			else
 			{
 				//DLOG(INFO) << "disconnected in start()";
+				printf("disconnected in start()\n");
 				if (_disconnectCallback)
 				{
 					_em->enqueue(_disconnectCallback);
@@ -111,21 +119,23 @@ namespace epoll_threadpool {
 		struct sockaddr_in sa;
 		int fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-		if (fd == -1) {
+		if (fd == -1)
+		{
 			//LOG(ERROR) << "can not create socket";
 			return shared_ptr<TcpSocket>();
 		}
-
 		memset(&sa, 0, sizeof(sa));
 		sa.sin_family = AF_INET;
 		sa.sin_port = htons(port);
-		if (inet_pton(AF_INET, host.c_str(), &sa.sin_addr) <= 0) {
+		if (inet_pton(AF_INET, host.c_str(), &sa.sin_addr) <= 0)
+		{
 			//LOG(ERROR) << "Failed to resolve address: " << host;
 			close(fd);
 			return shared_ptr<TcpSocket>();
 		}
 
-		if (::connect(fd, (struct sockaddr*)&sa, sizeof(sa)) == -1) {
+		if (::connect(fd, (struct sockaddr*)&sa, sizeof(sa)) == -1)
+		{
 			close(fd);
 			return shared_ptr<TcpSocket>();
 		}
@@ -133,50 +143,61 @@ namespace epoll_threadpool {
 		return shared_ptr<TcpSocket>(new TcpSocket(em, fd));
 	}
 
-	void TcpSocket::write(IOBuffer* data) {
+	void TcpSocket::write(IOBuffer* data)
+	{
+		data->print_data();
 		_internal->write(data);
 	}
 
-	void TcpSocket::disconnect() {
+	void TcpSocket::disconnect()
+	{
 		_internal->disconnect();
 	}
 
-	bool TcpSocket::isDisconnected() const {
+	bool TcpSocket::isDisconnected() const
+	{
 		return _internal->_fd == -1;
 	}
 
-	void TcpSocket::setReceiveCallback(function<void(IOBuffer*)> callback) {
+	void TcpSocket::setReceiveCallback(function<void(IOBuffer*)> callback)
+	{
 		pthread_mutex_lock(&_internal->_mutex);
 		_internal->_recvCallback = callback;
 		pthread_mutex_unlock(&_internal->_mutex);
 	}
 
-	void TcpSocket::setDisconnectCallback(function<void()> callback) {
+	void TcpSocket::setDisconnectCallback(function<void()> callback)
+	{
 		pthread_mutex_lock(&_internal->_mutex);
 		_internal->_disconnectCallback = callback;
 		pthread_mutex_unlock(&_internal->_mutex);
 	}
 
-	void TcpSocket::Internal::write(IOBuffer* data) {
+	void TcpSocket::Internal::write(IOBuffer* data)
+	{
 		pthread_mutex_lock(&_mutex);
 		bool wasBufferEmpty = (_sendBuffer.size() == 0);
 		_sendBuffer.append(data);
-		if (_fd >= 0 && _isStarted && wasBufferEmpty) {
+		if (_fd >= 0 && _isStarted && wasBufferEmpty)
+		{
 			_em->watchFd(_fd, EventManager::EM_WRITE,bind(&TcpSocket::Internal::onCanSend, shared_from_this()));
 		}
 		pthread_mutex_unlock(&_mutex);
 	}
 
-	void TcpSocket::Internal::disconnect() {
+	void TcpSocket::Internal::disconnect()
+	{
 		pthread_mutex_lock(&_mutex);
-		if (_fd > 0) {
+		if (_fd > 0)
+		{
 			_em->removeFd(_fd, EventManager::EM_READ);
 			_em->removeFd(_fd, EventManager::EM_WRITE);
 			_em->removeFd(_fd, EventManager::EM_ERROR);
 			::shutdown(_fd, SHUT_RDWR);
 			::close(_fd);
 			_fd = -1;
-			if (_disconnectCallback) {
+			if (_disconnectCallback)
+			{
 				_em->enqueue(_disconnectCallback);
 				_disconnectCallback = NULL;
 			}
@@ -210,6 +231,7 @@ namespace epoll_threadpool {
 					if (errno != EAGAIN)
 					{
 						//LOG(INFO) << "Read error. (" << errno << "). Disconnecting fd " << _fd;
+						printf("Read error - errno:%d, Disconnecting fd:%d", errno, _fd);
 						_em->enqueue(bind(&TcpSocket::Internal::disconnect, shared_from_this()));
 					}
 				}
@@ -245,6 +267,7 @@ namespace epoll_threadpool {
 						if (errno != EAGAIN)
 						{
 							//LOG(INFO) << "Write error. (" << errno << "). Disconnecting fd " << _fd;
+							printf("Write error - errno:%d, Disconnecting fd:%d", errno, _fd);
 							_em->enqueue(bind(&TcpSocket::Internal::disconnect, shared_from_this()));
 						}
 						pthread_mutex_unlock(&_mutex);
@@ -300,6 +323,7 @@ namespace epoll_threadpool {
 		if (fd == -1)
 		{
 			//LOG(ERROR) << "can not create socket";
+			printf("can not create socket");
 			return shared_ptr<TcpListenSocket>();
 		}
 

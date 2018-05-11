@@ -86,8 +86,7 @@ namespace epoll_threadpool {
 		 * Attempts to connect to the given host:port and return a TcpSocket for the
 		 * connection. If a connection cannot be made, returns NULL.
 		 */
-		static shared_ptr<TcpSocket> connect(
-			EventManager* em, string host, uint16_t port);
+		static shared_ptr<TcpSocket> connect(EventManager* em, string host, uint16_t port);
 
 		/**
 		 * Called to begin the event handling.
@@ -160,7 +159,8 @@ namespace epoll_threadpool {
 			void onReceive();
 			void onCanSend();
 
-			static void cleanup(shared_ptr<Internal> ptr) {
+			static void cleanup(shared_ptr<Internal> ptr)
+			{
 				ptr.reset();
 			}
 		};
@@ -185,7 +185,8 @@ namespace epoll_threadpool {
 	 * It is the callback's responsibility to set up any event handlers on the
 	 * TcpSocket and then call its start() method to begin receiving events.
 	 */
-	class TcpListenSocket {
+	class TcpListenSocket
+	{
 	public:
 		virtual ~TcpListenSocket();
 
@@ -209,6 +210,8 @@ namespace epoll_threadpool {
 		 */
 		EventManager* getEventManager() const { return _internal->_em; }
 
+		int fd() const { return _internal->_fd; }
+
 	private:
 		// Because we need to preserve data structures until we can be sure they
 		// aren't in use on worker threads, we store them separately.
@@ -226,8 +229,7 @@ namespace epoll_threadpool {
 			void shutdown();
 			void onAccept();
 
-			static void cleanup(shared_ptr<Internal> ptr)
-			{
+			static void cleanup(shared_ptr<Internal> ptr) {
 				ptr.reset();
 			}
 		};

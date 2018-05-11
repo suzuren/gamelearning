@@ -28,7 +28,7 @@
 */
 #include "eventmanager.h"
 
-//#include "logging.h"
+//#include <glog/logging.h>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -37,11 +37,14 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 namespace epoll_threadpool {
 
 	using std::tr1::function;
 
-	EventManager::EventManager() : _is_running(false) {
+	EventManager::EventManager() : _is_running(false)
+	{
 		pthread_mutex_init(&_mutex, 0);
 		_epoll_fd = epoll_create(64);
 
@@ -55,7 +58,8 @@ namespace epoll_threadpool {
 		epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, _event_fd, &ev);
 	}
 
-	EventManager::~EventManager() {
+	EventManager::~EventManager()
+	{
 		stop();
 
 		struct epoll_event ev;
@@ -69,17 +73,20 @@ namespace epoll_threadpool {
 		pthread_mutex_destroy(&_mutex);
 	}
 
-	bool EventManager::start(int num_threads) {
+	bool EventManager::start(int num_threads)
+	{
 		pthread_mutex_lock(&_mutex);
 
 		// Tried to call start() from one of our worker threads? There lies madness.
-		if (_thread_set.find(pthread_self()) != _thread_set.end()) {
+		if (_thread_set.find(pthread_self()) != _thread_set.end())
+		{
 			pthread_mutex_unlock(&_mutex);
 			return false;
 		}
 
 		_is_running = true;
-		for (int i = 0; i < num_threads; ++i) {
+		for (int i = 0; i < num_threads; ++i)
+		{
 			pthread_t thread;
 			pthread_create(&thread, NULL, trampoline, this);
 			_thread_set.insert(thread);
@@ -88,11 +95,13 @@ namespace epoll_threadpool {
 		return true;
 	}
 
-	bool EventManager::stop() {
+	bool EventManager::stop()
+	{
 		pthread_mutex_lock(&_mutex);
 
 		// We don't allow a stop() call from one of our worker threads.
-		if (_thread_set.find(pthread_self()) != _thread_set.end()) {
+		if (_thread_set.find(pthread_self()) != _thread_set.end())
+		{
 			pthread_mutex_unlock(&_mutex);
 			return false;
 		}
@@ -100,8 +109,8 @@ namespace epoll_threadpool {
 		_is_running = false;
 
 		eventfd_write(_event_fd, 1);
-		for (set<pthread_t>::const_iterator i = _thread_set.begin();
-		i != _thread_set.end(); ++i) {
+		for (set<pthread_t>::const_iterator i = _thread_set.begin(); i != _thread_set.end(); ++i)
+		{
 			pthread_mutex_unlock(&_mutex);
 			pthread_join(*i, NULL);
 			pthread_mutex_lock(&_mutex);
@@ -120,33 +129,39 @@ namespace epoll_threadpool {
 		return true;
 	}
 
-	EventManager::WallTime EventManager::currentTime() {
+	EventManager::WallTime EventManager::currentTime()
+	{
 		struct timeval tv;
 		gettimeofday(&tv, NULL);
 		return tv.tv_sec + tv.tv_usec / 1000000.0;
 	}
 
-	void EventManager::enqueue(Function f, WallTime when) {
+	void EventManager::enqueue(Function f, WallTime when)
+	{
 		pthread_mutex_lock(&_mutex);
 		Task t = { when, f };
 		double oldwhen = _tasks.empty() ? -1 : _tasks.front().when;
 		_tasks.push_back(t);
 		push_heap(_tasks.begin(), _tasks.end(), &EventManager::compareTasks);
 		// Do we need to wake up a worker to get this done on time?
-		if (oldwhen != _tasks.front().when) {
+		if (oldwhen != _tasks.front().when)
+		{
 			eventfd_write(_event_fd, 1);
 		}
 		pthread_mutex_unlock(&_mutex);
 	}
 
-	bool EventManager::watchFd(int fd, EventType type, function<void()> f) {
+	bool EventManager::watchFd(int fd, EventType type, function<void()> f)
+	{
 		pthread_mutex_lock(&_mutex);
 
-		if (_fds.find(fd) == _fds.end()) {
+		if (_fds.find(fd) == _fds.end())
+		{
 			_fds[fd][type] = f;
 			epollUpdate(fd, EPOLL_CTL_ADD);
 		}
-		else {
+		else
+		{
 			_fds[fd][type] = f;
 			epollUpdate(fd, EPOLL_CTL_MOD);
 		}
@@ -156,7 +171,8 @@ namespace epoll_threadpool {
 		return true;
 	}
 
-	bool EventManager::removeFd(int fd, EventType type) {
+	bool EventManager::removeFd(int fd, EventType type)
+	{
 		pthread_mutex_lock(&_mutex);
 
 		if (_fds.find(fd) == _fds.end()) {
@@ -178,14 +194,15 @@ namespace epoll_threadpool {
 		return true;
 	}
 
-	void EventManager::epollUpdate(int fd, int epoll_op) {
+	void EventManager::epollUpdate(int fd, int epoll_op)
+	{
 		struct epoll_event ev;
 		ev.data.u64 = 0;  // stop valgrind whinging
 		ev.events = 0;
-		for (std::map<EventManager::EventType,
-			function<void()> >::iterator i = _fds[fd].begin();
-			i != _fds[fd].end(); ++i) {
-			switch (i->first) {
+		for (std::map<EventManager::EventType,	function<void()> >::iterator i = _fds[fd].begin();	i != _fds[fd].end(); ++i)
+		{
+			switch (i->first)
+			{
 			case EventManager::EM_READ:
 				ev.events |= EPOLLIN;
 				break;
@@ -196,80 +213,95 @@ namespace epoll_threadpool {
 				ev.events |= EPOLLRDHUP | EPOLLHUP;
 				break;
 			default:
-				break;
+				printf("Unknown event type - fd:%d\n", i->first);
+				//break;
 				//LOG(ERROR) << "Unknown event type " << i->first;
 			};
 		}
 		ev.data.fd = fd;
 
 		int r = epoll_ctl(_epoll_fd, epoll_op, fd, &ev);
+		if (r != 0)
+		{
+			printf("epoll_ctl - _epoll_fd:%d,epoll_op:%d,error:%d\n", _epoll_fd, fd, errno);
+		}
+
 		//DLOG_IF(WARNING, r != 0) 
 		//    << "epoll_ctl(" << _epoll_fd << ", " << epoll_op << ", " << fd 
 		//    << ", &ev) returned error " << errno;
 	}
 
-	void* EventManager::trampoline(void *arg) {
+	void* EventManager::trampoline(void *arg)
+	{
 		EventManager *em = static_cast<EventManager *>(arg);
 		em->thread_main();
 		return NULL;
 	}
 
-	void EventManager::thread_main() {
+	void EventManager::thread_main()
+	{
 		const int kMaxEvents = 32;
 		const int kEpollDefaultWait = 10000;
 
 		struct epoll_event events[kMaxEvents];
 		pthread_mutex_lock(&_mutex);
-		while (_is_running) {
+		while (_is_running)
+		{
 			int timeout;
-			if (!_tasks.empty()) {
+			if (!_tasks.empty())
+			{
 				timeout = static_cast<int>((_tasks.front().when - currentTime()) * 1000);
-				if (timeout < 0) {
+				if (timeout < 0)
+				{
 					timeout = 0;
 				}
 			}
-			else {
+			else
+			{
 				timeout = kEpollDefaultWait;
 			}
 			pthread_mutex_unlock(&_mutex);
 			int ret = epoll_wait(_epoll_fd, events, kMaxEvents, timeout);
 			pthread_mutex_lock(&_mutex);
 
-			if (ret < 0) {
-				if (errno != EINTR) {
+			if (ret < 0)
+			{
+				if (errno != EINTR)
+				{
+					printf("Epoll error - errno:%d,_epoll_fd:%d\n", errno, _epoll_fd);
 					//LOG(ERROR) << "Epoll error: " << errno << " fd is " << _epoll_fd;
 				}
 				continue;
 			}
 
 			// Execute triggered fd handlers
-			for (int i = 0; i < ret; i++) {
+			for (int i = 0; i < ret; i++)
+			{
 				int fd = events[i].data.fd;
-				if (fd == _event_fd) {
+				if (fd == _event_fd)
+				{
 					uint64_t val;
 					eventfd_read(_event_fd, &val);
 				}
-				else {
+				else
+				{
 					int flags = events[i].events;
-					if ((flags | EPOLLIN) &&
-						_fds.find(fd) != _fds.end() &&
-						_fds[fd].find(EM_READ) != _fds[fd].end()) {
+					if ((flags | EPOLLIN) && _fds.find(fd) != _fds.end() &&	_fds[fd].find(EM_READ) != _fds[fd].end())
+					{
 						function<void()> f = _fds[fd][EM_READ];
 						pthread_mutex_unlock(&_mutex);
 						f();
 						pthread_mutex_lock(&_mutex);
 					}
-					if ((flags | EPOLLOUT) &&
-						_fds.find(fd) != _fds.end() &&
-						_fds[fd].find(EM_WRITE) != _fds[fd].end()) {
+					if ((flags | EPOLLOUT) && _fds.find(fd) != _fds.end() && _fds[fd].find(EM_WRITE) != _fds[fd].end())
+					{
 						function<void()> f = _fds[fd][EM_WRITE];
 						pthread_mutex_unlock(&_mutex);
 						f();
 						pthread_mutex_lock(&_mutex);
 					}
-					if ((flags | EPOLLHUP | EPOLLRDHUP) &&
-						_fds.find(fd) != _fds.end() &&
-						_fds[fd].find(EM_ERROR) != _fds[fd].end()) {
+					if ((flags | EPOLLHUP | EPOLLRDHUP) &&	_fds.find(fd) != _fds.end() && _fds[fd].find(EM_ERROR) != _fds[fd].end())
+					{
 						function<void()> f = _fds[fd][EM_ERROR];
 						pthread_mutex_unlock(&_mutex);
 						f();
@@ -279,7 +311,8 @@ namespace epoll_threadpool {
 			}
 
 			// Execute queued events that are due to be run.
-			while (!_tasks.empty() && _tasks.front().when <= currentTime()) {
+			while (!_tasks.empty() && _tasks.front().when <= currentTime())
+			{
 				Task t = _tasks.front();
 				pop_heap(_tasks.begin(), _tasks.end(), &EventManager::compareTasks);
 				_tasks.pop_back();

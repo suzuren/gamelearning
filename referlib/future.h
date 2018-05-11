@@ -31,7 +31,7 @@
 
 #include "eventmanager.h"
 
-//#include "logging.h"
+#include <glog/logging.h>
 
 #include <pthread.h>
 
@@ -81,7 +81,7 @@ namespace epoll_threadpool {
 			}
 			if (_internal->hasValue()) {
 				//LOG(ERROR) << "Future assigned another future's value but value "
-				//           << "has already been set.";
+				<< "has already been set.";
 				return *this;
 			}
 			if (_internal->hasCallbacks()) {

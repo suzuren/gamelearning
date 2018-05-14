@@ -129,6 +129,12 @@
     <ClInclude Include="..\cpp11\shared.hpp">
       <Filter>cpp11</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp11\test_regex_match.h">
+      <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp11\test_lambda.h">
+      <Filter>cpp11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -201,6 +207,30 @@
     <None Include="..\referlib\stop_client.sh">
       <Filter>referlib</Filter>
     </None>
+    <None Include="..\lua\gate.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\gateserver_ws.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\print_r.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\func_param.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\class_test.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\class_child.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\class_parent.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\closure_func.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -272,5 +302,10 @@
     <ClCompile Include="..\referlib\client.cpp">
       <Filter>referlib</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\cpp11\gcc install.txt">
+      <Filter>cpp11</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -5,7 +5,8 @@ using namespace std;
 #include "type_name.hpp"
 
 #include "shared.hpp"
-
+#include "test_regex_match.h"
+#include "test_lambda.h"
 
 int main(int argc, const char** argv)
 {
@@ -39,6 +40,15 @@ int main(int argc, const char** argv)
 	spb->pa = spa;
 	// 函数结束，思考一下：spa和spb会释放资源么？
 
+	regex_test1();
+	regex_test2();
+	regex_test3();
+	regex_test4();
+
+	lambda_test1();
+	lambda_test2();
+	lambda_test3();
+	lambda_test4();
 
 	return 0;
 }

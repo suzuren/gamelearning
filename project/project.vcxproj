@@ -26,6 +26,8 @@
     <ClInclude Include="..\3rd\templog\type_lists.h" />
     <ClInclude Include="..\cpp11\shared.hpp" />
     <ClInclude Include="..\cpp11\SyncQueue.hpp" />
+    <ClInclude Include="..\cpp11\test_lambda.h" />
+    <ClInclude Include="..\cpp11\test_regex_match.h" />
     <ClInclude Include="..\cpp11\ThreadPool.hpp" />
     <ClInclude Include="..\cpp11\Timer.hpp" />
     <ClInclude Include="..\cpp11\type_name.hpp" />
@@ -55,7 +57,15 @@
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
     <None Include="..\inicfg\Makefile" />
+    <None Include="..\lua\class_child.lua" />
+    <None Include="..\lua\class_parent.lua" />
+    <None Include="..\lua\class_test.lua" />
+    <None Include="..\lua\closure_func.lua" />
+    <None Include="..\lua\func_param.lua" />
+    <None Include="..\lua\gate.lua" />
+    <None Include="..\lua\gateserver_ws.lua" />
     <None Include="..\lua\helloworld.lua" />
+    <None Include="..\lua\print_r.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
     <None Include="..\proxy_epoll\Readme.md" />
@@ -95,6 +105,9 @@
     <ClCompile Include="..\referlib\tcp_test.cc" />
     <ClCompile Include="..\test\helloworld.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\cpp11\gcc install.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9CE8AE1B-F8B0-478D-845D-E86CFC4F5882}</ProjectGuid>

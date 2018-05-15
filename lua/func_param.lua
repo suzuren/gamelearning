@@ -1,6 +1,10 @@
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 --函数
 function g_func(param)
-	print("param+1:",param+1)
+	--print("param+1:",param+1)
 end
  
 --变量
@@ -23,3 +27,53 @@ function main()
 end
 
 main()
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+local printr = require "print_r"
+
+
+local proto = {}
+local skynet = {
+	-- read skynet.h
+	PTYPE_TEXT = 0,
+	PTYPE_RESPONSE = 1,
+	PTYPE_MULTICAST = 2,
+	PTYPE_CLIENT = 3,
+	PTYPE_SYSTEM = 4,
+	PTYPE_HARBOR = 5,
+	PTYPE_SOCKET = 6,
+	PTYPE_ERROR = 7,
+	PTYPE_QUEUE = 8,	-- used in deprecated mqueue, use skynet.queue instead
+	PTYPE_DEBUG = 9,
+	PTYPE_LUA = 10,
+	PTYPE_SNAX = 11,
+}
+
+
+function skynet.register_protocol(class)
+	local name = class.name
+	local id = class.id
+	assert(proto[name] == nil and proto[id] == nil)
+	assert(type(name) == "string" and type(id) == "number" and id >=0 and id <=255)
+	proto[name] = class
+	proto[id] = class
+end
+
+
+
+skynet.register_protocol ({
+	name = "client",
+	id = skynet.PTYPE_CLIENT,
+})
+
+printr(proto)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+

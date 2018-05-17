@@ -31,7 +31,7 @@
 
 #include "eventmanager.h"
 
-#include <glog/logging.h>
+//#include <glog/logging.h>
 
 #include <pthread.h>
 

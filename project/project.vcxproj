@@ -34,6 +34,15 @@
     <ClInclude Include="..\declare\helloworld.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.h" />
+    <ClInclude Include="..\http\http.h" />
+    <ClInclude Include="..\http\http_client.h" />
+    <ClInclude Include="..\http\http_method.h" />
+    <ClInclude Include="..\http\http_protocol.h" />
+    <ClInclude Include="..\http\http_request.h" />
+    <ClInclude Include="..\http\http_response.h" />
+    <ClInclude Include="..\http\http_server.h" />
+    <ClInclude Include="..\http\http_status.h" />
+    <ClInclude Include="..\http\socklib.h" />
     <ClInclude Include="..\MultiplayerBook\ByteSwap.h" />
     <ClInclude Include="..\MultiplayerBook\LinkingContext.h" />
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
@@ -46,6 +55,7 @@
     <ClInclude Include="..\referlib\notification.h" />
     <ClInclude Include="..\referlib\tcp.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
+    <ClInclude Include="..\webservice\websocket.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf" />
@@ -56,6 +66,7 @@
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
+    <None Include="..\http\Makefile" />
     <None Include="..\inicfg\Makefile" />
     <None Include="..\lua\class_child.lua" />
     <None Include="..\lua\class_parent.lua" />
@@ -80,6 +91,8 @@
     <None Include="..\test\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
+    <None Include="..\webservice\Makefile" />
+    <None Include="..\webservice\stop_client.sh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
@@ -91,6 +104,17 @@
     <ClCompile Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.c" />
     <ClCompile Include="..\GeneralHashFunctions_-_C\HashTest.c" />
     <ClCompile Include="..\helloworld\helloworld.cpp" />
+    <ClCompile Include="..\http\http.cpp" />
+    <ClCompile Include="..\http\http_client.cpp" />
+    <ClCompile Include="..\http\http_client_main.cpp" />
+    <ClCompile Include="..\http\http_method.cpp" />
+    <ClCompile Include="..\http\http_protocol.cpp" />
+    <ClCompile Include="..\http\http_request.cpp" />
+    <ClCompile Include="..\http\http_response.cpp" />
+    <ClCompile Include="..\http\http_server.cpp" />
+    <ClCompile Include="..\http\http_server_main.cpp" />
+    <ClCompile Include="..\http\http_status.cpp" />
+    <ClCompile Include="..\http\socklib.cpp" />
     <ClCompile Include="..\inicfg\INIFileOP.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
@@ -105,6 +129,8 @@
     <ClCompile Include="..\referlib\tcp_test.cc" />
     <ClCompile Include="..\test\helloworld.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
+    <ClCompile Include="..\webservice\webclient.cpp" />
+    <ClCompile Include="..\webservice\websocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt" />

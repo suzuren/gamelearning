@@ -52,6 +52,12 @@
     <Filter Include="declare">
       <UniqueIdentifier>{f477749b-1529-4cb6-8c46-fb0479e3ef58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="http">
+      <UniqueIdentifier>{151fb0ea-889e-4cb4-a11a-5157437b00de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="webservice">
+      <UniqueIdentifier>{3f609239-ee32-4f4b-90e8-b38e8c1553b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -134,6 +140,36 @@
     </ClInclude>
     <ClInclude Include="..\cpp11\test_lambda.h">
       <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http_client.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http_method.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http_protocol.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http_request.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http_response.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http_status.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\socklib.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http\http_server.h">
+      <Filter>http</Filter>
+    </ClInclude>
+    <ClInclude Include="..\webservice\websocket.h">
+      <Filter>webservice</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +267,15 @@
     <None Include="..\lua\closure_func.lua">
       <Filter>lua</Filter>
     </None>
+    <None Include="..\http\Makefile">
+      <Filter>http</Filter>
+    </None>
+    <None Include="..\webservice\Makefile">
+      <Filter>webservice</Filter>
+    </None>
+    <None Include="..\webservice\stop_client.sh">
+      <Filter>webservice</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -301,6 +346,45 @@
     </ClCompile>
     <ClCompile Include="..\referlib\client.cpp">
       <Filter>referlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_client.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_method.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_protocol.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_request.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_response.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_status.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\socklib.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_client_main.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_server.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http\http_server_main.cpp">
+      <Filter>http</Filter>
+    </ClCompile>
+    <ClCompile Include="..\webservice\webclient.cpp">
+      <Filter>webservice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\webservice\websocket.cpp">
+      <Filter>webservice</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

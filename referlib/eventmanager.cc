@@ -28,7 +28,7 @@
 */
 #include "eventmanager.h"
 
-//#include <glog/logging.h>
+////#include <glog/logging.h>
 
 #include <errno.h>
 #include <fcntl.h>

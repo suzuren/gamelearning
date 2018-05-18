@@ -3,12 +3,139 @@
 #include <string>
 using namespace std;
 
+#include <stdio.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <pthread.h>
+#include <arpa/inet.h>
+#include <sys/time.h>
+#include <pthread.h>
+
+
 static int socket_stage = CONN_IDLE;
 static bool socket_isconnect = false;
 static int connect_fd = -1;
 static std::string strip = "127.0.0.1";
 static unsigned int port = 8001;
+static fd_set read_fds, write_fds, except_fds;
+static int max_fds = 1;
 
+static pthread_t p_thread;
+
+int check_events()
+{
+	struct timeval tvalue;
+	tvalue.tv_sec = 10;
+	tvalue.tv_usec = 0;
+
+	FD_ZERO(&read_fds);
+	FD_ZERO(&write_fds);
+	FD_ZERO(&except_fds);
+
+	FD_SET(connect_fd, &read_fds);
+	FD_SET(connect_fd, &write_fds);
+	FD_SET(connect_fd, &except_fds);
+
+	int ret = select(max_fds + 1, &read_fds, &write_fds, &except_fds, &tvalue);
+	if (ret == -1)
+	{
+		printf("select error:%d\n", errno);
+	}
+	else if (ret == 0)
+	{
+		//continue;
+		printf("time out\n");
+	}
+	else
+	{
+		if (FD_ISSET(connect_fd, &read_fds))
+		{
+			socket_isconnect = true;
+			char curr_recv_buf[1024 * 8] = { 0 };
+			int curr_recv_len = ::recv(connect_fd, curr_recv_buf, 1024 * 8, 0);
+			if (-1 == curr_recv_len)
+			{
+				if (errno != EAGAIN && errno != EINTR && errno != EINPROGRESS)
+				{
+					socket_stage = CONN_FATAL_ERROR;
+					//log_info ("recv failed from fd[%d], msg[%s]", netfd, strerror(errno));
+				}
+				else
+				{
+					socket_stage = CONN_DATA_RECVING;
+				}
+			}
+			else if (0 == curr_recv_len)
+			{
+				socket_stage = CONN_DISCONNECT;
+				//log_info ("CCTcpHandle::handle_input()--curr_recv_len=0,connection disconnect by user fd[%d], msg[%s]", netfd, strerror(saveErrorNo));
+			}
+			else
+			{
+				printf("curr_recv_len:%d,curr_recv_buf:%s", curr_recv_len,curr_recv_buf);
+			}
+		}
+		if (FD_ISSET(connect_fd, &write_fds))
+		{
+			char curr_send_buf[512] = { 0 };
+			sprintf(curr_send_buf,"%s","hello world.");
+			int curr_send_len = strlen(curr_send_buf);
+
+			int ret = ::send(connect_fd, curr_send_buf, curr_send_len, 0);
+			int saveErrorNo = errno;
+			if (-1 == ret)
+			{
+				if (saveErrorNo == EINTR || saveErrorNo == EAGAIN || saveErrorNo == EINPROGRESS)
+				{
+					socket_stage = CONN_DATA_SENDING;
+					return socket_stage;
+				}
+				socket_stage = CONN_FATAL_ERROR;
+				return socket_stage;
+			}
+
+			if (ret == curr_send_len)
+			{
+				//log_debug("send complete, send len=[%d]",ret);
+				socket_stage = CONN_SEND_DONE;
+				return socket_stage;
+			}
+			else if (ret < curr_send_len)
+			{
+				//log_debug("had sent part of data, send len=[%d]",ret);
+				socket_stage = CONN_DATA_SENDING;
+				return socket_stage;
+			}
+
+		}
+	}
+	return 0;
+}
+
+void *thread_run(void* p)
+{
+	while (true)
+	{
+		check_events();
+	}
+
+	return NULL;
+}
+
+
+void web_run()
+{
+	int ret = pthread_create(&p_thread, 0, thread_run, NULL);
+	if (ret == -1)
+	{
+		printf("can't create thread: %s\n", strerror(errno));
+	}
+}
 
 
 int WebConnect()
@@ -64,7 +191,7 @@ int tcp_connect(int* fd, const char* address, int port, int block)
 	*fd = SOCKET_INVALID;
 	if ((*fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 	{
-		printf("fd:%d,errno:%d", fd, errno);
+		printf("fd:%d,errno:%d\n", *fd, errno);
 		return SOCKET_CREATE_FAILED;
 	}
 
@@ -78,14 +205,14 @@ int tcp_connect(int* fd, const char* address, int port, int block)
 	int flags = 1;
 	if (((flags = fcntl(*fd, F_GETFL, 0)) < 0 || fcntl(*fd, F_SETFL, flags | O_NONBLOCK) < 0))
 	{
-		printf("flags:%d,errno:%d", flags, errno);
+		printf("flags:%d,errno:%d\n", flags, errno);
 		close(*fd);
 		return -1;
 	}
 	int ret = -1;
 	if ((ret = ::connect(*fd, (struct sockaddr *)&tempsock, addrlen)) < 0)
 	{
-		printf("ret:%d,errno:%d", ret, errno);
+		printf("ret:%d,errno:%d\n", ret, errno);
 		if (errno != EINPROGRESS)
 		{
 			close(*fd);
@@ -93,7 +220,7 @@ int tcp_connect(int* fd, const char* address, int port, int block)
 			return -1;
 		}
 	}
-	printf("ret:%d",ret);
+	printf("ret:%d\n",ret);
 	if (0 == ret) // success return
 	{
 		return 0;

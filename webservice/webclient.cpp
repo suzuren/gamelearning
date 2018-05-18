@@ -62,7 +62,7 @@ char * get_curdir()
 	static char buf[256] = { 0 };
 	int count = readlink("/proc/self/exe", buf, sizeof(buf));
 	char * p = strrchr(buf, '/');
-	if (p != NULL)
+	if (count != -1 && p != NULL)
 	{
 		*(p + 1) = 0;
 	}
@@ -73,6 +73,10 @@ char * get_exename()
 {
 	static char buf[256] = { 0 };
 	int count = readlink("/proc/self/exe", buf, sizeof(buf));
+	if (count == -1)
+	{
+		return NULL;
+	}
 	return buf;
 }
 
@@ -110,7 +114,7 @@ static int check_pid(const char *pidfile)
 	char pidfilebuf[256] = { 0 };
 	int count = readlink("/proc/self/exe", pidfilebuf, sizeof(pidfilebuf));
 	char * p = strrchr(pidfilebuf, '/');
-	if (p != NULL)
+	if (count != -1 && p != NULL)
 	{
 		*(p + 1) = 0;
 	}
@@ -141,7 +145,7 @@ static int write_pid(const char *pidfile)
 	char pidfilebuf[256] = { 0 };
 	int count = readlink("/proc/self/exe", pidfilebuf, sizeof(pidfilebuf));
 	char * p = strrchr(pidfilebuf, '/');
-	if (p != NULL)
+	if (count != -1 && p != NULL)
 	{
 		*(p + 1) = 0;
 	}
@@ -210,7 +214,7 @@ int main(int argc, char *argv[])
 	// ---
 
 	int ret = WebConnect();
-
+	printf("WebConnect - ret:%d\n", ret);
 
 	// ---
 

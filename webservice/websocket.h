@@ -37,6 +37,7 @@ enum CConnState
 };
 
 
+void web_run();
 
 int WebConnect();
 

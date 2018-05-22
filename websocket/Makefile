@@ -16,4 +16,4 @@ $(TARGET):$(SRCS:.cpp=.o)
 	$(CC) $(FLAG) $(INCLUDE) -c -o $@ $<
 
 clean:
-	-rm -f *.o *.d
+	-rm -f *.o *.d websocketserver

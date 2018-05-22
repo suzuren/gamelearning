@@ -58,6 +58,12 @@
     <Filter Include="webservice">
       <UniqueIdentifier>{3f609239-ee32-4f4b-90e8-b38e8c1553b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="websocket">
+      <UniqueIdentifier>{728f1e93-0cba-40ea-afc7-4479fd434b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="candlua">
+      <UniqueIdentifier>{4c3bd3b8-a952-4b15-a790-e2b56d2c7063}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -171,6 +177,27 @@
     <ClInclude Include="..\webservice\websocket.h">
       <Filter>webservice</Filter>
     </ClInclude>
+    <ClInclude Include="..\websocket\base64.h">
+      <Filter>websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocket\debug_log.h">
+      <Filter>websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocket\network_interface.h">
+      <Filter>websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocket\sha1.h">
+      <Filter>websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocket\websocket_handler.h">
+      <Filter>websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocket\websocket_request.h">
+      <Filter>websocket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\websocket\websocket_respond.h">
+      <Filter>websocket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -275,6 +302,21 @@
     </None>
     <None Include="..\webservice\stop_client.sh">
       <Filter>webservice</Filter>
+    </None>
+    <None Include="..\websocket\Makefile">
+      <Filter>websocket</Filter>
+    </None>
+    <None Include="..\websocket\test.html">
+      <Filter>websocket</Filter>
+    </None>
+    <None Include="..\candlua\Makefile">
+      <Filter>candlua</Filter>
+    </None>
+    <None Include="..\candlua\test_clib.lua">
+      <Filter>candlua</Filter>
+    </None>
+    <None Include="..\candlua\test_clib2.lua">
+      <Filter>candlua</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +427,36 @@
     </ClCompile>
     <ClCompile Include="..\webservice\websocket.cpp">
       <Filter>webservice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\base64.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\debug_log.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\main.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\network_interface.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\sha1.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\websocket_handler.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\websocket_request.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\websocket\websocket_respond.cpp">
+      <Filter>websocket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\test_clib.c">
+      <Filter>candlua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\test_clib2.c">
+      <Filter>candlua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

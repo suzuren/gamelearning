@@ -15,6 +15,13 @@ Websocket_Handler::~Websocket_Handler(){
 
 int Websocket_Handler::process()
 {
+	static int i = 0;
+	DEBUG_LOG("process - buff_:%s", buff_);
+	sprintf(buff_ + strlen(buff_), "%d", i++);
+	send_data(buff_);
+	memset(buff_, 0, sizeof(buff_));
+	return 0;
+
 	if(status_ == WEBSOCKET_UNCONNECT){
 		return handshark();
 	}
@@ -71,7 +78,7 @@ int Websocket_Handler::fetch_http_info(){
 	std::string request;
 	request = s.str();
 	//std::getline(s, request);
-	printf("fetch_http_info - request - 2 - size:%d,:%s", request.size(),request.c_str());
+	//printf("fetch_http_info - request - 2 - size:%d,:%s", request.size(),request.c_str());
 	//printf("fetch_http_info - request:%c,- \r:%c,\n:%c", request[request.size() - 1], '\r','\n');
 	if (request[request.size()-1] == '\r')
 	{
@@ -82,7 +89,7 @@ int Websocket_Handler::fetch_http_info(){
 		return -1;
 	}
 
-	printf("fetch_http_info - request - 3 - size:%d,:%s", request.size(), request.c_str());
+	//printf("fetch_http_info - request - 3 - size:%d,:%s", request.size(), request.c_str());
 
 
 	std::string header;

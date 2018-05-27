@@ -38,7 +38,7 @@ enum CConnState
 
 
 void web_run();
-
+void Connect_skynet();
 int WebConnect();
 
 int tcp_connect(int* fd, const char* address, int port, int block);

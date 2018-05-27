@@ -55,6 +55,18 @@ int Network_Interface::init()
 	return 0;
 }
 
+void Network_Interface::send_hello(int fd)
+{
+	char buff[1024] = { 0 };
+	int i = 0;
+	sprintf(buff, "%s %d","hello world", i++);
+	int ret = send(fd, buff, strlen(buff),0);
+
+	DEBUG_LOG("send_hello - fd:%d,ret:%d,buff:%s", fd, ret, buff);
+
+}
+
+
 int Network_Interface::epoll_loop()
 {
 	struct sockaddr_in client_addr;
@@ -118,8 +130,14 @@ void Network_Interface::ctl_event(int fd, bool flag)
 	{
 		set_noblock(fd);
 		websocket_handler_map_[fd] = new Websocket_Handler(fd);
-		if(fd != listenfd_)
+		if (fd != listenfd_)
+		{
+			
 			DEBUG_LOG("fd: %d 加入epoll循环", fd);
+			send_hello(fd);
+		}
+
+		
 	}
 	else
 	{

@@ -213,8 +213,9 @@ int main(int argc, char *argv[])
 
 	// ---
 
-	int ret = WebConnect();
-	printf("WebConnect - ret:%d\n", ret);
+	//int ret = WebConnect();
+	Connect_skynet();
+	//printf("WebConnect - ret:%d\n", ret);
 
 	// ---
 

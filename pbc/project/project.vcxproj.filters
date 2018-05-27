@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{6adcad6c-0917-46c8-b86d-a0c78d7ce712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="binding">
+      <UniqueIdentifier>{cf643b71-ae24-4e06-bf05-d1e65baab1dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="binding\lua">
+      <UniqueIdentifier>{2ed3de21-8ef4-4d2d-bd36-9a5213b95eb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="binding\lua53">
+      <UniqueIdentifier>{d9f41a36-d688-4dca-8ba5-e78aedc40589}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\alloc.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\array.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bootstrap.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\context.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\decode.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\map.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pattern.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\proto.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\register.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rmessage.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\stringpool.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\varint.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wmessage.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\addressbook.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\array.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\decode.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\float.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\map.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\pattern.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\pbc.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\test.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\varint.c">
+      <Filter>test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\binding\lua\pbc-lua.c">
+      <Filter>binding\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\binding\lua53\pbc-lua53.c">
+      <Filter>binding\lua53</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\alloc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\array.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bootstrap.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\context.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\descriptor.pbc.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\map.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pattern.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\proto.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\stringpool.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\varint.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\readfile.h">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\test\addressbook.proto">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\descriptor.proto">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\float.proto">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\Makefile">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\test\test.proto">
+      <Filter>test</Filter>
+    </None>
+    <None Include="..\Android.mk" />
+    <None Include="..\build_ios.sh" />
+    <None Include="..\Makefile" />
+    <None Include="..\README.md" />
+    <None Include="..\binding\lua\build_ios.sh">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua\Makefile">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua\parser.lua">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua\protobuf.lua">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua\README.md">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua\test.lua">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua\test2.lua">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua\testparser.lua">
+      <Filter>binding\lua</Filter>
+    </None>
+    <None Include="..\binding\lua53\build_ios.sh">
+      <Filter>binding\lua53</Filter>
+    </None>
+    <None Include="..\binding\lua53\Makefile">
+      <Filter>binding\lua53</Filter>
+    </None>
+    <None Include="..\binding\lua53\protobuf.lua">
+      <Filter>binding\lua53</Filter>
+    </None>
+    <None Include="..\binding\lua53\test.lua">
+      <Filter>binding\lua53</Filter>
+    </None>
+    <None Include="..\clean.sh" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\license.txt" />
+  </ItemGroup>
+</Project>

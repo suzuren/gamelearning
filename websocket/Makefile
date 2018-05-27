@@ -4,7 +4,7 @@ INCLUDE =
 LIBDIR =
 LIB = 
 BIN = 
-TARGET = websocketserver
+TARGET = server
 SRCS = base64.cpp sha1.cpp network_interface.cpp debug_log.cpp websocket_handler.cpp \
 		websocket_request.cpp main.cpp
 
@@ -16,4 +16,4 @@ $(TARGET):$(SRCS:.cpp=.o)
 	$(CC) $(FLAG) $(INCLUDE) -c -o $@ $<
 
 clean:
-	-rm -f *.o *.d websocketserver
+	-rm -f *.o *.d server

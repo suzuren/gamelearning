@@ -214,6 +214,29 @@ void send_handshark()
 	printf("connect_fd:%d,ret:%d,curr_send_len:%d,buff:%s\n", connect_fd,ret, curr_send_len, buff);
 }
 
+void Connect_skynet()
+{
+	int ret = tcp_connect(&connect_fd, strip.c_str(), port, 0);
+
+	char curr_recv_buf[2048] = { 0 };
+	int curr_recv_len = ::recv(connect_fd, curr_recv_buf, 2048, 0);
+	printf("curr_recv_len:%d,curr_recv_buf:%s", curr_recv_len, curr_recv_buf);
+
+
+	char buff[2048] = { 0 };
+	strcat(buff, "hello world,skynet");
+	
+	int curr_send_len = strlen(buff);
+
+
+	ret = ::send(connect_fd, buff, curr_send_len, 0);
+
+	printf("connect_fd:%d,ret:%d,curr_send_len:%d,buff:%s\n", connect_fd, ret, curr_send_len, buff);
+
+
+
+}
+
 int tcp_connect(int* fd, const char* address, int port, int block)
 {
 	*fd = SOCKET_INVALID;
@@ -242,7 +265,7 @@ int tcp_connect(int* fd, const char* address, int port, int block)
 			return -1;
 		}
 	}
-
+	/*
 	int flags = 1;
 	if (((flags = fcntl(*fd, F_GETFL, 0)) < 0 || fcntl(*fd, F_SETFL, flags | O_NONBLOCK) < 0))
 	{
@@ -250,11 +273,12 @@ int tcp_connect(int* fd, const char* address, int port, int block)
 		close(*fd);
 		return -1;
 	}
+	*/
 
 	printf("connect - ret:%d\n",ret);
 	if (0 == ret) // success return
 	{
-		send_handshark();
+		//send_handshark();
 
 		return 0;
 	}
@@ -267,7 +291,7 @@ int tcp_connect(int* fd, const char* address, int port, int block)
 	//int poll(struct pollfd fds[], nfds_t nfds, int timeout);
 	//nfds：nfds_t类型的参数，用于标记数组fds中的结构体元素的总数量;
 	//timeout：是poll函数调用阻塞的时间，单位:毫秒
-
+	/*
 	int pollRet = -1;
 	struct pollfd event;
 
@@ -296,6 +320,7 @@ int tcp_connect(int* fd, const char* address, int port, int block)
 		*fd = SOCKET_INVALID;
 		return -1;
 	}
+	*/
 	return 0;
 }
 

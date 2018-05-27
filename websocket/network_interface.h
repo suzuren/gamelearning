@@ -15,6 +15,7 @@ private:
 	Network_Interface();
 	~Network_Interface();
 	int init();
+	void send_hello(int fd);
 	int epoll_loop();
 	int set_noblock(int fd);
 	void ctl_event(int fd, bool flag);

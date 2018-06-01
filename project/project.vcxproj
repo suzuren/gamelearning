@@ -82,6 +82,7 @@
     <None Include="..\lua\class_parent.lua" />
     <None Include="..\lua\class_test.lua" />
     <None Include="..\lua\closure_func.lua" />
+    <None Include="..\lua\eventDispatcher.lua" />
     <None Include="..\lua\func_param.lua" />
     <None Include="..\lua\gate.lua" />
     <None Include="..\lua\gateserver_ws.lua" />

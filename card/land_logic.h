@@ -211,16 +211,17 @@ bool CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirst
 	BYTE cbFirstType = GetCardType(cbFirstCard, cbFirstCount);
 
 	printf("CompareCard - cbFirstCount:%d,cbNextCount:%d,cbFirstType:%d,cbNextType:%d.\n", cbFirstCount, cbNextCount, cbFirstType, cbNextType);
-	
+	//		CompareCard - cbFirstCount:2, cbNextCount : 4, cbFirstType : 12, cbNextType : 11.
 	//¿‡–Õ≈–∂œ
 	if (cbNextType == CT_ERROR) return false;
 	if (cbNextType == CT_MISSILE_CARD) return true;
+	if (cbFirstType == CT_MISSILE_CARD) return false;
 
 	//’®µØ≈–∂œ
 	if ((cbFirstType != CT_BOMB_CARD) && (cbNextType == CT_BOMB_CARD)) return true;
 	if ((cbFirstType == CT_BOMB_CARD) && (cbNextType != CT_BOMB_CARD)) return false;
 
-	//printf("CompareCard 2 - cbFirstCount:%d,cbNextCount:%d,cbFirstType:%d,cbNextType:%d.\n", cbFirstCount, cbNextCount, cbFirstType, cbNextType);
+	printf("CompareCard 2 - cbFirstCount:%d,cbNextCount:%d,cbFirstType:%d,cbNextType:%d.\n", cbFirstCount, cbNextCount, cbFirstType, cbNextType);
 
 
 	//πÊ‘Ú≈–∂œ

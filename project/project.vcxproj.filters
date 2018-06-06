@@ -64,6 +64,9 @@
     <Filter Include="candlua">
       <UniqueIdentifier>{4c3bd3b8-a952-4b15-a790-e2b56d2c7063}</UniqueIdentifier>
     </Filter>
+    <Filter Include="card">
+      <UniqueIdentifier>{76770b28-e655-4a9b-bafe-156f459711c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -198,6 +201,9 @@
     <ClInclude Include="..\websocket\websocket_respond.h">
       <Filter>websocket</Filter>
     </ClInclude>
+    <ClInclude Include="..\card\land_logic.h">
+      <Filter>card</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -320,6 +326,9 @@
     </None>
     <None Include="..\lua\eventDispatcher.lua">
       <Filter>lua</Filter>
+    </None>
+    <None Include="..\card\Makefile">
+      <Filter>card</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -460,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="..\candlua\test_clib2.c">
       <Filter>candlua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\card\main.cpp">
+      <Filter>card</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

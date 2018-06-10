@@ -67,6 +67,9 @@
     <Filter Include="card">
       <UniqueIdentifier>{76770b28-e655-4a9b-bafe-156f459711c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="candlua\pbc">
+      <UniqueIdentifier>{373f62b3-5d63-429d-a261-27b852b411c3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -204,6 +207,36 @@
     <ClInclude Include="..\card\land_logic.h">
       <Filter>card</Filter>
     </ClInclude>
+    <ClInclude Include="..\candlua\pbc\alloc.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\array.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\bootstrap.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\context.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\descriptor.pbc.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\map.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\pattern.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\proto.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\stringpool.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\candlua\pbc\varint.h">
+      <Filter>candlua\pbc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -329,6 +362,48 @@
     </None>
     <None Include="..\card\Makefile">
       <Filter>card</Filter>
+    </None>
+    <None Include="..\candlua\test_pbcc.lua">
+      <Filter>candlua</Filter>
+    </None>
+    <None Include="..\candlua\pbc\Makefile">
+      <Filter>candlua\pbc</Filter>
+    </None>
+    <None Include="..\candlua\protobuf.lua">
+      <Filter>candlua</Filter>
+    </None>
+    <None Include="..\lua\common.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\pbConfig.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\pbParser.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\table_self.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\table_setmetatable.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\test_loop.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\test_table.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\test_timer.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\timer.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\xpcall.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\candlua\loginServer.login.s2c.proto">
+      <Filter>candlua</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -472,6 +547,51 @@
     </ClCompile>
     <ClCompile Include="..\card\main.cpp">
       <Filter>card</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\lua-pbcc.c">
+      <Filter>candlua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\alloc.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\array.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\bootstrap.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\context.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\decode.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\map.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\pattern.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\proto.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\register.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\rmessage.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\stringpool.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\varint.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc\wmessage.c">
+      <Filter>candlua\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\pbc-lua53.c">
+      <Filter>candlua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

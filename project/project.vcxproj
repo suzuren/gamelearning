@@ -85,6 +85,7 @@
     <None Include="..\candlua\test_clib.lua" />
     <None Include="..\candlua\test_clib2.lua" />
     <None Include="..\candlua\test_pbcc.lua" />
+    <None Include="..\candlua\test_wordfilter.lua" />
     <None Include="..\card\Makefile" />
     <None Include="..\clean.sh" />
     <None Include="..\cpp11\Makefile" />
@@ -137,6 +138,7 @@
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
     <ClCompile Include="..\3rd\templog\test\test_logging.cpp" />
     <ClCompile Include="..\candlua\lua-pbcc.c" />
+    <ClCompile Include="..\candlua\lua-wordfilter.c" />
     <ClCompile Include="..\candlua\pbc-lua53.c" />
     <ClCompile Include="..\candlua\pbc\alloc.c" />
     <ClCompile Include="..\candlua\pbc\array.c" />

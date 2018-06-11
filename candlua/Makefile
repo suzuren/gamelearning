@@ -11,7 +11,7 @@ ROOT_DIR := $(abspath $(lastword $(MAKEFILE_LIST)))
 SUB_DIRS = $(shell ls -l | grep ^d | awk '{print $$9}')
 
 
-all : testclib.so testclibtwo.so pbcc.so protobuf.so loginServer.login.s2c.pb
+all : testclib.so testclibtwo.so pbcc.so protobuf.so loginServer.login.s2c.pb wordfilter.so
 
 testclib.so : test_clib.c
 	$(CC) $(CFLAGS) $(SHARED) $^ -o $@
@@ -30,6 +30,8 @@ GAME_PROTO = $(wildcard ./*.proto)
 loginServer.login.s2c.pb : $(GAME_PROTO)
 	protoc -o $@ -I. --include_imports $^
 
+wordfilter.so : lua-wordfilter.c
+	$(CC) $(CFLAGS) $(SHARED) $^ -o $@
 
 clean :
 	rm -f *.so *.pb

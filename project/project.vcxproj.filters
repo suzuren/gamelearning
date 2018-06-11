@@ -405,6 +405,9 @@
     <None Include="..\candlua\loginServer.login.s2c.proto">
       <Filter>candlua</Filter>
     </None>
+    <None Include="..\candlua\test_wordfilter.lua">
+      <Filter>candlua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -591,6 +594,9 @@
       <Filter>candlua\pbc</Filter>
     </ClCompile>
     <ClCompile Include="..\candlua\pbc-lua53.c">
+      <Filter>candlua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\lua-wordfilter.c">
       <Filter>candlua</Filter>
     </ClCompile>
   </ItemGroup>

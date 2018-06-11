@@ -5,7 +5,7 @@ git rm -r --cached some-directory
 git commit -m "Remove the now ignored directory some-directory"
 git push
 
-
+2.
 git log
 git log -p -2
 

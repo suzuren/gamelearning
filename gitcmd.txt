@@ -6,7 +6,14 @@ git commit -m "Remove the now ignored directory some-directory"
 git push
 
 
-
+git log
 git log -p -2
+
+git diff --name-only HEAD~ HEAD
+git diff --name-only 3bd6f3d769eb5e5fb96e4153eab846136531225a 63ae0644b1304607a0ac096cec7fac4a8529b8f1
+
+
+
+
 
 

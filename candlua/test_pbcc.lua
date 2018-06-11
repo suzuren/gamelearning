@@ -1,6 +1,7 @@
 
 local pbcc = require "pbcc"
 local protobuf = require "protobuf"
+local printr = require "print_r"
 
 print("-- test unpackNetPayload 1 ------------------------------------------------------------------------------------------------")
 
@@ -31,7 +32,13 @@ print(msg, size)
 
 print("-- test unpackNetPayload 1 ------------------------------------------------------------------------------------------------")
 
-local pNo, pStr = pbcc.unpackNetPayload(msg, size)
+local pNo, pStr,ignore1,ignore2 = pbcc.unpackNetPayload(msg, size)
 
-print(pNo,pStr)
-print(string.format("pNo:0x%06X,pStr:%s",pNo,pStr))
+local sz = 2
+local pbObj  = protobuf.decode(typeName, pStr, sz)
+
+print(pNo,ignore1,ignore2,pbObj)
+
+print(string.format("pNo:0x%06X,pStr:%s",pNo,pbObj))
+
+printr(pbObj)

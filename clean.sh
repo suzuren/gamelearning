@@ -11,7 +11,7 @@ cd ./pbc
 cd ${root_dir}
 
 clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_CPP" "helloworld" "./MultiplayerBook/" "inicfg"
- "test" "proxy_epoll" "referlib" "cpp11" "ThreadPool" "declare" "http" "webservice" "websocket" "candlua" "card")
+ "test" "proxy_epoll" "referlib" "cpp11" "ThreadPool" "declare" "http" "webservice" "websocket" "candlua" "card" "lua-arc4random")
 
 clean_len=${#clean_dir[@]}
 

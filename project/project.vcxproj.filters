@@ -70,6 +70,36 @@
     <Filter Include="candlua\pbc">
       <UniqueIdentifier>{373f62b3-5d63-429d-a261-27b852b411c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua-arc4random">
+      <UniqueIdentifier>{829bf1a2-f662-4e80-9af2-95ae45cc9bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\compat">
+      <UniqueIdentifier>{8181b2bd-9344-4098-9575-8030ef770bfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\include">
+      <UniqueIdentifier>{31263373-9790-4506-bf0a-630050ef2a08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\rockspec">
+      <UniqueIdentifier>{9f2a1536-9c19-459f-9521-015baaaf0bcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\src">
+      <UniqueIdentifier>{af18ec4e-1f63-4839-9105-e35a9d294644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\include\machine">
+      <UniqueIdentifier>{94a67c6e-45cd-4ec3-8636-dde9c72ee8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\include\sys">
+      <UniqueIdentifier>{72185406-8a7e-47ff-a7b1-b1aeec621fbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\compat\arc4random">
+      <UniqueIdentifier>{3b967024-572a-48f8-95f6-da36a798c006}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\compat\getentropy">
+      <UniqueIdentifier>{547b0bd4-cab4-483f-8a87-c1eada734084}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-arc4random\compat\sha">
+      <UniqueIdentifier>{74ae400c-9ac1-4e39-9ca1-455ef716e486}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -236,6 +266,45 @@
     </ClInclude>
     <ClInclude Include="..\candlua\pbc\varint.h">
       <Filter>candlua\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\include\blf.h">
+      <Filter>lua-arc4random\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\include\stdlib.h">
+      <Filter>lua-arc4random\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\include\string.h">
+      <Filter>lua-arc4random\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\include\unistd.h">
+      <Filter>lua-arc4random\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\include\machine\endian.h">
+      <Filter>lua-arc4random\include\machine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\include\sys\types.h">
+      <Filter>lua-arc4random\include\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\compat\arc4random\arc4random.h">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\compat\arc4random\arc4random_freebsd.h">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\compat\arc4random\arc4random_linux.h">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\compat\arc4random\arc4random_osx.h">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\compat\arc4random\arc4random_solaris.h">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\compat\arc4random\arc4random_win.h">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-arc4random\compat\arc4random\chacha_private.h">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -413,6 +482,39 @@
     </None>
     <None Include="..\candlua\cItemBuffer.lua">
       <Filter>candlua</Filter>
+    </None>
+    <None Include="..\lua-arc4random\Makefile">
+      <Filter>lua-arc4random</Filter>
+    </None>
+    <None Include="..\lua-arc4random\Makefile.mess">
+      <Filter>lua-arc4random</Filter>
+    </None>
+    <None Include="..\lua-arc4random\README.md">
+      <Filter>lua-arc4random</Filter>
+    </None>
+    <None Include="..\lua-arc4random\test.lua">
+      <Filter>lua-arc4random</Filter>
+    </None>
+    <None Include="..\lua-arc4random\rockspec\arc4random-1.0-1.rockspec">
+      <Filter>lua-arc4random\rockspec</Filter>
+    </None>
+    <None Include="..\lua-arc4random\rockspec\arc4random-1.1-1.rockspec">
+      <Filter>lua-arc4random\rockspec</Filter>
+    </None>
+    <None Include="..\lua-arc4random\rockspec\arc4random-1.2-1.rockspec">
+      <Filter>lua-arc4random\rockspec</Filter>
+    </None>
+    <None Include="..\lua-arc4random\rockspec\arc4random-1.3-1.rockspec">
+      <Filter>lua-arc4random\rockspec</Filter>
+    </None>
+    <None Include="..\lua-arc4random\rockspec\arc4random-1.3-2.rockspec">
+      <Filter>lua-arc4random\rockspec</Filter>
+    </None>
+    <None Include="..\lua-arc4random\rockspec\arc4random-1.3-3.rockspec">
+      <Filter>lua-arc4random\rockspec</Filter>
+    </None>
+    <None Include="..\lua-arc4random\rockspec\arc4random-scm-1.rockspec">
+      <Filter>lua-arc4random\rockspec</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -607,6 +709,33 @@
     </ClCompile>
     <ClCompile Include="..\candlua\lua-sui.c">
       <Filter>candlua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\src\main.c">
+      <Filter>lua-arc4random\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\arc4random\arc4random.c">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\arc4random\arc4random_uniform.c">
+      <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\getentropy\getentropy_freebsd.c">
+      <Filter>lua-arc4random\compat\getentropy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\getentropy\getentropy_linux.c">
+      <Filter>lua-arc4random\compat\getentropy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\getentropy\getentropy_osx.c">
+      <Filter>lua-arc4random\compat\getentropy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\getentropy\getentropy_solaris.c">
+      <Filter>lua-arc4random\compat\getentropy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\getentropy\getentropy_win.c">
+      <Filter>lua-arc4random\compat\getentropy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-arc4random\compat\sha\sha512.c">
+      <Filter>lua-arc4random\compat\sha</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

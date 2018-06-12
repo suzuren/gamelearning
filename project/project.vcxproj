@@ -78,6 +78,7 @@
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf" />
     <None Include="..\3rd\templog\makefile" />
+    <None Include="..\candlua\cItemBuffer.lua" />
     <None Include="..\candlua\loginServer.login.s2c.proto" />
     <None Include="..\candlua\Makefile" />
     <None Include="..\candlua\pbc\Makefile" />
@@ -85,6 +86,7 @@
     <None Include="..\candlua\test_clib.lua" />
     <None Include="..\candlua\test_clib2.lua" />
     <None Include="..\candlua\test_pbcc.lua" />
+    <None Include="..\candlua\test_sui.lua" />
     <None Include="..\candlua\test_wordfilter.lua" />
     <None Include="..\card\Makefile" />
     <None Include="..\clean.sh" />
@@ -138,6 +140,7 @@
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
     <ClCompile Include="..\3rd\templog\test\test_logging.cpp" />
     <ClCompile Include="..\candlua\lua-pbcc.c" />
+    <ClCompile Include="..\candlua\lua-sui.c" />
     <ClCompile Include="..\candlua\lua-wordfilter.c" />
     <ClCompile Include="..\candlua\pbc-lua53.c" />
     <ClCompile Include="..\candlua\pbc\alloc.c" />

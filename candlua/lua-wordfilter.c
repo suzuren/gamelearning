@@ -8,14 +8,19 @@
 
 
 #define WORD_NUM          256
+
+
+//#pragma  pack(1)
 struct trie_node {
 	struct trie_node *node[WORD_NUM];
 	int exist;
 };
+//#pragma  pack()
 
 static int l_new(lua_State *L) {
 	struct trie_node *root = calloc(1, sizeof(struct trie_node));
 	lua_pushlightuserdata(L, (void*)root);
+	//printf("l_new - node size:%ld\n", sizeof(struct trie_node)); 2056 = 8*256 +  8
 	return 1;
 }
 
@@ -24,8 +29,10 @@ static int l_addWord(lua_State *L) {
 	int size=0,i;
 	unsigned char * word = (unsigned char *)luaL_checklstring(L,2,(size_t *)&size);
 	struct trie_node *n = root;
+	
 	for(i=0;i<size;i++)
 	{
+		//printf("l_addWord - size:%d,word:%s,word:%d,node:%p\n", size, word,word[i], n->node[word[i]]);
 		if (n->node[word[i]] == NULL) {
 			n->node[word[i]] = calloc(1, sizeof(struct trie_node));
 		}
@@ -39,6 +46,8 @@ static int l_addWord(lua_State *L) {
 
 static int l_hasMatch(lua_State *L)
 {
+	//printf("lua_islightuserdata(L, 1):%d,luaL_typename(L, 1):%s\n", lua_islightuserdata(L, 1), luaL_typename(L, 1));
+
 	struct trie_node *root = (struct trie_node *)lua_touserdata(L, 1);
 	char *word = (char *)luaL_checklstring(L, 2, NULL);
 	struct trie_node *n = NULL;

@@ -408,6 +408,12 @@
     <None Include="..\candlua\test_wordfilter.lua">
       <Filter>candlua</Filter>
     </None>
+    <None Include="..\candlua\test_sui.lua">
+      <Filter>candlua</Filter>
+    </None>
+    <None Include="..\candlua\cItemBuffer.lua">
+      <Filter>candlua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -597,6 +603,9 @@
       <Filter>candlua</Filter>
     </ClCompile>
     <ClCompile Include="..\candlua\lua-wordfilter.c">
+      <Filter>candlua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\candlua\lua-sui.c">
       <Filter>candlua</Filter>
     </ClCompile>
   </ItemGroup>

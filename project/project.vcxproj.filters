@@ -115,6 +115,15 @@
     <Filter Include="lua-cjson\lua\cjson">
       <UniqueIdentifier>{288c2955-0889-4822-b1f7-ceca74f366c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua-5.3.4-src">
+      <UniqueIdentifier>{99b74ddd-59d7-482d-9f09-73ca9927c980}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-5.3.4-src\doc">
+      <UniqueIdentifier>{bf6cbadd-fac0-4539-8549-a8719f6b44d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-5.3.4-src\src">
+      <UniqueIdentifier>{5215f367-bf3b-4df0-9a33-18e57029b71e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -329,6 +338,84 @@
     </ClInclude>
     <ClInclude Include="..\lua-cjson\strbuf.h">
       <Filter>lua-cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lapi.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lauxlib.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lcode.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lctype.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\ldebug.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\ldo.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lfunc.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lgc.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\llex.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\llimits.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lmem.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lobject.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lopcodes.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lparser.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lprefix.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lstate.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lstring.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\ltable.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\ltm.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lua.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lua.hpp">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\luaconf.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lualib.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lundump.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lvm.h">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-5.3.4-src\src\lzio.h">
+      <Filter>lua-5.3.4-src\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -627,6 +714,39 @@
     <None Include="..\lua-cjson\tests\types.json">
       <Filter>lua-cjson\tests</Filter>
     </None>
+    <None Include="..\lua-5.3.4-src\Makefile">
+      <Filter>lua-5.3.4-src</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\README">
+      <Filter>lua-5.3.4-src</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\contents.html">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\index.css">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\lua.1">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\lua.css">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\luac.1">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\manual.css">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\manual.html">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\doc\readme.html">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </None>
+    <None Include="..\lua-5.3.4-src\src\Makefile">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -863,6 +983,111 @@
     <ClCompile Include="..\lua-cjson\strbuf.c">
       <Filter>lua-cjson</Filter>
     </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lapi.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lauxlib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lbaselib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lbitlib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lcode.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lcorolib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lctype.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\ldblib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\ldebug.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\ldo.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\ldump.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lfunc.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lgc.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\linit.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\liolib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\llex.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lmathlib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lmem.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\loadlib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lobject.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lopcodes.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\loslib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lparser.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lstate.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lstring.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lstrlib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\ltable.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\ltablib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\ltm.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lua.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\luac.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lundump.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lutf8lib.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lvm.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-5.3.4-src\src\lzio.c">
+      <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -877,5 +1102,13 @@
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt">
       <Filter>lua-cjson\devel</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\lua-5.3.4-src\doc\logo.gif">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </Image>
+    <Image Include="..\lua-5.3.4-src\doc\osi-certified-72x60.png">
+      <Filter>lua-5.3.4-src\doc</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -33,15 +33,14 @@ static int l_unpackNetPayload(lua_State *L) {
 	}
 	//int i=1;
 	int k = 0;
-	int pbNo = 0;
-	printf("l_unpackNetPayload 1 - size:%d,pbNo:%d - 0x%06X,ptr:%d %d %d %d %d %d\n", size, pbNo, pbNo, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5]);
+	//printf("l_unpackNetPayload 1 - size:%d,pbNo:%d - 0x%06X,ptr:%d %d %d %d %d %d\n", size, pbNo, pbNo, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5]);
 
 	
-	//pbNo = ( (unsigned char)ptr[1] << 16 ) | ( (unsigned char)ptr[2] << 8 ) | (unsigned char)ptr[3];
+	//int pbNo = ( (unsigned char)ptr[1] << 16 ) | ( (unsigned char)ptr[2] << 8 ) | (unsigned char)ptr[3];
 	
-	pbNo = ( (unsigned char)ptr[3] << 16 ) | ( (unsigned char)ptr[4] << 8 ) | (unsigned char)ptr[5];
+	int pbNo = ( (unsigned char)ptr[3] << 16 ) | ( (unsigned char)ptr[4] << 8 ) | (unsigned char)ptr[5];
 
-	printf("l_unpackNetPayload 2 - size:%d,pbNo:%d - 0x%06X,ptr:%d %d %d %d %d %d\n", size, pbNo, pbNo, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5]);
+	//printf("l_unpackNetPayload 2 - size:%d,pbNo:%d - 0x%06X,ptr:%d %d %d %d %d %d\n", size, pbNo, pbNo, ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5]);
 
 
 	//size += 4;			// actual network payload size
@@ -65,7 +64,7 @@ static int l_unpackNetPayload(lua_State *L) {
 	lua_pushinteger(L,k);
 	lua_pushinteger(L,(unsigned char)ptr[0]);
 
-	printf("l_unpackNetPayload - size:%d,k:%d,(unsigned char)ptr[0]:%d\n", size-4,k, (unsigned char)ptr[0]);
+	//printf("l_unpackNetPayload - size:%d,k:%d,(unsigned char)ptr[0]:%d\n", size-4,k, (unsigned char)ptr[0]);
 
 	return 4;
 }
@@ -97,7 +96,7 @@ static int l_packNetPBPacket(lua_State *L)
 	lua_Unsigned protoNo = (lua_Unsigned)luaL_checkinteger(L, 3);
 	int test = lua_toboolean(L, 4);
 
-	printf("l_packNetPBPacket - size:%d, protoNo:0x%06llX,test:%d\n", size, protoNo, test);
+	//printf("l_packNetPBPacket - size:%d, protoNo:0x%06llX,test:%d\n", size, protoNo, test);
 	//							size:2, protoNo:0x000100,test:1
 	//uint8_t *buffer = malloc(size+6);
 	char *buffer = malloc(size + 6);
@@ -114,7 +113,7 @@ static int l_packNetPBPacket(lua_State *L)
 	buffer[4] = (protoNo >> 8) & 0xff;	// 2^8 = 256 and 0x000100 = 256
 	buffer[5] = protoNo & 0xff;
 
-	printf("l_packNetPBPacket - buffer:%d %d %d %d %d %d\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5] );
+	//printf("l_packNetPBPacket - buffer:%d %d %d %d %d %d\n", buffer[0], buffer[1], buffer[2], buffer[3], buffer[4], buffer[5] );
 	//							buffer:0 6 0 0 1 0
 	int i=0;
 	int k = 0;
@@ -123,7 +122,7 @@ static int l_packNetPBPacket(lua_State *L)
 		k+=((unsigned char)buffer[i]);
 		k&=0xff;
 	}
-	printf("l_packNetPBPacket - k:%d\n", k);
+	//printf("l_packNetPBPacket - k:%d\n", k);
 
 	if(!test)
 	{

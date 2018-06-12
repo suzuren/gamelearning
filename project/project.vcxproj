@@ -67,6 +67,9 @@
     <ClInclude Include="..\lua-arc4random\include\string.h" />
     <ClInclude Include="..\lua-arc4random\include\sys\types.h" />
     <ClInclude Include="..\lua-arc4random\include\unistd.h" />
+    <ClInclude Include="..\lua-cjson\dtoa_config.h" />
+    <ClInclude Include="..\lua-cjson\fpconv.h" />
+    <ClInclude Include="..\lua-cjson\strbuf.h" />
     <ClInclude Include="..\MultiplayerBook\ByteSwap.h" />
     <ClInclude Include="..\MultiplayerBook\LinkingContext.h" />
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
@@ -121,6 +124,35 @@
     <None Include="..\lua-arc4random\rockspec\arc4random-1.3-3.rockspec" />
     <None Include="..\lua-arc4random\rockspec\arc4random-scm-1.rockspec" />
     <None Include="..\lua-arc4random\test.lua" />
+    <None Include="..\lua-cjson\build-packages.sh" />
+    <None Include="..\lua-cjson\LICENSE" />
+    <None Include="..\lua-cjson\lua-cjson-2.1devel-1.rockspec" />
+    <None Include="..\lua-cjson\lua-cjson.spec" />
+    <None Include="..\lua-cjson\lua\cjson\util.lua" />
+    <None Include="..\lua-cjson\lua\json2lua.lua" />
+    <None Include="..\lua-cjson\lua\lua2json.lua" />
+    <None Include="..\lua-cjson\Makefile" />
+    <None Include="..\lua-cjson\manual.adoc" />
+    <None Include="..\lua-cjson\NEWS" />
+    <None Include="..\lua-cjson\performance.adoc" />
+    <None Include="..\lua-cjson\README.adoc" />
+    <None Include="..\lua-cjson\runtests.sh" />
+    <None Include="..\lua-cjson\tests\bench.lua" />
+    <None Include="..\lua-cjson\tests\example1.json" />
+    <None Include="..\lua-cjson\tests\example2.json" />
+    <None Include="..\lua-cjson\tests\example3.json" />
+    <None Include="..\lua-cjson\tests\example4.json" />
+    <None Include="..\lua-cjson\tests\example5.json" />
+    <None Include="..\lua-cjson\tests\genutf8.pl" />
+    <None Include="..\lua-cjson\tests\numbers.json" />
+    <None Include="..\lua-cjson\tests\octets-escaped.dat" />
+    <None Include="..\lua-cjson\tests\README" />
+    <None Include="..\lua-cjson\tests\rfc-example1.json" />
+    <None Include="..\lua-cjson\tests\rfc-example2.json" />
+    <None Include="..\lua-cjson\tests\test.lua" />
+    <None Include="..\lua-cjson\tests\types.json" />
+    <None Include="..\lua-cjson\THANKS" />
+    <None Include="..\lua-cjson\TODO" />
     <None Include="..\lua\class_child.lua" />
     <None Include="..\lua\class_parent.lua" />
     <None Include="..\lua\class_test.lua" />
@@ -211,6 +243,11 @@
     <ClCompile Include="..\lua-arc4random\compat\getentropy\getentropy_win.c" />
     <ClCompile Include="..\lua-arc4random\compat\sha\sha512.c" />
     <ClCompile Include="..\lua-arc4random\src\main.c" />
+    <ClCompile Include="..\lua-cjson\dtoa.c" />
+    <ClCompile Include="..\lua-cjson\fpconv.c" />
+    <ClCompile Include="..\lua-cjson\g_fmt.c" />
+    <ClCompile Include="..\lua-cjson\lua_cjson.c" />
+    <ClCompile Include="..\lua-cjson\strbuf.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
@@ -237,6 +274,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt" />
+    <Text Include="..\lua-cjson\CMakeLists.txt" />
+    <Text Include="..\lua-cjson\devel\json_parser_outline.txt" />
+    <Text Include="..\lua-cjson\rfc4627.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9CE8AE1B-F8B0-478D-845D-E86CFC4F5882}</ProjectGuid>

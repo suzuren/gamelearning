@@ -100,6 +100,21 @@
     <Filter Include="lua-arc4random\compat\sha">
       <UniqueIdentifier>{74ae400c-9ac1-4e39-9ca1-455ef716e486}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua-cjson">
+      <UniqueIdentifier>{96af706b-7cda-4587-9845-ec7d6a0ac3b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-cjson\devel">
+      <UniqueIdentifier>{f5421fd2-09ce-4638-8472-347b6faa0031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-cjson\lua">
+      <UniqueIdentifier>{e58f61b1-7f7b-4188-ba8a-3e1b3a87433b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-cjson\tests">
+      <UniqueIdentifier>{d1663ce4-27fb-4525-ad8e-39b169cad600}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua-cjson\lua\cjson">
+      <UniqueIdentifier>{288c2955-0889-4822-b1f7-ceca74f366c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -305,6 +320,15 @@
     </ClInclude>
     <ClInclude Include="..\lua-arc4random\compat\arc4random\chacha_private.h">
       <Filter>lua-arc4random\compat\arc4random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-cjson\dtoa_config.h">
+      <Filter>lua-cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-cjson\fpconv.h">
+      <Filter>lua-cjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lua-cjson\strbuf.h">
+      <Filter>lua-cjson</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -515,6 +539,93 @@
     </None>
     <None Include="..\lua-arc4random\rockspec\arc4random-scm-1.rockspec">
       <Filter>lua-arc4random\rockspec</Filter>
+    </None>
+    <None Include="..\lua-cjson\build-packages.sh">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\LICENSE">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\lua-cjson.spec">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\lua-cjson-2.1devel-1.rockspec">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\Makefile">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\manual.adoc">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\NEWS">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\performance.adoc">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\README.adoc">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\runtests.sh">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\THANKS">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\TODO">
+      <Filter>lua-cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\lua\json2lua.lua">
+      <Filter>lua-cjson\lua</Filter>
+    </None>
+    <None Include="..\lua-cjson\lua\lua2json.lua">
+      <Filter>lua-cjson\lua</Filter>
+    </None>
+    <None Include="..\lua-cjson\lua\cjson\util.lua">
+      <Filter>lua-cjson\lua\cjson</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\bench.lua">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\example1.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\example2.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\example3.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\example4.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\example5.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\genutf8.pl">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\numbers.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\octets-escaped.dat">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\README">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\rfc-example1.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\rfc-example2.json">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\test.lua">
+      <Filter>lua-cjson\tests</Filter>
+    </None>
+    <None Include="..\lua-cjson\tests\types.json">
+      <Filter>lua-cjson\tests</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -737,10 +848,34 @@
     <ClCompile Include="..\lua-arc4random\compat\sha\sha512.c">
       <Filter>lua-arc4random\compat\sha</Filter>
     </ClCompile>
+    <ClCompile Include="..\lua-cjson\dtoa.c">
+      <Filter>lua-cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-cjson\fpconv.c">
+      <Filter>lua-cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-cjson\g_fmt.c">
+      <Filter>lua-cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-cjson\lua_cjson.c">
+      <Filter>lua-cjson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lua-cjson\strbuf.c">
+      <Filter>lua-cjson</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
       <Filter>cpp11</Filter>
+    </Text>
+    <Text Include="..\lua-cjson\CMakeLists.txt">
+      <Filter>lua-cjson</Filter>
+    </Text>
+    <Text Include="..\lua-cjson\rfc4627.txt">
+      <Filter>lua-cjson</Filter>
+    </Text>
+    <Text Include="..\lua-cjson\devel\json_parser_outline.txt">
+      <Filter>lua-cjson\devel</Filter>
     </Text>
   </ItemGroup>
 </Project>

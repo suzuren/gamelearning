@@ -211,6 +211,7 @@
     <None Include="..\lua\timer.lua" />
     <None Include="..\lua\xpcall.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
+    <None Include="..\NetSelect\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
     <None Include="..\proxy_epoll\Readme.md" />
     <None Include="..\proxy_epoll\start_proxy.sh" />
@@ -322,6 +323,9 @@
     <ClCompile Include="..\lua-cjson\strbuf.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
+    <ClCompile Include="..\NetSelect\client.c" />
+    <ClCompile Include="..\NetSelect\select.h" />
+    <ClCompile Include="..\NetSelect\server.c" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
     <ClCompile Include="..\referlib\client.cpp" />
     <ClCompile Include="..\referlib\eventmanager.cc" />

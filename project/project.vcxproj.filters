@@ -124,6 +124,9 @@
     <Filter Include="lua-5.3.4-src\src">
       <UniqueIdentifier>{5215f367-bf3b-4df0-9a33-18e57029b71e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NetSelect">
+      <UniqueIdentifier>{b56d0236-c6a6-422e-b43c-23965b89b13e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -747,6 +750,9 @@
     <None Include="..\lua-5.3.4-src\src\Makefile">
       <Filter>lua-5.3.4-src\src</Filter>
     </None>
+    <None Include="..\NetSelect\Makefile">
+      <Filter>NetSelect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1087,6 +1093,15 @@
     </ClCompile>
     <ClCompile Include="..\lua-5.3.4-src\src\lzio.c">
       <Filter>lua-5.3.4-src\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NetSelect\select.h">
+      <Filter>NetSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NetSelect\client.c">
+      <Filter>NetSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NetSelect\server.c">
+      <Filter>NetSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

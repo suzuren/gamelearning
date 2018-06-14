@@ -21,7 +21,7 @@
 #include<sys/poll.h>
 
 #define IPADDRESS "127.0.0.1"
-#define PORT 8787
+#define PORT 8788
 
 int socket_connect(const char *ip, int port)
 {
@@ -204,13 +204,5 @@ const char* getStrTime()
 
 	return szDate;
 }
-
-
-
-
-
-
-
-
 
 

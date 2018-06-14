@@ -127,6 +127,9 @@
     <Filter Include="NetSelect">
       <UniqueIdentifier>{b56d0236-c6a6-422e-b43c-23965b89b13e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NetPoll">
+      <UniqueIdentifier>{40ff8853-3b79-4aec-998e-be4820e582b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -419,6 +422,9 @@
     </ClInclude>
     <ClInclude Include="..\lua-5.3.4-src\src\lzio.h">
       <Filter>lua-5.3.4-src\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NetPoll\poll_socket.h">
+      <Filter>NetPoll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -752,6 +758,9 @@
     </None>
     <None Include="..\NetSelect\Makefile">
       <Filter>NetSelect</Filter>
+    </None>
+    <None Include="..\NetPoll\Makefile">
+      <Filter>NetPoll</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1102,6 +1111,12 @@
     </ClCompile>
     <ClCompile Include="..\NetSelect\server.c">
       <Filter>NetSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NetPoll\client.c">
+      <Filter>NetPoll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NetPoll\server.c">
+      <Filter>NetPoll</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

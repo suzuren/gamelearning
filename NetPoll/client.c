@@ -1,4 +1,4 @@
-#include "select.h"
+#include "poll_socket.h"
 
 
 
@@ -23,8 +23,8 @@ int main(int argc, char const *argv[])
 		{
 			printf("send buf error\n");
 		}
-
-		printf("%s len_buff:%d,len_send:%d,buf:%s\n", getStrTime(), len_buff, len_send, write_buf);
+		
+		printf("%s len_buff:%d,len_send:%d,buf:%s", getStrTime(), len_buff, len_send, write_buf);
 
 		char read_buf[65535] = { 0 };
 		int nread = read(client_fd, read_buf, 65535);
@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{
-			//printf("recv - len:%d,buf:%s.\n", strlen(read_buf), read_buf);
+			//printf("recv - len:%d,buf:%s.", strlen(read_buf), read_buf);
 		}
 		sleep(1);
 	}

@@ -1,7 +1,7 @@
 #include "select.h"
 
-
-#define MAX_CLIENT_COUNT 2048
+//select 模式最大的客户端一般为1024
+#define MAX_CLIENT_COUNT 1024
 
 static void accpet_client(int *clients_fd, int *iClientCount, int listen_fd);
 static void recv_client_msg(int *clients_fd, int *iClientCount, fd_set *readfds, fd_set *writefds);
@@ -9,7 +9,10 @@ static void handle_client_msg(int fd, char *buf);
 
 int main(int argc, char const *argv[])
 {
+	int clients_fd[MAX_CLIENT_COUNT] = { 0 };
+	memset(clients_fd, -1, sizeof(clients_fd));
 	
+
 	int listen_fd = socket_bind("0.0.0.0", PORT);
 
 	printf("socket_bind listen_fd:%d\n", listen_fd);
@@ -25,8 +28,6 @@ int main(int argc, char const *argv[])
 	FD_ZERO(&writefds);
 	FD_ZERO(&exceptionfds);
 
-	int clients_fd[MAX_CLIENT_COUNT] = { 0 };
-	memset(clients_fd, -1, sizeof(clients_fd));
 
 	struct timeval tvalue;
 	tvalue.tv_sec = 5;
@@ -84,9 +85,23 @@ static void accpet_client(int *clients_fd, int *iClientCount,int listen_fd)
 	}
 	else
 	{
-		clients_fd[(*iClientCount)++] = client_fd;
-		printf("new client accpeted,client_fd:%d,*iClientCount:%d,clients_fd:%d\n", client_fd, (*iClientCount)-1, clients_fd[(*iClientCount)-1]);
+		int i = 0;
+		for (; i < MAX_CLIENT_COUNT; ++i)
+		{
+			if (clients_fd[i] == -1)
+			{
+				clients_fd[i] = client_fd;
+				(*iClientCount)++;
+				break;
+			}
+		}
+		if (i == MAX_CLIENT_COUNT)
+		{
+			close(client_fd);
+			printf("too much clients\n");
+		}
 
+		printf("new client accpeted - client_fd:%d,*iClientCount:%d\n", client_fd, (*iClientCount));
 	}
 }
 
@@ -95,7 +110,7 @@ static void recv_client_msg(int *clients_fd, int *iClientCount, fd_set *readfds,
 {
 	char buf[65535] = { 0 };
 
-	for (size_t i = 0; i < *iClientCount; ++i)
+	for (size_t i = 0; i < MAX_CLIENT_COUNT; ++i)
 	{
 		if (clients_fd[i] == -1)
 		{
@@ -104,10 +119,10 @@ static void recv_client_msg(int *clients_fd, int *iClientCount, fd_set *readfds,
 		else if (FD_ISSET(clients_fd[i], readfds))
 		{
 			int n = read(clients_fd[i], buf, 65535);
-			if (n <= 0)
+			if (n <= 0 && errno != EINPROGRESS)
 			{
 				FD_CLR(clients_fd[i], readfds);
-				printf("one socket close,client_fd:%d\n", clients_fd[i]);
+				printf("one socket close,client_fd:%d", clients_fd[i]);
 				close(clients_fd[i]);
 				clients_fd[i] = -1;
 				(*iClientCount)--;
@@ -123,6 +138,6 @@ static void handle_client_msg(int fd, char *buf)
 {
 	assert(buf);
 	int len = strlen(buf);
-	printf("recv len:%d,buf:%s\n", len, buf);
+	printf("recv len:%d,buf:%s", len, buf);
 	write(fd, buf, len);
 }

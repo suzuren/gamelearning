@@ -100,6 +100,7 @@
     <ClInclude Include="..\MultiplayerBook\LinkingContext.h" />
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
     <ClInclude Include="..\MultiplayerBook\RoboMath.h" />
+    <ClInclude Include="..\NetPoll\poll_socket.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
     <ClInclude Include="..\referlib\barrier.h" />
     <ClInclude Include="..\referlib\eventmanager.h" />
@@ -211,6 +212,7 @@
     <None Include="..\lua\timer.lua" />
     <None Include="..\lua\xpcall.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
+    <None Include="..\NetPoll\Makefile" />
     <None Include="..\NetSelect\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
     <None Include="..\proxy_epoll\Readme.md" />
@@ -323,6 +325,8 @@
     <ClCompile Include="..\lua-cjson\strbuf.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
+    <ClCompile Include="..\NetPoll\client.c" />
+    <ClCompile Include="..\NetPoll\server.c" />
     <ClCompile Include="..\NetSelect\client.c" />
     <ClCompile Include="..\NetSelect\select.h" />
     <ClCompile Include="..\NetSelect\server.c" />

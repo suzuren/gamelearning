@@ -13,7 +13,10 @@ git diff --name-only HEAD~ HEAD
 git diff --name-only 3bd6f3d769eb5e5fb96e4153eab846136531225a 63ae0644b1304607a0ac096cec7fac4a8529b8f1
 
 
+3.
 
+netstat -anp | grep 9998
+netstat -anp | grep skynet
 
 
 

@@ -130,6 +130,12 @@
     <Filter Include="NetPoll">
       <UniqueIdentifier>{40ff8853-3b79-4aec-998e-be4820e582b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ConnectSkynet">
+      <UniqueIdentifier>{c18fdd19-70aa-4e10-b362-4fb8f8c7fadc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ConnectSkynet\pbc">
+      <UniqueIdentifier>{f439a1a2-a070-470f-ae10-5cd662840bcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -425,6 +431,45 @@
     </ClInclude>
     <ClInclude Include="..\NetPoll\poll_socket.h">
       <Filter>NetPoll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\select.h">
+      <Filter>ConnectSkynet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\alloc.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\array.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\bootstrap.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\context.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\descriptor.pbc.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\map.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\pattern.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\pbc.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\proto.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\stringpool.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\pbc\varint.h">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnectSkynet\readfile.h">
+      <Filter>ConnectSkynet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -761,6 +806,15 @@
     </None>
     <None Include="..\NetPoll\Makefile">
       <Filter>NetPoll</Filter>
+    </None>
+    <None Include="..\ConnectSkynet\Makefile">
+      <Filter>ConnectSkynet</Filter>
+    </None>
+    <None Include="..\ConnectSkynet\pbc\Makefile">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </None>
+    <None Include="..\ConnectSkynet\loginServer.login.s2c.proto">
+      <Filter>ConnectSkynet</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1118,6 +1172,51 @@
     <ClCompile Include="..\NetPoll\server.c">
       <Filter>NetPoll</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\client.c">
+      <Filter>ConnectSkynet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\lua-pbcc.c">
+      <Filter>ConnectSkynet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\alloc.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\array.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\bootstrap.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\context.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\decode.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\map.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\pattern.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\proto.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\register.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\rmessage.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\stringpool.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\varint.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnectSkynet\pbc\wmessage.c">
+      <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -1132,6 +1231,7 @@
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt">
       <Filter>lua-cjson\devel</Filter>
     </Text>
+    <Text Include="..\gitcmd.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

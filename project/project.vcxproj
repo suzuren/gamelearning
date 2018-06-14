@@ -35,6 +35,19 @@
     <ClInclude Include="..\candlua\pbc\stringpool.h" />
     <ClInclude Include="..\candlua\pbc\varint.h" />
     <ClInclude Include="..\card\land_logic.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\alloc.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\array.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\bootstrap.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\context.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\descriptor.pbc.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\map.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\pattern.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\pbc.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\proto.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\stringpool.h" />
+    <ClInclude Include="..\ConnectSkynet\pbc\varint.h" />
+    <ClInclude Include="..\ConnectSkynet\readfile.h" />
+    <ClInclude Include="..\ConnectSkynet\select.h" />
     <ClInclude Include="..\cpp11\shared.hpp" />
     <ClInclude Include="..\cpp11\SyncQueue.hpp" />
     <ClInclude Include="..\cpp11\test_lambda.h" />
@@ -133,6 +146,9 @@
     <None Include="..\candlua\test_wordfilter.lua" />
     <None Include="..\card\Makefile" />
     <None Include="..\clean.sh" />
+    <None Include="..\ConnectSkynet\loginServer.login.s2c.proto" />
+    <None Include="..\ConnectSkynet\Makefile" />
+    <None Include="..\ConnectSkynet\pbc\Makefile" />
     <None Include="..\cpp11\Makefile" />
     <None Include="..\declare\Makefile" />
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
@@ -255,6 +271,21 @@
     <ClCompile Include="..\candlua\test_clib.c" />
     <ClCompile Include="..\candlua\test_clib2.c" />
     <ClCompile Include="..\card\main.cpp" />
+    <ClCompile Include="..\ConnectSkynet\client.c" />
+    <ClCompile Include="..\ConnectSkynet\lua-pbcc.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\alloc.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\array.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\bootstrap.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\context.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\decode.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\map.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\pattern.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\proto.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\register.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\rmessage.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\stringpool.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\varint.c" />
+    <ClCompile Include="..\ConnectSkynet\pbc\wmessage.c" />
     <ClCompile Include="..\cpp11\main.cpp" />
     <ClCompile Include="..\declare\helloworld.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.cpp" />
@@ -354,6 +385,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt" />
+    <Text Include="..\gitcmd.txt" />
     <Text Include="..\lua-cjson\CMakeLists.txt" />
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt" />
     <Text Include="..\lua-cjson\rfc4627.txt" />

@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
 		{
 			printf("recv - len:%d,buf:%s.\n", strlen(read_buf), read_buf);
 		}
-		sleep(8);
+		sleep(3);
 	}
 }
 

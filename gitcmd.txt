@@ -18,5 +18,6 @@ git diff --name-only 3bd6f3d769eb5e5fb96e4153eab846136531225a 63ae0644b1304607a0
 netstat -anp | grep 9998
 netstat -anp | grep skynet
 
+telnet 47.52.249.46 4001
 
 

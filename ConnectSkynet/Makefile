@@ -4,7 +4,7 @@ CPPFLAGS = -O3
 LDFLAGS = -lrt -lpthread -lstdc++ -std=c++11
 LUA_INC := /usr/local/lua/include
 
-all: client pbcc.so loginServer.login.s2c.pb
+all: client pbcc.so loginServer.login.s2c.pb loginServer.login.c2s.pb
 
 clean:
 	rm -f *.o *.so *.pb client
@@ -19,4 +19,7 @@ pbcc.so : lua-pbcc.c
 
 GAME_PROTO = $(wildcard ./*.proto)
 loginServer.login.s2c.pb : $(GAME_PROTO)
+	protoc -o $@ -I. --include_imports $^
+
+loginServer.login.c2s.pb : $(GAME_PROTO)
 	protoc -o $@ -I. --include_imports $^

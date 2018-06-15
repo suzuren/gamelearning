@@ -136,6 +136,9 @@
     <Filter Include="ConnectSkynet\pbc">
       <UniqueIdentifier>{f439a1a2-a070-470f-ae10-5cd662840bcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="big_little_endian">
+      <UniqueIdentifier>{eac60593-87b6-42c3-afa1-1b6dd68b1031}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -816,6 +819,12 @@
     <None Include="..\ConnectSkynet\loginServer.login.s2c.proto">
       <Filter>ConnectSkynet</Filter>
     </None>
+    <None Include="..\ConnectSkynet\loginServer.login.c2s.proto">
+      <Filter>ConnectSkynet</Filter>
+    </None>
+    <None Include="..\big_little_endian\Makefile">
+      <Filter>big_little_endian</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1216,6 +1225,9 @@
     </ClCompile>
     <ClCompile Include="..\ConnectSkynet\pbc\wmessage.c">
       <Filter>ConnectSkynet\pbc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\big_little_endian\main.c">
+      <Filter>big_little_endian</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

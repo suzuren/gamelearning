@@ -134,6 +134,7 @@
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf" />
     <None Include="..\3rd\templog\makefile" />
+    <None Include="..\big_little_endian\Makefile" />
     <None Include="..\candlua\cItemBuffer.lua" />
     <None Include="..\candlua\loginServer.login.s2c.proto" />
     <None Include="..\candlua\Makefile" />
@@ -146,6 +147,7 @@
     <None Include="..\candlua\test_wordfilter.lua" />
     <None Include="..\card\Makefile" />
     <None Include="..\clean.sh" />
+    <None Include="..\ConnectSkynet\loginServer.login.c2s.proto" />
     <None Include="..\ConnectSkynet\loginServer.login.s2c.proto" />
     <None Include="..\ConnectSkynet\Makefile" />
     <None Include="..\ConnectSkynet\pbc\Makefile" />
@@ -251,6 +253,7 @@
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
     <ClCompile Include="..\3rd\templog\test\test_logging.cpp" />
+    <ClCompile Include="..\big_little_endian\main.c" />
     <ClCompile Include="..\candlua\lua-pbcc.c" />
     <ClCompile Include="..\candlua\lua-sui.c" />
     <ClCompile Include="..\candlua\lua-wordfilter.c" />

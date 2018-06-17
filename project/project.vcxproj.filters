@@ -139,6 +139,9 @@
     <Filter Include="big_little_endian">
       <UniqueIdentifier>{eac60593-87b6-42c3-afa1-1b6dd68b1031}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NetEpoll">
+      <UniqueIdentifier>{ecd77292-9bd3-43ce-a885-43efdf8bcd5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -473,6 +476,9 @@
     </ClInclude>
     <ClInclude Include="..\ConnectSkynet\readfile.h">
       <Filter>ConnectSkynet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NetEpoll\epoll_socket.h">
+      <Filter>NetEpoll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -824,6 +830,9 @@
     </None>
     <None Include="..\big_little_endian\Makefile">
       <Filter>big_little_endian</Filter>
+    </None>
+    <None Include="..\NetEpoll\Makefile">
+      <Filter>NetEpoll</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1229,6 +1238,12 @@
     <ClCompile Include="..\big_little_endian\main.c">
       <Filter>big_little_endian</Filter>
     </ClCompile>
+    <ClCompile Include="..\NetEpoll\client.c">
+      <Filter>NetEpoll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\NetEpoll\server.c">
+      <Filter>NetEpoll</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -1244,6 +1259,9 @@
       <Filter>lua-cjson\devel</Filter>
     </Text>
     <Text Include="..\gitcmd.txt" />
+    <Text Include="..\NetEpoll\readme.txt">
+      <Filter>NetEpoll</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

@@ -10,9 +10,9 @@ cd ./pbc
 ./clean.sh
 cd ${root_dir}
 
-clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_CPP" "helloworld" "./MultiplayerBook/" "inicfg"
+clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_CPP" "helloworld" "MultiplayerBook" "inicfg"
  "test" "proxy_epoll" "referlib" "cpp11" "ThreadPool" "declare" "http" "webservice" "websocket" "candlua" "card" 
- "lua-arc4random" "lua-cjson" "lua-5.3.4-src" "luasql" "NetSelect" "NetPoll" "ConnectSkynet" "big_little_endian")
+ "lua-arc4random" "lua-cjson" "lua-5.3.4-src" "luasql" "NetSelect" "NetPoll" "NetEpoll" "ConnectSkynet" "big_little_endian")
 
 clean_len=${#clean_dir[@]}
 

@@ -99,6 +99,8 @@ static void accpet_client(struct pollfd *clients_fd, int *iClientCount,int liste
 	}
 	else
 	{
+		SetSocketNonblock(client_fd);
+
 		int i = 0;
 		for (; i < MAX_CLIENT_COUNT; ++i)
 		{

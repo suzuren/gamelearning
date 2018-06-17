@@ -30,8 +30,8 @@ int main(int argc, char const *argv[])
 
 
 	struct timeval tvalue;
-	tvalue.tv_sec = 5;
-	tvalue.tv_usec = 0;
+	tvalue.tv_sec = 0;
+	tvalue.tv_usec = 500;
 
 	while(1)
 	{
@@ -85,6 +85,8 @@ static void accpet_client(int *clients_fd, int *iClientCount,int listen_fd)
 	}
 	else
 	{
+		SetSocketNonblock(client_fd);
+
 		int i = 0;
 		for (; i < MAX_CLIENT_COUNT; ++i)
 		{
@@ -119,10 +121,12 @@ static void recv_client_msg(int *clients_fd, int *iClientCount, fd_set *readfds,
 		else if (FD_ISSET(clients_fd[i], readfds))
 		{
 			int n = read(clients_fd[i], buf, 65535);
-			if (n <= 0 && errno != EINPROGRESS)
+			//printf("one socket close,n:%d,client_fd:%d\n", n,clients_fd[i]);
+
+			if (n <= 0)
 			{
 				FD_CLR(clients_fd[i], readfds);
-				printf("one socket close,client_fd:%d", clients_fd[i]);
+				printf("one socket close,client_fd:%d\n", clients_fd[i]);
 				close(clients_fd[i]);
 				clients_fd[i] = -1;
 				(*iClientCount)--;

@@ -33,8 +33,13 @@ int main(int argc, char const *argv[])
 			close(client_fd);
 			break;
 		}
-		else if (nread < 0 && (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR))
+		else if (nread < 0 && (errno == EAGAIN || errno == EWOULDBLOCK))// || errno == EINTR))
 		{
+			// EINTR 加上这个忽略 select 模式的服务端就会收不到read=0不知道为什么
+
+			// EAGAIN 提示你的应用程序现在没有数据可读请稍后再试。
+			// EWOULDBLOCK 用于非阻塞模式，不需要重新读或者写
+			// EINTR 指操作被中断唤醒，需要重新读 / 写
 			continue;
 		}
 		else

@@ -9,6 +9,7 @@
 #include <unistd.h> //unix standard
 
 #include <sys/select.h> // select IO multiplexing model
+#include <sys/epoll.h>
 
 #include <sys/types.h>
 #include <pthread.h>
@@ -22,8 +23,22 @@
 
 #include <stdbool.h>
 
-#define IPADDRESS "47.52.249.46"
-#define PORT 4001
+#define IPADDRESS "127.0.0.1"
+#define PORT 8790
+
+bool SetSocketEvents(int epfd,int fd, int op)
+{
+	struct epoll_event ev;
+
+	/*设置监听描述符*/
+	ev.data.fd = fd;
+	/*设置处理事件类型*/
+	ev.events = EPOLLIN | EPOLLET | EPOLLERR | EPOLLOUT;
+	/*注册事件*/
+	epoll_ctl(epfd, op, fd, &ev);
+
+	return true;
+}
 
 bool SetSocketNonblock(int fd)
 {
@@ -71,85 +86,60 @@ int socket_connect(const char *ip, int port)
 	if (0 == ret)
 	{   //如果connect()返回0则连接已建立 
 		//下面恢复套接字阻塞状态 
-		if (fcntl(client_fd, F_SETFL, flags) < 0)
-		{
-			//错误处理 
-		}
+		//if (fcntl(client_fd, F_SETFL, flags) < 0)
+		//{
+		//	//错误处理 
+		//}
 
 		//下面是连接成功后要执行的代码 
 		printf("connect success\n");
 		return client_fd;
 	}
-
-
-	int max_fds = client_fd;
-
-	fd_set rdevents;
-	fd_set wrevents;
-	fd_set exevents;
-
-	FD_ZERO(&rdevents);
-	FD_SET(client_fd, &rdevents);  //把先前的套接字加到读集合里面 
-	wrevents = rdevents;   //写集合
-	exevents = rdevents;   //异常集合
-
-	struct timeval tvalue;
-	tvalue.tv_sec = 5;
-	tvalue.tv_usec = 0;
-
-	while (1)
+	else
 	{
-		int retcode = select(max_fds + 1, &rdevents, &wrevents, &exevents, &tvalue);
-		if (retcode < 0)
-		{
-			//select返回错误
-			//错误处理 
-		}
-		else if (0 == retcode)
-		{
-			//select 超时
-			//超时处理 
-		}
-		else
-		{
-			//套接字已经准备好 
-			if (!FD_ISSET(client_fd, &rdevents) && !FD_ISSET(client_fd, &wrevents))
-			{
-				//connect()失败，进行错处理
-				printf("1 connect failed\n");
-				return -1;
-			}
-			int err = -1;
-			unsigned int len = sizeof(err);
-			int ret = getsockopt(client_fd, SOL_SOCKET, SO_ERROR, &err, &len);
-			if (ret < 0)
-			{
-				//getsockopt()失败，进行错处理
-				printf("2 connect failed\n");
+		struct epoll_event events[64];
+		int epfd = epoll_create(64);
 
-				return -1;
-			}
-			if (err != 0)
+		SetSocketEvents(epfd, client_fd, EPOLL_CTL_ADD);
+
+		while (true)
+		{
+			int nfds = epoll_wait(epfd, events, 64, -1);
+			if (nfds <= 0)
 			{
-				//connect()失败，进行错处理 
-				printf("3 connect failed\n");
-
-				return -1;
+				continue;
 			}
-			//到这里说明connect()正确返回 
-			//下面恢复套接字阻塞状态 
-			//if (fcntl(client_fd, F_SETFL, flags) < 0)
-			//{
-			//	//错误处理
-			//	printf("4 connect failed\n");
+			for (int i = 0; i < nfds; ++i)
+			{
+				if (events[i].events & EPOLLIN)
+				{
+					printf("epoll - EPOLLIN errno:%d\n", errno);
+				}
+				else if (events[i].events & EPOLLET)
+				{
+					printf("epoll - EPOLLET errno:%d\n", errno);
+				}
+				else if (events[i].events & EPOLLERR)
+				{
+					printf("epoll - EPOLLERR errno:%d\n", errno);
+					close(epfd);
+					return -1;
+				}
+				else if (events[i].events & EPOLLOUT)
+				{
+					printf("epoll - EPOLLOUT errno:%d\n", errno);
+					close(epfd);
+					return client_fd;
+				}
+				else
+				{
+					printf("epoll - else errno:%d\n", errno);
+				}
+			}
 
-			//	return -1;
-			//}
-			//下面是连接成功后要执行的代码
-			printf("connect success 2\n");
-			return client_fd;
 		}
 	}
+
 	return -1;
 }
 
@@ -199,13 +189,5 @@ const char* getStrTime()
 
 	return szDate;
 }
-
-
-
-
-
-
-
-
 
 

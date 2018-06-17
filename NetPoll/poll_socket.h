@@ -20,8 +20,31 @@
 #include <netinet/tcp.h>
 #include<sys/poll.h>
 
+#include <stdbool.h>
+
 #define IPADDRESS "127.0.0.1"
 #define PORT 8788
+
+bool SetSocketNonblock(int fd)
+{
+	//下面获取套接字的标志
+	int flag = fcntl(fd, F_GETFL, 0);
+	if (flag < 0)
+	{
+		printf("fcntl F_GETFL filed.flags:%d\n", flag);
+		//错误处理
+		return false;
+	}
+	//下面设置套接字为非阻塞
+	flag = fcntl(fd, F_SETFL, flag | O_NONBLOCK);
+	if (flag < 0)
+	{
+		//错误处理
+		printf("fcntl F_SETFL filed.flags:%d\n", flag);
+		return false;
+	}
+	return true;
+}
 
 int socket_connect(const char *ip, int port)
 {
@@ -31,22 +54,9 @@ int socket_connect(const char *ip, int port)
 		printf("create socket filed.\n");
 		exit(1);
 	}
-	//下面获取套接字的标志
-	int flags = fcntl(client_fd, F_GETFL, 0);
-	if (flags < 0)
-	{
-		printf("fcntl F_GETFL filed.flags:%d\n", flags);
-		//错误处理
-		exit(1);
-	}
-	//下面设置套接字为非阻塞
-	flags = fcntl(client_fd, F_SETFL, flags | O_NONBLOCK);
-	if (flags < 0)
-	{
-		//错误处理
-		printf("fcntl F_SETFL filed.flags:%d\n", flags);
-		exit(1);
-	}
+
+	SetSocketNonblock(client_fd);
+
 	struct sockaddr_in server_addr;
 	memset(&server_addr, 0, sizeof(struct sockaddr_in));
 	server_addr.sin_family = AF_INET;
@@ -61,10 +71,10 @@ int socket_connect(const char *ip, int port)
 	if (0 == ret)
 	{   //如果connect()返回0则连接已建立 
 		//下面恢复套接字阻塞状态 
-		if (fcntl(client_fd, F_SETFL, flags) < 0)
-		{
-			//错误处理 
-		}
+		//if (fcntl(client_fd, F_SETFL, flags) < 0)
+		//{
+		//	//错误处理 
+		//}
 
 		//下面是连接成功后要执行的代码 
 		printf("connect success\n");
@@ -154,22 +164,7 @@ int socket_bind(const char *ip, int port)
 		exit(1);
 	}
 
-	//下面获取套接字的标志
-	int flags = fcntl(listen_fd, F_GETFL, 0);
-	if (flags < 0)
-	{
-		printf("fcntl F_GETFL filed.flags:%d\n", flags);
-		//错误处理
-		exit(1);
-	}
-	//下面设置套接字为非阻塞
-	flags = fcntl(listen_fd, F_SETFL, flags | O_NONBLOCK);
-	if (flags < 0)
-	{
-		//错误处理
-		printf("fcntl F_SETFL filed.flags:%d\n", flags);
-		exit(1);
-	}
+	SetSocketNonblock(listen_fd);
 
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof(struct sockaddr_in));

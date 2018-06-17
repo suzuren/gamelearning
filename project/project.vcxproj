@@ -113,6 +113,7 @@
     <ClInclude Include="..\MultiplayerBook\LinkingContext.h" />
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
     <ClInclude Include="..\MultiplayerBook\RoboMath.h" />
+    <ClInclude Include="..\NetEpoll\epoll_socket.h" />
     <ClInclude Include="..\NetPoll\poll_socket.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
     <ClInclude Include="..\referlib\barrier.h" />
@@ -230,6 +231,7 @@
     <None Include="..\lua\timer.lua" />
     <None Include="..\lua\xpcall.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
+    <None Include="..\NetEpoll\Makefile" />
     <None Include="..\NetPoll\Makefile" />
     <None Include="..\NetSelect\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
@@ -359,6 +361,8 @@
     <ClCompile Include="..\lua-cjson\strbuf.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
+    <ClCompile Include="..\NetEpoll\client.c" />
+    <ClCompile Include="..\NetEpoll\server.c" />
     <ClCompile Include="..\NetPoll\client.c" />
     <ClCompile Include="..\NetPoll\server.c" />
     <ClCompile Include="..\NetSelect\client.c" />
@@ -392,6 +396,7 @@
     <Text Include="..\lua-cjson\CMakeLists.txt" />
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt" />
     <Text Include="..\lua-cjson\rfc4627.txt" />
+    <Text Include="..\NetEpoll\readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />

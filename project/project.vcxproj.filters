@@ -142,6 +142,9 @@
     <Filter Include="NetEpoll">
       <UniqueIdentifier>{ecd77292-9bd3-43ce-a885-43efdf8bcd5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="logger">
+      <UniqueIdentifier>{c358ae60-bfea-4d6b-bbcb-559db4f6aefb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -479,6 +482,9 @@
     </ClInclude>
     <ClInclude Include="..\NetEpoll\epoll_socket.h">
       <Filter>NetEpoll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\logger\logger.h">
+      <Filter>logger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -833,6 +839,9 @@
     </None>
     <None Include="..\NetEpoll\Makefile">
       <Filter>NetEpoll</Filter>
+    </None>
+    <None Include="..\logger\Makefile">
+      <Filter>logger</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1243,6 +1252,12 @@
     </ClCompile>
     <ClCompile Include="..\NetEpoll\server.c">
       <Filter>NetEpoll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\logger\logger.c">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\logger\main.c">
+      <Filter>logger</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

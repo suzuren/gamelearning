@@ -67,6 +67,7 @@
     <ClInclude Include="..\http\http_server.h" />
     <ClInclude Include="..\http\http_status.h" />
     <ClInclude Include="..\http\socklib.h" />
+    <ClInclude Include="..\logger\logger.h" />
     <ClInclude Include="..\lua-5.3.4-src\src\lapi.h" />
     <ClInclude Include="..\lua-5.3.4-src\src\lauxlib.h" />
     <ClInclude Include="..\lua-5.3.4-src\src\lcode.h" />
@@ -159,6 +160,7 @@
     <None Include="..\helloworld\Makefile" />
     <None Include="..\http\Makefile" />
     <None Include="..\inicfg\Makefile" />
+    <None Include="..\logger\Makefile" />
     <None Include="..\lua-5.3.4-src\doc\contents.html" />
     <None Include="..\lua-5.3.4-src\doc\index.css" />
     <None Include="..\lua-5.3.4-src\doc\lua.1" />
@@ -310,6 +312,8 @@
     <ClCompile Include="..\http\http_status.cpp" />
     <ClCompile Include="..\http\socklib.cpp" />
     <ClCompile Include="..\inicfg\INIFileOP.c" />
+    <ClCompile Include="..\logger\logger.c" />
+    <ClCompile Include="..\logger\main.c" />
     <ClCompile Include="..\lua-5.3.4-src\src\lapi.c" />
     <ClCompile Include="..\lua-5.3.4-src\src\lauxlib.c" />
     <ClCompile Include="..\lua-5.3.4-src\src\lbaselib.c" />

@@ -263,6 +263,28 @@ void log_init_info(struct log_info * pinfo)
 	}
 }
 
+struct log_info * log_create_logger()
+{
+	struct log_info * pinfo = (struct log_info *)malloc(sizeof(struct log_info));
+	log_init_info(pinfo);
+	return pinfo;
+}
+
+void log_constructor_logger(const char * prename)
+{
+	if (_LOGGER == NULL)
+	{
+		_LOGGER = log_create_logger();
+	}
+	if (prename != NULL)
+	{
+		memset(_LOGGER->prename, 0, sizeof(_LOGGER->prename));
+		sprintf(_LOGGER->prename, "%s.log", prename);
+		printf("log_constructor_logger - prename:%s\n", _LOGGER->prename);
+	}
+}
+
+
 void log_destroy_logger()
 {
 	struct log_info * pinfo = _LOGGER;
@@ -280,12 +302,7 @@ void log_destroy_logger()
 	}
 }
 
-struct log_info * log_create_logger()
-{
-	struct log_info * pinfo = (struct log_info *)malloc(sizeof(struct log_info));
-	log_init_info(pinfo);
-	return pinfo;
-}
+
 
 const char* log_set_header(int level, const char *  pfunc, const char *  pfile, unsigned int line)
 {

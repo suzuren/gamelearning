@@ -313,7 +313,7 @@
     <ClCompile Include="..\http\socklib.cpp" />
     <ClCompile Include="..\inicfg\INIFileOP.c" />
     <ClCompile Include="..\logger\logger.c" />
-    <ClCompile Include="..\logger\main.c" />
+    <ClCompile Include="..\logger\test.c" />
     <ClCompile Include="..\lua-5.3.4-src\src\lapi.c" />
     <ClCompile Include="..\lua-5.3.4-src\src\lauxlib.c" />
     <ClCompile Include="..\lua-5.3.4-src\src\lbaselib.c" />

@@ -1256,7 +1256,7 @@
     <ClCompile Include="..\logger\logger.c">
       <Filter>logger</Filter>
     </ClCompile>
-    <ClCompile Include="..\logger\main.c">
+    <ClCompile Include="..\logger\test.c">
       <Filter>logger</Filter>
     </ClCompile>
   </ItemGroup>

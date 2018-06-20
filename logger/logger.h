@@ -38,6 +38,7 @@ int		write_buffer(FILE * pstream, int count, const void * buffer);
 //------------------------------------------------------------------------------
 
 // write log
+void log_constructor_logger(const char * prename);
 void log_destroy_logger();
 void log_format_write(int level, const char * pfunc, const char * pfile, unsigned int line, char const* pformat, ...);
 

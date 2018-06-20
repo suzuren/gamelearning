@@ -15,18 +15,18 @@
 void test_file_stream()
 {
 	const char * pname = "temp.log";
-	FILE * pstream = open_file(pname, OPEN_MODE_APPEND);
+	FILE * pstream = file_open(pname, OPEN_MODE_APPEND);
 	char buffer[1024] = { 0 };
 	sprintf(buffer, "hello world.");
-	int ret_seek = seek_file(pstream, 8, SEEK_SET);
-	int ret_write = write_buffer(pstream, strlen(buffer), buffer);
-	flush_file(pstream);
-	int ret_size = size_file(pstream);
-	close_file(pstream);
+	int ret_seek = file_seek(pstream, 8, SEEK_SET);
+	int ret_write = file_write_buffer(pstream, strlen(buffer), buffer);
+	file_flush(pstream);
+	int ret_size = file_size(pstream);
+	file_close(pstream);
 	printf("file stream - ret_seek:%d,ret_write:%d,ret_size:%d\n", ret_seek, ret_write, ret_size);
 }
 
-FILE * open_file(const char * pname, const char * pmode)
+FILE * file_open(const char * pname, const char * pmode)
 {
 	if (pname == NULL)
 	{
@@ -36,7 +36,7 @@ FILE * open_file(const char * pname, const char * pmode)
 	return pstream;
 }
 
-void close_file(FILE * pstream)
+void file_close(FILE * pstream)
 {
 	if (pstream != NULL)
 	{
@@ -45,7 +45,7 @@ void close_file(FILE * pstream)
 	pstream = NULL;
 }
 
-void flush_file(FILE * pstream)
+void file_flush(FILE * pstream)
 {
 	//确保写入到文件-不一定是磁盘但是别处可以读取
 	if (pstream != NULL)
@@ -56,7 +56,7 @@ void flush_file(FILE * pstream)
 
 //|SEEK_SET | SEEK_CUR		| SEEK_END	|
 //|文件开头 | 当前读写的位置| 文件尾	|
-int	seek_file(FILE * pstream,int offset, int fromwhere)
+int	file_seek(FILE * pstream,int offset, int fromwhere)
 {
 	if (pstream == NULL)
 	{
@@ -65,7 +65,7 @@ int	seek_file(FILE * pstream,int offset, int fromwhere)
 	return fseek(pstream, offset, fromwhere);
 }
 
-int size_file(FILE * pstream)
+int file_size(FILE * pstream)
 {
 	if (pstream == NULL)
 	{
@@ -73,19 +73,19 @@ int size_file(FILE * pstream)
 	}
 
 	int itell = ftell(pstream); // 记录当前文件的位置
-	int ret_seek = seek_file(pstream,0, SEEK_END);
+	int ret_seek = file_seek(pstream,0, SEEK_END);
 	if (ret_seek != 0)
 	{
-		seek_file(pstream, itell, SEEK_SET);
+		file_seek(pstream, itell, SEEK_SET);
 		return 0;
 	}
 	int isize = ftell(pstream); // 文件位置指针当前位置相对于文件首的偏移字节数
-	seek_file(pstream, itell, SEEK_SET); // 恢复当前文件位置
+	file_seek(pstream, itell, SEEK_SET); // 恢复当前文件位置
 	return isize;
 }
 
 
-int write_buffer(FILE * pstream,int count,const void * buffer)
+int file_write_buffer(FILE * pstream,int count,const void * buffer)
 {
 	if (pstream == NULL || count == 0 || buffer == NULL)
 	{
@@ -110,11 +110,15 @@ struct log_queue
 
 struct log_info
 {
-	char    prename[32];
+	char	curdir[256];
+	char    prename[32];	// file name prefix
+	char    filename[32];	// file name
 	FILE *  pstream;
 	int     curday;
 	int		retainday;
-	int     maxsize;
+	int     cursize;   // current file size
+	int     maxsize;   // max file size
+	int		backcount; // backup files count
 	int		queuesize;
 	pthread_mutex_t	   mutex;
 	struct log_queue * pqueue_head;
@@ -127,7 +131,7 @@ static struct log_info * _LOGGER = NULL;
 
 
 
-void queue_push(struct log_queue ** heard, struct log_queue ** tail, pthread_mutex_t * mutex,int * queuesize,const void * buffer, int size)
+void queue_push(struct log_info * pinfo,const void * buffer, int size)
 {
 	void * ptr = malloc(size);
 	memcpy(ptr, buffer, size);
@@ -138,7 +142,11 @@ void queue_push(struct log_queue ** heard, struct log_queue ** tail, pthread_mut
 	pqueue->ptr = ptr;
 	pqueue->pnext = NULL;
 
-	pthread_mutex_lock(mutex);
+	pthread_mutex_lock(&pinfo->mutex);
+	int * queuesize = &pinfo->queuesize;
+	struct log_queue ** head = &pinfo->pqueue_head;
+	struct log_queue ** tail = &pinfo->pqueue_tail;	
+
 	if (*heard == NULL && *tail == NULL)
 	{
 		*heard = pqueue;
@@ -151,12 +159,16 @@ void queue_push(struct log_queue ** heard, struct log_queue ** tail, pthread_mut
 	}
 	((*queuesize)++);
 
-	pthread_mutex_unlock(mutex);
+	pthread_mutex_unlock(&pinfo->mutex);
 }
 
-int queue_pop(struct log_queue ** heard, pthread_mutex_t * mutex, int * queuesize, char ** buffer, int * size)
+int queue_pop(struct log_info * pinfo, char ** buffer, int * size)
 {
-	pthread_mutex_lock(mutex);
+	pthread_mutex_lock(&pinfo->mutex);
+	int * queuesize = &pinfo->queuesize;
+	struct log_queue ** head = &pinfo->pqueue_head;
+	struct log_queue ** tail = &pinfo->pqueue_tail;
+
 	int ret = 0;
 	struct log_queue * pqueue = *heard;
 	if (pqueue != NULL)
@@ -174,7 +186,7 @@ int queue_pop(struct log_queue ** heard, pthread_mutex_t * mutex, int * queuesiz
 		*size = 0;
 		ret = -1;
 	}
-	pthread_mutex_unlock(mutex);
+	pthread_mutex_unlock(&pinfo->mutex);
 
 	return ret;
 }
@@ -193,25 +205,71 @@ void queue_clear(struct log_queue * heard)
 	}
 }
 
-void write_queue_data(struct log_info * pinfo)
+//struct log_info
+//{
+//	char    prename[32];	// file name prefix
+//	char    filename[32];	// file name
+//	FILE *  pstream;
+//	int     curday;
+//	int		retainday;
+//	int     cursize;   // current file size
+//	int     maxsize;   // max file size
+//	int		backcount; // backup files count
+//	int		queuesize;
+//	pthread_mutex_t	   mutex;
+//	struct log_queue * pqueue_head;
+//	struct log_queue * pqueue_tail;
+//	pthread_t pthread;
+//	int		runthread;
+//};
+
+
+void check_file(struct log_info * pinfo)
+{
+	static char namebuffer[256];
+	static time_t now_tm = time(0);
+	static struct tm * ptime = localtime(&now_tm);
+	if (pinfo->curday != ptime->tm_mday)
+	{
+		pinfo->cursize = 0;
+		pinfo->curday = ptime->tm_mday;
+		memset(namebuffer, 0, sizeof(namebuffer));
+		memset(pinfo->filename, 0, sizeof(pinfo->filename));
+		sprintf(pinfo->filename, "%s_%d_%d.log", pinfo->prename, ptime->tm_mon + 1, ptime->tm_mday);		
+		sprintf(namebuffer, "%s%s", pinfo->curdir, pinfo->filename);
+		file_close(pinfo->pstream);
+		pinfo->pstream = file_open(namebuffer, OPEN_MODE_APPEND);
+	}
+	if (pinfo->cursize >= pinfo->maxsize)
+	{
+		file_close(pinfo->pstream);
+		// rename
+
+		memset(namebuffer, 0, sizeof(namebuffer));
+		sprintf(namebuffer, "%s%s", pinfo->curdir, pinfo->filename);
+		pinfo->pstream = file_open(namebuffer, OPEN_MODE_APPEND);
+	}
+}
+
+void queue_write_data(struct log_info * pinfo)
 {
 	while (pinfo->runthread == 1)
 	{
 		if (pinfo != NULL && pinfo->queuesize > 0)
 		{
-			if (pinfo->pstream == NULL)
-			{
-				pinfo->pstream = open_file(pinfo->prename, OPEN_MODE_APPEND);
-			}
+			check_file(pinfo);
+
+
 			int len = -2;
 			char * buffer = NULL;
-			int ret = queue_pop(&pinfo->pqueue_head, &pinfo->mutex, &pinfo->queuesize, &buffer, &len);
-			printf("queue_pop - head:%p,ret:%d,len:%d\n", _LOGGER->pqueue_head, ret, len);
+			int ret = queue_pop(pinfo, &buffer, &len);
+			printf("queue_pop - head:%p,queuesize:%d,ret:%d,len:%d\n", pinfo->pqueue_head, pinfo->queuesize, ret, len);
 			if (ret == 1)
 			{
-				write_buffer(pinfo->pstream, len, buffer);
-				flush_file(pinfo->pstream);
+				file_write_buffer(pinfo->pstream, len, buffer);
+				file_flush(pinfo->pstream);
 				free(buffer);
+				pinfo->cursize = += len;
 			}
 			else
 			{
@@ -228,7 +286,7 @@ void write_queue_data(struct log_info * pinfo)
 void* runthread(void* parm)
 {
 	struct log_info * pinfo = (struct log_info *)parm;
-	write_queue_data(pinfo);
+	queue_write_data(pinfo);
 	return NULL;
 }
 
@@ -244,16 +302,31 @@ const char* gettime()
 	return cdate;
 }
 
+void log_get_curdir(char * pbuf)
+{
+	int count = readlink("/proc/self/exe", pbuf, 256);
+	char * p = strrchr(pbuf, '/');
+	if (p != NULL)
+	{
+		*(p + 1) = 0;
+	}
+}
+
 void log_init_info(struct log_info * pinfo)
 {
 	if (pinfo != NULL)
 	{
+		log_get_curdir(pinfo->curdir);
+		printf("log_init_info - curdir:%s", pinfo->curdir);
 		memset(pinfo->prename, 0, sizeof(pinfo->prename));
-		sprintf(pinfo->prename,"temp.log");
+		memset(pinfo->filename, 0, sizeof(pinfo->filename));
+		sprintf(pinfo->prename,"temp");
 		pinfo->pstream = NULL;
 		pinfo->curday = -1;
-		pinfo->retainday = 3;	//retain 3 day
+		pinfo->retainday = 5;	//retain 3 day
+		pinfo->cursize = 0;
 		pinfo->maxsize = 1024 * 1024 * 50; // 50M
+		pinfo->backcount = 0;
 		pinfo->queuesize = 0;
 		pinfo->pqueue_head = NULL;
 		pinfo->pqueue_tail = NULL;
@@ -279,7 +352,7 @@ void log_constructor_logger(const char * prename)
 	if (prename != NULL)
 	{
 		memset(_LOGGER->prename, 0, sizeof(_LOGGER->prename));
-		sprintf(_LOGGER->prename, "%s.log", prename);
+		sprintf(_LOGGER->prename, "%s", prename);
 		printf("log_constructor_logger - prename:%s\n", _LOGGER->prename);
 	}
 }
@@ -297,7 +370,7 @@ void log_destroy_logger()
 		pthread_mutex_destroy(&(pinfo->mutex));
 		pthread_join(pinfo->pthread, NULL);
 		pthread_cancel(pinfo->pthread);
-		close_file(pinfo->pstream);
+		file_close(pinfo->pstream);
 		free(pinfo);
 	}
 }
@@ -321,7 +394,7 @@ int log_write(const void * buffer, int len)
 	{
 		_LOGGER = log_create_logger();
 	}
-	queue_push(&_LOGGER->pqueue_head, &_LOGGER->pqueue_tail, &_LOGGER->mutex, &_LOGGER->queuesize, buffer, len);
+	queue_push(_LOGGER, buffer, len);
 	return 1;
 }
 

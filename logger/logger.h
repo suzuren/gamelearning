@@ -28,12 +28,12 @@
 //------------------------------------------------------------------------------
 // file stream
 
-FILE *	open_file(const char * pname, const char * pmode);
-void	close_file(FILE * pstream);
-void	flush_file(FILE * pstream);
-int		seek_file(FILE * pstream, int offset, int fromwhere);
-int		size_file(FILE * pstream);
-int		write_buffer(FILE * pstream, int count, const void * buffer);
+FILE *	file_open(const char * pname, const char * pmode);
+void	file_close(FILE * pstream);
+void	file_flush(FILE * pstream);
+int		file_seek(FILE * pstream, int offset, int fromwhere);
+int		file_size(FILE * pstream);
+int		file_write_buffer(FILE * pstream, int count, const void * buffer);
 
 //------------------------------------------------------------------------------
 

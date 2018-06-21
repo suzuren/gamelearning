@@ -13,15 +13,16 @@
 #include <sys/types.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 //------------------------------------------------------------------------------
 
 
-#define LOG_LEVEL_DEBUG					1
-#define LOG_LEVEL_WARNING				2
-#define LOG_LEVEL_NORMAL				3
-#define LOG_LEVEL_ERROR					4
-#define LOG_LEVEL_CRITIC				5
+#define LOG_LEVEL_DEBUG					0
+#define LOG_LEVEL_WARNING				1
+#define LOG_LEVEL_NORMAL				2
+#define LOG_LEVEL_ERROR					3
+#define LOG_LEVEL_CRITIC				4
 
 #define MAX_EACH_LINE_WORD				(1024*512) //每次写入最大字符数
 
@@ -29,7 +30,7 @@
 // file stream
 
 FILE *	file_open(const char * pname, const char * pmode);
-void	file_close(FILE * pstream);
+void	file_close(FILE ** pstream);
 void	file_flush(FILE * pstream);
 int		file_seek(FILE * pstream, int offset, int fromwhere);
 int		file_size(FILE * pstream);

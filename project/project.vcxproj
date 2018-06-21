@@ -56,6 +56,7 @@
     <ClInclude Include="..\cpp11\Timer.hpp" />
     <ClInclude Include="..\cpp11\type_name.hpp" />
     <ClInclude Include="..\declare\helloworld.h" />
+    <ClInclude Include="..\demo_php_connect_server\select.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.h" />
     <ClInclude Include="..\http\http.h" />
@@ -155,6 +156,7 @@
     <None Include="..\ConnectSkynet\pbc\Makefile" />
     <None Include="..\cpp11\Makefile" />
     <None Include="..\declare\Makefile" />
+    <None Include="..\demo_php_connect_server\Makefile" />
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
@@ -295,6 +297,7 @@
     <ClCompile Include="..\ConnectSkynet\pbc\wmessage.c" />
     <ClCompile Include="..\cpp11\main.cpp" />
     <ClCompile Include="..\declare\helloworld.cpp" />
+    <ClCompile Include="..\demo_php_connect_server\client.c" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\HashTest.cpp" />
     <ClCompile Include="..\GeneralHashFunctions_-_C\GeneralHashFunctions.c" />

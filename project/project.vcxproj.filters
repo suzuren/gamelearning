@@ -145,6 +145,9 @@
     <Filter Include="logger">
       <UniqueIdentifier>{c358ae60-bfea-4d6b-bbcb-559db4f6aefb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="demo_php_connect_server">
+      <UniqueIdentifier>{0d5aae4b-0c82-4795-9c6d-111521a999b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -485,6 +488,9 @@
     </ClInclude>
     <ClInclude Include="..\logger\logger.h">
       <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\demo_php_connect_server\select.h">
+      <Filter>demo_php_connect_server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -842,6 +848,9 @@
     </None>
     <None Include="..\logger\Makefile">
       <Filter>logger</Filter>
+    </None>
+    <None Include="..\demo_php_connect_server\Makefile">
+      <Filter>demo_php_connect_server</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1258,6 +1267,9 @@
     </ClCompile>
     <ClCompile Include="..\logger\test.c">
       <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="..\demo_php_connect_server\client.c">
+      <Filter>demo_php_connect_server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

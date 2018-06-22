@@ -1,7 +1,7 @@
 
 
 CPPFLAGS = -O3
-LDFLAGS = -lrt -lpthread -lstdc++ -std=c++11
+LDFLAGS = -lrt -lpthread -liconv -lstdc++ -std=c++11
 
 all: client
 

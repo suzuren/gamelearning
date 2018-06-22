@@ -29,33 +29,22 @@
 bool SetSocketEvents(int epfd, int fd, int op)
 {
 	struct epoll_event ev;
-
-	/*设置监听描述符*/
 	ev.data.fd = fd;
-	/*设置处理事件类型*/
 	ev.events = EPOLLIN | EPOLLET | EPOLLERR | EPOLLOUT;
-	/*注册事件*/
 	epoll_ctl(epfd, op, fd, &ev);
-
 	return true;
 }
 
 bool SetSocketNonblock(int fd)
 {
-	//下面获取套接字的标志
 	int flag = fcntl(fd, F_GETFL, 0);
 	if (flag < 0)
 	{
-		printf("fcntl F_GETFL filed.flags:%d\n", flag);
-		//错误处理
 		return false;
 	}
-	//下面设置套接字为非阻塞
 	flag = fcntl(fd, F_SETFL, flag | O_NONBLOCK);
 	if (flag < 0)
 	{
-		//错误处理
-		printf("fcntl F_SETFL filed.flags:%d\n", flag);
 		return false;
 	}
 	return true;
@@ -122,11 +111,9 @@ int socket_connect(const char *ip, int port)
 	if (client_fd == -1)
 	{
 		printf("create socket filed.\n");
-		exit(1);
+		return -1;
 	}
-
 	SetSocketNonblock(client_fd);
-
 	struct sockaddr_in server_addr;
 	memset(&server_addr, 0, sizeof(struct sockaddr_in));
 	server_addr.sin_family = AF_INET;
@@ -136,17 +123,10 @@ int socket_connect(const char *ip, int port)
 	if (ret == -1 && errno != EINPROGRESS)
 	{
 		printf("connect server filed\n");
-		exit(1);
+		return -1;
 	}
 	if (0 == ret)
-	{   //如果connect()返回0则连接已建立 
-		//下面恢复套接字阻塞状态 
-		//if (fcntl(client_fd, F_SETFL, flags) < 0)
-		//{
-		//	//错误处理 
-		//}
-
-		//下面是连接成功后要执行的代码 
+	{
 		printf("connect success\n");
 		return client_fd;
 	}
@@ -154,9 +134,7 @@ int socket_connect(const char *ip, int port)
 	{
 		struct epoll_event events[64];
 		int epfd = epoll_create(64);
-
 		SetSocketEvents(epfd, client_fd, EPOLL_CTL_ADD);
-
 		while (true)
 		{
 			int nfds = epoll_wait(epfd, events, 64, -1);
@@ -168,21 +146,21 @@ int socket_connect(const char *ip, int port)
 			{
 				if (events[i].events & EPOLLIN)
 				{
-					printf("epoll - EPOLLIN errno:%d\n", errno);
+					//printf("epoll - EPOLLIN errno:%d\n", errno);
 				}
 				else if (events[i].events & EPOLLET)
 				{
-					printf("epoll - EPOLLET errno:%d\n", errno);
+					//printf("epoll - EPOLLET errno:%d\n", errno);
 				}
 				else if (events[i].events & EPOLLERR)
 				{
-					printf("epoll - EPOLLERR errno:%d\n", errno);
+					//printf("epoll - EPOLLERR errno:%d\n", errno);
 					close(epfd);
 					return -1;
 				}
 				else if (events[i].events & EPOLLOUT)
 				{
-					printf("epoll - EPOLLOUT errno:%d\n", errno);
+					//printf("epoll - EPOLLOUT errno:%d\n", errno);
 					close(epfd);
 					return client_fd;
 				}
@@ -191,14 +169,10 @@ int socket_connect(const char *ip, int port)
 					printf("epoll - else errno:%d\n", errno);
 				}
 			}
-
 		}
 	}
-
 	return -1;
 }
-
-
 
 int socket_bind(const char *ip, int port)
 {
@@ -245,13 +219,3 @@ const char* getStrTime()
 	return szDate;
 }
 
-
-void http_post()
-{
-	static char buffer[2048];
-	memset(buffer, 0, sizeof(buffer));
-	strcat(buffer, "POST /collection;add-member/ HTTP/1.1\r\n");
-	strcat(buffer, "Host: example.com\r\n");
-	strcat(buffer, "Content-Type: text/plain\r\n");
-	strcat(buffer, "Content-Length: 12\r\n");
-}

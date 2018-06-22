@@ -151,6 +151,9 @@
     <Filter Include="NetHttp">
       <UniqueIdentifier>{7bbce6c5-9c47-46a8-9111-26d110e76b65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="loggercpp">
+      <UniqueIdentifier>{2cb03e3a-167f-4250-ac12-4282df9a758c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -497,6 +500,9 @@
     </ClInclude>
     <ClInclude Include="..\NetHttp\epoll_socket.h">
       <Filter>NetHttp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\loggercpp\logger.h">
+      <Filter>loggercpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -860,6 +866,9 @@
     </None>
     <None Include="..\NetHttp\Makefile">
       <Filter>NetHttp</Filter>
+    </None>
+    <None Include="..\loggercpp\Makefile">
+      <Filter>loggercpp</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1282,6 +1291,12 @@
     </ClCompile>
     <ClCompile Include="..\NetHttp\client.c">
       <Filter>NetHttp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\loggercpp\logger.c">
+      <Filter>loggercpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\loggercpp\test.c">
+      <Filter>loggercpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -25,4 +25,4 @@ $(TARGET) : $(COBJS) $(CPPOBJS)
 	$(CC) $(LDFLAGS) -o $(TARGET) $(COBJS) $(CPPOBJS)
 install:
 clean:
-	rm -f *.o *.so $(TARGET)
+	rm -rf logs_* *.o *.so $(TARGET)

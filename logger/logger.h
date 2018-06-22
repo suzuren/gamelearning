@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <stdarg.h>
 #include <stdarg.h>
@@ -26,6 +27,8 @@
 
 #define MAX_EACH_LINE_WORD				(1024*512) //每次写入最大字符数
 
+#define LOG_BREATHING_SPACE				(50)
+
 //------------------------------------------------------------------------------
 // file stream
 
@@ -39,6 +42,7 @@ int		file_write_buffer(FILE * pstream, int count, const void * buffer);
 //------------------------------------------------------------------------------
 
 // write log
+void log_thread_sleep(unsigned int msec);
 void log_constructor_logger(const char * prename);
 void log_destroy_logger();
 void log_format_write(int level, const char * pfunc, const char * pfile, unsigned int line, char const* pformat, ...);

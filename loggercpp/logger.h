@@ -4,6 +4,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
+#include <vector>
+
 #include <time.h>
 
 #include <stdarg.h>
@@ -27,7 +30,7 @@
 
 #define MAX_EACH_LINE_WORD				(1024*512) //每次写入最大字符数
 
-#define LOG_BREATHING_SPACE				(50)
+#define LOG_BREATHING_SPACE				(10)
 
 //------------------------------------------------------------------------------
 // file stream
@@ -37,7 +40,7 @@ void	file_close(FILE ** pstream);
 void	file_flush(FILE * pstream);
 int		file_seek(FILE * pstream, int offset, int fromwhere);
 int		file_size(FILE * pstream);
-int		file_write_buffer(FILE * pstream, int count, const void * buffer);
+int		file_write_buffer(FILE * pstream, unsigned int count, const void * buffer);
 
 //------------------------------------------------------------------------------
 

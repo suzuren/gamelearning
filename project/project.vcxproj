@@ -319,7 +319,7 @@
     <ClCompile Include="..\http\http_status.cpp" />
     <ClCompile Include="..\http\socklib.cpp" />
     <ClCompile Include="..\inicfg\INIFileOP.c" />
-    <ClCompile Include="..\loggercpp\logger.c" />
+    <ClCompile Include="..\loggercpp\logger.cpp" />
     <ClCompile Include="..\loggercpp\test.c" />
     <ClCompile Include="..\logger\logger.c" />
     <ClCompile Include="..\logger\test.c" />

@@ -10,6 +10,35 @@
 #define OPEN_MODE_READ_WRITE			"rb+"
 #define OPEN_MODE_APPEND				"ab+"
 
+struct log_queue_node
+{
+	int len;
+	std::string data;
+	struct log_queue_node * pnext;
+};
+
+struct log_info
+{
+	char	curdir[256];
+	char    prename[32];	// file name prefix
+	char    filename[32];	// file name
+	FILE *  pstream;
+	int     curday;
+	int		retainday;
+	int     cursize;   // current file size
+	int     maxsize;   // max file size
+	int		backcount; // backup files count
+	int		queuesize;
+	pthread_mutex_t	   mutex;
+	struct log_queue_node * pqueue_head;
+	struct log_queue_node * pqueue_tail;
+	pthread_t pthread;
+	int		runthread;
+	std::vector<struct log_queue_node *> vecnode;
+};
+
+static struct log_info * _LOGGER = NULL;
+
 //------------------------------------------------------------------------------
 
 void test_file_stream()
@@ -85,7 +114,7 @@ int file_size(FILE * pstream)
 }
 
 
-int file_write_buffer(FILE * pstream,int count,const void * buffer)
+int file_write_buffer(FILE * pstream,unsigned int count,const void * buffer)
 {
 	if (pstream == NULL || count == 0 || buffer == NULL)
 	{
@@ -98,64 +127,55 @@ int file_write_buffer(FILE * pstream,int count,const void * buffer)
 	return -1;
 }
 
-
 //------------------------------------------------------------------------------
 
-struct log_queue_node
+struct log_queue_node * queue_get_node(struct log_info * pinfo)
 {
-	int len;
-	char *ptr;
-	struct log_queue_node * pnext;
-};
-
-struct log_info
-{
-	char	curdir[256];
-	char    prename[32];	// file name prefix
-	char    filename[32];	// file name
-	FILE *  pstream;
-	int     curday;
-	int		retainday;
-	int     cursize;   // current file size
-	int     maxsize;   // max file size
-	int		backcount; // backup files count
-	int		queuesize;
-	pthread_mutex_t	   mutex;
-	struct log_queue_node * pqueue_head;
-	struct log_queue_node * pqueue_tail;
-	pthread_t pthread;
-	int		runthread;
-};
-
-static struct log_info * _LOGGER = NULL;
-
-
-struct log_queue_node * queue_get_node()
-{
-	struct log_queue_node * pnode = (struct log_queue_node *)malloc(sizeof(struct log_queue_node));
+	struct log_queue_node * pnode = NULL;
+	//printf("queue_get_node - vecnode.size:%ld\n", pinfo->vecnode.size());
+	if (pinfo != NULL)
+	{
+		if (pinfo->vecnode.size() > 0)
+		{
+			pnode = pinfo->vecnode[0];
+			pinfo->vecnode.erase(pinfo->vecnode.begin());
+		}
+		else
+		{
+			pnode = new(struct log_queue_node);
+			pnode->len = 0;
+			pnode->pnext = NULL;
+			pnode->data.clear();
+		}
+	}
 	return pnode;
+}
+
+void queue_set_node(struct log_info * pinfo,struct log_queue_node * pnode)
+{
+	if (pinfo != NULL && pnode != NULL)
+	{
+		pnode->len = 0;
+		pnode->pnext = NULL;
+		pnode->data.clear();
+		pinfo->vecnode.push_back(pnode);
+	}
 }
 
 void queue_push(struct log_info * pinfo,const void * buffer, int size)
 {
-	void * ptr = malloc(size);
-	if (ptr == NULL)
-	{
-		return;
-	}
-	//char temp[size];
-	memcpy(ptr, buffer, size);
+	pthread_mutex_lock(&pinfo->mutex);
 
-	struct log_queue_node * pnode = queue_get_node();
+	struct log_queue_node * pnode = queue_get_node(pinfo);
 	if (pnode == NULL)
 	{
+		pthread_mutex_unlock(&pinfo->mutex);
 		return;
 	}
 	pnode->len = size;
-	pnode->ptr = ptr;
 	pnode->pnext = NULL;
-
-	pthread_mutex_lock(&pinfo->mutex);
+	pnode->data = (char *)buffer;
+	
 	int * queuesize = &pinfo->queuesize;
 	struct log_queue_node * * head = &pinfo->pqueue_head;
 	struct log_queue_node * * tail = &pinfo->pqueue_tail;
@@ -175,8 +195,10 @@ void queue_push(struct log_info * pinfo,const void * buffer, int size)
 	pthread_mutex_unlock(&pinfo->mutex);
 }
 
-int queue_pop(struct log_info * pinfo, char ** buffer, int * size)
+int queue_pop(struct log_info * pinfo, std::string & data, int * size)
 {
+	data.clear();
+
 	pthread_mutex_lock(&pinfo->mutex);
 	int * queuesize = &pinfo->queuesize;
 	struct log_queue_node * * head = &pinfo->pqueue_head;
@@ -185,20 +207,19 @@ int queue_pop(struct log_info * pinfo, char ** buffer, int * size)
 	//printf("queue_pop 1 - head:%p,tail:%p\n", pinfo->pqueue_head, pinfo->pqueue_tail);
 
 	int ret = 0;
-	struct log_queue_node * pqueue = (*head);
-	if (pqueue != NULL)
+	struct log_queue_node * pnode = (*head);
+	if (pnode != NULL)
 	{
-		*head = pqueue->pnext;
-		if (pqueue->pnext == NULL)
+		*head = pnode->pnext;
+		if (pnode->pnext == NULL)
 		{
-			*tail = pqueue->pnext;
+			*tail = pnode->pnext;
 			//printf("queue_pop 2 - head:%p,tail:%p\n", pinfo->pqueue_head, pinfo->pqueue_tail);
 		}
-		*buffer = pqueue->ptr;
-		*size = pqueue->len;
+		data = pnode->data;
+		*size = pnode->len;
 		(*queuesize)--;
-		free(pqueue);
-		pqueue = NULL;
+		queue_set_node(pinfo, pnode);
 		ret = 1;
 	}
 	else
@@ -212,21 +233,33 @@ int queue_pop(struct log_info * pinfo, char ** buffer, int * size)
 	return ret;
 }
 
-void queue_clear(struct log_queue_node * heard)
-{	
+void queue_clear(struct log_info * pinfo)
+{
+	struct log_queue_node * heard = pinfo->pqueue_head;
 	while (heard != NULL)
 	{
-		if (heard->ptr != NULL)
+		if (heard->len > 0)
 		{
-			free(heard->ptr);
-			heard->ptr = NULL;
+			heard->data.clear();
 			heard->len = 0;
 			heard = heard->pnext;
 		}
 	}
+	while (pinfo->vecnode.size()>0)
+	{
+		struct log_queue_node * pnode = pinfo->vecnode[0];
+		pinfo->vecnode.erase(pinfo->vecnode.begin());
+		if (pnode != NULL)
+		{
+			delete pnode;
+			pnode = NULL;
+		}
+	}
 }
 
-void check_file(struct log_info * pinfo)
+//------------------------------------------------------------------------------
+
+void log_file_check(struct log_info * pinfo)
 {
 	static char buffer_dir_new[32];
 	static char buffer_dir_mk[512];
@@ -329,30 +362,28 @@ void check_file(struct log_info * pinfo)
 	
 }
 
-void queue_write_data(struct log_info * pinfo)
+void log_write_queue_data(struct log_info * pinfo)
 {
 	while (pinfo->runthread == 1)
 	{
 		if (pinfo != NULL && pinfo->queuesize > 0)
 		{
-			check_file(pinfo);
+			log_file_check(pinfo);
 
 			int len = -2;
-			char * buffer = NULL;
-			int ret = queue_pop(pinfo, &buffer, &len);
-			//printf("queue_write_data - head:%p,tail:%p,queuesize:%d,ret:%d,len:%d,buffer:%s\n", pinfo->pqueue_head, pinfo->pqueue_tail, pinfo->queuesize, ret, len,buffer);
+			static std::string data;
+			int ret = queue_pop(pinfo, data, &len);
+			//printf("log_write_queue_data - head:%p,tail:%p,queuesize:%d,ret:%d,len:%d,buffer:%s\n", pinfo->pqueue_head, pinfo->pqueue_tail, pinfo->queuesize, ret, len,buffer);
 			if (ret == 1)
 			{
-				file_write_buffer(pinfo->pstream, len, buffer);
+				file_write_buffer(pinfo->pstream, data.size(), data.c_str());
 				file_flush(pinfo->pstream);
-				free(buffer);
-				buffer = NULL;
-				pinfo->cursize += len;
+				pinfo->cursize += data.size();
 			}
-			//else
-			//{
-			//	log_thread_sleep(LOG_BREATHING_SPACE);
-			//}
+			else
+			{
+				log_thread_sleep(LOG_BREATHING_SPACE);
+			}
 		}
 		else
 		{
@@ -361,11 +392,11 @@ void queue_write_data(struct log_info * pinfo)
 	}
 }
 
-void* runthread(void* parm)
+void* runthreadfunc(void* parm)
 {
 	struct log_info * pinfo = (struct log_info *)parm;
-	queue_write_data(pinfo);
-	printf("thread exit\n");
+	log_write_queue_data(pinfo);
+	//printf("thread exit\n");
 	return NULL;
 }
 
@@ -421,14 +452,14 @@ void log_init_info(struct log_info * pinfo)
 		pinfo->pqueue_head = NULL;
 		pinfo->pqueue_tail = NULL;
 		pthread_mutex_init(&(pinfo->mutex), NULL);
-		pthread_create(&(pinfo->pthread), 0, runthread, pinfo);
+		pthread_create(&(pinfo->pthread), 0, runthreadfunc, pinfo);
 		pinfo->runthread = 1;
 	}
 }
 
 struct log_info * log_create_logger()
 {
-	struct log_info * pinfo = (struct log_info *)malloc(sizeof(struct log_info));
+	struct log_info * pinfo = new(struct log_info);
 	log_init_info(pinfo);
 	return pinfo;
 }
@@ -453,7 +484,7 @@ void log_destroy_logger()
 	struct log_info * pinfo = _LOGGER;
 	if (pinfo != NULL)
 	{
-		queue_clear(pinfo->pqueue_head);
+		queue_clear(pinfo);
 		pinfo->pqueue_head = NULL;
 		pinfo->pqueue_tail = NULL;
 		pinfo->runthread = 0;
@@ -461,9 +492,12 @@ void log_destroy_logger()
 		pthread_join(pinfo->pthread, NULL);
 		pthread_cancel(pinfo->pthread);
 		file_close(&pinfo->pstream);
-		free(pinfo);
+		delete(pinfo);
+		_LOGGER = NULL;
 	}
 }
+
+//------------------------------------------------------------------------------
 
 
 const char* log_set_header(int level, const char *  pfunc, const char *  pfile, unsigned int line)
@@ -489,7 +523,8 @@ int log_write(const void * buffer, int len)
 
 void log_format_write(int level, const char * pfunc, const char * pfile, unsigned int line, char const* pformat, ...)
 {
-	char  buffer[MAX_EACH_LINE_WORD] = { 0 };
+	static char  buffer[MAX_EACH_LINE_WORD];
+	memset(buffer, 0, sizeof(buffer));
 	const char * pheader = log_set_header(level, pfunc, pfile, line);
 	sprintf(buffer, "%s [", pheader);	
 	unsigned int usedlen = strlen(buffer);
@@ -507,3 +542,5 @@ void log_format_write(int level, const char * pfunc, const char * pfile, unsigne
 
 	log_write(buffer, usedlen);
 }
+
+//------------------------------------------------------------------------------

@@ -489,7 +489,8 @@ int log_write(const void * buffer, int len)
 
 void log_format_write(int level, const char * pfunc, const char * pfile, unsigned int line, char const* pformat, ...)
 {
-	char  buffer[MAX_EACH_LINE_WORD] = { 0 };
+	static char  buffer[MAX_EACH_LINE_WORD];
+	memset(buffer, 0, sizeof(buffer));
 	const char * pheader = log_set_header(level, pfunc, pfile, line);
 	sprintf(buffer, "%s [", pheader);	
 	unsigned int usedlen = strlen(buffer);

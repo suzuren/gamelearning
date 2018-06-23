@@ -1,5 +1,5 @@
 #include "epoll_socket.h"
-
+#include "http_header.h"
 
 
 int main(int argc, char const *argv[])
@@ -13,7 +13,13 @@ int main(int argc, char const *argv[])
 	int iCount = 0;
 	char buffer[65535] = { 0 };	
 	memset(buffer, 0, sizeof(buffer));
-	sprintf(buffer, "%s", http_get_post_head());
+
+	struct http_header_option header;
+	http_reset_header(&header);
+	http_init_header(&header);
+
+	sprintf(buffer, "%s", http_build_header(&header));
+
 	int len_buff = strlen(buffer);
 	while (len_buff>0)
 	{

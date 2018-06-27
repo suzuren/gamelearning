@@ -504,6 +504,12 @@
     <ClInclude Include="..\loggercpp\logger.h">
       <Filter>loggercpp</Filter>
     </ClInclude>
+    <ClInclude Include="..\NetHttp\http_header.h">
+      <Filter>NetHttp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\NetHttp\base_unit.h">
+      <Filter>NetHttp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

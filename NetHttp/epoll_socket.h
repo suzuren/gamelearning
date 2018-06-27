@@ -1,3 +1,9 @@
+
+#ifndef __EPOLL_SOCKET_
+#define __EPOLL_SOCKET_
+
+
+
 #include <arpa/inet.h>
 #include <assert.h>
 #include <errno.h>
@@ -206,16 +212,6 @@ int socket_bind(const char *ip, int port)
 	return listen_fd;
 }
 
+#endif
 
-const char* getStrTime()
-{
-	time_t now = time(0);
-	struct tm * pTime = localtime(&now);
-
-	static char szDate[32] = { 0 };
-
-	sprintf(szDate, "%.4d-%.2d-%.2d %.2d:%.2d:%.2d", pTime->tm_year + 1900, pTime->tm_mon + 1, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
-
-	return szDate;
-}
 

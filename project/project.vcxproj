@@ -117,7 +117,9 @@
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
     <ClInclude Include="..\MultiplayerBook\RoboMath.h" />
     <ClInclude Include="..\NetEpoll\epoll_socket.h" />
+    <ClInclude Include="..\NetHttp\base_unit.h" />
     <ClInclude Include="..\NetHttp\epoll_socket.h" />
+    <ClInclude Include="..\NetHttp\http_header.h" />
     <ClInclude Include="..\NetPoll\poll_socket.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
     <ClInclude Include="..\referlib\barrier.h" />

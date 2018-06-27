@@ -226,6 +226,17 @@ void queue_clear(struct log_queue_node * heard)
 	}
 }
 
+int queue_get_size(struct log_info * pinfo)
+{
+	int size = 0;
+
+	pthread_mutex_lock(&pinfo->mutex);
+	size = pinfo->queuesize;
+	pthread_mutex_unlock(&pinfo->mutex);
+
+	return size;
+}
+
 void check_file(struct log_info * pinfo)
 {
 	static char buffer_dir_new[32];
@@ -333,7 +344,7 @@ void queue_write_data(struct log_info * pinfo)
 {
 	while (pinfo->runthread == 1)
 	{
-		if (pinfo != NULL && pinfo->queuesize > 0)
+		if (pinfo != NULL && queue_get_size(pinfo) > 0)
 		{
 			check_file(pinfo);
 

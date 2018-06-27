@@ -18,7 +18,7 @@ int main(int argc, const char** argv)
 	{
 		LOG_DEBUG("hello world - %d.", i++);
 		log_thread_sleep(LOG_BREATHING_SPACE);
-		if (i == 100)
+		if (i == 10000)
 		{
 			break;
 		}

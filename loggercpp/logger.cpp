@@ -233,6 +233,18 @@ int queue_pop(struct log_info * pinfo, std::string & data, int * size)
 	return ret;
 }
 
+
+int queue_get_size(struct log_info * pinfo)
+{
+	int size = 0;
+
+	pthread_mutex_lock(&pinfo->mutex);
+	size = pinfo->queuesize;
+	pthread_mutex_unlock(&pinfo->mutex);
+
+	return size;
+}
+
 void queue_clear(struct log_info * pinfo)
 {
 	struct log_queue_node * heard = pinfo->pqueue_head;
@@ -366,7 +378,7 @@ void log_write_queue_data(struct log_info * pinfo)
 {
 	while (pinfo->runthread == 1)
 	{
-		if (pinfo != NULL && pinfo->queuesize > 0)
+		if (pinfo != NULL && queue_get_size(pinfo) > 0)
 		{
 			log_file_check(pinfo);
 

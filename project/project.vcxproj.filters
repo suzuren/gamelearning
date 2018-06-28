@@ -154,6 +154,9 @@
     <Filter Include="loggercpp">
       <UniqueIdentifier>{2cb03e3a-167f-4250-ac12-4282df9a758c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="loggersafe">
+      <UniqueIdentifier>{7ba3b789-48c2-4940-aba1-762d9ec4e3d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -509,6 +512,9 @@
     </ClInclude>
     <ClInclude Include="..\NetHttp\base_unit.h">
       <Filter>NetHttp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\loggersafe\logger.h">
+      <Filter>loggersafe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -875,6 +881,9 @@
     </None>
     <None Include="..\loggercpp\Makefile">
       <Filter>loggercpp</Filter>
+    </None>
+    <None Include="..\loggersafe\Makefile">
+      <Filter>loggersafe</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1303,6 +1312,12 @@
     </ClCompile>
     <ClCompile Include="..\loggercpp\logger.cpp">
       <Filter>loggercpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\loggersafe\logger.cpp">
+      <Filter>loggersafe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\loggersafe\test.c">
+      <Filter>loggersafe</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

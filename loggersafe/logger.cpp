@@ -285,8 +285,8 @@ void log_file_check(struct log_info * pinfo)
 	static char buffer_file_back[512];
 	static char buffer_file_ago[512];
 
-	time_t now_tm = time(0);
-	struct tm * ptime = localtime(&now_tm);
+	time_t time_now = time(NULL);
+	struct tm * ptime = localtime(&time_now);
 	if (pinfo->curday != ptime->tm_mday)
 	{
 		//make new dir
@@ -341,22 +341,24 @@ void log_file_check(struct log_info * pinfo)
 		//printf("buffer_file_open:%s\r\n", buffer_file_open);
 		//printf("buffer_file_back:%s\r\n", buffer_file_back);
 	}
-	//delete back file	
+	//delete ago 7 day back file 保留五天后的日志 五天后的后面七天全部删除
 	for (int index = 0; index < 7; ++index)
 	{
-		int agoday = pinfo->retainday + index;
-		time_t cur_tm = time(0);
-		time_t ago_tm = cur_tm - (agoday * 60 * 60 * 24);
-		struct tm * ptime_ago = localtime(&ago_tm);
+		unsigned long long agoday = pinfo->retainday + index;
+		time_t time_ago = time_now - (agoday * 60 * 60 * 24);
+		struct tm * ptime_ago = localtime_r(&time_ago, ptime);
 
 		memset(buffer_dir_ago, 0, sizeof(buffer_dir_ago));
 		memset(buffer_file_ago, 0, sizeof(buffer_file_ago));
 		sprintf(buffer_dir_ago, "logs_%04d_%02d_%02d/", ptime_ago->tm_year + 1900, ptime_ago->tm_mon + 1, ptime_ago->tm_mday);
 		sprintf(buffer_file_ago, "%s%s%s", pinfo->curdir, buffer_dir_ago, pinfo->filename);
 		
+		//printf("retainday:%d,agoday:%d,index:%d,tm_mday:%d\r\n", pinfo->retainday, agoday, index, ptime_ago->tm_mday);
+
 		if (access(buffer_file_ago, F_OK) == 0)
 		{
-			printf("retainday:%d,agoday:%d,index:%d,tm_mday:%d\r\n", pinfo->retainday, agoday, index, ptime_ago->tm_mday);
+			printf("retainday:%d,agoday:%lld,time_ago:%ld,index:%d,tm_year:%d,tm_mon:%d,tm_mday:%d\r\n",
+				pinfo->retainday, agoday, time_ago,index, ptime_ago->tm_year + 1900, ptime_ago->tm_mon + 1, ptime_ago->tm_mday);
 
 			printf("1 buffer_file_ago:%s\r\n", buffer_file_ago);
 
@@ -369,7 +371,7 @@ void log_file_check(struct log_info * pinfo)
 			sprintf(buffer_file_ago, "%s%s%s_back_%d.log", pinfo->curdir, buffer_dir_ago, pinfo->prename, backcount);
 			if (access(buffer_file_ago, F_OK) == 0)
 			{
-				printf("2 buffer_file_ago:%s\r\n", buffer_file_ago);
+				//printf("2 buffer_file_ago:%s\r\n", buffer_file_ago);
 
 				unlink(buffer_file_ago);
 			}
@@ -463,11 +465,12 @@ void* runthreadfunc(void* parm)
 
 const char* log_get_time()
 {
-	time_t now = time(0);
-	struct tm * pTime = localtime(&now);
+	time_t time_now = time(NULL);
+	struct tm * ptime_now = localtime(&time_now);
+	struct tm * ptime = localtime_r(&time_now, ptime_now);
 	static char cdate[32] = { 0 };
 	memset(cdate, 0, sizeof(cdate));
-	sprintf(cdate, "[%.4d-%.2d-%.2d %.2d:%.2d:%.2d]", pTime->tm_year + 1900, pTime->tm_mon + 1, pTime->tm_mday, pTime->tm_hour, pTime->tm_min, pTime->tm_sec);
+	sprintf(cdate, "[%.4d-%.2d-%.2d %.2d:%.2d:%.2d]", ptime->tm_year + 1900, ptime->tm_mon + 1, ptime->tm_mday, ptime->tm_hour, ptime->tm_min, ptime->tm_sec);
 	return cdate;
 }
 
@@ -568,7 +571,7 @@ int log_write(const void * buffer, int len)
 	if (_LOGGER == NULL)
 	{
 		//printf("_LOGGER is null - len:%d,buffer:%s", len, buffer);
-		//1_LOGGER = log_create_logger();
+		1_LOGGER = log_create_logger();
 	}
 	queue_push(_LOGGER, buffer, len);
 	return 1;

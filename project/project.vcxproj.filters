@@ -516,6 +516,9 @@
     <ClInclude Include="..\loggersafe\logger.h">
       <Filter>loggersafe</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp11\test_chrono_time.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -883,6 +886,9 @@
       <Filter>loggercpp</Filter>
     </None>
     <None Include="..\loggersafe\Makefile">
+      <Filter>loggersafe</Filter>
+    </None>
+    <None Include="..\loggersafe\stop.sh">
       <Filter>loggersafe</Filter>
     </None>
   </ItemGroup>

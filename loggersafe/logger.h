@@ -10,7 +10,6 @@
 #include <time.h>
 
 #include <stdarg.h>
-#include <stdarg.h>
 #include <string.h>
 #include <sys/time.h>
 
@@ -33,9 +32,10 @@
 //------------------------------------------------------------------------------
 
 // write log
-void log_thread_sleep(unsigned int msec);
+void log_time_update_logger();
 void log_constructor_logger(const char * prename);
 void log_shutdown_logger();
+void log_thread_sleep(unsigned int msec);
 void log_format_write(int level, const char * pfunc, const char * pfile, unsigned int line, char const* pformat, ...);
 
 #define LOG_DEBUG(fmt, arg...) \

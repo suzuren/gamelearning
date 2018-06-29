@@ -50,6 +50,7 @@
     <ClInclude Include="..\ConnectSkynet\select.h" />
     <ClInclude Include="..\cpp11\shared.hpp" />
     <ClInclude Include="..\cpp11\SyncQueue.hpp" />
+    <ClInclude Include="..\cpp11\test_chrono_time.hpp" />
     <ClInclude Include="..\cpp11\test_lambda.h" />
     <ClInclude Include="..\cpp11\test_regex_match.h" />
     <ClInclude Include="..\cpp11\ThreadPool.hpp" />
@@ -169,6 +170,7 @@
     <None Include="..\inicfg\Makefile" />
     <None Include="..\loggercpp\Makefile" />
     <None Include="..\loggersafe\Makefile" />
+    <None Include="..\loggersafe\stop.sh" />
     <None Include="..\logger\Makefile" />
     <None Include="..\lua-5.3.4-src\doc\contents.html" />
     <None Include="..\lua-5.3.4-src\doc\index.css" />

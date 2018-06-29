@@ -1,5 +1,5 @@
 
-TARGET := test
+TARGET := test_logger
 CC := g++ -Wall
 CPPFLAGS := -DNDEBUG
 CFLAGS :=
@@ -25,4 +25,4 @@ $(TARGET) : $(COBJS) $(CPPOBJS)
 	$(CC) $(LDFLAGS) -o $(TARGET) $(COBJS) $(CPPOBJS)
 install:
 clean:
-	rm -rf logs_* *.o *.so $(TARGET)
+	rm -rf logs_* *.o *.so *.pid $(TARGET)

@@ -157,6 +157,9 @@
     <Filter Include="loggersafe">
       <UniqueIdentifier>{7ba3b789-48c2-4940-aba1-762d9ec4e3d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="timer">
+      <UniqueIdentifier>{49e9174e-87c1-4c29-b83d-0ee1783fd143}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -518,6 +521,9 @@
     </ClInclude>
     <ClInclude Include="..\cpp11\test_chrono_time.hpp">
       <Filter>cpp11</Filter>
+    </ClInclude>
+    <ClInclude Include="..\timer\timer.h">
+      <Filter>timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -890,6 +896,9 @@
     </None>
     <None Include="..\loggersafe\stop.sh">
       <Filter>loggersafe</Filter>
+    </None>
+    <None Include="..\timer\Makefile">
+      <Filter>timer</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1324,6 +1333,12 @@
     </ClCompile>
     <ClCompile Include="..\loggersafe\test.c">
       <Filter>loggersafe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\timer\test.c">
+      <Filter>timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\timer\timer.c">
+      <Filter>timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -132,9 +132,32 @@ static int write_pid(const char *pidfile)
 	return pid;
 }
 
+void reload(int signal)
+{
+	if (signal == SIGUSR2)
+	{
+		printf("reload config ... \r\n");
+	}
+}
+
+static bool g_isrun = true;
+
+void shutdown(int signal)
+{
+	if (signal == SIGUSR1)
+	{
+		printf("shutdown ... \r\n");
+		g_isrun = false;
+	}
+}
+
 int main(int argc, const char** argv)
 {
 	printf("test logger ...\n");
+
+	signal(SIGUSR2, reload);
+	signal(SIGUSR1, shutdown);
+
 	daemonize();
 	int pid = check_pid("logger.pid");
 	if (pid)
@@ -153,7 +176,7 @@ int main(int argc, const char** argv)
 	//{
 	//	//LOG_DEBUG("hello world - %d.", i);
 	//}
-	while (1)
+	while (g_isrun)
 	{
 		log_time_update_logger();
 
@@ -164,7 +187,7 @@ int main(int argc, const char** argv)
 			//break;
 		}
 		log_thread_sleep(3);
-	}	
+	}
 	log_shutdown_logger();
 	log_thread_sleep(LOG_BREATHING_SPACE * 10);
 	return 0;

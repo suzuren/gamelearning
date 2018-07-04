@@ -900,6 +900,9 @@
     <None Include="..\timer\Makefile">
       <Filter>timer</Filter>
     </None>
+    <None Include="..\loggersafe\reload.sh">
+      <Filter>loggersafe</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">

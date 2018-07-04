@@ -171,6 +171,7 @@
     <None Include="..\inicfg\Makefile" />
     <None Include="..\loggercpp\Makefile" />
     <None Include="..\loggersafe\Makefile" />
+    <None Include="..\loggersafe\reload.sh" />
     <None Include="..\loggersafe\stop.sh" />
     <None Include="..\logger\Makefile" />
     <None Include="..\lua-5.3.4-src\doc\contents.html" />

@@ -1,8 +1,8 @@
 
 TARGET := test
-CC := gcc -Wall
+CC := g++ -Wall
 CPPFLAGS := -DNDEBUG
-CFLAGS := -std=gnu11
+CFLAGS := -std=c++11
 CXXFLAGS := -Wall -I../../include/ -D_FILE_OFFSET_BITS=64 -std=c++11
 LDFLAGS := -lpthread -lrt -lm
 CPP_SOURCES := $(wildcard *.cpp)

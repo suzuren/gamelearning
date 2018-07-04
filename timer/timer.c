@@ -111,6 +111,21 @@ const char* timer_get_time_format(struct timer_info *pinfo)
 	return cdate;
 }
 
+const char* timer_get_seconds_format(long int seconds)
+{
+	struct timer_info *pinfo = _TIMER;
+	static char cdate[32];
+	memset(cdate, 0, sizeof(cdate));
+	if (pinfo != NULL)
+	{
+		struct tm time_target;
+		timer_get_target(&time_target, pinfo);
+		struct tm * ptime = localtime_r(&seconds, &time_target);
+		sprintf(cdate, "[%.4d-%.2d-%.2d %.2d:%.2d:%.2d]", ptime->tm_year + 1900, ptime->tm_mon + 1, ptime->tm_mday, ptime->tm_hour, ptime->tm_min, ptime->tm_sec);
+	}
+	return cdate;
+}
+
 void timer_init_info()
 {
 	if (_TIMER == NULL)
@@ -151,6 +166,16 @@ void timer_test()
 	printf("time string:%s\r\n", timer_get_time_format(_TIMER));
 	printf("time value - tv_sec:%ld,tv_usec:%ld\r\n", _TIMER->time_value.tv_sec, _TIMER->time_value.tv_usec);
 	printf("time zone - tz_minuteswest:%d,tz_dsttime:%d\r\n", _TIMER->time_zone.tz_minuteswest, _TIMER->time_zone.tz_dsttime);
+
+
+	unsigned long long u64ArrayTime[] = { 1499220668, 1499220969 };
+	cout << "u64ArrayTime: -- {" << endl;
+	for (unsigned int i = 0; i < sizeof(u64ArrayTime) / sizeof(u64ArrayTime[0]); i++)
+	{
+		cout << left;
+		cout << "i:" << setw(2) << i << " time:" << u64ArrayTime[i] << " format:" << timer_get_seconds_format(u64ArrayTime[i]) << endl;
+	}
+	cout << "}" << endl;
 }
 
 

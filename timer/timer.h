@@ -3,6 +3,9 @@
 #define __TIMER_H__
 
 
+#include <iostream>
+#include <iomanip>
+using namespace std;
 
 #include <stdio.h>
 #include <stdlib.h>

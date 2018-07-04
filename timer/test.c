@@ -1,7 +1,10 @@
 
 #include <stdio.h>
-
 #include "timer.h"
+
+
+
+
 
 
 int main(int argc, const char** argv)
@@ -13,6 +16,7 @@ int main(int argc, const char** argv)
 	timer_update_time();
 
 	
+
 
 	timer_destroy_info();
 

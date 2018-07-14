@@ -151,7 +151,7 @@ print("-------------------------------------------------------------------------
 
 local xpcallUtility = require "utility.xpcall"
 xpcallUtility.errorMessageSaver("error msg")
-local dataerr = xpcallUtility.getErrorMessage()
+--local dataerr = xpcallUtility.getErrorMessage()
 
 print("xpcallUtility.getErrorMessage - ",dataerr)
 

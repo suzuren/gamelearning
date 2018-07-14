@@ -2,7 +2,8 @@ local _errorMsg = nil
 
 local function errorMessageSaver(errMsg)
 	local co = coroutine.running()
-	_errorMsg = string.format("%s\n%s", errMsg, debug.traceback(co, nil, 2))
+    _errorMsg = string.format("%s\n%s", errMsg, debug.traceback(co, nil, 2))
+    print(_errorMsg)
 end
 
 local function getErrorMessage()

@@ -1,3 +1,2 @@
-
 clean:
-	rm -rf *.so *.log logs/
+	rm -rf *.log logs/

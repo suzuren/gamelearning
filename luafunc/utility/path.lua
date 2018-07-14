@@ -1,5 +1,5 @@
 local arc4 = require "arc4random"
-require "utility.table"
+--require "utility.table"
 
 local printr = require "print_r"
 

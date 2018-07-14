@@ -160,6 +160,12 @@
     <Filter Include="timer">
       <UniqueIdentifier>{49e9174e-87c1-4c29-b83d-0ee1783fd143}</UniqueIdentifier>
     </Filter>
+    <Filter Include="luafunc">
+      <UniqueIdentifier>{a40682bd-0404-419a-a397-d675cb763ae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="luafunc\utility">
+      <UniqueIdentifier>{29143eb5-e1fb-4bda-8bf5-17879b635901}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -902,6 +908,69 @@
     </None>
     <None Include="..\loggersafe\reload.sh">
       <Filter>loggersafe</Filter>
+    </None>
+    <None Include="..\luafunc\xLogService.lua">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\makefile">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\pbConfig.lua">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\print_r.lua">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\utility\bullet.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\cItemBuffer.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\currency.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\ip.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\jsonHttpResponse.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\mcClient.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\path.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\readFile.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\sign.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\string.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\table.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\tableController.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\time.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\timer.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\uniformPlatformHttp.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\utility\xpcall.lua">
+      <Filter>luafunc\utility</Filter>
+    </None>
+    <None Include="..\luafunc\test_utility.lua">
+      <Filter>luafunc</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -166,6 +166,9 @@
     <Filter Include="luafunc\utility">
       <UniqueIdentifier>{29143eb5-e1fb-4bda-8bf5-17879b635901}</UniqueIdentifier>
     </Filter>
+    <Filter Include="luafunc\cjson">
+      <UniqueIdentifier>{df3c8acc-4eaf-4720-afbd-2105948d006f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -921,13 +924,28 @@
     <None Include="..\luafunc\print_r.lua">
       <Filter>luafunc</Filter>
     </None>
+    <None Include="..\luafunc\test_utility.lua">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\cjson\script.lua">
+      <Filter>luafunc\cjson</Filter>
+    </None>
+    <None Include="..\luafunc\cjson\util.lua">
+      <Filter>luafunc\cjson</Filter>
+    </None>
+    <None Include="..\luafunc\script.lua">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\test_cjson.lua">
+      <Filter>luafunc</Filter>
+    </None>
     <None Include="..\luafunc\utility\bullet.lua">
       <Filter>luafunc\utility</Filter>
     </None>
-    <None Include="..\luafunc\utility\cItemBuffer.lua">
+    <None Include="..\luafunc\utility\currency.lua">
       <Filter>luafunc\utility</Filter>
     </None>
-    <None Include="..\luafunc\utility\currency.lua">
+    <None Include="..\luafunc\utility\DropTable.csv">
       <Filter>luafunc\utility</Filter>
     </None>
     <None Include="..\luafunc\utility\ip.lua">
@@ -936,10 +954,10 @@
     <None Include="..\luafunc\utility\jsonHttpResponse.lua">
       <Filter>luafunc\utility</Filter>
     </None>
-    <None Include="..\luafunc\utility\mcClient.lua">
+    <None Include="..\luafunc\utility\path.lua">
       <Filter>luafunc\utility</Filter>
     </None>
-    <None Include="..\luafunc\utility\path.lua">
+    <None Include="..\luafunc\utility\print_r.lua">
       <Filter>luafunc\utility</Filter>
     </None>
     <None Include="..\luafunc\utility\readFile.lua">
@@ -954,22 +972,13 @@
     <None Include="..\luafunc\utility\table.lua">
       <Filter>luafunc\utility</Filter>
     </None>
-    <None Include="..\luafunc\utility\tableController.lua">
-      <Filter>luafunc\utility</Filter>
-    </None>
     <None Include="..\luafunc\utility\time.lua">
-      <Filter>luafunc\utility</Filter>
-    </None>
-    <None Include="..\luafunc\utility\timer.lua">
-      <Filter>luafunc\utility</Filter>
-    </None>
-    <None Include="..\luafunc\utility\uniformPlatformHttp.lua">
       <Filter>luafunc\utility</Filter>
     </None>
     <None Include="..\luafunc\utility\xpcall.lua">
       <Filter>luafunc\utility</Filter>
     </None>
-    <None Include="..\luafunc\test_utility.lua">
+    <None Include="..\luafunc\test_struct.lua">
       <Filter>luafunc</Filter>
     </None>
   </ItemGroup>
@@ -1411,6 +1420,9 @@
     </ClCompile>
     <ClCompile Include="..\timer\timer.c">
       <Filter>timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\luafunc\lua-struct.c">
+      <Filter>luafunc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -160,7 +160,8 @@ local function cmd_insert(sql)
 end
 
 local function cmd_call(sql)
-	local cursor, errmsg = _conn:callprocedure(sql)
+    print("cmd_call - ",sql)
+    local cursor, errmsg = _conn:callprocedure(sql)
 	checkReturn(cursor, errmsg)	
 	local rows = {}
 	while true do

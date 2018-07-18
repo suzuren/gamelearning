@@ -157,15 +157,6 @@ void log_time_update(struct tm tag_time, time_t sec_time)
 	pthread_mutex_unlock(&_LOGGER->time_mutex);
 }
 
-time_t log_time_get_seconds()
-{
-	time_t seconds = 0;
-	pthread_mutex_lock(&_LOGGER->time_mutex);
-	seconds = _LOGGER->sec_time;
-	pthread_mutex_unlock(&_LOGGER->time_mutex);
-	return seconds;
-}
-
 void log_time_get_tag(struct tm & tag_time)
 {
 	if (_LOGGER == NULL)

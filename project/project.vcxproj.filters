@@ -169,6 +169,9 @@
     <Filter Include="luafunc\cjson">
       <UniqueIdentifier>{df3c8acc-4eaf-4720-afbd-2105948d006f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_curl">
+      <UniqueIdentifier>{30232b0a-bae3-4ef3-b641-7e6ca3c61242}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -533,6 +536,15 @@
     </ClInclude>
     <ClInclude Include="..\timer\timer.h">
       <Filter>timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_curl\logger.h">
+      <Filter>test_curl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_curl\singleton.h">
+      <Filter>test_curl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_curl\curl_mgr.h">
+      <Filter>test_curl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -981,6 +993,15 @@
     <None Include="..\luafunc\test_struct.lua">
       <Filter>luafunc</Filter>
     </None>
+    <None Include="..\test_curl\Makefile">
+      <Filter>test_curl</Filter>
+    </None>
+    <None Include="..\test_curl\reload.sh">
+      <Filter>test_curl</Filter>
+    </None>
+    <None Include="..\test_curl\stop.sh">
+      <Filter>test_curl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1423,6 +1444,15 @@
     </ClCompile>
     <ClCompile Include="..\luafunc\lua-struct.c">
       <Filter>luafunc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_curl\logger.cpp">
+      <Filter>test_curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_curl\test.cpp">
+      <Filter>test_curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_curl\curl_mgr.cpp">
+      <Filter>test_curl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

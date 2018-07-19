@@ -155,26 +155,13 @@ void shutdown(int signal)
 	}
 }
 
+
+
 int main(int argc, const char** argv)
 {
 	printf("test curl ...\n");
 
-	signal(SIGUSR2, reload);
-	signal(SIGUSR1, shutdown);
-
-	daemonize();
-	int pid = check_pid("logger.pid");
-	if (pid)
-	{
-		fprintf(stderr, "logger is already running, pid = %d.\n", pid);
-		return 1;
-	}
-	pid = write_pid("logger.pid");
-	if (pid == 0)
-	{
-		return 1;
-	}
-	log_constructor_logger("server_data");
+	//log_constructor_logger("server_data");
 
 	CRobotPostMgr::Instance().Init();
 
@@ -188,24 +175,29 @@ int main(int argc, const char** argv)
 
 	//std::string response;
 	//curl_per_post(url, data, response);
-	CRobotPostMgr::Instance().PostData(url, data);
+
+	
 
 	while (g_isrun)
 	{
-		log_time_update_logger();
-		CRobotPostMgr::Instance().UpdataCurl();
+		//log_time_update_logger();
+		//
 
+		CRobotPostMgr::Instance().PostData(url, data);
+		//CRobotPostMgr::Instance().ReadInfoFromMulti();
+		CRobotPostMgr::Instance().UpdataCurl();
 
 		//LOG_DEBUG("hello world - %d.", i++);
 		//log_thread_sleep(LOG_BREATHING_SPACE);
-		if (i == 1024 * 1024 * 1024)
+		if (i == 9999)
 		{
 			//break;
 		}
 		log_thread_sleep(3*1000);
 	}
-	log_shutdown_logger();
-	log_thread_sleep(LOG_BREATHING_SPACE * 10);
+	//log_shutdown_logger();
+	//log_thread_sleep(LOG_BREATHING_SPACE * 10);
+	printf("main exit\r\n");
 	return 0;
 }
 

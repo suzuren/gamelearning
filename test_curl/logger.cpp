@@ -627,6 +627,7 @@ int log_write(const void * buffer, int len)
 {
 	if (_LOGGER == NULL)
 	{
+		return 0;
 		//printf("_LOGGER is null - len:%d,buffer:%s", len, buffer);
 		_LOGGER = log_create_logger();
 	}

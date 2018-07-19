@@ -1,9 +1,9 @@
 
 TARGET := test_curl
 CC := g++ -Wall
-CPPFLAGS := -DNDEBUG
+CPPFLAGS := -DNDEBUG -lcurl
 CFLAGS :=
-CXXFLAGS := -Wall -I./ -D_FILE_OFFSET_BITS=64 -std=c++11
+CXXFLAGS := -Wall -I./ -D_FILE_OFFSET_BITS=64 -std=c++11 -L./
 LDFLAGS := -lpthread -lrt -lm -lcurl
 CPP_SOURCES := $(wildcard *.cpp)
 CPP_SOURCES += $(wildcard ../hlib/*.cpp)
@@ -19,6 +19,7 @@ ifeq ($(MAKECMDGOALS),embedded)
 CPPFLAGS += -DEMBEDDED
 endif
 embedded:all
+
 all:$(TARGET)
 
 $(TARGET) : $(COBJS) $(CPPOBJS)

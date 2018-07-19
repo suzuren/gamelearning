@@ -22,18 +22,18 @@ bool CRobotPostMgr::Init()
 
 void CRobotPostMgr::InitCurl()
 {
-	curl_global_init(CURL_GLOBAL_ALL);
 	m_multiHandle = curl_multi_init();
 }
 
 void CRobotPostMgr::SubCurl(int index)
 {
+	printf("SubCurl - index:%d,url:%p\n", index, m_urlInfo[index].url);
 	if (m_urlInfo[index].url != NULL)
 	{
-		curl_multi_remove_handle(m_multiHandle, m_urlInfo[index].url);
-		curl_easy_cleanup(m_urlInfo[index].url);
+		//curl_multi_remove_handle(m_multiHandle, m_urlInfo[index].url);
+		//curl_easy_cleanup(m_urlInfo[index].url);
 		m_urlInfo[index].Reset();
-		m_iCurlCount--;
+		//m_iCurlCount--;
 	}
 }
 
@@ -100,13 +100,85 @@ void CRobotPostMgr::ShutDown()
 	}
 }
 
+void CRobotPostMgr::ReadInfoFromMulti()
+{
+	printf("start curl_multi_perform()");
+	int still_running = 0;
+	printf("error curl_multi_perform() returned - still_running:%d", still_running);
+	curl_multi_perform(m_multiHandle, &still_running);
+	do
+	{
+		//int numfds = 0;
+		//int res = curl_multi_wait(m_multiHandle, NULL, 0, CURL_MAX_WAIT_MSECS, &numfds);
+		//if (res != CURLM_OK)
+		//{
+		//	LOG_DEBUG("error curl_multi_wait() returned - res:%d", res);
+		//	return;
+		//}
+		curl_multi_perform(m_multiHandle, &still_running);
+		
+		printf("error curl_multi_perform() returned - still_running:%d", still_running);
+	} while (0);
+
+
+	//读取发送返回结果信息
+	int msgs_left = 0;
+	CURL* eh = NULL;
+	CURLMsg* msg = NULL;
+	CURLcode return_code = CURLE_OK;
+	int http_status_code;
+	char* szUrl;
+	do
+	{
+		msg = curl_multi_info_read(m_multiHandle, &msgs_left);
+		//是否读取成功
+		if (msg->msg == CURLMSG_DONE)
+		{
+			LOG_DEBUG("success curl_multi_info_read(), CURLMsg=%d ", msg->msg);
+			printf("success curl_multi_info_read(), CURLMsg=%d ", msg->msg);
+
+			eh = msg->easy_handle;
+
+			return_code = msg->data.result;
+			//检测数据发送结果
+			if (return_code != CURLE_OK)
+			{
+				LOG_DEBUG("CURL error code:%d - %s ", return_code, msg->data.result);
+				continue;
+			}
+
+			//检测HTTP状态
+			http_status_code = 0;
+			szUrl = NULL;
+
+			curl_easy_getinfo(eh, CURLINFO_RESPONSE_CODE, &http_status_code);
+			curl_easy_getinfo(eh, CURLINFO_PRIVATE, &szUrl);
+
+			if (http_status_code != 200)
+			{
+				LOG_DEBUG("GET of:%s returned http status code:%d ", szUrl, http_status_code);
+			}
+
+			curl_multi_remove_handle(m_multiHandle, eh);
+			curl_easy_cleanup(eh);
+		}
+		else
+		{
+			LOG_DEBUG("error: after curl_multi_info_read(), CURLMsg=%d ", msg->msg);
+			printf("error: after curl_multi_info_read(), CURLMsg=%d ", msg->msg);
+			break;
+		}
+	} while (0);
+}
+
 int CRobotPostMgr::PostData(const std::string &url, const std::string &data)
 {
 	CURL* curl = curl_easy_init();
 
 	int iIndex = AddCurl(curl);
 
-	LOG_DEBUG("robotpostdata - m_iCurlCount:%d,iIndex:%d,curl:%s", m_iCurlCount, iIndex, url.c_str());
+	LOG_DEBUG("robotpostdata - m_iCurlCount:%d,curl:%p,iIndex:%d,curl:%s", m_iCurlCount, curl, iIndex, url.c_str());
+	printf("robotpostdata - m_iCurlCount:%d,curl:%p,iIndex:%d,curl:%s\r\n", m_iCurlCount, curl, iIndex, url.c_str());
 
 	if (iIndex == -1)
 	{
@@ -115,6 +187,7 @@ int CRobotPostMgr::PostData(const std::string &url, const std::string &data)
 
 	curl_easy_setopt(curl, CURLOPT_POST, 1);
 	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+	curl_easy_setopt(curl, CURLOPT_PRIVATE, url.c_str());
 	//curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
 
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, post_data_req_reply);
@@ -123,21 +196,23 @@ int CRobotPostMgr::PostData(const std::string &url, const std::string &data)
 	int ret = curl_multi_add_handle(m_multiHandle, curl);
 	if (ret != CURLM_OK)
 	{
-		LOG_DEBUG("failed to add handle - url:%s,data:%s", url.c_str(), data.c_str());
+		printf("failed to add handle - url:%s,data:%s", url.c_str(), data.c_str());
 		return -1;
 	}
+	//printf("robotpostdata - m_iCurlCount:%d,curl:%p,ret:%d,curl:%s\r\n", m_iCurlCount, curl, ret, url.c_str());
 
-	//int still_running = 0;
-	//CURLMcode curlm_code = CURLM_CALL_MULTI_PERFORM;
-	//while (CURLM_CALL_MULTI_PERFORM == curlm_code)
-	//{
-	//	curlm_code = curl_multi_perform(m_multiHandle, &still_running);
-	//}
-	//if (curlm_code != CURLM_OK)
-	//{
-	//	LOG_DEBUG( "code:%d,msg:%s", curlm_code, curl_multi_strerror(curlm_code));
-	//	return -1;
-	//}
+	int still_running = 0;
+	CURLMcode curlm_code = CURLM_CALL_MULTI_PERFORM;
+	while (CURLM_CALL_MULTI_PERFORM == curlm_code)
+	{
+		curlm_code = curl_multi_perform(m_multiHandle, &still_running);
+	}
+	if (curlm_code != CURLM_OK)
+	{
+		printf( "failed - code:%d,msg:%s\n", curlm_code, curl_multi_strerror(curlm_code));
+		return -1;
+	}
+	printf("success - code:%d,msg:%s\n", curlm_code, curl_multi_strerror(curlm_code));
 
 	return 1;
 }
@@ -146,18 +221,18 @@ int CRobotPostMgr::PostData(const std::string &url, const std::string &data)
 void CRobotPostMgr::UpdataCurl()
 {
 
-	if (m_iCurlCount == 0)
-	{
-		return;
-	}
+	//if (m_iCurlCount == 0)
+	//{
+	//	return;
+	//}
 
-	RemoveTimeOutCurl();
+	//RemoveTimeOutCurl();
 
 	int still_running = 0;
 
 	CURLMcode mc = curl_multi_perform(m_multiHandle, &still_running);
 
-	LOG_DEBUG("curl_multi_perform mc:%d,still_running:%d", mc, still_running);
+	printf("curl_multi_perform mc:%d,still_running:%d\n", mc, still_running);
 
 	if (still_running)
 	{
@@ -167,22 +242,22 @@ void CRobotPostMgr::UpdataCurl()
 		CURLMcode mc = curl_multi_fdset(m_multiHandle, &fdread, &fdwrite, &fdexcep, &maxfd);
 		if (!mc)
 		{
-			LOG_DEBUG("error - curl_multi_fdset mc:%d",mc);
+			printf("error - curl_multi_fdset mc:%d\n",mc);
 		}
 		long curl_timeo;
 		mc = curl_multi_timeout(m_multiHandle, &curl_timeo);
 		if (!mc)
 		{
-			LOG_DEBUG("error - curl_multi_timeout mc:%d", mc);
+			printf("error - curl_multi_timeout mc:%d\n", mc);
 		}
 		int rc = -2;
 		struct timeval timeout;
 
-		LOG_DEBUG("mc:%d,maxfd:%d,rc:%d,tv_sec:%ld,tv_usec:%ld,curl_timeo:%ld", mc, maxfd, rc, timeout.tv_sec, timeout.tv_usec, curl_timeo);
+		printf("mc:%d,maxfd:%d,rc:%d,tv_sec:%ld,tv_usec:%ld,curl_timeo:%ld\n", mc, maxfd, rc, timeout.tv_sec, timeout.tv_usec, curl_timeo);
 
 		if (maxfd == -1)
 		{
-			sleep((unsigned int)curl_timeo / 1000);
+			//sleep((unsigned int)curl_timeo / 1000);
 		}
 		else
 		{

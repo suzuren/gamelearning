@@ -20,6 +20,7 @@ using namespace std;
 
 #define MAX_CURL_COUNT (512)
 
+#define CURL_MAX_WAIT_MSECS 30*1000
 
 struct sm_url_info_t
 {
@@ -59,7 +60,7 @@ public:
 
 
 	void UpdataCurl();
-
+	void ReadInfoFromMulti();
 	int GetCurlCount()
 	{
 		return m_iCurlCount;
@@ -85,9 +86,9 @@ static size_t post_data_req_reply(void *ptr, size_t size, size_t nmemb, void *st
 	//cout<<*str<<endl;
 	pInfo->strData.append((char*)ptr, size*nmemb);
 
-	printf("robotpostdata - m_iCurlCount:%d,index:%d,curl:%p,data:%s\r\n", CRobotPostMgr::Instance().GetCurlCount(), pInfo->index, pInfo->url, pInfo->strData.c_str());
+	printf("2 robotpostdata - m_iCurlCount:%d,index:%d,curl:%p,data:%s\r\n", CRobotPostMgr::Instance().GetCurlCount(), pInfo->index, pInfo->url, pInfo->strData.c_str());
 
-	LOG_DEBUG("robotpostdata - m_iCurlCount:%d,index:%d,curl:%p,data:%s\r\n", CRobotPostMgr::Instance().GetCurlCount(), pInfo->index, pInfo->url, pInfo->strData.c_str());
+	//LOG_DEBUG("robotpostdata - m_iCurlCount:%d,index:%d,curl:%p,data:%s\r\n", CRobotPostMgr::Instance().GetCurlCount(), pInfo->index, pInfo->url, pInfo->strData.c_str());
 
 	CRobotPostMgr::Instance().SubCurl(pInfo->index);
 

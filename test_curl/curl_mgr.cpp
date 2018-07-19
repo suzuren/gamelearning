@@ -22,6 +22,7 @@ bool CRobotPostMgr::Init()
 
 void CRobotPostMgr::InitCurl()
 {
+	curl_global_init(CURL_GLOBAL_ALL);
 	m_multiHandle = curl_multi_init();
 }
 
@@ -99,13 +100,13 @@ void CRobotPostMgr::ShutDown()
 	}
 }
 
-int CRobotPostMgr::PostData(const std::string &url, const std::string &data, std::string &response)
+int CRobotPostMgr::PostData(const std::string &url, const std::string &data)
 {
 	CURL* curl = curl_easy_init();
 
 	int iIndex = AddCurl(curl);
 
-	LOG_DEBUG("robotpostdata - m_iCurlCount:%d,iIndex:%d,curl:%s,response:%s", m_iCurlCount, iIndex, url.c_str(), response.c_str());
+	LOG_DEBUG("robotpostdata - m_iCurlCount:%d,iIndex:%d,curl:%s", m_iCurlCount, iIndex, url.c_str());
 
 	if (iIndex == -1)
 	{
@@ -114,7 +115,7 @@ int CRobotPostMgr::PostData(const std::string &url, const std::string &data, std
 
 	curl_easy_setopt(curl, CURLOPT_POST, 1);
 	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+	//curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
 
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, post_data_req_reply);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&(m_urlInfo[iIndex]));
@@ -126,17 +127,17 @@ int CRobotPostMgr::PostData(const std::string &url, const std::string &data, std
 		return -1;
 	}
 
-	int still_running = 0;
-	CURLMcode curlm_code = CURLM_CALL_MULTI_PERFORM;
-	while (CURLM_CALL_MULTI_PERFORM == curlm_code)
-	{
-		curlm_code = curl_multi_perform(m_multiHandle, &still_running);
-	}
-	if (curlm_code != CURLM_OK)
-	{
-		LOG_DEBUG( "code:%d,msg:%s", curlm_code, curl_multi_strerror(curlm_code));
-		return -1;
-	}
+	//int still_running = 0;
+	//CURLMcode curlm_code = CURLM_CALL_MULTI_PERFORM;
+	//while (CURLM_CALL_MULTI_PERFORM == curlm_code)
+	//{
+	//	curlm_code = curl_multi_perform(m_multiHandle, &still_running);
+	//}
+	//if (curlm_code != CURLM_OK)
+	//{
+	//	LOG_DEBUG( "code:%d,msg:%s", curlm_code, curl_multi_strerror(curlm_code));
+	//	return -1;
+	//}
 
 	return 1;
 }
@@ -154,45 +155,65 @@ void CRobotPostMgr::UpdataCurl()
 
 	int still_running = 0;
 
-	long curl_timeo;
-	curl_multi_timeout(m_multiHandle, &curl_timeo);
-	if (curl_timeo < 0)
-		curl_timeo = 1000;
-	struct timeval timeout;
-	timeout.tv_sec = curl_timeo / 1000;
-	timeout.tv_usec = (curl_timeo % 1000) * 1000;
+	CURLMcode mc = curl_multi_perform(m_multiHandle, &still_running);
 
-	fd_set fdread;
-	fd_set fdwrite;
-	fd_set fdexcep;
-	int maxfd = -1;
-	FD_ZERO(&fdread);
-	FD_ZERO(&fdwrite);
-	FD_ZERO(&fdexcep);
-	curl_multi_fdset(m_multiHandle, &fdread, &fdwrite, &fdexcep, &maxfd);
-	
-	if (maxfd == -1)
-	{
-		return;
-	}
+	LOG_DEBUG("curl_multi_perform mc:%d,still_running:%d", mc, still_running);
 
-	int rc = select(maxfd + 1, &fdread, &fdwrite, &fdexcep, &timeout);
-	switch (rc)
+	if (still_running)
 	{
-	case -1:
-		break;
-	case 0:
-		break;
-	default:
-		while (1)
+		int maxfd = -1;
+		fd_set fdread, fdwrite,fdexcep;
+		FD_ZERO(&fdread);FD_ZERO(&fdwrite);	FD_ZERO(&fdexcep);
+		CURLMcode mc = curl_multi_fdset(m_multiHandle, &fdread, &fdwrite, &fdexcep, &maxfd);
+		if (!mc)
 		{
-			int ret = curl_multi_perform(m_multiHandle, &still_running);
-			if (ret != CURLM_CALL_MULTI_PERFORM)
+			LOG_DEBUG("error - curl_multi_fdset mc:%d",mc);
+		}
+		long curl_timeo;
+		mc = curl_multi_timeout(m_multiHandle, &curl_timeo);
+		if (!mc)
+		{
+			LOG_DEBUG("error - curl_multi_timeout mc:%d", mc);
+		}
+		int rc = -2;
+		struct timeval timeout;
+
+		LOG_DEBUG("mc:%d,maxfd:%d,rc:%d,tv_sec:%ld,tv_usec:%ld,curl_timeo:%ld", mc, maxfd, rc, timeout.tv_sec, timeout.tv_usec, curl_timeo);
+
+		if (maxfd == -1)
+		{
+			sleep((unsigned int)curl_timeo / 1000);
+		}
+		else
+		{
+			
+			timeout.tv_sec = curl_timeo / 1000;
+			timeout.tv_usec = (curl_timeo % 1000) * 1000;
+
+			rc = select(maxfd + 1, &fdread, &fdwrite, &fdexcep, &timeout);
+
+
+			switch (rc)
 			{
+			case -1:
+				break;
+			case 0:
+				break;
+			default:
+				while (1)
+				{
+					int ret = curl_multi_perform(m_multiHandle, &still_running);
+					if (ret != CURLM_CALL_MULTI_PERFORM)
+					{
+						break;
+					}
+				}
 				break;
 			}
 		}
-		break;
+
+
 	}
+	
 }
 

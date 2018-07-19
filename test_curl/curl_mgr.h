@@ -1,6 +1,6 @@
 
-#ifndef _ROBOT_POST_MGR_H__
-#define _ROBOT_POST_MGR_H__
+#ifndef __CURL_MGR_H__
+#define __CURL_MGR_H__
 
 
 #include <stdio.h>
@@ -18,7 +18,7 @@
 using namespace std;
 
 
-#define MAX_CURL_COUNT (4096)
+#define MAX_CURL_COUNT (512)
 
 
 struct sm_url_info_t
@@ -55,7 +55,7 @@ public:
 	int AddCurl(CURL* curl);
 	void RemoveTimeOutCurl();
 
-	int PostData(const std::string &url, const std::string &data, std::string &response);
+	int PostData(const std::string &url, const std::string &data);
 
 
 	void UpdataCurl();
@@ -84,6 +84,8 @@ static size_t post_data_req_reply(void *ptr, size_t size, size_t nmemb, void *st
 	}
 	//cout<<*str<<endl;
 	pInfo->strData.append((char*)ptr, size*nmemb);
+
+	printf("robotpostdata - m_iCurlCount:%d,index:%d,curl:%p,data:%s\r\n", CRobotPostMgr::Instance().GetCurlCount(), pInfo->index, pInfo->url, pInfo->strData.c_str());
 
 	LOG_DEBUG("robotpostdata - m_iCurlCount:%d,index:%d,curl:%p,data:%s\r\n", CRobotPostMgr::Instance().GetCurlCount(), pInfo->index, pInfo->url, pInfo->strData.c_str());
 

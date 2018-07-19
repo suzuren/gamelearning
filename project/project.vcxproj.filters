@@ -546,6 +546,9 @@
     <ClInclude Include="..\test_curl\curl_mgr.h">
       <Filter>test_curl</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_curl\curl_per.h">
+      <Filter>test_curl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1001,6 +1004,15 @@
     </None>
     <None Include="..\test_curl\stop.sh">
       <Filter>test_curl</Filter>
+    </None>
+    <None Include="..\luafunc\md5.lua">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\test_luasql.lua">
+      <Filter>luafunc</Filter>
+    </None>
+    <None Include="..\luafunc\test_md5.lua">
+      <Filter>luafunc</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

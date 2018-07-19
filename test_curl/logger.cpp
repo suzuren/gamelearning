@@ -324,7 +324,7 @@ void queue_clear(struct log_info * pinfo)
 			
 		}
 	}
-	std::string data = "logger thread exit";
+	std::string data = "logger thread exit\r\n";
 	file_write_buffer(pinfo->pstream, data.size(), data.c_str());
 	file_flush(pinfo->pstream);
 	pinfo->cursize += data.size();

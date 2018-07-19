@@ -130,6 +130,7 @@
     <ClInclude Include="..\referlib\iobuffer.h" />
     <ClInclude Include="..\referlib\notification.h" />
     <ClInclude Include="..\referlib\tcp.h" />
+    <ClInclude Include="..\test_curl\curl_per.h" />
     <ClInclude Include="..\test_curl\logger.h" />
     <ClInclude Include="..\test_curl\curl_mgr.h" />
     <ClInclude Include="..\test_curl\singleton.h" />
@@ -231,10 +232,13 @@
     <None Include="..\luafunc\cjson\script.lua" />
     <None Include="..\luafunc\cjson\util.lua" />
     <None Include="..\luafunc\makefile" />
+    <None Include="..\luafunc\md5.lua" />
     <None Include="..\luafunc\pbConfig.lua" />
     <None Include="..\luafunc\print_r.lua" />
     <None Include="..\luafunc\script.lua" />
     <None Include="..\luafunc\test_cjson.lua" />
+    <None Include="..\luafunc\test_luasql.lua" />
+    <None Include="..\luafunc\test_md5.lua" />
     <None Include="..\luafunc\test_struct.lua" />
     <None Include="..\luafunc\test_utility.lua" />
     <None Include="..\luafunc\utility\bullet.lua" />

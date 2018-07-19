@@ -7,6 +7,10 @@
 #include <sys/file.h>
 #include <sys/resource.h>
 
+#include "curl_mgr.h"
+
+#include "curl_per.h"
+
 int GenCoreDumpFile(size_t size = 1024 * 1024 * 32)
 {
 	struct rlimit flimit;
@@ -153,7 +157,7 @@ void shutdown(int signal)
 
 int main(int argc, const char** argv)
 {
-	printf("test logger ...\n");
+	printf("test curl ...\n");
 
 	signal(SIGUSR2, reload);
 	signal(SIGUSR1, shutdown);
@@ -171,22 +175,34 @@ int main(int argc, const char** argv)
 		return 1;
 	}
 	log_constructor_logger("server_data");
+
+	CRobotPostMgr::Instance().Init();
+
 	int i = 0;
 	//for (; i < 100; i++)
 	//{
 	//	//LOG_DEBUG("hello world - %d.", i);
 	//}
+	std::string url = "http://www.tuling123.com/openapi/api";
+	std::string data = "";
+
+	//std::string response;
+	//curl_per_post(url, data, response);
+	CRobotPostMgr::Instance().PostData(url, data);
+
 	while (g_isrun)
 	{
 		log_time_update_logger();
+		CRobotPostMgr::Instance().UpdataCurl();
 
-		LOG_DEBUG("hello world - %d.", i++);
+
+		//LOG_DEBUG("hello world - %d.", i++);
 		//log_thread_sleep(LOG_BREATHING_SPACE);
-		if (i == 99999999)
+		if (i == 1024 * 1024 * 1024)
 		{
 			//break;
 		}
-		log_thread_sleep(3);
+		log_thread_sleep(3*1000);
 	}
 	log_shutdown_logger();
 	log_thread_sleep(LOG_BREATHING_SPACE * 10);

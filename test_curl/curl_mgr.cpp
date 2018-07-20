@@ -32,8 +32,9 @@ void CRobotPostMgr::SubCurl(int index)
 	{
 		//curl_multi_remove_handle(m_multiHandle, m_urlInfo[index].url);
 		//curl_easy_cleanup(m_urlInfo[index].url);
+		m_vecFreeCurlPool.push_back(m_urlInfo[index].url);
 		m_urlInfo[index].Reset();
-		//m_iCurlCount--;
+		m_iCurlCount--;
 	}
 }
 
@@ -100,80 +101,25 @@ void CRobotPostMgr::ShutDown()
 	}
 }
 
-void CRobotPostMgr::ReadInfoFromMulti()
+CURL* CRobotPostMgr::GetCurlEasy()
 {
-	printf("start curl_multi_perform()");
-	int still_running = 0;
-	printf("error curl_multi_perform() returned - still_running:%d", still_running);
-	curl_multi_perform(m_multiHandle, &still_running);
-	do
+	CURL* curl = NULL;
+	if (m_vecFreeCurlPool.size()>0)
 	{
-		//int numfds = 0;
-		//int res = curl_multi_wait(m_multiHandle, NULL, 0, CURL_MAX_WAIT_MSECS, &numfds);
-		//if (res != CURLM_OK)
-		//{
-		//	LOG_DEBUG("error curl_multi_wait() returned - res:%d", res);
-		//	return;
-		//}
-		curl_multi_perform(m_multiHandle, &still_running);
-		
-		printf("error curl_multi_perform() returned - still_running:%d", still_running);
-	} while (0);
-
-
-	//读取发送返回结果信息
-	int msgs_left = 0;
-	CURL* eh = NULL;
-	CURLMsg* msg = NULL;
-	CURLcode return_code = CURLE_OK;
-	int http_status_code;
-	char* szUrl;
-	do
+		curl = m_vecFreeCurlPool[0];
+		m_vecFreeCurlPool.erase(m_vecFreeCurlPool.begin());
+	}
+	if (curl == NULL)
 	{
-		msg = curl_multi_info_read(m_multiHandle, &msgs_left);
-		//是否读取成功
-		if (msg->msg == CURLMSG_DONE)
-		{
-			LOG_DEBUG("success curl_multi_info_read(), CURLMsg=%d ", msg->msg);
-			printf("success curl_multi_info_read(), CURLMsg=%d ", msg->msg);
-
-			eh = msg->easy_handle;
-
-			return_code = msg->data.result;
-			//检测数据发送结果
-			if (return_code != CURLE_OK)
-			{
-				LOG_DEBUG("CURL error code:%d - %s ", return_code, msg->data.result);
-				continue;
-			}
-
-			//检测HTTP状态
-			http_status_code = 0;
-			szUrl = NULL;
-
-			curl_easy_getinfo(eh, CURLINFO_RESPONSE_CODE, &http_status_code);
-			curl_easy_getinfo(eh, CURLINFO_PRIVATE, &szUrl);
-
-			if (http_status_code != 200)
-			{
-				LOG_DEBUG("GET of:%s returned http status code:%d ", szUrl, http_status_code);
-			}
-
-			curl_multi_remove_handle(m_multiHandle, eh);
-			curl_easy_cleanup(eh);
-		}
-		else
-		{
-			LOG_DEBUG("error: after curl_multi_info_read(), CURLMsg=%d ", msg->msg);
-			printf("error: after curl_multi_info_read(), CURLMsg=%d ", msg->msg);
-			break;
-		}
-	} while (0);
+		curl = curl_easy_init();
+	}
+	return curl;
 }
+
 
 int CRobotPostMgr::PostData(const std::string &url, const std::string &data)
 {
-	CURL* curl = curl_easy_init();
+	CURL* curl = GetCurlEasy();
 
 	int iIndex = AddCurl(curl);
 
@@ -187,7 +133,7 @@ int CRobotPostMgr::PostData(const std::string &url, const std::string &data)
 
 	curl_easy_setopt(curl, CURLOPT_POST, 1);
 	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-	curl_easy_setopt(curl, CURLOPT_PRIVATE, url.c_str());
+	//curl_easy_setopt(curl, CURLOPT_PRIVATE, url.c_str());
 	//curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
 
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, post_data_req_reply);

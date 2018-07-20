@@ -60,14 +60,11 @@ public:
 
 
 	void UpdataCurl();
-	void ReadInfoFromMulti();
-	int GetCurlCount()
-	{
-		return m_iCurlCount;
-	}
+	int GetCurlCount(){	return m_iCurlCount;}
+	CURL* GetCurlEasy();
 
 public:
-	std::vector<pthread_t> m_pthreadPool;
+	std::vector<CURL *> m_vecFreeCurlPool;
 	int m_iCurlCount;
 
 	sm_url_info_t  m_urlInfo[MAX_CURL_COUNT];

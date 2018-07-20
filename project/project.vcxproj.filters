@@ -172,6 +172,9 @@
     <Filter Include="test_curl">
       <UniqueIdentifier>{30232b0a-bae3-4ef3-b641-7e6ca3c61242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="post_mgr">
+      <UniqueIdentifier>{a11d0e9e-9156-44ab-b43e-2c52eb131736}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -548,6 +551,12 @@
     </ClInclude>
     <ClInclude Include="..\test_curl\curl_per.h">
       <Filter>test_curl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\post_mgr\epoll_socket.h">
+      <Filter>post_mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\post_mgr\http_header.h">
+      <Filter>post_mgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1014,6 +1023,9 @@
     <None Include="..\luafunc\test_md5.lua">
       <Filter>luafunc</Filter>
     </None>
+    <None Include="..\post_mgr\Makefile">
+      <Filter>post_mgr</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1465,6 +1477,9 @@
     </ClCompile>
     <ClCompile Include="..\test_curl\curl_mgr.cpp">
       <Filter>test_curl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\post_mgr\client.cpp">
+      <Filter>post_mgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

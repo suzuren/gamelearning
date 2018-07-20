@@ -123,6 +123,8 @@
     <ClInclude Include="..\NetHttp\epoll_socket.h" />
     <ClInclude Include="..\NetHttp\http_header.h" />
     <ClInclude Include="..\NetPoll\poll_socket.h" />
+    <ClInclude Include="..\post_mgr\epoll_socket.h" />
+    <ClInclude Include="..\post_mgr\http_header.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
     <ClInclude Include="..\referlib\barrier.h" />
     <ClInclude Include="..\referlib\eventmanager.h" />
@@ -280,6 +282,7 @@
     <None Include="..\NetHttp\Makefile" />
     <None Include="..\NetPoll\Makefile" />
     <None Include="..\NetSelect\Makefile" />
+    <None Include="..\post_mgr\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
     <None Include="..\proxy_epoll\Readme.md" />
     <None Include="..\proxy_epoll\start_proxy.sh" />
@@ -427,6 +430,7 @@
     <ClCompile Include="..\NetSelect\client.c" />
     <ClCompile Include="..\NetSelect\select.h" />
     <ClCompile Include="..\NetSelect\server.c" />
+    <ClCompile Include="..\post_mgr\client.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
     <ClCompile Include="..\referlib\client.cpp" />
     <ClCompile Include="..\referlib\eventmanager.cc" />

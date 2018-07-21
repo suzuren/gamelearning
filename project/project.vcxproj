@@ -69,6 +69,9 @@
     <ClInclude Include="..\http\http_server.h" />
     <ClInclude Include="..\http\http_status.h" />
     <ClInclude Include="..\http\socklib.h" />
+    <ClInclude Include="..\http_client\http_mgr.h" />
+    <ClInclude Include="..\http_client\http_socket.h" />
+    <ClInclude Include="..\http_client\http_socket.cpp" />
     <ClInclude Include="..\loggercpp\logger.h" />
     <ClInclude Include="..\loggersafe\logger.h" />
     <ClInclude Include="..\logger\logger.h" />
@@ -174,6 +177,7 @@
     <None Include="..\GeneralHashFunctions_-_C\Makefile" />
     <None Include="..\helloworld\Makefile" />
     <None Include="..\http\Makefile" />
+    <None Include="..\http_client\Makefile" />
     <None Include="..\inicfg\Makefile" />
     <None Include="..\loggercpp\Makefile" />
     <None Include="..\loggersafe\Makefile" />
@@ -363,6 +367,8 @@
     <ClCompile Include="..\http\http_server_main.cpp" />
     <ClCompile Include="..\http\http_status.cpp" />
     <ClCompile Include="..\http\socklib.cpp" />
+    <ClCompile Include="..\http_client\client.cpp" />
+    <ClCompile Include="..\http_client\http_mgr.cpp" />
     <ClCompile Include="..\inicfg\INIFileOP.c" />
     <ClCompile Include="..\loggercpp\logger.cpp" />
     <ClCompile Include="..\loggercpp\test.c" />

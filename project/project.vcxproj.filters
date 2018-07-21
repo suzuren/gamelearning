@@ -175,6 +175,9 @@
     <Filter Include="post_mgr">
       <UniqueIdentifier>{a11d0e9e-9156-44ab-b43e-2c52eb131736}</UniqueIdentifier>
     </Filter>
+    <Filter Include="http_client">
+      <UniqueIdentifier>{0026511a-6ca3-4c51-a664-f83d1f01d671}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -557,6 +560,15 @@
     </ClInclude>
     <ClInclude Include="..\post_mgr\http_header.h">
       <Filter>post_mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http_client\http_mgr.h">
+      <Filter>http_client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http_client\http_socket.h">
+      <Filter>http_client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\http_client\http_socket.cpp">
+      <Filter>http_client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1026,6 +1038,9 @@
     <None Include="..\post_mgr\Makefile">
       <Filter>post_mgr</Filter>
     </None>
+    <None Include="..\http_client\Makefile">
+      <Filter>http_client</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1480,6 +1495,12 @@
     </ClCompile>
     <ClCompile Include="..\post_mgr\client.cpp">
       <Filter>post_mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http_client\client.cpp">
+      <Filter>http_client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\http_client\http_mgr.cpp">
+      <Filter>http_client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

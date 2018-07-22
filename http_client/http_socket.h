@@ -28,18 +28,19 @@
 #include <sys/poll.h>
 #include <netdb.h>
 #include <stdbool.h>
+#include <string>
 
 #define IPADDRESS "127.0.0.1"
 #define PORT 8793
 
 
-
+bool atoi_parser(int * ptrnum, char * ptrstr, int len);
 bool SetSocketEvents(int epfd, int fd, int op);
 bool SetSocketNonblock(int fd);
 char * socket_hosttoip(const char * phost);
 int socket_connect(const char *ip, int port, int * fd);
 char * http_build_post_head(const char * api, const char * body);
-
+bool http_body_is_final(std::string & strdata);
 
 #endif
 

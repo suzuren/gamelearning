@@ -301,6 +301,7 @@
     <None Include="..\test_curl\Makefile" />
     <None Include="..\test_curl\reload.sh" />
     <None Include="..\test_curl\stop.sh" />
+    <None Include="..\test_string\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
     <None Include="..\timer\Makefile" />
@@ -450,6 +451,7 @@
     <ClCompile Include="..\test_curl\logger.cpp" />
     <ClCompile Include="..\test_curl\curl_mgr.cpp" />
     <ClCompile Include="..\test_curl\test.cpp" />
+    <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />
     <ClCompile Include="..\timer\timer.c" />

@@ -34,10 +34,11 @@ void CHttpMgr::AddSocketTarget(struct tagsocket_info * psocket)
 
 struct tagsocket_info * CHttpMgr::AddSocketEpoll(int fd)
 {
-	SetSocketEvents(m_tagconnect.epfd, fd, EPOLL_CTL_ADD);
+	bool flag = SetSocketEvents(m_tagconnect.epfd, fd, EPOLL_CTL_ADD);
 	struct tagsocket_info * psocket = GetSocketTarget();
-	if (psocket == NULL)
+	if (psocket == NULL || flag == false)
 	{
+		close(fd);
 		return NULL;
 	}
 	psocket->Init();
@@ -127,6 +128,34 @@ int CHttpMgr::GetSocketWStatus(int fd)
 	return status;
 }
 
+void CHttpMgr::response_parser(std::string & strdata, std::string & str_content)
+{
+	str_content.clear();
+	std::string str_parser = strdata;
+	if (http_body_is_final(str_parser))
+	{
+		do
+		{
+			std::string::size_type pos_chunked_size = str_parser.find("\r\n");
+			std::string str_chunked_size = str_parser.substr(0, pos_chunked_size);
+			if (str_chunked_size.size() > 64)
+			{
+				break;
+			}
+			char buffer[64] = { 0 };
+			sprintf(buffer, "%s", str_chunked_size.c_str());
+			int chunked_size = strtol(buffer, NULL, 16);
+			if (chunked_size == 0)
+			{
+				break;
+			}
+			str_content += str_parser.substr(pos_chunked_size + 2, chunked_size);
+			str_parser = str_parser.substr(pos_chunked_size + 2 + chunked_size + 2, std::string::npos);
+		} while (true);
+	}
+}
+
+
 int CHttpMgr::AnalysisSocketData(int fd)
 {
 	int rlen = 0;
@@ -146,38 +175,47 @@ int CHttpMgr::AnalysisSocketData(int fd)
 		return -1;
 	}
 
-	std::string response;
-	response.append(ptrbuf, rlen);
-	printf("AnalysisSocketData - \n\nresponse:\n%s\n", response.c_str());
-	std::string temp = response;
-	std::string::size_type pos_http_ver = temp.find("\r\n");
-	std::string str_http_line;
-	std::string str_http_body;
-	if (std::string::npos != pos_http_ver)
-	{
-		str_http_line = temp.substr(0, pos_http_ver);
-	}
-	else
-	{
-		printf("AnalysisSocketData - 1\n");
-		return -1;
-	}
+	std::string http_response;
+	http_response.append(ptrbuf, rlen);
+	//printf("AnalysisSocketData - \n\nresponse:\n%s\n", http_response.c_str());
 
-	bool bLineCompare = (str_http_line == "HTTP/1.1 200 ");
-	if (bLineCompare)
+	std::string::size_type pos_http_state_code = http_response.find("HTTP/1.1 200 \r\n");
+	std::string::size_type pos_http_encode = http_response.find("Transfer-Encoding: chunked\r\n");
+
+	//printf("AnalysisSocketData pos - size:%d,npos:%d,code:%d,encode:%d\n",str_temp.size(), std::string::npos, pos_http_state_code, pos_http_encode);
+
+	if (pos_http_state_code != std::string::npos && pos_http_encode != std::string::npos)
 	{
-		std::string::size_type pos_http_body = temp.find("\r\n\r\n");
-		str_http_body = temp.substr(pos_http_body + 4, std::string::npos);
-		printf("AnalysisSocketData - \n\nstr_http_body:%d-%s", str_http_body.size(), str_http_body.c_str());
-		//SetSocketRStatus(fd, SOCKET_STATUS_READED);
-		SetSocketAStatus(fd, SOCKET_STATUS_CLOSE);		
+		std::string str_check_body = http_response;
+		std::string::size_type pos_http_body_begin = str_check_body.find("\r\n\r\n");
+		std::string::size_type pos_http_body_end = str_check_body.find("\r\n0\r\n\r\n");
+		if(pos_http_body_begin != std::string::npos && pos_http_body_end != std::string::npos)
+		{
+			//str_http_body = str_temp.substr(pos_http_body + 4, std::string::npos);
+			str_check_body = str_check_body.substr(pos_http_body_begin+4, pos_http_body_end);
+
+			response_parser(str_check_body, iter->second->content);
+
+			SetSocketRStatus(fd, SOCKET_STATUS_READED);
+			SetSocketAStatus(fd, SOCKET_STATUS_CLOSE);
+
+			printf("AnalysisSocketData - \n\nhttp_response:-%s-\n", http_response.c_str());
+			printf("AnalysisSocketData - \n\nhttp_content:-%s-\n", iter->second->content.c_str());
+
+			return 1;
+		}		
+		//printf("AnalysisSocketData - pos begin:%d,end:%d, \n\nstr_http_body:%d-%s-", pos_http_body_begin, pos_http_body_end, str_http_body.size(), str_http_body.c_str());
+	}
+	else if (pos_http_state_code != std::string::npos && pos_http_encode == std::string::npos)
+	{
+
 	}
 	else
 	{
-		printf("AnalysisSocketData - 2 bLineCompare:%d,str_http_line:%s-\n", bLineCompare, str_http_line.c_str());
+		//printf("AnalysisSocketData - 2 bLineCompare:%d,str_http_line:%s-\n", bLineCompare, str_http_line.c_str());
 		return -1;
 	}
-	return 1;
+	return 0;
 }
 
 int CHttpMgr::ReadSocketData(int fd)
@@ -199,11 +237,13 @@ int CHttpMgr::ReadSocketData(int fd)
 	if (nread == 0)
 	{
 		SetSocketRStatus(fd, SOCKET_STATUS_READED);
+		printf("1 ReadSocketData - nread:%d,errno:%d\n", nread, errno);
 		//close(client_fd);
 		return -1;
 	}
 	else if (nread < 0 && (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR))
 	{
+		printf("2 ReadSocketData - nread:%d,errno:%d\n", nread, errno);
 		return -1;
 	}
 	else
@@ -234,7 +274,7 @@ int CHttpMgr::WriteSocketData(int fd)
 	else
 	{
 		return -1;
-	}
+	}	
 	int nwrite = write(fd, ptrbuf + flen, wlen - flen);
 	if (nwrite>0 && iter != m_mpsocket.end())
 	{
@@ -245,8 +285,10 @@ int CHttpMgr::WriteSocketData(int fd)
 	{
 		SetSocketWStatus(fd, SOCKET_STATUS_WRITEED);
 		//SetSocketRStatus(fd, SOCKET_STATUS_READ);
-		printf("WriteSocketData - fd:%d,wlen:%d,ptrbuf:\n%s\n\n", fd, wlen, ptrbuf);
+		
 	}
+	int wstatus = GetSocketWStatus(fd);
+	printf("WriteSocketData - fd:%d,wstatus:%d,wlen:%d,flen:%d,ptrbuf:\n-%s-\n\n", fd, wstatus, wlen, flen, ptrbuf);
 	return nwrite;
 }
 
@@ -288,7 +330,9 @@ int	CHttpMgr::PostData(const char * api, const char * body)
 void CHttpMgr::UpdateSocketStatus()
 {
 	m_tagconnect.reevents();
-	int nfds = epoll_wait(m_tagconnect.epfd, m_tagconnect.events, MAX_SOCKET_CONNECT, -1);
+	//printf("1111111111111111111111111\n");
+	int nfds = epoll_wait(m_tagconnect.epfd, m_tagconnect.events, MAX_SOCKET_CONNECT, 0);
+	//printf("2222222222222222222222222222\n");
 	//printf("UpdateSocketStatus - nfds:%d\n", nfds);
 
 	if (nfds <= 0)
@@ -299,11 +343,15 @@ void CHttpMgr::UpdateSocketStatus()
 	{
 		int fd = m_tagconnect.events[i].data.fd;
 		unsigned int events = m_tagconnect.events[i].events;
+		int astatus = GetSocketAStatus(fd);
 		int cstatus = GetSocketCStatus(fd);
+		int rstatus = GetSocketRStatus(fd);
+		int wstatus = GetSocketWStatus(fd);
+		printf("UpdateSocketStatus - fd:%d,astatus:%d,cstatus:%d,rstatus:%d,wstatus:%d,events:%d\n",
+			fd, astatus, cstatus, rstatus, wstatus, events);
 		if (events & EPOLLIN)
 		{
 			SetSocketRStatus(fd, SOCKET_STATUS_READ);
-			int rstatus = GetSocketRStatus(fd);
 			printf("UpdateSocketStatus - EPOLLIN fd:%d,rstatus:%d,errno:%d\n", fd, rstatus, errno);
 		}
 		else if (events & EPOLLET)
@@ -343,27 +391,24 @@ void CHttpMgr::UpdateSocketData()
 		int cstatus = iter->second->cstatus;
 		int rstatus = iter->second->rstatus;
 		int wstatus = iter->second->wstatus;
+		
+		//printf("UpdateSocketData - fd:%d,astatus:%d,cstatus:%d,rstatus:%d,wstatus:%d\n",fd, astatus, cstatus, rstatus, wstatus);
 
-		int aastatus = GetSocketAStatus(fd);
-		int ccstatus = GetSocketAStatus(fd);
-		int rrstatus = GetSocketAStatus(fd);
-		int wwstatus = GetSocketAStatus(fd);
-
-		printf("UpdateSocketData - fd:%d,astatus:%d,cstatus,rstatus:%d,wstatus:%d,aastatus:%d,ccstatus,rrstatus:%d,wwstatus:%d\n",
-			fd, astatus, cstatus, rstatus, wstatus, aastatus, ccstatus, rrstatus, wwstatus);
 		if (wstatus == SOCKET_STATUS_WRITE || wstatus == SOCKET_STATUS_WRITEING)
 		{
 			WriteSocketData(fd);
 		}
-		else if (rstatus == SOCKET_STATUS_READ || rstatus == SOCKET_STATUS_READING)
+		if (rstatus == SOCKET_STATUS_READ || rstatus == SOCKET_STATUS_READING)
 		{
 			ReadSocketData(fd);
 		}
-		else if (rstatus == SOCKET_STATUS_READ || rstatus == SOCKET_STATUS_READING)
+		if (rstatus == SOCKET_STATUS_READ || rstatus == SOCKET_STATUS_READING)
 		{
+			printf("111111111111111111111\n");
 			AnalysisSocketData(fd);
+			printf("2222222222222222222222\n");
 		}
-		else if (astatus == SOCKET_STATUS_CLOSE || astatus == SOCKET_STATUS_CONNECT_FAILURE || astatus == SOCKET_STATUS_ERROR)
+		if (astatus == SOCKET_STATUS_CLOSE || astatus == SOCKET_STATUS_CONNECT_FAILURE || astatus == SOCKET_STATUS_ERROR)
 		{
 			vecsocket.push_back(iter->second);
 		}
@@ -371,8 +416,10 @@ void CHttpMgr::UpdateSocketData()
 	for (unsigned int index = 0; index < vecsocket.size(); index++)
 	{
 		struct tagsocket_info * psocket = vecsocket[index];
-		m_mpsocket.erase(psocket->fd);
-		close(psocket->fd);
+		int fd = psocket->fd;
+		m_mpsocket.erase(fd);
+		SetSocketEvents(m_tagconnect.epfd, fd, EPOLL_CTL_DEL);
+		close(fd);
 		AddSocketTarget(psocket);
 	}
 }

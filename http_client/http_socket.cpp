@@ -1,4 +1,5 @@
 
+
 #include "http_socket.h"
 
 bool SetSocketEvents(int epfd, int fd, int op)
@@ -63,9 +64,15 @@ int socket_connect(const char *ip, int port, int * fd)
 	int client_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (client_fd == -1)
 	{
+		close(client_fd);
 		return -1;
 	}
-	SetSocketNonblock(client_fd);
+	bool flag = SetSocketNonblock(client_fd);
+	if (flag == false)
+	{
+		close(client_fd);
+		return -1;
+	}
 	struct sockaddr_in server_addr;
 	memset(&server_addr, 0, sizeof(struct sockaddr_in));
 	server_addr.sin_family = AF_INET;
@@ -74,6 +81,7 @@ int socket_connect(const char *ip, int port, int * fd)
 	int ret = connect(client_fd, (struct sockaddr *)&server_addr, sizeof(server_addr));
 	if (ret == -1 && errno != EINPROGRESS)
 	{
+		close(client_fd);
 		return -1;
 	}
 	*fd = client_fd;
@@ -125,6 +133,30 @@ char* itoa_parser(int num, int radix)
 	return str;
 }
 
+static inline int hextoint(char c)
+{
+	if (c >= '0' && c <= '9')
+		return c - '0';
+	if (c >= 'a' && c <= 'f')
+		return c - 'a' + 10;
+	if (c >= 'A' && c <= 'F')
+		return c - 'A' + 10;
+	return 0;
+}
+
+bool atoi_parser(int * ptrnum,char * ptrstr,int len)
+{
+	*ptrnum = 0;
+	if (ptrnum == NULL || ptrstr == NULL || len == 0)
+	{
+		return false;
+	}
+	for (int i = 0; i < len; i++)
+	{
+		(*ptrnum) += (hextoint(ptrstr[i]));
+	}
+}
+
 char * http_build_post_head(const char * api,const char * body)
 {
 	static char buffer[1024];
@@ -138,4 +170,12 @@ char * http_build_post_head(const char * api,const char * body)
 	return buffer;
 }
 
-
+bool http_body_is_final(std::string & strdata)
+{
+	std::string::size_type pos_http_body_end = strdata.find("\r\n0\r\n\r\n");
+	if (pos_http_body_end != std::string::npos)
+	{
+		return true;
+	}
+	return false;
+}

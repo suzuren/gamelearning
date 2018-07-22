@@ -178,6 +178,9 @@
     <Filter Include="http_client">
       <UniqueIdentifier>{0026511a-6ca3-4c51-a664-f83d1f01d671}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_string">
+      <UniqueIdentifier>{8e78d669-6948-4a84-a06e-0225b7d07962}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1041,6 +1044,9 @@
     <None Include="..\http_client\Makefile">
       <Filter>http_client</Filter>
     </None>
+    <None Include="..\test_string\Makefile">
+      <Filter>test_string</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1501,6 +1507,9 @@
     </ClCompile>
     <ClCompile Include="..\http_client\http_mgr.cpp">
       <Filter>http_client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_string\test_string.cpp">
+      <Filter>test_string</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -121,6 +121,7 @@
     <ClInclude Include="..\MultiplayerBook\LinkingContext.h" />
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
     <ClInclude Include="..\MultiplayerBook\RoboMath.h" />
+    <ClInclude Include="..\mysql_connect\db_wrap.h" />
     <ClInclude Include="..\NetEpoll\epoll_socket.h" />
     <ClInclude Include="..\NetHttp\base_unit.h" />
     <ClInclude Include="..\NetHttp\epoll_socket.h" />
@@ -282,6 +283,7 @@
     <None Include="..\lua\timer.lua" />
     <None Include="..\lua\xpcall.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
+    <None Include="..\mysql_connect\Makefile" />
     <None Include="..\NetEpoll\Makefile" />
     <None Include="..\NetHttp\Makefile" />
     <None Include="..\NetPoll\Makefile" />
@@ -429,6 +431,8 @@
     <ClCompile Include="..\luafunc\lua-struct.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
+    <ClCompile Include="..\mysql_connect\client.cpp" />
+    <ClCompile Include="..\mysql_connect\db_wrap.cpp" />
     <ClCompile Include="..\NetEpoll\client.c" />
     <ClCompile Include="..\NetEpoll\server.c" />
     <ClCompile Include="..\NetHttp\client.c" />

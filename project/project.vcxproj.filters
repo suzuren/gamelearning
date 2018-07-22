@@ -181,6 +181,9 @@
     <Filter Include="test_string">
       <UniqueIdentifier>{8e78d669-6948-4a84-a06e-0225b7d07962}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mysql_connect">
+      <UniqueIdentifier>{65064951-a366-4d59-9b6f-eb863ccf4a8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -572,6 +575,9 @@
     </ClInclude>
     <ClInclude Include="..\http_client\http_socket.cpp">
       <Filter>http_client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mysql_connect\db_wrap.h">
+      <Filter>mysql_connect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1047,6 +1053,9 @@
     <None Include="..\test_string\Makefile">
       <Filter>test_string</Filter>
     </None>
+    <None Include="..\mysql_connect\Makefile">
+      <Filter>mysql_connect</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1510,6 +1519,12 @@
     </ClCompile>
     <ClCompile Include="..\test_string\test_string.cpp">
       <Filter>test_string</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mysql_connect\client.cpp">
+      <Filter>mysql_connect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mysql_connect\db_wrap.cpp">
+      <Filter>mysql_connect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

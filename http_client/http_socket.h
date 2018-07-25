@@ -30,8 +30,9 @@
 #include <stdbool.h>
 #include <string>
 
-#define IPADDRESS "127.0.0.1"
-#define PORT 8793
+#define MAX_TIME_OUT		(30*1000)
+#define MAX_SOCKET_CONNECT	1024
+#define SOCKET_TCP_BUFFER   65535
 
 
 bool atoi_parser(int * ptrnum, char * ptrstr, int len);
@@ -41,6 +42,7 @@ char * socket_hosttoip(const char * phost);
 int socket_connect(const char *ip, int port, int * fd);
 char * http_build_post_head(const char * api, const char * body);
 bool http_body_is_final(std::string & strdata);
+unsigned long long	GetMillisecond();
 
 #endif
 

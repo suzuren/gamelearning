@@ -6,76 +6,55 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <queue>
 
 #include "http_socket.h"
 
-#define MAX_SOCKET_CONNECT	1024
-#define SOCKET_TCP_BUFFER   65535
+#define IPADDRESS "47.94.250.154"
+#define PORT 38018
 
 //enum emSOCKET_STATUS
 //{
 //	SOCKET_STATUS_INIT = 0,
-//	SOCKET_STATUS_CONNECTING = 1,
-//	SOCKET_STATUS_CONNECT_FAILURE = 2,
-//	SOCKET_STATUS_CONNECTED = 3,
-//	SOCKET_STATUS_WRITE = 4,
-//	SOCKET_STATUS_WRITEING = 5,
-//	SOCKET_STATUS_WRITEED = 6,
-//	SOCKET_STATUS_READ = 7,
-//	SOCKET_STATUS_READING = 8,
-//	SOCKET_STATUS_READED = 9,
-//	SOCKET_STATUS_WAIT = 10,
-//	SOCKET_STATUS_CLOSE = 11,
-//	SOCKET_STATUS_ERROR = 12,
-//	SOCKET_STATUS_TIME_OUT = 13
+//
+//	SOCKET_STATUS_CONNECTING,
+//	SOCKET_STATUS_CONNECT_FAILURE,
+//	SOCKET_STATUS_CONNECTED,
+//
+//	SOCKET_STATUS_WRITE,
+//	SOCKET_STATUS_WRITEING,
+//	SOCKET_STATUS_WRITEED,
+//
+//	SOCKET_STATUS_READ,
+//	SOCKET_STATUS_READING,
+//	SOCKET_STATUS_READED,
+//
+//	SOCKET_STATUS_WAIT,
+//	SOCKET_STATUS_CLOSE,
+//	SOCKET_STATUS_ERROR,
+//	SOCKET_STATUS_TIME_OUT
 //};
 
-enum emSOCKET_STATUS
-{
-	SOCKET_STATUS_INIT = 0,
-	SOCKET_STATUS_WAIT = 1,
-	SOCKET_STATUS_CLOSE = 2,
-	SOCKET_STATUS_ERROR = 3,
-	SOCKET_STATUS_TIME_OUT = 4
-};
-enum emSOCKET_STATUS_CONNECT
-{
-	SOCKET_STATUS_CINIT = 0,
-	SOCKET_STATUS_CONNECTING = 1,
-	SOCKET_STATUS_CONNECT_FAILURE = 2,
-	SOCKET_STATUS_CONNECTED = 3,
-};
-enum emSOCKET_STATUS_WRITE
-{
-	SOCKET_STATUS_WINIT = 0,
-	SOCKET_STATUS_WRITE = 1,
-	SOCKET_STATUS_WRITEING = 2,
-	SOCKET_STATUS_WRITEED = 3,
-};
-enum emSOCKET_STATUS_READ
-{
-	SOCKET_STATUS_RINIT = 0,
-	SOCKET_STATUS_READ = 1,
-	SOCKET_STATUS_READING = 2,
-	SOCKET_STATUS_READED = 3,
-};
 
-//static const int SOCKET_STATUS_INIT = 0;
-//static const int SOCKET_STATUS_CONNECTING = 1;
-//static const int SOCKET_STATUS_CONNECT_FAILURE = 2;
-//static const int SOCKET_STATUS_CONNECTED = 3;
-//static const int SOCKET_STATUS_WRITE = 4;
-//static const int SOCKET_STATUS_WRITEING = 5;
-//static const int SOCKET_STATUS_WRITEED = 6;
-//static const int SOCKET_STATUS_READ = 7;
-//static const int SOCKET_STATUS_READING = 8;
-//static const int SOCKET_STATUS_READED = 9;
-//static const int SOCKET_STATUS_WAIT = 10;
-//static const int SOCKET_STATUS_CLOSE = 11;
-//static const int SOCKET_STATUS_ERROR = 12;
-//static const int SOCKET_STATUS_TIME_OUT = 13;
+static const int SOCKET_STATUS_INIT = 0;
+static const int SOCKET_STATUS_CONNECTING = 1;
+static const int SOCKET_STATUS_CONNECT_FAILURE = 2;
+static const int SOCKET_STATUS_CONNECTED = 3;
 
-#pragma  pack(1)
+static const int SOCKET_STATUS_WRITE = 1;
+static const int SOCKET_STATUS_WRITEING = 2;
+static const int SOCKET_STATUS_WRITEED = 3;
+
+static const int SOCKET_STATUS_READ = 1;
+static const int SOCKET_STATUS_READING = 2;
+static const int SOCKET_STATUS_READED = 3;
+
+static const int SOCKET_STATUS_WAIT = 1;
+static const int SOCKET_STATUS_CLOSE = 2;
+static const int SOCKET_STATUS_ERROR = 3;
+static const int SOCKET_STATUS_TIME_OUT = 4;
+
+//#pragma  pack(1)
 
 struct tagsocket_connect
 {
@@ -85,7 +64,29 @@ struct tagsocket_connect
 	{
 		memset(events, 0, sizeof(events));
 	}
+};
 
+struct tagpost_data
+{
+	int roomid;
+	int tableid;
+	std::string identify;
+	std::string api;
+	std::string body;
+	std::string content;
+	tagpost_data()
+	{
+		Init();
+	}
+	void Init()
+	{
+		roomid = -1;
+		tableid = -1;
+		identify.clear();
+		api.clear();
+		body.clear();
+		content.clear();
+	}
 };
 
 struct tagsocket_info
@@ -98,9 +99,10 @@ struct tagsocket_info
 	int rlen;
 	int wlen;
 	int flen;
+	unsigned long long btime;
+	struct tagpost_data * ptrpost;
 	char rbuffer[SOCKET_TCP_BUFFER];
 	char wbuffer[SOCKET_TCP_BUFFER];
-	std::string content;
 	tagsocket_info()
 	{
 		Init();
@@ -115,12 +117,16 @@ struct tagsocket_info
 		rlen = 0;
 		wlen = 0;
 		flen = 0;
+		btime = 0;
+		ptrpost = NULL;
 		memset(rbuffer, 0, sizeof(rbuffer));
 		memset(wbuffer, 0, sizeof(wbuffer));
-		content.clear();
 	}
 };
-#pragma pack()
+
+
+//#pragma pack()
+
 class CHttpMgr
 {
 protected:
@@ -138,13 +144,17 @@ private:
 	struct tagsocket_connect m_tagconnect;
 	std::map<int,struct tagsocket_info *> m_mpsocket;
 	std::vector<struct tagsocket_info *> m_vecsocket_storage;
+	std::queue<struct tagpost_data *> m_queue_post;
+	std::vector<struct tagpost_data *> m_vecpost_storage;
 private:
-	struct tagsocket_info * GetSocketTarget();
+	struct  tagsocket_info * GetSocketTarget();
+	void    FreeSocketTarget(struct tagsocket_info ** psocket);
 	void	AddSocketTarget(struct tagsocket_info * psocket);
-	struct tagsocket_info *	AddSocketEpoll(int fd);
 
-	void	response_parser(std::string & strdata, std::string & str_content);
-
+	struct  tagpost_data * GetPostDataTarget();
+	void    FreePostDataTarget(struct tagpost_data ** ptrpost);
+	void    AddPostDataTarget(struct tagpost_data * ptrpost);
+private:
 	bool	SetSocketAStatus(int fd, int status);
 	bool	SetSocketCStatus(int fd, int status);
 	bool	SetSocketRStatus(int fd, int status);
@@ -154,17 +164,23 @@ private:
 	int		GetSocketCStatus(int fd);
 	int		GetSocketRStatus(int fd);
 	int		GetSocketWStatus(int fd);
-
+private:
+	struct  tagsocket_info *	AddSocketEpoll(int fd);
+	void	response_parser(std::string & strdata, std::string & str_content);
 	int		AnalysisSocketData(int fd);
 	int		ReadSocketData(int fd);
 	int		WriteSocketData(int fd);
-
+public:
+	int     UpdateSendPostData();
+	void	UpdateSocketStatus();
+	void	UpdateSocketData();
+	void    UpdateCheckTimeOut();
+	
 public:
 	bool	Init();
 	int		PostData(const char * api, const char * body);
-	void	UpdateSocketStatus();
-	void	UpdateSocketData();
-	
+	void    OnHttpTick();
+	void    ShutDown();
 };
 
 

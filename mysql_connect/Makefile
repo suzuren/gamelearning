@@ -1,10 +1,19 @@
 
-LDFLAGS = -lstdc++ -std=c++11
-MYSQL_INC = -I/usr/include/mysql
+CPPFLAGS = -O3
+LDFLAGS = -lrt -lpthread -lmysqlclient -lstdc++ -std=c++11
+MYSQL_INC = /usr/include/mysql
+MYSQL_LIB = /usr/lib64/mysql
 
-all: client
+
+client: db_wrap.so client.so
+	g++ -g -o client db_wrap.so client.so
+
+db_wrap.so : db_wrap.cpp
+	g++ -g -c -o db_wrap.so db_wrap.cpp $(LDFLAGS) -I$(MYSQL_INC) -L$(MYSQL_LIB)
+
+client.so: client.cpp
+	g++ -g -c -o client.so client.cpp db_wrap.so $(LDFLAGS) -I$(MYSQL_INC) -L$(MYSQL_LIB)
+
 clean:
-	rm -f *.o *.pid client
-db_wrap: db_wrap.cpp
-	g++ -I/usr/include/mysql -L/usr/lib64/mysql -ansi -pedantic -Wall -c db_wrap.cpp
+	rm -f *.o *.so *.pid client
 

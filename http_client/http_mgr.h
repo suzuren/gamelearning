@@ -7,52 +7,56 @@
 #include <vector>
 #include <string>
 #include <queue>
+#include <iostream>
 
 #include "http_socket.h"
 
 #define IPADDRESS "47.94.250.154"
 #define PORT 38018
 
-//enum emSOCKET_STATUS
-//{
-//	SOCKET_STATUS_INIT = 0,
+enum emSOCKET_STATUS
+{
+	SOCKET_STATUS_INIT = 0,
+
+	SOCKET_STATUS_CONNECTING,
+	SOCKET_STATUS_CONNECT_FAILURE,
+	SOCKET_STATUS_CONNECTED,
+
+	SOCKET_STATUS_WRITE,
+	SOCKET_STATUS_WRITEING,
+	SOCKET_STATUS_WRITEED,
+
+	SOCKET_STATUS_READ,
+	SOCKET_STATUS_READING,
+	SOCKET_STATUS_READED,
+	SOCKET_STATUS_READ_EXCEPTION,
+
+	SOCKET_STATUS_WAIT,
+	SOCKET_STATUS_CLOSE,
+	SOCKET_STATUS_ERROR,
+	SOCKET_STATUS_TIME_OUT,
+	SOCKET_STATUS_EXCEPTION
+};
+
+
+//static const int SOCKET_STATUS_INIT = 0;
+//static const int SOCKET_STATUS_CONNECTING = 1;
+//static const int SOCKET_STATUS_CONNECT_FAILURE = 2;
+//static const int SOCKET_STATUS_CONNECTED = 3;
 //
-//	SOCKET_STATUS_CONNECTING,
-//	SOCKET_STATUS_CONNECT_FAILURE,
-//	SOCKET_STATUS_CONNECTED,
+//static const int SOCKET_STATUS_WRITE = 1;
+//static const int SOCKET_STATUS_WRITEING = 2;
+//static const int SOCKET_STATUS_WRITEED = 3;
 //
-//	SOCKET_STATUS_WRITE,
-//	SOCKET_STATUS_WRITEING,
-//	SOCKET_STATUS_WRITEED,
+//static const int SOCKET_STATUS_READ = 1;
+//static const int SOCKET_STATUS_READING = 2;
+//static const int SOCKET_STATUS_READED = 3;
+//static const int SOCKET_STATUS_READEXCEPTION = 4;
 //
-//	SOCKET_STATUS_READ,
-//	SOCKET_STATUS_READING,
-//	SOCKET_STATUS_READED,
-//
-//	SOCKET_STATUS_WAIT,
-//	SOCKET_STATUS_CLOSE,
-//	SOCKET_STATUS_ERROR,
-//	SOCKET_STATUS_TIME_OUT
-//};
-
-
-static const int SOCKET_STATUS_INIT = 0;
-static const int SOCKET_STATUS_CONNECTING = 1;
-static const int SOCKET_STATUS_CONNECT_FAILURE = 2;
-static const int SOCKET_STATUS_CONNECTED = 3;
-
-static const int SOCKET_STATUS_WRITE = 1;
-static const int SOCKET_STATUS_WRITEING = 2;
-static const int SOCKET_STATUS_WRITEED = 3;
-
-static const int SOCKET_STATUS_READ = 1;
-static const int SOCKET_STATUS_READING = 2;
-static const int SOCKET_STATUS_READED = 3;
-
-static const int SOCKET_STATUS_WAIT = 1;
-static const int SOCKET_STATUS_CLOSE = 2;
-static const int SOCKET_STATUS_ERROR = 3;
-static const int SOCKET_STATUS_TIME_OUT = 4;
+//static const int SOCKET_STATUS_WAIT = 1;
+//static const int SOCKET_STATUS_CLOSE = 2;
+//static const int SOCKET_STATUS_ERROR = 3;
+//static const int SOCKET_STATUS_TIME_OUT = 4;
 
 //#pragma  pack(1)
 
@@ -146,6 +150,8 @@ private:
 	std::vector<struct tagsocket_info *> m_vecsocket_storage;
 	std::queue<struct tagpost_data *> m_queue_post;
 	std::vector<struct tagpost_data *> m_vecpost_storage;
+	int		m_iNewSocketCount;
+	int		m_iNewPostDataCount;
 private:
 	struct  tagsocket_info * GetSocketTarget();
 	void    FreeSocketTarget(struct tagsocket_info ** psocket);

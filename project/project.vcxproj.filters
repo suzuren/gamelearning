@@ -579,6 +579,9 @@
     <ClInclude Include="..\mysql_connect\db_wrap.h">
       <Filter>mysql_connect</Filter>
     </ClInclude>
+    <ClInclude Include="..\mysql_connect\db_mysql.h">
+      <Filter>mysql_connect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1524,6 +1527,9 @@
       <Filter>mysql_connect</Filter>
     </ClCompile>
     <ClCompile Include="..\mysql_connect\db_wrap.cpp">
+      <Filter>mysql_connect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mysql_connect\db_mysql.cpp">
       <Filter>mysql_connect</Filter>
     </ClCompile>
   </ItemGroup>

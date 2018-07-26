@@ -121,6 +121,7 @@
     <ClInclude Include="..\MultiplayerBook\LinkingContext.h" />
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
     <ClInclude Include="..\MultiplayerBook\RoboMath.h" />
+    <ClInclude Include="..\mysql_connect\db_mysql.h" />
     <ClInclude Include="..\mysql_connect\db_wrap.h" />
     <ClInclude Include="..\NetEpoll\epoll_socket.h" />
     <ClInclude Include="..\NetHttp\base_unit.h" />
@@ -432,6 +433,7 @@
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
     <ClCompile Include="..\mysql_connect\client.cpp" />
+    <ClCompile Include="..\mysql_connect\db_mysql.cpp" />
     <ClCompile Include="..\mysql_connect\db_wrap.cpp" />
     <ClCompile Include="..\NetEpoll\client.c" />
     <ClCompile Include="..\NetEpoll\server.c" />

@@ -2,10 +2,15 @@
 #ifndef __DB_MYSQL_H__
 #define __DB_MYSQL_H__
 
+
+#include <memory.h>
+#include <stdio.h>
+
+#include <mysql.h>
+#include <errmsg.h>
+
 #define MAX_ERROR_MESSAGE_SIZE 512
 
-static struct tag_db_exception db_exception_sent;
-static struct tag_db_exception db_exception_stmt;
 
 struct tag_db_exception
 {
@@ -26,8 +31,8 @@ struct tag_db_exception
 	}
 };
 
-void mysql_set_error_sentence(MYSQL* mysql, unsigned int code, int len, const char* msg);
-void mysql_set_error_statement(MYSQL_STMT* stmt, unsigned int code, int len, const char* msg);
+void mysql_set_error_sentence(MYSQL* mysql, unsigned int code, const char* msg);
+void mysql_set_error_statement(MYSQL_STMT* stmt, unsigned int code, const char* msg);
 
 
 

@@ -1,7 +1,11 @@
 
 #include "db_mysql.h"
 
-void mysql_set_error_sentence(MYSQL* mysql, unsigned int code,int len, const char* msg)
+
+static struct tag_db_exception db_exception_sent;
+static struct tag_db_exception db_exception_stmt;
+
+void mysql_set_error_sentence(MYSQL* mysql, unsigned int code, const char* msg)
 {
 	db_exception_sent.init();
 	db_exception_sent.code = code;
@@ -20,7 +24,7 @@ void mysql_set_error_sentence(MYSQL* mysql, unsigned int code,int len, const cha
 	}
 }
 
-void mysql_set_error_statement(MYSQL_STMT* stmt, unsigned int code, int len, const char* msg)
+void mysql_set_error_statement(MYSQL_STMT* stmt, unsigned int code, const char* msg)
 {
 	db_exception_stmt.init();
 	db_exception_stmt.code = code;
@@ -28,7 +32,7 @@ void mysql_set_error_statement(MYSQL_STMT* stmt, unsigned int code, int len, con
 	{
 		strcpy(db_exception_stmt.message, msg);
 	}
-	if (mysql != NULL)
+	if (stmt != NULL)
 	{
 		if (code != 0)
 		{

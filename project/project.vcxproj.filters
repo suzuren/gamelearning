@@ -184,6 +184,9 @@
     <Filter Include="mysql_connect">
       <UniqueIdentifier>{65064951-a366-4d59-9b6f-eb863ccf4a8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cpp_new_features">
+      <UniqueIdentifier>{a607ab16-2197-4bce-9383-5ddb95ccca4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1059,6 +1062,9 @@
     <None Include="..\mysql_connect\Makefile">
       <Filter>mysql_connect</Filter>
     </None>
+    <None Include="..\cpp_new_features\Makefile">
+      <Filter>cpp_new_features</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1531,6 +1537,9 @@
     </ClCompile>
     <ClCompile Include="..\mysql_connect\db_mysql.cpp">
       <Filter>mysql_connect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp_new_features\main.cpp">
+      <Filter>cpp_new_features</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

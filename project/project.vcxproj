@@ -173,6 +173,7 @@
     <None Include="..\ConnectSkynet\Makefile" />
     <None Include="..\ConnectSkynet\pbc\Makefile" />
     <None Include="..\cpp11\Makefile" />
+    <None Include="..\cpp_new_features\Makefile" />
     <None Include="..\declare\Makefile" />
     <None Include="..\demo_php_connect_server\Makefile" />
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\ConnectSkynet\pbc\varint.c" />
     <ClCompile Include="..\ConnectSkynet\pbc\wmessage.c" />
     <ClCompile Include="..\cpp11\main.cpp" />
+    <ClCompile Include="..\cpp_new_features\main.cpp" />
     <ClCompile Include="..\declare\helloworld.cpp" />
     <ClCompile Include="..\demo_php_connect_server\client.c" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.cpp" />

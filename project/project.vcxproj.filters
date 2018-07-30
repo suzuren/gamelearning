@@ -187,6 +187,9 @@
     <Filter Include="cpp_new_features">
       <UniqueIdentifier>{a607ab16-2197-4bce-9383-5ddb95ccca4d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_jemalloc">
+      <UniqueIdentifier>{fa434cf8-9a67-4953-b54f-9bfaefc024e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -584,6 +587,27 @@
     </ClInclude>
     <ClInclude Include="..\mysql_connect\db_mysql.h">
       <Filter>mysql_connect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_new_features\define.h">
+      <Filter>cpp_new_features</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_new_features\cplusplus_extern.h">
+      <Filter>cpp_new_features</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_jemalloc\malloc_hook.h">
+      <Filter>test_jemalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_jemalloc\atomic.h">
+      <Filter>test_jemalloc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_new_features\template.h">
+      <Filter>cpp_new_features</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_new_features\smart_pointer.h">
+      <Filter>cpp_new_features</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_new_features\enum_class.h">
+      <Filter>cpp_new_features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1065,6 +1089,9 @@
     <None Include="..\cpp_new_features\Makefile">
       <Filter>cpp_new_features</Filter>
     </None>
+    <None Include="..\test_jemalloc\Makefile">
+      <Filter>test_jemalloc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1540,6 +1567,12 @@
     </ClCompile>
     <ClCompile Include="..\cpp_new_features\main.cpp">
       <Filter>cpp_new_features</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_jemalloc\malloc_hook.c">
+      <Filter>test_jemalloc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_jemalloc\main.cpp">
+      <Filter>test_jemalloc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

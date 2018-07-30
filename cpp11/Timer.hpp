@@ -58,5 +58,20 @@ private:
 	time_point<high_resolution_clock> m_begin;
 };
 
+
+
+void test_timer()
+{
+	Timer objTimer;
+	printf("objTimer\n");
+	printf("elapsed:%ld\n", objTimer.elapsed());
+	printf("elapsed_second:%f\n", objTimer.elapsed_second());
+	printf("elapsed_micro:%ld\n", objTimer.elapsed_micro());
+	printf("elapsed_nano:%ld\n", objTimer.elapsed_nano());
+	printf("elapsed_minutes:%ld\n", objTimer.elapsed_minutes());
+	printf("elapsed_hours:%ld\n", objTimer.elapsed_hours());
+
+}
+
 #endif
 

@@ -82,8 +82,16 @@ void regex_test4()
 		std::cout << rit->str() << std::endl;
 		++rit;
 	}
-
 }
+
+void test_regex()
+{
+	regex_test1();
+	regex_test2();
+	regex_test3();
+	regex_test4();
+}
+
 /*
 常用的元字符：
 

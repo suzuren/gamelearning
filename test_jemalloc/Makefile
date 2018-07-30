@@ -1,10 +1,10 @@
 
-TARGET := tmain
+TARGET := test
 CC := g++ -Wall
 CPPFLAGS := -DNDEBUG
 CFLAGS :=
-CXXFLAGS := -Wall -I../../include/ -D_FILE_OFFSET_BITS=64 -std=c++17
-LDFLAGS := -lpthread -lrt -lm
+CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++98
+LDFLAGS := -L/root/code/jemalloc/lib -lpthread -lrt -lm -ljemalloc
 CPP_SOURCES := $(wildcard *.cpp)
 CPP_SOURCES += $(wildcard ../hlib/*.cpp)
 CPP_SOURCES += $(wildcard ../hlib/json/*.cpp)

@@ -45,6 +45,13 @@ void lambda_test4()
 	cout << "lambda_test4 - " << add_x(10) << endl; // 输出 30
 }
 
+void test_lambda()
+{
+	lambda_test1();
+	lambda_test2();
+	lambda_test3();
+	lambda_test4();
+}
 
 /*
 有以下几种情况来捕获其所在作用域中的变量：

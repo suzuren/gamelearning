@@ -56,6 +56,11 @@
     <ClInclude Include="..\cpp11\ThreadPool.hpp" />
     <ClInclude Include="..\cpp11\Timer.hpp" />
     <ClInclude Include="..\cpp11\type_name.hpp" />
+    <ClInclude Include="..\cpp_new_features\cplusplus_extern.h" />
+    <ClInclude Include="..\cpp_new_features\define.h" />
+    <ClInclude Include="..\cpp_new_features\enum_class.h" />
+    <ClInclude Include="..\cpp_new_features\smart_pointer.h" />
+    <ClInclude Include="..\cpp_new_features\template.h" />
     <ClInclude Include="..\declare\helloworld.h" />
     <ClInclude Include="..\demo_php_connect_server\select.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.h" />
@@ -141,6 +146,8 @@
     <ClInclude Include="..\test_curl\logger.h" />
     <ClInclude Include="..\test_curl\curl_mgr.h" />
     <ClInclude Include="..\test_curl\singleton.h" />
+    <ClInclude Include="..\test_jemalloc\atomic.h" />
+    <ClInclude Include="..\test_jemalloc\malloc_hook.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
     <ClInclude Include="..\timer\timer.h" />
     <ClInclude Include="..\webservice\websocket.h" />
@@ -305,6 +312,7 @@
     <None Include="..\test_curl\Makefile" />
     <None Include="..\test_curl\reload.sh" />
     <None Include="..\test_curl\stop.sh" />
+    <None Include="..\test_jemalloc\Makefile" />
     <None Include="..\test_string\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
@@ -459,6 +467,8 @@
     <ClCompile Include="..\test_curl\logger.cpp" />
     <ClCompile Include="..\test_curl\curl_mgr.cpp" />
     <ClCompile Include="..\test_curl\test.cpp" />
+    <ClCompile Include="..\test_jemalloc\main.cpp" />
+    <ClCompile Include="..\test_jemalloc\malloc_hook.c" />
     <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />

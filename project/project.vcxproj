@@ -60,6 +60,7 @@
     <ClInclude Include="..\cpp_new_features\define.h" />
     <ClInclude Include="..\cpp_new_features\enum_class.h" />
     <ClInclude Include="..\cpp_new_features\smart_pointer.h" />
+    <ClInclude Include="..\cpp_new_features\std_thread.h" />
     <ClInclude Include="..\cpp_new_features\template.h" />
     <ClInclude Include="..\declare\helloworld.h" />
     <ClInclude Include="..\demo_php_connect_server\select.h" />

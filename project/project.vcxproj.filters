@@ -609,6 +609,9 @@
     <ClInclude Include="..\cpp_new_features\enum_class.h">
       <Filter>cpp_new_features</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp_new_features\std_thread.h">
+      <Filter>cpp_new_features</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

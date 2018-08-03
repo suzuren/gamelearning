@@ -1,0 +1,33 @@
+#-------------------------------------------------------------------------
+.c.o:
+	gcc -I$(INCL) -O -fPIC -rdynamic $(G) -c $<
+# gcc -I$(INCL) -O -fPIC -c $<             # LINUX
+# gcc -I$(INCL) -O -fPIC -bdynamic -c $<   # AIX
+#-------------------------------------------------------------------------
+
+APP_HOME=$(HOME)/Private/Working/zxpay/app
+PTS_HOME=$(HOME)/Private/Working/zxpay/pts
+INCL=$(PTS_HOME)/incl
+OBJ=ptsops.o opsschd.o opssimplex.o opsduplex.o opshttp.o
+OBJS=`ls $(PTS_HOME)/obj/ops/*.o `
+LIB=ops
+
+all:$(LIB)
+	@echo ""
+	@echo ""
+	@echo ""
+	@echo ""
+	@echo "   Output Process Services Module for PTS.OPS Library Compilied£¡   "
+	@echo "                          Version no.4.0                            "
+	@echo ""
+	@echo ""
+	@echo ""
+	@echo ""
+	@echo ""
+
+$(LIB): $(OBJ)
+	@mv *.o $(PTS_HOME)/obj/ops
+	gcc -shared $(G) -o lib$@.so $(OBJS)
+	ar rvu lib$@.a $(OBJS)
+	@mv lib$@.a  $(PTS_HOME)/lib
+	@mv lib$@.so $(PTS_HOME)/lib

@@ -1,23 +1,31 @@
 
-CPPFLAGS = -O3
-LDFLAGS = -lrt -lpthread -lmysqlclient -lstdc++ -std=c++11
 MYSQL_INC = /usr/include/mysql
 MYSQL_LIB = /usr/lib64/mysql
 
-all : client db_mysql.so db_wrap.so client.so
+TARGET := test
+CC := g++ -Wall
+CPPFLAGS := -DNDEBUG
+CFLAGS :=
+CXXFLAGS := -Wall -I$(MYSQL_INC) -L$(MYSQL_LIB) -D_FILE_OFFSET_BITS=64 -std=c++17
+LDFLAGS := -lpthread -lrt -lm -lmysqlclient
+CPP_SOURCES := $(wildcard *.cpp)
+CPP_SOURCES += $(wildcard ../hlib/*.cpp)
+CPP_SOURCES += $(wildcard ../hlib/json/*.cpp)
 
-client: db_mysql.so db_wrap.so client.so
-	g++ -g -o client db_mysql.so db_wrap.so client.so
+C_SOURCES := $(wildcard *.c)
+C_SOURCES += $(wildcard ../hlib/*.c)
 
-db_mysql.so : db_mysql.cpp
-	g++ -g -c -o db_mysql.so db_mysql.cpp $(LDFLAGS) -I$(MYSQL_INC) -L$(MYSQL_LIB) -lmysqlclient
+CPPOBJS := $(CPP_SOURCES:.cpp=.o)
+COBJS := $(C_SOURCES:.c=.o)
 
-db_wrap.so : db_wrap.cpp
-	g++ -g -c -o db_wrap.so db_wrap.cpp db_mysql.so $(LDFLAGS) -I$(MYSQL_INC) -L$(MYSQL_LIB) -lmysqlclient
+ifeq ($(MAKECMDGOALS),embedded)
+CPPFLAGS += -DEMBEDDED
+endif
+embedded:all
+all:$(TARGET)
 
-client.so : client.cpp
-	g++ -g -o client.so client.cpp db_wrap.so db_mysql.so $(LDFLAGS) -I$(MYSQL_INC) -L$(MYSQL_LIB) -lmysqlclient
-
+$(TARGET) : $(COBJS) $(CPPOBJS)
+	$(CC) $(LDFLAGS) -o $(TARGET) $(COBJS) $(CPPOBJS)
+install:
 clean:
-	rm -f *.o *.so *.pid client
-
+	rm -f *.o *.so $(TARGET)

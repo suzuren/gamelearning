@@ -33,6 +33,7 @@ struct tag_db_exception
 
 void mysql_set_error_sentence(MYSQL* mysql, unsigned int code, const char* msg);
 void mysql_set_error_statement(MYSQL_STMT* stmt, unsigned int code, const char* msg);
+void mysql_get_error_message();
 
 
 

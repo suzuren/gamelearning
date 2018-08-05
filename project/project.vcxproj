@@ -294,6 +294,7 @@
     <None Include="..\lua\xpcall.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
     <None Include="..\mysql_connect\Makefile" />
+    <None Include="..\mysql_connect\Makefile_back" />
     <None Include="..\NetEpoll\Makefile" />
     <None Include="..\NetHttp\Makefile" />
     <None Include="..\NetPoll\Makefile" />

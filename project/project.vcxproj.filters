@@ -1086,14 +1086,17 @@
     <None Include="..\test_string\Makefile">
       <Filter>test_string</Filter>
     </None>
-    <None Include="..\mysql_connect\Makefile">
-      <Filter>mysql_connect</Filter>
-    </None>
     <None Include="..\cpp_new_features\Makefile">
       <Filter>cpp_new_features</Filter>
     </None>
     <None Include="..\test_jemalloc\Makefile">
       <Filter>test_jemalloc</Filter>
+    </None>
+    <None Include="..\mysql_connect\Makefile_back">
+      <Filter>mysql_connect</Filter>
+    </None>
+    <None Include="..\mysql_connect\Makefile">
+      <Filter>mysql_connect</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

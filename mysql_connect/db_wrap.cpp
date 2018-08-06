@@ -94,7 +94,6 @@ bool  db_mysql_ping()
 	int ret = mysql_ping(pmysql);
 	if (ret == 0)
 	{
-		//true
 		return true;
 	}
 	static char message[128];
@@ -182,13 +181,13 @@ bool db_mysql_get_connect_character_info()
 	MY_CHARSET_INFO info;
 	memset(&info, 0, sizeof(info));
 	mysql_get_character_set_info(pmysql, &info);
-	printf("字符集信息:\n");
-	printf("字符集名: %s\n", info.name);
-	printf("校对名: %s\n", info.csname);
-	printf("注释: %s\n", info.comment);
-	printf("目录: %s\n", info.dir);
-	printf("多字节字符最小长度: %d\n", info.mbminlen);
-	printf("多字节字符最大长度: %d\n", info.mbmaxlen);
+	printf("db_mysql_get_connect_character_info - 字符集信息:\n");
+	printf("db_mysql_get_connect_character_info - 字符集名: %s\n", info.name);
+	printf("db_mysql_get_connect_character_info - 校对名: %s\n", info.csname);
+	printf("db_mysql_get_connect_character_info - 注释: %s\n", info.comment);
+	printf("db_mysql_get_connect_character_info - 目录: %s\n", info.dir);
+	printf("db_mysql_get_connect_character_info - 多字节字符最小长度: %d\n", info.mbminlen);
+	printf("db_mysql_get_connect_character_info - 多字节字符最大长度: %d\n", info.mbmaxlen);
 	return true;
 }
 
@@ -203,11 +202,11 @@ bool db_mysql_get_server_info()
 	{
 		return false;
 	}
-	printf("mysql_get_host_info(%s)\n", mysql_get_host_info(pmysql));
-	printf("以整数形式返回服务器的版本号(%ld)\n", mysql_get_server_version(pmysql));
-	printf("返回服务器的版本号(%s)\n", mysql_get_server_info(pmysql));
-	printf("以字符串形式返回服务器状态(%s)\n", mysql_stat(pmysql));
-	printf("最后查询信息(%s)\n", mysql_info(pmysql));
+	printf("db_mysql_get_server_info - mysql_get_host_info(%s)\n", mysql_get_host_info(pmysql));
+	printf("db_mysql_get_server_info - 以整数形式返回服务器的版本号(%ld)\n", mysql_get_server_version(pmysql));
+	printf("db_mysql_get_server_info - 返回服务器的版本号(%s)\n", mysql_get_server_info(pmysql));
+	printf("db_mysql_get_server_info - 以字符串形式返回服务器状态(%s)\n", mysql_stat(pmysql));
+	printf("db_mysql_get_server_info - 最后查询信息(%s)\n", mysql_info(pmysql));
 	return true;
 }
 
@@ -218,9 +217,9 @@ bool db_mysql_get_client_info()
 	{
 		return false;
 	}
-	printf("返回连接所使用的协议版本。(%u)\n", mysql_get_proto_info(pmysql));
-	printf("以字符串形式返回客户端版本信息。(%s)\n", mysql_get_client_info());
-	printf("以整数形式返回客户端版本信息(%ld)\n", mysql_get_client_version());
+	printf("db_mysql_get_client_info - 返回连接所使用的协议版本。(%u)\n", mysql_get_proto_info(pmysql));
+	printf("db_mysql_get_client_info - 以字符串形式返回客户端版本信息。(%s)\n", mysql_get_client_info());
+	printf("db_mysql_get_client_info - 以整数形式返回客户端版本信息(%ld)\n", mysql_get_client_version());
 	return true;
 }
 

@@ -190,6 +190,12 @@
     <Filter Include="test_jemalloc">
       <UniqueIdentifier>{fa434cf8-9a67-4953-b54f-9bfaefc024e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_lib">
+      <UniqueIdentifier>{0ded2eca-3ab5-4cb7-8a6c-39ddb7d3374b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mysql_client">
+      <UniqueIdentifier>{a0f7f8aa-93a5-4e98-b37b-3c6a0b65c938}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -611,6 +617,15 @@
     </ClInclude>
     <ClInclude Include="..\cpp_new_features\std_thread.h">
       <Filter>cpp_new_features</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_lib\testadd.h">
+      <Filter>test_lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mysql_client\data_table.hpp">
+      <Filter>mysql_client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mysql_client\mysql.hpp">
+      <Filter>mysql_client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1098,6 +1113,15 @@
     <None Include="..\mysql_connect\Makefile">
       <Filter>mysql_connect</Filter>
     </None>
+    <None Include="..\test_lib\makefile">
+      <Filter>test_lib</Filter>
+    </None>
+    <None Include="..\test_lib\makefile_lib_back">
+      <Filter>test_lib</Filter>
+    </None>
+    <None Include="..\mysql_client\Makefile">
+      <Filter>mysql_client</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1580,6 +1604,12 @@
     <ClCompile Include="..\test_jemalloc\main.cpp">
       <Filter>test_jemalloc</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_lib\testadd.c">
+      <Filter>test_lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mysql_client\test.cpp">
+      <Filter>mysql_client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -1598,6 +1628,7 @@
     <Text Include="..\NetEpoll\readme.txt">
       <Filter>NetEpoll</Filter>
     </Text>
+    <Text Include="..\shellcmd.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

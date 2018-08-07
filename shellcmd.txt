@@ -1,0 +1,29 @@
+
+------------------------------------------------------------------------------------------------------------
+
+添加系统路径
+export PATH=$PATH:/usr/local/lib
+export PATH=$PATH:/usr/local/cmake/bin
+source /etc/profile
+查看系统路径
+echo $PATH
+
+
+PATH=$PATH:/usr/local/lua:/usr/local/lua/bin:/usr/local/lua/lib:/usr/local/lua/include:/usr/local/cmake/bin;
+export PATH
+
+
+第一步
+vi /etc/profile
+在文件的最后添加上如下：
+PATH=$PATH:xxxxxxx;
+export PATH
+
+xxxxxx为自己需要添加的目录路径
+
+第二步：通过输入下面命令来使修改即时生效，否则需要reboot
+source /etc/profile
+
+第三步：在文件 /etc/bashrc 最后一行加入 source /etc/profile 命令,以后不需要再每次执行 source /etc/profile 才能生效
+
+------------------------------------------------------------------------------------------------------------

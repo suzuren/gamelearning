@@ -127,6 +127,8 @@
     <ClInclude Include="..\MultiplayerBook\LinkingContext.h" />
     <ClInclude Include="..\MultiplayerBook\MemoryBitStream.h" />
     <ClInclude Include="..\MultiplayerBook\RoboMath.h" />
+    <ClInclude Include="..\mysql_client\data_table.hpp" />
+    <ClInclude Include="..\mysql_client\mysql.hpp" />
     <ClInclude Include="..\mysql_connect\db_mysql.h" />
     <ClInclude Include="..\mysql_connect\db_wrap.h" />
     <ClInclude Include="..\NetEpoll\epoll_socket.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="..\test_curl\singleton.h" />
     <ClInclude Include="..\test_jemalloc\atomic.h" />
     <ClInclude Include="..\test_jemalloc\malloc_hook.h" />
+    <ClInclude Include="..\test_lib\testadd.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
     <ClInclude Include="..\timer\timer.h" />
     <ClInclude Include="..\webservice\websocket.h" />
@@ -293,6 +296,7 @@
     <None Include="..\lua\timer.lua" />
     <None Include="..\lua\xpcall.lua" />
     <None Include="..\MultiplayerBook\Makefile" />
+    <None Include="..\mysql_client\Makefile" />
     <None Include="..\mysql_connect\Makefile" />
     <None Include="..\mysql_connect\Makefile_back" />
     <None Include="..\NetEpoll\Makefile" />
@@ -315,6 +319,8 @@
     <None Include="..\test_curl\reload.sh" />
     <None Include="..\test_curl\stop.sh" />
     <None Include="..\test_jemalloc\Makefile" />
+    <None Include="..\test_lib\makefile" />
+    <None Include="..\test_lib\makefile_lib_back" />
     <None Include="..\test_string\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
@@ -444,6 +450,7 @@
     <ClCompile Include="..\luafunc\lua-struct.c" />
     <ClCompile Include="..\MultiplayerBook\Main.cpp" />
     <ClCompile Include="..\MultiplayerBook\MemoryBitStream.cpp" />
+    <ClCompile Include="..\mysql_client\test.cpp" />
     <ClCompile Include="..\mysql_connect\client.cpp" />
     <ClCompile Include="..\mysql_connect\db_mysql.cpp" />
     <ClCompile Include="..\mysql_connect\db_wrap.cpp" />
@@ -471,6 +478,7 @@
     <ClCompile Include="..\test_curl\test.cpp" />
     <ClCompile Include="..\test_jemalloc\main.cpp" />
     <ClCompile Include="..\test_jemalloc\malloc_hook.c" />
+    <ClCompile Include="..\test_lib\testadd.c" />
     <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />
@@ -493,6 +501,7 @@
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt" />
     <Text Include="..\lua-cjson\rfc4627.txt" />
     <Text Include="..\NetEpoll\readme.txt" />
+    <Text Include="..\shellcmd.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />

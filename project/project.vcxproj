@@ -325,6 +325,7 @@
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
     <None Include="..\timer\Makefile" />
+    <None Include="..\virtual_destructor\Makefile" />
     <None Include="..\webservice\Makefile" />
     <None Include="..\webservice\stop_client.sh" />
     <None Include="..\websocket\Makefile" />
@@ -483,6 +484,7 @@
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />
     <ClCompile Include="..\timer\timer.c" />
+    <ClCompile Include="..\virtual_destructor\test.cpp" />
     <ClCompile Include="..\webservice\webclient.cpp" />
     <ClCompile Include="..\webservice\websocket.cpp" />
     <ClCompile Include="..\websocket\base64.cpp" />

@@ -14,7 +14,7 @@ clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_C
  "test" "proxy_epoll" "referlib" "cpp11" "ThreadPool" "declare" "http" "webservice" "websocket" "candlua" "card" 
  "lua-arc4random" "lua-cjson" "lua-5.3.4-src" "luasql" "NetSelect" "NetPoll" "NetEpoll" "ConnectSkynet" "big_little_endian"
  "logger" "loggercpp" "loggersafe" "demo_php_connect_server" "NetHttp" "timer" "luafunc" "test_curl" "post_mgr" "http_client"
- "test_string" "mysql_connect" "mysql_client" "cpp_new_features" "test_jemalloc" "test_lib")
+ "test_string" "mysql_connect" "mysql_client" "cpp_new_features" "test_jemalloc" "test_lib" "virtual_destructor")
 
 clean_len=${#clean_dir[@]}
 

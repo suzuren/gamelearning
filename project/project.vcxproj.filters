@@ -196,6 +196,9 @@
     <Filter Include="mysql_client">
       <UniqueIdentifier>{a0f7f8aa-93a5-4e98-b37b-3c6a0b65c938}</UniqueIdentifier>
     </Filter>
+    <Filter Include="virtual_destructor">
+      <UniqueIdentifier>{e9e0d3ce-3ab1-47a4-8c23-b72df0a7a596}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1122,6 +1125,9 @@
     <None Include="..\mysql_client\Makefile">
       <Filter>mysql_client</Filter>
     </None>
+    <None Include="..\virtual_destructor\Makefile">
+      <Filter>virtual_destructor</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1609,6 +1615,9 @@
     </ClCompile>
     <ClCompile Include="..\mysql_client\test.cpp">
       <Filter>mysql_client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\virtual_destructor\test.cpp">
+      <Filter>virtual_destructor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -91,6 +91,7 @@ bool  db_mysql_ping()
 	{
 		return false;
 	}
+	return true;
 	int ret = mysql_ping(pmysql);
 	if (ret == 0)
 	{
@@ -139,7 +140,7 @@ bool db_mysql_set_connect_character(const char * charset)
 	return true;
 }
 
-bool	db_mysql_set_current_character(const char * charset)
+bool db_mysql_set_current_character(const char * charset)
 {
 	if (charset == NULL)
 	{
@@ -203,9 +204,9 @@ bool db_mysql_get_server_info()
 		return false;
 	}
 	printf("db_mysql_get_server_info - mysql_get_host_info(%s)\n", mysql_get_host_info(pmysql));
-	printf("db_mysql_get_server_info - 以整数形式返回服务器的版本号(%ld)\n", mysql_get_server_version(pmysql));
+	//printf("db_mysql_get_server_info - 以整数形式返回服务器的版本号(%ld)\n", mysql_get_server_version(pmysql));
 	printf("db_mysql_get_server_info - 返回服务器的版本号(%s)\n", mysql_get_server_info(pmysql));
-	printf("db_mysql_get_server_info - 以字符串形式返回服务器状态(%s)\n", mysql_stat(pmysql));
+	//printf("db_mysql_get_server_info - 以字符串形式返回服务器状态(%s)\n", mysql_stat(pmysql));
 	printf("db_mysql_get_server_info - 最后查询信息(%s)\n", mysql_info(pmysql));
 	return true;
 }

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string_view>
 #include <stdlib.h>
+#include <string.h>
 #include "mysql.h"
 #include "data_table.hpp"
 

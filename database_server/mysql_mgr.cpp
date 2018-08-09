@@ -1,5 +1,6 @@
 
 #include "mysql_mgr.h"
+#include <iomanip>
 
 
 
@@ -79,11 +80,13 @@ void CMysqlMgr::TestMysql()
 {
 	TestMysql_One();
 	TestMysql_Two();
+	TestMysql_Three();
 }
 
 
 void CMysqlMgr::TestMysql_One()
 {
+	return;
 	try
 	{
 		db::mysql mysql;
@@ -115,10 +118,10 @@ void CMysqlMgr::TestMysql_One()
 		for (auto& row : *result)
 		{
 			std::cout << std::get<int64_t>(row[0]) << std::endl;
-			//std::cout << std::get<int64_t>(row[1]) << std::endl;
-			//std::cout << std::get<std::string>(row[2]) << std::endl;
-			//std::cout << std::get<std::string>(row[3]) << std::endl;
-			//std::cout << std::get<std::string>(row[4]) << std::endl;
+			std::cout << std::get<int64_t>(row[1]) << std::endl;
+			std::cout << std::get<std::string>(row[2]) << std::endl;
+			std::cout << std::get<std::string>(row[3]) << std::endl;
+			std::cout << std::get<std::string>(row[4]) << std::endl;
 		}
 	}
 	catch (std::exception& e)
@@ -191,6 +194,7 @@ CREATE TABLE `gameproperty` (
 	m_dbSyncOper[DB_INDEX_TYPE_TREASURE].execute(sql_gamescoreinfo);
 	m_dbSyncOper[DB_INDEX_TYPE_TREASURE].execute(sql_gameproperty);
 
+
 	auto sql_gameproperty_insert_value = R"(
 INSERT INTO `gameproperty` VALUES ('1', '汽车', '1500', '90', '7', '7', '0', '0', '', '1');
 INSERT INTO `gameproperty` VALUES ('2', '臭蛋', '100', '90', '7', '7', '0', '0', '', '1');
@@ -244,5 +248,52 @@ INSERT INTO `gameproperty` VALUES ('211', '别墅', '1000000', '90', '7', '7', '
 )";
 	m_dbSyncOper[DB_INDEX_TYPE_TREASURE].execute(sql_gameproperty_insert_value);
 
+}
+
+void CMysqlMgr::TestMysql_Three()
+{
+	std::shared_ptr<db::data_table> sptr_result = m_dbSyncOper[DB_INDEX_TYPE_TREASURE].query<db::data_table>("select * from gameproperty where ID=211 or ID=1;");
+	std::cout << "gameproperty - row_size:" << sptr_result->row_size() << std::endl;
+	std::cout << "gameproperty - column_size:" << sptr_result->column_size() << std::endl;
+	if (sptr_result != nullptr)
+	{
+		int index_clos = 0;
+		auto iter_vec_cols = sptr_result->get_cols();
+		std::cout << "----------------------------------------------------------" << std::endl;
+		for (auto iter_clo = iter_vec_cols.begin(); iter_clo != iter_vec_cols.end(); iter_clo++)
+		{
+			std::cout << index_clos++ << " - colname:" << std::setw(20) << std::setiosflags(std::ios::left) << std::setfill(' ') << iter_clo->first  << "  data_type:" << iter_clo->second << std::endl;
+		}
+
+		for (auto iter_rows = sptr_result->begin(); iter_rows != sptr_result->end(); iter_rows++)
+		{
+			auto & row = (*iter_rows);
+			std::cout << "----------------------------------------------------------" << std::endl;
+			std::cout << "0 - " << std::get<int>(row[0]) << std::endl;
+			std::cout << "1 - " << std::get<std::string>(row[1]) << std::endl;
+			std::cout << "2 - " << std::get<int64_t>(row[2]) << std::endl;
+			std::cout << "3 - " << std::get<int>(row[3]) << std::endl;
+			std::cout << "4 - " << std::get<int>(row[4]) << std::endl;
+			std::cout << "5 - " << std::get<int>(row[5]) << std::endl;
+			std::cout << "6 - " << std::get<int64_t>(row[6]) << std::endl;
+			std::cout << "7 - " << std::get<int64_t>(row[7]) << std::endl;
+			std::cout << "8 - " << std::get<std::string>(row[8]) << std::endl;
+			std::cout << "9 - " << std::get<int>(row[9]) << std::endl;
+		}
+	}
+
+	//for (size_t i = 0; i < sptr_result->row_size(); i++)
+	//{
+	//	size_t j = 0;
+	//	auto tem_0 = sptr_result->get<const int>(i, j);
+	//	//auto tem_1 = sptr_result->get<std::string>(i, 1);
+	//	//auto tem_2 = sptr_result->get<int>(i, 2);
+	//	//auto tem_3 = sptr_result->get<int>(i, 3);
+	//	//auto tem_4 = sptr_result->get<int>(i, 4);
+	//	//auto tem_5 = sptr_result->get<int>(i, 5);
+	//	//auto tem_6 = sptr_result->get<int>(i, 6);
+	//	//auto tem_7 = sptr_result->get<int>(i, 7);
+	//	//auto tem_8 = sptr_result->get<int>(i, 8);
+	//}
 
 }

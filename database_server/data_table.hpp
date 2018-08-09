@@ -144,6 +144,11 @@ namespace db
 		{
 			return rows_.size();
 		}
+	public: // add func
+		std::vector<std::pair<std::string, int>> & get_cols()
+		{
+			return cols_;
+		}
 	private:
 		std::vector<std::pair<std::string, int>> cols_;
 		rows_t rows_;

@@ -1,6 +1,6 @@
 
-#ifndef __HTTP_MGR_H_
-#define __HTTP_MGR_H_
+#ifndef __MYSQL_MGR_H_
+#define __MYSQL_MGR_H_
 
 #include "mysql.hpp"
 #include "data_table.hpp"
@@ -81,6 +81,7 @@ public:
 	void	TestMysql();
 	void	TestMysql_One();
 	void	TestMysql_Two();
+	void	TestMysql_Three();
 
 };
 

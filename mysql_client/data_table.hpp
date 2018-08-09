@@ -5,7 +5,7 @@
 #include <string>
 #include <tuple>
 #include <string_view>
-#include <stdarg.h>
+
 namespace db
 {
 	template <class T>
@@ -47,7 +47,7 @@ namespace db
 	template<class T>
 	constexpr bool is_char_array_v = std::is_array_v<T>&&std::is_same_v<char, std::remove_pointer_t<std::decay_t<T>>>;
 
-	using db_data_value_t = std::variant<nullptr_t, char, short, int, float, double, int64_t, std::string>;
+	using db_data_value_t = std::variant<nullptr_t, char, int, float, double, int64_t, std::string>;
 
 	class data_table
 	{
@@ -108,7 +108,7 @@ namespace db
 					row.emplace_back(std::stod(rowdata[i]));
 					break;
 				case MYSQL_TYPE_LONGLONG:
-					row.emplace_back(std::stoll(rowdata[i]));
+					row.emplace_back(static_cast<int64_t>(std::stoll(rowdata[i])));
 					break;
 				case MYSQL_TYPE_VAR_STRING:
 					row.emplace_back(std::string(rowdata[i]));

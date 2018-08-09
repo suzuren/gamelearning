@@ -6,8 +6,9 @@
 #include <unordered_map>
 #include <sstream>
 #include <string_view>
-#include <stdlib.h>
-#include <string.h>
+#include <cstring>
+#include <cstdarg>
+#include <errmsg.h>
 #include "mysql.h"
 #include "data_table.hpp"
 
@@ -47,11 +48,35 @@ namespace db
 			std::string sql;
 		};
 
+		struct connect_info
+		{
+			int port;
+			int timeout;
+			std::string host;
+			std::string user;
+			std::string password;
+			std::string database;
+		};
+
 		using stmt_ptr = std::shared_ptr<stmt>;
 
 		MYSQL* mysql_=nullptr;
+		connect_info connect_info_;
 		std::unordered_map<size_t, stmt_ptr> stmts_;
 	public:
+		mysql() = default;
+		mysql(const mysql&) = delete;
+		mysql& operator=(mysql&) = delete;
+
+		~mysql()
+		{
+			if (nullptr != mysql_)
+			{
+				mysql_close(mysql_);
+				mysql_ = nullptr;
+			}
+		}
+
 		void connect(const std::string& host, int port, const std::string& user, const std::string& password, const std::string& database, int timeout = 0)
 		{
 			if (nullptr != mysql_)
@@ -83,6 +108,33 @@ namespace db
 
 			char value = 1;
 			mysql_options(mysql_, MYSQL_OPT_RECONNECT, &value);
+
+			connect_info_.host = host;
+			connect_info_.port = port;
+			connect_info_.user = user;
+			connect_info_.password = password;
+			connect_info_.timeout = timeout;
+			connect_info_.database = database;
+		}
+
+		bool connected()
+		{
+			if (nullptr != mysql_)
+			{
+				auto ec = mysql_errno(mysql_);
+				return (ec != CR_SERVER_LOST && ec != CR_SERVER_GONE_ERROR);
+			}
+			return false;
+		}
+
+		void reconnect()
+		{
+			connect(connect_info_.host, connect_info_.port, connect_info_.user, connect_info_.password, connect_info_.database, connect_info_.timeout);
+		}
+
+		int error_code()
+		{
+			return mysql_errno(mysql_);
 		}
 
 		void execute(const std::string& sql)
@@ -90,11 +142,13 @@ namespace db
 			do
 			{
 				if (nullptr == mysql_)
-					break;
+				{
+					format_throw("SQL: mysql not init");
+				}
 
 				if (mysql_query(mysql_, sql.data()))
 				{
-					format_throw("Execute SQL:%s. ERROR:%s",sql.data(), mysql_error(mysql_));
+					format_throw("Execute SQL:%s. ERROR:%s", sql.data(), mysql_error(mysql_));
 				}
 
 				while (!mysql_next_result(mysql_))
@@ -110,15 +164,15 @@ namespace db
 		}
 
 		template<typename... Args>
-		void execute(const std::string& sql, Args&&... args)
+		constexpr void execute_stmt(size_t stmtid, Args&&... args)
 		{
-			bind_params b;
-			b.bind(std::forward<Args>(args)...);
-			return execute_stmt(std::hash<std::string>()(sql), b.binds);
+			std::vector<MYSQL_BIND> binds;
+			((set_param_bind(binds, std::forward<Args>(args))), ...);
+			execute_stmt_param(stmtid, binds);
 		}
 
-		template<typename TablePolicy,typename... Args>
-		std::shared_ptr<TablePolicy> query(const std::string& sql,Args&&... args)
+		template<typename TablePolicy,typename... PolicyArgs>
+		std::shared_ptr<TablePolicy> query(const std::string& sql, PolicyArgs&&... args)
 		{
 			if (nullptr == mysql_)
 			{
@@ -157,7 +211,7 @@ namespace db
 				nfield = mysql_field_count(mysql_);
 				fields = mysql_fetch_fields(result);
 
-				dt = std::make_shared<TablePolicy>(std::forward<Args>(args)...);
+				dt = std::make_shared<TablePolicy>(std::forward<PolicyArgs>(args)...);
 
 				for (uint32_t i = 0; i < nfield; i++)
 				{
@@ -190,12 +244,12 @@ namespace db
 			return dt;
 		}
 
-		void execute_stmt(size_t id, std::vector<MYSQL_BIND>& params)
+		void execute_stmt_param(size_t id, std::vector<MYSQL_BIND>& params)
 		{
 			stmt_ptr m = nullptr;
 			if (auto iter = stmts_.find(id); iter == stmts_.end())
 			{
-				format_throw("SQL: can not found prepare stmt for '%z'", id);
+				format_throw("SQL: can not found prepare stmt for '%zu'", id);
 			}
 			else
 			{
@@ -274,7 +328,7 @@ namespace db
 				return;
 			}
 			va_list ap;
-			char szBuffer[8192];
+			char szBuffer[8192] = { 0 };
 			va_start(ap, fmt);
 			// win32
 #if defined(_WIN32)
@@ -288,37 +342,27 @@ namespace db
 			throw std::logic_error(szBuffer);
 		}
 
-		struct bind_params
-		{
-			template<typename Arg0, typename... Args>
-			constexpr void bind(Arg0&& arg0, Args&&... args)
-			{
-				set_param_bind(binds, std::forward<Arg0>(arg0));
-				if constexpr (sizeof...(args) > 0) bind(std::forward<Args>(args)...);
-			}
+		
+		template<typename T>
+		constexpr void set_param_bind(std::vector<MYSQL_BIND>& param_binds, T&& value) {
+			MYSQL_BIND param = {};
 
-			template<typename T>
-			constexpr void set_param_bind(std::vector<MYSQL_BIND>& param_binds, T&& value) {
-				MYSQL_BIND param = {};
-
-				using U = std::remove_const_t<std::remove_reference_t<T>>;
-				if constexpr(std::is_arithmetic_v<U>) {
-					param.buffer_type = (enum_field_types)type_id_map<U>::value;
-					param.buffer = const_cast<void*>(static_cast<const void*>(&value));
-				}
-				else if constexpr(std::is_same_v<std::string, U>) {
-					param.buffer_type = MYSQL_TYPE_STRING;
-					param.buffer = (void*)(value.c_str());
-					param.buffer_length = (unsigned long)value.size();
-				}
-				else if constexpr(std::is_same_v<const char*, U> || is_char_array_v<U>) {
-					param.buffer_type = MYSQL_TYPE_STRING;
-					param.buffer = (void*)(value);
-					param.buffer_length = (unsigned long)strlen(value);
-				}
-				param_binds.push_back(param);
+			using U = std::remove_const_t<std::remove_reference_t<T>>;
+			if constexpr(std::is_arithmetic_v<U>) {
+				param.buffer_type = (enum_field_types)type_id_map<U>::value;
+				param.buffer = const_cast<void*>(static_cast<const void*>(&value));
 			}
-			std::vector<MYSQL_BIND> binds;
-		};
+			else if constexpr(std::is_same_v<std::string, U>) {
+				param.buffer_type = MYSQL_TYPE_STRING;
+				param.buffer = (void*)(value.c_str());
+				param.buffer_length = (unsigned long)value.size();
+			}
+			else if constexpr(std::is_same_v<const char*, U> || is_char_array_v<U>) {
+				param.buffer_type = MYSQL_TYPE_STRING;
+				param.buffer = (void*)(value);
+				param.buffer_length = (unsigned long)strlen(value);
+			}
+			param_binds.push_back(param);
+		}
 	};
 }

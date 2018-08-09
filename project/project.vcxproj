@@ -62,6 +62,9 @@
     <ClInclude Include="..\cpp_new_features\smart_pointer.h" />
     <ClInclude Include="..\cpp_new_features\std_thread.h" />
     <ClInclude Include="..\cpp_new_features\template.h" />
+    <ClInclude Include="..\database_server\data_table.hpp" />
+    <ClInclude Include="..\database_server\mysql.hpp" />
+    <ClInclude Include="..\database_server\mysql_mgr.h" />
     <ClInclude Include="..\declare\helloworld.h" />
     <ClInclude Include="..\demo_php_connect_server\select.h" />
     <ClInclude Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.h" />
@@ -185,6 +188,8 @@
     <None Include="..\ConnectSkynet\pbc\Makefile" />
     <None Include="..\cpp11\Makefile" />
     <None Include="..\cpp_new_features\Makefile" />
+    <None Include="..\database_server\databases.sql" />
+    <None Include="..\database_server\Makefile" />
     <None Include="..\declare\Makefile" />
     <None Include="..\demo_php_connect_server\Makefile" />
     <None Include="..\GeneralHashFunctions_-_CPP\Makefile" />
@@ -372,6 +377,8 @@
     <ClCompile Include="..\ConnectSkynet\pbc\wmessage.c" />
     <ClCompile Include="..\cpp11\main.cpp" />
     <ClCompile Include="..\cpp_new_features\main.cpp" />
+    <ClCompile Include="..\database_server\mysql_mgr.cpp" />
+    <ClCompile Include="..\database_server\main.cpp" />
     <ClCompile Include="..\declare\helloworld.cpp" />
     <ClCompile Include="..\demo_php_connect_server\client.c" />
     <ClCompile Include="..\GeneralHashFunctions_-_CPP\GeneralHashFunctions.cpp" />

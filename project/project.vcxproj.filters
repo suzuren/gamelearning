@@ -199,6 +199,9 @@
     <Filter Include="virtual_destructor">
       <UniqueIdentifier>{e9e0d3ce-3ab1-47a4-8c23-b72df0a7a596}</UniqueIdentifier>
     </Filter>
+    <Filter Include="database_server">
+      <UniqueIdentifier>{e5b44e8e-596b-4cae-83fc-d30b9e1b140a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -629,6 +632,15 @@
     </ClInclude>
     <ClInclude Include="..\mysql_client\mysql.hpp">
       <Filter>mysql_client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database_server\data_table.hpp">
+      <Filter>database_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database_server\mysql.hpp">
+      <Filter>database_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database_server\mysql_mgr.h">
+      <Filter>database_server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1128,6 +1140,12 @@
     <None Include="..\virtual_destructor\Makefile">
       <Filter>virtual_destructor</Filter>
     </None>
+    <None Include="..\database_server\Makefile">
+      <Filter>database_server</Filter>
+    </None>
+    <None Include="..\database_server\databases.sql">
+      <Filter>database_server</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1618,6 +1636,12 @@
     </ClCompile>
     <ClCompile Include="..\virtual_destructor\test.cpp">
       <Filter>virtual_destructor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database_server\mysql_mgr.cpp">
+      <Filter>database_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database_server\main.cpp">
+      <Filter>database_server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

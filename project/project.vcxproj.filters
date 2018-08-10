@@ -642,6 +642,15 @@
     <ClInclude Include="..\database_server\mysql_mgr.h">
       <Filter>database_server</Filter>
     </ClInclude>
+    <ClInclude Include="..\database_server\mysql_task.h">
+      <Filter>database_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database_server\mysql_oper_define.h">
+      <Filter>database_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\database_server\mysql_async_callback.h">
+      <Filter>database_server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1641,6 +1650,12 @@
       <Filter>database_server</Filter>
     </ClCompile>
     <ClCompile Include="..\database_server\main.cpp">
+      <Filter>database_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database_server\mysql_task.cpp">
+      <Filter>database_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\database_server\mysql_async_callback.cpp">
       <Filter>database_server</Filter>
     </ClCompile>
   </ItemGroup>

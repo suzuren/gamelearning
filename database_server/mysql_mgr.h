@@ -4,48 +4,17 @@
 
 #include "mysql.hpp"
 #include "data_table.hpp"
+
+#include "mysql_oper_define.h"
+
+
 #include <iostream>
 
-#define CHECK_CONNECT_TIME (20*1000)
 
-enum DB_INDEX_TYPE
+class AsyncDBCallBack
 {
-	DB_INDEX_TYPE_ACCOUNT = 0,
-	DB_INDEX_TYPE_RECORD,
-	DB_INDEX_TYPE_TREASURE,
-	DB_INDEX_TYPE_MAX,
-};
-
-struct tagDataBaseConfig
-{
-	int port;
-	int timeout;
-	std::string host;
-	std::string user;
-	std::string password;
-	std::string database;
-	tagDataBaseConfig()
-	{
-		init();
-	}
-	void init()
-	{
-		port = 0;
-		timeout = 0;
-		host.clear();
-		user.clear();
-		password.clear();
-		database.clear();
-	}
-	void operator=(const tagDataBaseConfig & conf)
-	{
-		port = conf.port;
-		timeout = conf.timeout;
-		host = conf.host;
-		user = conf.user;
-		password = conf.password;
-		database = conf.database;
-	}
+public:
+	virtual bool OnProcessDBEvent(std::shared_ptr<struct tagEventResponse> sptrResponse) = 0;
 };
 
 class CMysqlMgr

@@ -63,7 +63,7 @@ void CMysqlMgr::OnCheckConnect()
 		{
 			if (m_dbSyncOper[i].connected() == false)
 			{
-				m_dbSyncOper[i].reconnect();
+				//m_dbSyncOper[i].reconnect();
 				return;
 			}
 		}
@@ -282,18 +282,19 @@ void CMysqlMgr::TestMysql_Three()
 		}
 	}
 
-	//for (size_t i = 0; i < sptr_result->row_size(); i++)
-	//{
-	//	size_t j = 0;
-	//	auto tem_0 = sptr_result->get<const int>(i, j);
-	//	//auto tem_1 = sptr_result->get<std::string>(i, 1);
-	//	//auto tem_2 = sptr_result->get<int>(i, 2);
-	//	//auto tem_3 = sptr_result->get<int>(i, 3);
-	//	//auto tem_4 = sptr_result->get<int>(i, 4);
-	//	//auto tem_5 = sptr_result->get<int>(i, 5);
-	//	//auto tem_6 = sptr_result->get<int>(i, 6);
-	//	//auto tem_7 = sptr_result->get<int>(i, 7);
-	//	//auto tem_8 = sptr_result->get<int>(i, 8);
-	//}
+	for (size_t i = 0; i < sptr_result->row_size(); i++)
+	{
+		std::cout << "----------------------------------------------------------" << std::endl;
+		std::cout << "0 - " << sptr_result->get<int>(i, 0) << std::endl;
+		std::cout << "1 - " << sptr_result->get<std::string>(i, 1) << std::endl;
+		std::cout << "2 - " << sptr_result->get<int64_t>(i, 2) << std::endl;
+		std::cout << "3 - " << sptr_result->get<int>(i, 3) << std::endl;
+		std::cout << "4 - " << sptr_result->get<int>(i, 4) << std::endl;
+		std::cout << "5 - " << sptr_result->get<int>(i, 5) << std::endl;
+		std::cout << "6 - " << sptr_result->get<int64_t>(i, 6) << std::endl;
+		std::cout << "7 - " << sptr_result->get<int64_t>(i, 7) << std::endl;
+		std::cout << "8 - " << sptr_result->get<std::string>(i, 8) << std::endl;
+		std::cout << "9 - " << sptr_result->get<int>(i, 9) << std::endl;
+	}
 
 }

@@ -58,11 +58,13 @@ enum emMYSQL_DATABASE_CALL_BACK
 	DATABASE_CALL_BACK_MAX,
 };
 
+#define MAX_EVENT_PARAM_COUNT 3
+
 struct tagEventRequest
 {
 	int	eventid;
 	int callback;
-	long long params[3];
+	long long params[MAX_EVENT_PARAM_COUNT];
 	std::string strsql;
 	tagEventRequest()
 	{
@@ -81,8 +83,7 @@ struct tagEventResponse
 {
 	int	eventid;
 	int callback;
-	long long params[3];
-
+	long long params[MAX_EVENT_PARAM_COUNT];
 	tagEventResponse()
 	{
 		init();
@@ -94,6 +95,15 @@ struct tagEventResponse
 		memset(params, 0, sizeof(params));
 
 	}
+};
+
+// ---------------------------------------------------------------------------------------
+
+enum emMYSQL_DATABASE_EVENT_TYPE
+{
+	MYSQL_DATABASE_EVENT_MIN,
+	MYSQL_DATABASE_EVENT_TEST,
+	MYSQL_DATABASE_EVENT_MAX,
 };
 
 // ---------------------------------------------------------------------------------------

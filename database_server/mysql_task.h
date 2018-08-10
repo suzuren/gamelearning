@@ -33,7 +33,6 @@ private:
 	struct tagDataBaseConfig m_dbConfig;
 	db::mysql m_dbAsyncOper;
 private:
-	bool StartAsyncConnect();
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	void AddEventRequest(std::shared_ptr<struct tagEventResponse> sptrResponse);
 
@@ -43,7 +42,12 @@ private:
 public:
 	bool Init();
 	bool Start();
+	void SetDatabaseConfigure(struct tagDataBaseConfig & dbConfig);
+	bool StartAsyncConnect();
+	std::shared_ptr<struct tagEventRequest> MallocEventRequest(int eventid, int callback);
+	void AsyncExecute(std::shared_ptr<struct tagEventRequest>);
 	bool OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequest);
+	std::shared_ptr<struct tagEventResponse> GetAsyncExecuteResult();
 };
 
 

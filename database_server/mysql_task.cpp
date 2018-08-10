@@ -65,6 +65,11 @@ bool CMysqlTask::Init()
 	return true;
 }
 
+void CMysqlTask::SetDatabaseConfigure(struct tagDataBaseConfig & dbConfig)
+{
+	m_dbConfig = dbConfig;
+}
+
 bool CMysqlTask::StartAsyncConnect()
 {
 	struct tagDataBaseConfig & config = m_dbConfig;
@@ -75,6 +80,8 @@ bool CMysqlTask::StartAsyncConnect()
 	}
 	return true;
 }
+
+
 
 void CMysqlTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
@@ -106,6 +113,19 @@ bool CMysqlTask::Start()
 	return true;
 }
 
+std::shared_ptr<struct tagEventRequest> CMysqlTask::MallocEventRequest(int eventid, int callback)
+{
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->eventid = eventid;
+	sptrRequest->callback = callback;
+	return sptrRequest;
+}
+
+void CMysqlTask::AsyncExecute(std::shared_ptr<struct tagEventRequest> sptrRequest)
+{
+	AddEventRequest(sptrRequest);
+}
+
 bool CMysqlTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	if (sptrRequest == nullptr)
@@ -135,4 +155,17 @@ bool CMysqlTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequ
 	}
 
 	return false;
+}
+
+std::shared_ptr<struct tagEventResponse> CMysqlTask::GetAsyncExecuteResult()
+{
+	while (m_queueResponse.empty() == false)
+	{
+		std::unique_lock<std::mutex> lock_front(m_queue_mutex_response);
+		auto sptrResponse = m_queueResponse.front();
+		m_queueResponse.pop();
+		lock_front.unlock();
+		return sptrResponse;
+	}
+	return nullptr;
 }

@@ -314,7 +314,7 @@ namespace db
 				return;
 			}
 			va_list ap;
-			char szBuffer[8192];
+			char szBuffer[8192] = { 0 };
 			va_start(ap, fmt);
 			// win32
 #if defined(_WIN32)

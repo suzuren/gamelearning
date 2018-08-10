@@ -2,9 +2,7 @@
 #include "mysql_mgr.h"
 #include <iomanip>
 
-
-
-bool CMysqlMgr::Init()
+bool CMysqlMgr::InitDatabaseConfigure()
 {
 	m_dbConfig[DB_INDEX_TYPE_ACCOUNT].port = 3306;
 	m_dbConfig[DB_INDEX_TYPE_ACCOUNT].timeout = 0;
@@ -26,7 +24,11 @@ bool CMysqlMgr::Init()
 	m_dbConfig[DB_INDEX_TYPE_TREASURE].user = "root";
 	m_dbConfig[DB_INDEX_TYPE_TREASURE].password = "game123456";
 	m_dbConfig[DB_INDEX_TYPE_TREASURE].database = "db_treasure";
+	return true;
+}
 
+bool CMysqlMgr::ConnectSyncOper()
+{
 	for (int i = 0; i < DB_INDEX_TYPE_MAX; i++)
 	{
 		struct tagDataBaseConfig & config = m_dbConfig[i];
@@ -36,15 +38,24 @@ bool CMysqlMgr::Init()
 			return false;
 		}
 	}
-	m_lLastCheckTime = GetMillisecond();
 
 	return true;
 }
 
-void CMysqlMgr::ShutDown()
+bool CMysqlMgr::ConnectAsyncOper()
 {
-
+	for (int i = 0; i < DB_INDEX_TYPE_MAX; i++)
+	{
+		m_sptrDBAsyncOper[i]->SetDatabaseConfigure(m_dbConfig[i]);
+		if (m_sptrDBAsyncOper[i]->StartAsyncConnect() == false)
+		{
+			return false;
+		}
+	}
+	return true;
 }
+
+// ---------------------------------------------------------------------------------------
 
 unsigned long long	CMysqlMgr::GetMillisecond()
 {
@@ -52,6 +63,16 @@ unsigned long long	CMysqlMgr::GetMillisecond()
 	clock_gettime(CLOCK_MONOTONIC, &_spec);
 	unsigned long long millisecond = _spec.tv_sec * 1000 + _spec.tv_nsec / 1000 / 1000;
 	return millisecond;
+}
+
+std::string CMysqlMgr::FormatToString(const char* fmt, ...)
+{
+	va_list ap;
+	char szBuffer[2048] = { 0 };
+	va_start(ap, fmt);
+	vsnprintf(szBuffer, sizeof(szBuffer), fmt, ap);
+	va_end(ap);
+	return szBuffer;
 }
 
 void CMysqlMgr::OnCheckConnect()
@@ -71,16 +92,90 @@ void CMysqlMgr::OnCheckConnect()
 	}
 }
 
+// ---------------------------------------------------------------------------------------
+
+void CMysqlMgr::DispatchDataBaseEvent()
+{
+	int count = 0;
+	for (int i = 0; i < DB_INDEX_TYPE_MAX; ++i)
+	{
+		if (m_sptrDBAsyncOper[i] == nullptr)
+		{
+			continue;
+		}
+		do
+		{
+			auto sptrResponse = m_sptrDBAsyncOper[i]->GetAsyncExecuteResult();
+			DispatchDataBaseCallBack(sptrResponse);
+			if (++count >= 200)
+			{
+				sptrResponse = nullptr;
+				break;
+			}
+			if (sptrResponse == nullptr)
+			{
+				break;
+			}
+		} while (true);
+	}
+}
+
+void CMysqlMgr::DispatchDataBaseCallBack(std::shared_ptr<struct tagEventResponse> sptrResponse)
+{
+	if (m_sptrAsyncDBCallBack != nullptr)
+	{
+		m_sptrAsyncDBCallBack->OnProcessDBEvent(sptrResponse);
+	}
+}
+
+// ---------------------------------------------------------------------------------------
+
+bool CMysqlMgr::Init()
+{
+	if (InitDatabaseConfigure() == false)
+	{
+		return false;
+	}
+	if (ConnectSyncOper() == false)
+	{
+		return false;
+	}
+	if (ConnectAsyncOper() == false)
+	{
+		return false;
+	}
+	return true;
+}
+
+void CMysqlMgr::ShutDown()
+{
+
+}
+
+
+void CMysqlMgr::SetAsyncDBCallBack(std::shared_ptr<AsyncDBCallBack> sptrAsyncDBCallBack)
+{
+	if (sptrAsyncDBCallBack != nullptr)
+	{
+		m_sptrAsyncDBCallBack = sptrAsyncDBCallBack;
+	}
+}
+
+
 void CMysqlMgr::OnMysqlTick()
 {
 	OnCheckConnect();
-
+	DispatchDataBaseEvent();
 }
+
+
+
 void CMysqlMgr::TestMysql()
 {
 	TestMysql_One();
 	TestMysql_Two();
-	TestMysql_Three();
+	//TestMysql_Three();
+	TestMysql_Four();
 }
 
 
@@ -297,4 +392,15 @@ void CMysqlMgr::TestMysql_Three()
 		std::cout << "9 - " << sptr_result->get<int>(i, 9) << std::endl;
 	}
 
+}
+
+void CMysqlMgr::TestMysql_Four()
+{
+	auto sptrRequest = m_sptrDBAsyncOper[DB_INDEX_TYPE_TREASURE]->MallocEventRequest(MYSQL_DATABASE_EVENT_TEST, DATABASE_CALL_BACK_QUERY_FIELDS);
+	sptrRequest->params[0] = 1;
+	sptrRequest->params[1] = 2;
+	sptrRequest->params[2] = 3;
+	sptrRequest->strsql = std::move(FormatToString("select * from gameproperty where ID=%d", 3));
+	m_sptrDBAsyncOper[DB_INDEX_TYPE_TREASURE]->AsyncExecute(std::move(sptrRequest));
+	return;
 }

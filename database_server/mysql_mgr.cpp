@@ -38,7 +38,6 @@ bool CMysqlMgr::ConnectSyncOper()
 			return false;
 		}
 	}
-
 	return true;
 }
 
@@ -46,8 +45,28 @@ bool CMysqlMgr::ConnectAsyncOper()
 {
 	for (int i = 0; i < DB_INDEX_TYPE_MAX; i++)
 	{
+		m_sptrDBAsyncOper[i] = std::make_shared<CMysqlTask>();
+		if (m_sptrDBAsyncOper[i] == nullptr)
+		{
+			continue;
+		}
 		m_sptrDBAsyncOper[i]->SetDatabaseConfigure(m_dbConfig[i]);
 		if (m_sptrDBAsyncOper[i]->StartAsyncConnect() == false)
+		{
+			return false;
+		}
+	}
+	for (int i = 0; i < DB_INDEX_TYPE_MAX; i++)
+	{
+		if (m_sptrDBAsyncOper[i] == nullptr)
+		{
+			continue;
+		}
+		if (m_sptrDBAsyncOper[i]->Init() == false)
+		{
+			return false;
+		}
+		if (m_sptrDBAsyncOper[i]->Start() == false)
 		{
 			return false;
 		}
@@ -75,23 +94,6 @@ std::string CMysqlMgr::FormatToString(const char* fmt, ...)
 	return szBuffer;
 }
 
-void CMysqlMgr::OnCheckConnect()
-{
-	unsigned long long lCurrentTime = GetMillisecond();
-	if (m_lLastCheckTime + CHECK_CONNECT_TIME > lCurrentTime)
-	{
-		for (int i = 0; i < DB_INDEX_TYPE_MAX; i++)
-		{
-			if (m_dbSyncOper[i].connected() == false)
-			{
-				//m_dbSyncOper[i].reconnect();
-				return;
-			}
-		}
-		m_lLastCheckTime = lCurrentTime;
-	}
-}
-
 // ---------------------------------------------------------------------------------------
 
 void CMysqlMgr::DispatchDataBaseEvent()
@@ -106,14 +108,10 @@ void CMysqlMgr::DispatchDataBaseEvent()
 		do
 		{
 			auto sptrResponse = m_sptrDBAsyncOper[i]->GetAsyncExecuteResult();
-			DispatchDataBaseCallBack(sptrResponse);
-			if (++count >= 200)
+			DispatchDataBaseCallBack(std::move(sptrResponse));
+			if (++count >= 128)
 			{
 				sptrResponse = nullptr;
-				break;
-			}
-			if (sptrResponse == nullptr)
-			{
 				break;
 			}
 		} while (true);
@@ -124,7 +122,7 @@ void CMysqlMgr::DispatchDataBaseCallBack(std::shared_ptr<struct tagEventResponse
 {
 	if (m_sptrAsyncDBCallBack != nullptr)
 	{
-		m_sptrAsyncDBCallBack->OnProcessDBEvent(sptrResponse);
+		m_sptrAsyncDBCallBack->OnProcessDataBaseEvent(sptrResponse);
 	}
 }
 
@@ -149,9 +147,17 @@ bool CMysqlMgr::Init()
 
 void CMysqlMgr::ShutDown()
 {
-
+	for (int i = 0; i < DB_INDEX_TYPE_MAX; ++i)
+	{
+		if (m_sptrDBAsyncOper[i] == nullptr)
+		{
+			continue;
+		}
+		m_sptrDBAsyncOper[i]->ShutDown();
+		m_sptrDBAsyncOper[i].reset();
+		m_sptrDBAsyncOper[i] = nullptr;
+	}
 }
-
 
 void CMysqlMgr::SetAsyncDBCallBack(std::shared_ptr<AsyncDBCallBack> sptrAsyncDBCallBack)
 {
@@ -161,10 +167,8 @@ void CMysqlMgr::SetAsyncDBCallBack(std::shared_ptr<AsyncDBCallBack> sptrAsyncDBC
 	}
 }
 
-
 void CMysqlMgr::OnMysqlTick()
 {
-	OnCheckConnect();
 	DispatchDataBaseEvent();
 }
 
@@ -177,7 +181,6 @@ void CMysqlMgr::TestMysql()
 	//TestMysql_Three();
 	TestMysql_Four();
 }
-
 
 void CMysqlMgr::TestMysql_One()
 {

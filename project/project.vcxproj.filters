@@ -651,6 +651,9 @@
     <ClInclude Include="..\database_server\mysql_async_callback.h">
       <Filter>database_server</Filter>
     </ClInclude>
+    <ClInclude Include="..\database_server\mysql_daemonize.h">
+      <Filter>database_server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1153,6 +1156,12 @@
       <Filter>database_server</Filter>
     </None>
     <None Include="..\database_server\databases.sql">
+      <Filter>database_server</Filter>
+    </None>
+    <None Include="..\database_server\reload.sh">
+      <Filter>database_server</Filter>
+    </None>
+    <None Include="..\database_server\stop.sh">
       <Filter>database_server</Filter>
     </None>
   </ItemGroup>

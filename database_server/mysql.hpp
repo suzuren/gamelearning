@@ -198,7 +198,7 @@ namespace db
 				fields = mysql_fetch_fields(result);
 
 				dt = std::make_shared<TablePolicy>(std::forward<PolicyArgs>(args)...);
-
+				dt->set_affected_rows(nrow);
 				for (uint32_t i = 0; i < nfield; i++)
 				{
 					dt->add_column(fields[i].name, fields[i].type);

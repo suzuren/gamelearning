@@ -14,7 +14,7 @@
 class AsyncDBCallBack
 {
 public:
-	virtual bool OnProcessDBEvent(std::shared_ptr<struct tagEventResponse> sptrResponse) = 0;
+	virtual bool OnProcessDataBaseEvent(std::shared_ptr<struct tagEventResponse> sptrResponse) = 0;
 };
 
 class CMysqlMgr
@@ -31,7 +31,6 @@ public:
 		return  s_SingleObj;
 	}
 private:
-	unsigned long long m_lLastCheckTime;
 	struct tagDataBaseConfig m_dbConfig[DB_INDEX_TYPE_MAX];
 	db::mysql m_dbSyncOper[DB_INDEX_TYPE_MAX];
 	std::shared_ptr<CMysqlTask>  m_sptrDBAsyncOper[DB_INDEX_TYPE_MAX];
@@ -43,7 +42,6 @@ private:
 	bool ConnectAsyncOper();
 	unsigned long long	GetMillisecond();
 	std::string FormatToString(const char* fmt, ...);
-	void OnCheckConnect();
 	void	DispatchDataBaseEvent();
 
 public:
@@ -52,7 +50,6 @@ public:
 	void    OnMysqlTick();
 	void	SetAsyncDBCallBack(std::shared_ptr<AsyncDBCallBack> sptrAsyncDBCallBack);
 	void	DispatchDataBaseCallBack(std::shared_ptr<struct tagEventResponse> sptrResponse);
-
 
 public:
 	void	TestMysql();

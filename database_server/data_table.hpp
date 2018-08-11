@@ -149,8 +149,17 @@ namespace db
 		{
 			return cols_;
 		}
+		void set_affected_rows(size_t rows)
+		{
+			affected_rows_ = rows;
+		}
+		size_t get_affected_rows()
+		{
+			return affected_rows_;
+		}
 	private:
 		std::vector<std::pair<std::string, int>> cols_;
 		rows_t rows_;
+		size_t affected_rows_;
 	};
 }

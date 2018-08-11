@@ -7,7 +7,7 @@
 class CMysqlAsyncCallBack : public AsyncDBCallBack
 {
 public:
-	virtual bool OnProcessDBEvent(std::shared_ptr<struct tagEventResponse> sptrResponse);
+	virtual bool OnProcessDataBaseEvent(std::shared_ptr<struct tagEventResponse> sptrResponse);
 
 private:
 	bool EventCallBackOnTest(std::shared_ptr<struct tagEventResponse> sptrResponse);

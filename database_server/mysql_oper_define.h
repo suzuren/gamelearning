@@ -84,6 +84,8 @@ struct tagEventResponse
 	int	eventid;
 	int callback;
 	long long params[MAX_EVENT_PARAM_COUNT];
+	unsigned int affected_rows;
+	std::shared_ptr<db::data_table> sptrResult;
 	tagEventResponse()
 	{
 		init();
@@ -93,7 +95,8 @@ struct tagEventResponse
 		eventid = 0;
 		callback = 0;
 		memset(params, 0, sizeof(params));
-
+		affected_rows = 0;
+		sptrResult = nullptr;
 	}
 };
 
@@ -103,6 +106,10 @@ enum emMYSQL_DATABASE_EVENT_TYPE
 {
 	MYSQL_DATABASE_EVENT_MIN,
 	MYSQL_DATABASE_EVENT_TEST,
+	// ...
+	// ...
+	// ...
+	// ...
 	MYSQL_DATABASE_EVENT_MAX,
 };
 

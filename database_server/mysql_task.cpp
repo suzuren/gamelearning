@@ -3,6 +3,7 @@
 #include <iomanip>
 
 
+
 void CMysqlTask::runThreadFunction(CMysqlTask *pTask)
 {
 	while (pTask->m_bRunFlag == true)
@@ -55,9 +56,8 @@ CMysqlTask::CMysqlTask()
 
 CMysqlTask::~CMysqlTask()
 {
-	m_workThread.join();
-}
 
+}
 
 bool CMysqlTask::Init()
 {
@@ -81,8 +81,6 @@ bool CMysqlTask::StartAsyncConnect()
 	return true;
 }
 
-
-
 void CMysqlTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	if (m_bRunFlag && sptrRequest != nullptr)
@@ -93,7 +91,7 @@ void CMysqlTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrReq
 	}
 }
 
-void CMysqlTask::AddEventRequest(std::shared_ptr<struct tagEventResponse> sptrResponse)
+void CMysqlTask::AddEventResponse(std::shared_ptr<struct tagEventResponse> sptrResponse)
 {
 	if (m_bRunFlag && sptrResponse != nullptr)
 	{
@@ -110,6 +108,14 @@ bool CMysqlTask::Start()
 	std::thread worker_thread(startfunc);
 	m_workThread = std::move(worker_thread);
 
+	return true;
+}
+
+bool CMysqlTask::ShutDown()
+{
+	m_bRunFlag = false;
+	std::cout << "CMysqlTask::ShutDown - pid:" << m_workThread.get_id() << std::endl;
+	m_workThread.join();
 	return true;
 }
 
@@ -139,18 +145,31 @@ bool CMysqlTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequ
 	}
 
 	auto sptrResponse = std::make_shared<struct tagEventResponse>();
+	if (sptrResponse == nullptr)
+	{
+		return false;
+	}
 	sptrResponse->eventid = sptrRequest->eventid;
 	sptrResponse->callback = sptrRequest->callback;
 	memcpy(sptrResponse->params, sptrRequest->params, sizeof(sptrResponse->params));
 
 	if (sptrRequest->callback == DATABASE_CALL_BACK_QUERY_FIELDS)
 	{
-		AddEventRequest(sptrResponse);
+		sptrResponse->sptrResult = m_dbAsyncOper.query<db::data_table>(sptrRequest->strsql);
+		if (sptrResponse->sptrResult != nullptr)
+		{
+			sptrResponse->affected_rows = sptrResponse->sptrResult->get_affected_rows();
+		}		AddEventResponse(sptrResponse);
 		return true;
 	}
 	if (sptrRequest->callback == DATABASE_CALL_BACK_AFFECTED_ROWS)
 	{
-		AddEventRequest(sptrResponse);
+		sptrResponse->sptrResult = m_dbAsyncOper.query<db::data_table>(sptrRequest->strsql);
+		if (sptrResponse->sptrResult != nullptr)
+		{
+			sptrResponse->affected_rows = sptrResponse->sptrResult->get_affected_rows();
+		}
+		AddEventResponse(sptrResponse);
 		return true;
 	}
 
@@ -159,7 +178,7 @@ bool CMysqlTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequ
 
 std::shared_ptr<struct tagEventResponse> CMysqlTask::GetAsyncExecuteResult()
 {
-	while (m_queueResponse.empty() == false)
+	if (m_queueResponse.empty() == false)
 	{
 		std::unique_lock<std::mutex> lock_front(m_queue_mutex_response);
 		auto sptrResponse = m_queueResponse.front();

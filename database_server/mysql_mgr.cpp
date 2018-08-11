@@ -178,8 +178,10 @@ void CMysqlMgr::TestMysql()
 {
 	TestMysql_One();
 	TestMysql_Two();
-	//TestMysql_Three();
+	TestMysql_Three();
 	TestMysql_Four();
+	TestMysql_Five();
+	TestMysql_Six();
 }
 
 void CMysqlMgr::TestMysql_One()
@@ -351,13 +353,13 @@ INSERT INTO `gameproperty` VALUES ('211', '别墅', '1000000', '90', '7', '7', '
 void CMysqlMgr::TestMysql_Three()
 {
 	std::shared_ptr<db::data_table> sptr_result = m_dbSyncOper[DB_INDEX_TYPE_TREASURE].query<db::data_table>("select * from gameproperty where ID=211 or ID=1;");
-	std::cout << "gameproperty - row_size:" << sptr_result->row_size() << std::endl;
-	std::cout << "gameproperty - column_size:" << sptr_result->column_size() << std::endl;
+	std::cout << "TestMysql_Three - gameproperty - row_size:" << sptr_result->row_size() << std::endl;
+	std::cout << "TestMysql_Three - gameproperty - column_size:" << sptr_result->column_size() << std::endl;
 	if (sptr_result != nullptr)
 	{
 		int index_clos = 0;
 		auto iter_vec_cols = sptr_result->get_cols();
-		std::cout << "----------------------------------------------------------" << std::endl;
+		std::cout << "TestMysql_Three - ----------------------------------------------------------" << std::endl;
 		for (auto iter_clo = iter_vec_cols.begin(); iter_clo != iter_vec_cols.end(); iter_clo++)
 		{
 			std::cout << index_clos++ << " - colname:" << std::setw(20) << std::setiosflags(std::ios::left) << std::setfill(' ') << iter_clo->first  << "  data_type:" << iter_clo->second << std::endl;
@@ -366,7 +368,7 @@ void CMysqlMgr::TestMysql_Three()
 		for (auto iter_rows = sptr_result->begin(); iter_rows != sptr_result->end(); iter_rows++)
 		{
 			auto & row = (*iter_rows);
-			std::cout << "----------------------------------------------------------" << std::endl;
+			std::cout << "TestMysql_Three - ----------------------------------------------------------" << std::endl;
 			std::cout << "0 - " << std::get<int>(row[0]) << std::endl;
 			std::cout << "1 - " << std::get<std::string>(row[1]) << std::endl;
 			std::cout << "2 - " << std::get<int64_t>(row[2]) << std::endl;
@@ -382,7 +384,7 @@ void CMysqlMgr::TestMysql_Three()
 
 	for (size_t i = 0; i < sptr_result->row_size(); i++)
 	{
-		std::cout << "----------------------------------------------------------" << std::endl;
+		std::cout << "TestMysql_Three - ----------------------------------------------------------" << std::endl;
 		std::cout << "0 - " << sptr_result->get<int>(i, 0) << std::endl;
 		std::cout << "1 - " << sptr_result->get<std::string>(i, 1) << std::endl;
 		std::cout << "2 - " << sptr_result->get<int64_t>(i, 2) << std::endl;
@@ -406,4 +408,20 @@ void CMysqlMgr::TestMysql_Four()
 	sptrRequest->strsql = std::move(FormatToString("select * from gameproperty where ID=%d", 3));
 	m_sptrDBAsyncOper[DB_INDEX_TYPE_TREASURE]->AsyncExecute(std::move(sptrRequest));
 	return;
+}
+
+void CMysqlMgr::TestMysql_Five()
+{
+	int ret = m_dbSyncOper[DB_INDEX_TYPE_TREASURE].ping();
+	std::cout << "TestMysql_Three - " << " ping ret:" << ret << std::endl;
+}
+
+void CMysqlMgr::TestMysql_Six()
+{
+	auto stmtid = m_dbSyncOper[DB_INDEX_TYPE_ACCOUNT].prepare("INSERT INTO accountsinfo(GameID,PlatformID,NickName,Gender,FaceID,Experience,LoveLiness) VALUES(?,?,?,?,?,?,?)");
+	m_dbSyncOper[DB_INDEX_TYPE_ACCOUNT].execute_stmt(stmtid, 2002, 3, "sucer", 1, 10, 9000, 3000);
+
+	stmtid = m_dbSyncOper[DB_INDEX_TYPE_ACCOUNT].prepare("delete from accountsinfo where GameID=?");
+	m_dbSyncOper[DB_INDEX_TYPE_ACCOUNT].execute_stmt(stmtid, 2002);
+
 }

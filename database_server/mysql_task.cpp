@@ -6,7 +6,7 @@
 
 void CMysqlTask::runThreadFunction(CMysqlTask *pTask)
 {
-	while (pTask->m_bRunFlag == true)
+	while (pTask != nullptr &&pTask->m_bRunFlag == true)
 	{
 		if (pTask->m_queueRequest.empty() == false)
 		{
@@ -20,7 +20,8 @@ void CMysqlTask::runThreadFunction(CMysqlTask *pTask)
 					bool bDataBaseConnected = pTask->m_dbAsyncOper.connected();
 					if (bDataBaseConnected)
 					{
-						pTask->StartAsyncConnect();
+						//pTask->StartAsyncConnect();
+						pTask->m_dbAsyncOper.ping();
 						continue;
 					}
 					else

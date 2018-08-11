@@ -57,7 +57,8 @@ public:
 	void	TestMysql_Two();
 	void	TestMysql_Three();
 	void	TestMysql_Four();
-
+	void	TestMysql_Five();
+	void	TestMysql_Six();
 };
 
 

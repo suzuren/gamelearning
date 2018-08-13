@@ -17,11 +17,10 @@ void CMysqlTask::runThreadFunction(CMysqlTask *pTask)
 			{
 				if (pTask->OnProcessEvent(sptrRequest) == false)
 				{
-					bool bDataBaseConnected = pTask->m_dbAsyncOper.connected();
-					if (bDataBaseConnected)
+					int ret = pTask->m_dbAsyncOper.ping();
+					if (ret != 0)
 					{
-						//pTask->StartAsyncConnect();
-						pTask->m_dbAsyncOper.ping();
+						pTask->StartAsyncConnect();
 						continue;
 					}
 					else
@@ -133,6 +132,27 @@ void CMysqlTask::AsyncExecute(std::shared_ptr<struct tagEventRequest> sptrReques
 	AddEventRequest(sptrRequest);
 }
 
+bool CMysqlTask::IsProcessSuccess()
+{
+	bool bDataBaseConnected = m_dbAsyncOper.connected();
+	if (bDataBaseConnected == false)
+	{
+		int ret = m_dbAsyncOper.ping();
+		if (ret != 0)
+		{
+			StartAsyncConnect();
+		}
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+	return false;
+}
+
+
+
 bool CMysqlTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	if (sptrRequest == nullptr)
@@ -142,6 +162,10 @@ bool CMysqlTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequ
 	if (sptrRequest->callback == DATABASE_CALL_BACK_NULL)
 	{
 		m_dbAsyncOper.execute(sptrRequest->strsql);
+		if (IsProcessSuccess() == false)
+		{
+			return false;
+		}
 		return true;
 	}
 
@@ -157,15 +181,24 @@ bool CMysqlTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequ
 	if (sptrRequest->callback == DATABASE_CALL_BACK_QUERY_FIELDS)
 	{
 		sptrResponse->sptrResult = m_dbAsyncOper.query<db::data_table>(sptrRequest->strsql);
+		if (IsProcessSuccess() == false)
+		{
+			return false;
+		}
 		if (sptrResponse->sptrResult != nullptr)
 		{
 			sptrResponse->affected_rows = sptrResponse->sptrResult->get_affected_rows();
-		}		AddEventResponse(sptrResponse);
+		}
+		AddEventResponse(sptrResponse);
 		return true;
 	}
 	if (sptrRequest->callback == DATABASE_CALL_BACK_AFFECTED_ROWS)
 	{
 		sptrResponse->sptrResult = m_dbAsyncOper.query<db::data_table>(sptrRequest->strsql);
+		if (IsProcessSuccess() == false)
+		{
+			return false;
+		}
 		if (sptrResponse->sptrResult != nullptr)
 		{
 			sptrResponse->affected_rows = sptrResponse->sptrResult->get_affected_rows();

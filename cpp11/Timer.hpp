@@ -56,6 +56,20 @@ public:
 
 private:
 	time_point<high_resolution_clock> m_begin;
+
+public:
+	//add function
+
+	static int64_t system_second()
+	{
+		return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	}
+
+	static int64_t system_millsecond()
+	{
+		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	}
+
 };
 
 
@@ -70,6 +84,8 @@ void test_timer()
 	printf("elapsed_nano:%ld\n", objTimer.elapsed_nano());
 	printf("elapsed_minutes:%ld\n", objTimer.elapsed_minutes());
 	printf("elapsed_hours:%ld\n", objTimer.elapsed_hours());
+	printf("system_second:%ld\n", Timer::system_second());
+	printf("system_millsecond:%ld\n", Timer::system_millsecond());
 
 }
 

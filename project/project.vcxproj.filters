@@ -654,6 +654,9 @@
     <ClInclude Include="..\database_server\mysql_daemonize.h">
       <Filter>database_server</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp_new_features\mempool.h">
+      <Filter>cpp_new_features</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

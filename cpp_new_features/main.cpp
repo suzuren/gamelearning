@@ -7,7 +7,7 @@
 #include "smart_pointer.h"
 #include "enum_class.h"
 #include "std_thread.h"
-
+#include "mempool.h"
 
 int main(int argc, const char** argv)
 {
@@ -20,7 +20,8 @@ int main(int argc, const char** argv)
 	//test_enum_class();
 	//test_templateFunc();
 	//test_smart_pointer();
-	test_std_thread();
+	//test_std_thread();
+	//test_mempool();
 
 	return 0;
 }

@@ -37,6 +37,7 @@ private:
 private:
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	void AddEventResponse(std::shared_ptr<struct tagEventResponse> sptrResponse);
+	bool IsProcessSuccess();
 
 private:
 	static void runThreadFunction(CMysqlTask *pTask);

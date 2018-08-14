@@ -144,6 +144,11 @@
     <ClInclude Include="..\NetHttp\epoll_socket.h" />
     <ClInclude Include="..\NetHttp\http_header.h" />
     <ClInclude Include="..\NetPoll\poll_socket.h" />
+    <ClInclude Include="..\network_server\network_async_callback.h" />
+    <ClInclude Include="..\network_server\network_daemonize.h" />
+    <ClInclude Include="..\network_server\network_mgr.h" />
+    <ClInclude Include="..\network_server\network_oper_define.h" />
+    <ClInclude Include="..\network_server\network_task.h" />
     <ClInclude Include="..\post_mgr\epoll_socket.h" />
     <ClInclude Include="..\post_mgr\http_header.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
@@ -315,6 +320,9 @@
     <None Include="..\NetHttp\Makefile" />
     <None Include="..\NetPoll\Makefile" />
     <None Include="..\NetSelect\Makefile" />
+    <None Include="..\network_server\Makefile" />
+    <None Include="..\network_server\reload.sh" />
+    <None Include="..\network_server\stop.sh" />
     <None Include="..\post_mgr\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
     <None Include="..\proxy_epoll\Readme.md" />
@@ -479,6 +487,10 @@
     <ClCompile Include="..\NetSelect\client.c" />
     <ClCompile Include="..\NetSelect\select.h" />
     <ClCompile Include="..\NetSelect\server.c" />
+    <ClCompile Include="..\network_server\main.cpp" />
+    <ClCompile Include="..\network_server\network_async_callback.cpp" />
+    <ClCompile Include="..\network_server\network_mgr.cpp" />
+    <ClCompile Include="..\network_server\network_task.cpp" />
     <ClCompile Include="..\post_mgr\client.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
     <ClCompile Include="..\referlib\client.cpp" />

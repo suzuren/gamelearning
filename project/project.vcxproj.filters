@@ -202,6 +202,9 @@
     <Filter Include="database_server">
       <UniqueIdentifier>{e5b44e8e-596b-4cae-83fc-d30b9e1b140a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="network_server">
+      <UniqueIdentifier>{7b7bcc9e-1576-4436-a94e-ddc3db0db22f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -656,6 +659,21 @@
     </ClInclude>
     <ClInclude Include="..\cpp_new_features\mempool.h">
       <Filter>cpp_new_features</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_async_callback.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_daemonize.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_mgr.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_oper_define.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_task.h">
+      <Filter>network_server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1167,6 +1185,15 @@
     <None Include="..\database_server\stop.sh">
       <Filter>database_server</Filter>
     </None>
+    <None Include="..\network_server\Makefile">
+      <Filter>network_server</Filter>
+    </None>
+    <None Include="..\network_server\reload.sh">
+      <Filter>network_server</Filter>
+    </None>
+    <None Include="..\network_server\stop.sh">
+      <Filter>network_server</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -1669,6 +1696,18 @@
     </ClCompile>
     <ClCompile Include="..\database_server\mysql_async_callback.cpp">
       <Filter>database_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\main.cpp">
+      <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\network_async_callback.cpp">
+      <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\network_mgr.cpp">
+      <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\network_task.cpp">
+      <Filter>network_server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

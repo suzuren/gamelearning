@@ -1,42 +1,20 @@
 
-#include "mysql_mgr.h"
-#include <iomanip>
-
-
-// ---------------------------------------------------------------------------------------
-
-unsigned long long	CNetworkMgr::GetMillisecond()
-{
-	timespec _spec;
-	clock_gettime(CLOCK_MONOTONIC, &_spec);
-	unsigned long long millisecond = _spec.tv_sec * 1000 + _spec.tv_nsec / 1000 / 1000;
-	return millisecond;
-}
-
-std::string CNetworkMgr::FormatToString(const char* fmt, ...)
-{
-	va_list ap;
-	char szBuffer[2048] = { 0 };
-	va_start(ap, fmt);
-	vsnprintf(szBuffer, sizeof(szBuffer), fmt, ap);
-	va_end(ap);
-	return szBuffer;
-}
+#include "network_mgr.h"
 
 // ---------------------------------------------------------------------------------------
 
 void CNetworkMgr::DispatchNetworkEvent()
 {
 	int count = 0;
-	for (int i = 0; i < DB_INDEX_TYPE_MAX; ++i)
+	for (int i = 0; i < MAX_WORK_THREAD_COUNT; ++i)
 	{
-		if (m_sptrDBAsyncOper[i] == nullptr)
+		if (m_sptrNetAsyncOper[i] == nullptr)
 		{
 			continue;
 		}
 		do
 		{
-			auto sptrResponse = m_sptrDBAsyncOper[i]->GetAsyncExecuteResult();
+			auto sptrResponse = m_sptrNetAsyncOper[i]->GetAsyncExecuteResult();
 			DispatchNetworkCallBack(std::move(sptrResponse));
 			if (++count >= 128)
 			{
@@ -59,22 +37,15 @@ void CNetworkMgr::DispatchNetworkCallBack(std::shared_ptr<struct tagEventRespons
 
 bool CNetworkMgr::Init()
 {
+	m_listenfd = socket_bind(IPADDR, PORT);
+	m_epfd = epoll_create(MAX_SOCKET_CONNECT);
+	SetSocketEvents(m_epfd, m_listenfd, EPOLL_CTL_ADD);
 
 	return true;
 }
 
 void CNetworkMgr::ShutDown()
 {
-	for (int i = 0; i < DB_INDEX_TYPE_MAX; ++i)
-	{
-		if (m_sptrDBAsyncOper[i] == nullptr)
-		{
-			continue;
-		}
-		m_sptrDBAsyncOper[i]->ShutDown();
-		m_sptrDBAsyncOper[i].reset();
-		m_sptrDBAsyncOper[i] = nullptr;
-	}
 }
 
 void CNetworkMgr::SetAsyncNetCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack)
@@ -85,12 +56,42 @@ void CNetworkMgr::SetAsyncNetCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyn
 	}
 }
 
-void CNetworkMgr::OnNetworkTick()
+void CNetworkMgr::OnDisposeEvents()
 {
-	DispatchNetworkEvent();
+	memset(m_events, 0, sizeof(m_events));
+	int nfds = socket_wait(m_epfd, m_events, MAX_SOCKET_CONNECT, 0);
+	if (nfds > 0)
+	{
+		for (int i = 0; i < nfds; i++)
+		{
+			int fd = m_events[i].data.fd;
+			int ev = m_events[i].events;
+			if (ev && (EPOLLHUP | EPOLLERR))
+			{
+				int sock_err = 0;
+				int sock_err_len = sizeof(sock_err);
+				int sockopt_ret = getsockopt(fd, SOL_SOCKET, SO_ERROR, &sock_err, (socklen_t*)&sock_err_len);
+
+				//HangupNotify();
+			}
+			if (ev && EPOLLIN)
+			{
+				//InputNotify();
+			}
+			if (ev && EPOLLOUT)
+			{
+				//OutputNotify();
+			}
+		}
+	}
+
 }
 
-
+void CNetworkMgr::OnNetworkTick()
+{
+	OnDisposeEvents();
+	DispatchNetworkEvent();
+}
 
 void CNetworkMgr::TestNetwork()
 {

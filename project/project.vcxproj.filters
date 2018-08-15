@@ -675,6 +675,9 @@
     <ClInclude Include="..\network_server\network_task.h">
       <Filter>network_server</Filter>
     </ClInclude>
+    <ClInclude Include="..\network_server\epoll_socket.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1707,6 +1710,9 @@
       <Filter>network_server</Filter>
     </ClCompile>
     <ClCompile Include="..\network_server\network_task.cpp">
+      <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\epoll_socket.cpp">
       <Filter>network_server</Filter>
     </ClCompile>
   </ItemGroup>

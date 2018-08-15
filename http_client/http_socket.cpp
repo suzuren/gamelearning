@@ -64,7 +64,7 @@ int socket_connect(const char *ip, int port, int * fd)
 	int client_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (client_fd == -1)
 	{
-		close(client_fd);
+		//close(client_fd);
 		return -1;
 	}
 	bool flag = SetSocketNonblock(client_fd);

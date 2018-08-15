@@ -9,6 +9,7 @@
 
 // ---------------------------------------------------------------------------------------
 
+#define MAX_WORK_THREAD_COUNT 3
 #define MAX_EVENT_PARAM_COUNT 3
 
 struct tagEventRequest

@@ -2,13 +2,10 @@
 #ifndef __MYSQL_MGR_H_
 #define __MYSQL_MGR_H_
 
-#include "mysql.hpp"
-#include "data_table.hpp"
+#include "epoll_socket.h"
+#include "network_oper_define.h"
+#include "network_task.h"
 
-#include "mysql_oper_define.h"
-#include "mysql_task.h"
-
-#include <iostream>
 
 
 class AsyncNetCallBack
@@ -31,22 +28,23 @@ public:
 		return  s_SingleObj;
 	}
 private:
-	struct tagDataBaseConfig m_dbConfig[DB_INDEX_TYPE_MAX];
-	std::shared_ptr<CMysqlTask>  m_sptrDBAsyncOper[DB_INDEX_TYPE_MAX];
+	int m_epfd;
+	int m_listenfd;
+	struct epoll_event m_events[MAX_SOCKET_CONNECT];
+	std::shared_ptr<CNetworkTask>  m_sptrNetAsyncOper[MAX_WORK_THREAD_COUNT];
+
 protected:
 	std::shared_ptr<AsyncDBCallBack> m_sptrAsyncNetCallBack;
 private:
-
-	unsigned long long	GetMillisecond();
-	std::string FormatToString(const char* fmt, ...);
 	void	DispatchNetworkEvent();
+	void	DispatchNetworkCallBack(std::shared_ptr<struct tagEventResponse> sptrResponse);
+	void	SetAsyncNetCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack);
 
 public:
 	bool	Init();
 	void    ShutDown();
+	void	OnDisposeEvents();
 	void    OnNetworkTick();
-	void	SetAsyncNetCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack);
-	void	DispatchNetworkCallBack(std::shared_ptr<struct tagEventResponse> sptrResponse);
 
 public:
 	void	TestNetwork();

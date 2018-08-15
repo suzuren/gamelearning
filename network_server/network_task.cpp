@@ -10,32 +10,7 @@ void CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 	{
 		if (pTask->m_queueRequest.empty() == false)
 		{
-			std::unique_lock<std::mutex> lock_front(pTask->m_queue_mutex_request);
-			std::shared_ptr<struct tagEventRequest> sptrRequest = pTask->m_queueRequest.front();
-			lock_front.unlock();
-			if (sptrRequest != nullptr)
-			{
-				if (pTask->OnProcessEvent(sptrRequest) == false)
-				{
-					int ret = pTask->m_dbAsyncOper.ping();
-					if (ret != 0)
-					{
-						pTask->StartAsyncConnect();
-						continue;
-					}
-					else
-					{
-						// wtite error log
-					}
-				}
-				else
-				{
-					// success
-				}
-			}
-			std::unique_lock<std::mutex> lock_pop(pTask->m_queue_mutex_request);
-			pTask->m_queueRequest.pop();
-			lock_pop.unlock();
+
 		}
 		else
 		{
@@ -65,21 +40,7 @@ bool CNetworkTask::Init()
 	return true;
 }
 
-void CNetworkTask::SetDatabaseConfigure(struct tagDataBaseConfig & dbConfig)
-{
-	m_dbConfig = dbConfig;
-}
 
-bool CNetworkTask::StartAsyncConnect()
-{
-	struct tagDataBaseConfig & config = m_dbConfig;
-	m_dbAsyncOper.connect(config.host.data(), config.port, config.user.data(), config.password.data(), config.database.data(), config.timeout);
-	if (m_dbAsyncOper.connected() == false)
-	{
-		return false;
-	}
-	return true;
-}
 
 void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
@@ -132,93 +93,16 @@ void CNetworkTask::AsyncExecute(std::shared_ptr<struct tagEventRequest> sptrRequ
 	AddEventRequest(sptrRequest);
 }
 
-bool CNetworkTask::IsProcessSuccess()
-{
-	bool bDataBaseConnected = m_dbAsyncOper.connected();
-	if (bDataBaseConnected == false)
-	{
-		int ret = m_dbAsyncOper.ping();
-		if (ret != 0)
-		{
-			StartAsyncConnect();
-		}
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-	return false;
-}
 
 
 
 bool CNetworkTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
-	if (sptrRequest == nullptr)
-	{
-		return false;
-	}
-	if (sptrRequest->callback == DATABASE_CALL_BACK_NULL)
-	{
-		m_dbAsyncOper.execute(sptrRequest->strsql);
-		if (IsProcessSuccess() == false)
-		{
-			return false;
-		}
-		return true;
-	}
-
-	auto sptrResponse = std::make_shared<struct tagEventResponse>();
-	if (sptrResponse == nullptr)
-	{
-		return false;
-	}
-	sptrResponse->eventid = sptrRequest->eventid;
-	sptrResponse->callback = sptrRequest->callback;
-	memcpy(sptrResponse->params, sptrRequest->params, sizeof(sptrResponse->params));
-
-	if (sptrRequest->callback == DATABASE_CALL_BACK_QUERY_FIELDS)
-	{
-		sptrResponse->sptrResult = m_dbAsyncOper.query<db::data_table>(sptrRequest->strsql);
-		if (IsProcessSuccess() == false)
-		{
-			return false;
-		}
-		if (sptrResponse->sptrResult != nullptr)
-		{
-			sptrResponse->affected_rows = sptrResponse->sptrResult->get_affected_rows();
-		}
-		AddEventResponse(sptrResponse);
-		return true;
-	}
-	if (sptrRequest->callback == DATABASE_CALL_BACK_AFFECTED_ROWS)
-	{
-		sptrResponse->sptrResult = m_dbAsyncOper.query<db::data_table>(sptrRequest->strsql);
-		if (IsProcessSuccess() == false)
-		{
-			return false;
-		}
-		if (sptrResponse->sptrResult != nullptr)
-		{
-			sptrResponse->affected_rows = sptrResponse->sptrResult->get_affected_rows();
-		}
-		AddEventResponse(sptrResponse);
-		return true;
-	}
 
 	return false;
 }
 
 std::shared_ptr<struct tagEventResponse> CNetworkTask::GetAsyncExecuteResult()
 {
-	if (m_queueResponse.empty() == false)
-	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_response);
-		auto sptrResponse = m_queueResponse.front();
-		m_queueResponse.pop();
-		lock_front.unlock();
-		return sptrResponse;
-	}
 	return nullptr;
 }

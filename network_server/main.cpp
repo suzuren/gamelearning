@@ -9,20 +9,21 @@ int main(int argc, const char** argv)
 {
 	printf("test network server ...\n");
 
-	signal(SIGUSR2, reload);
-	signal(SIGUSR1, shutdown);
-	daemonize();
-	int pid = check_pid("network.pid");
-	if (pid)
-	{
-		fprintf(stderr, "network server is already running, pid = %d.\n", pid);
-		return 1;
-	}
-	pid = write_pid("network.pid");
-	if (pid == 0)
-	{
-		return 1;
-	}
+	//signal(SIGUSR2, reload);
+	//signal(SIGUSR1, shutdown);
+	//daemonize();
+	//int pid = check_pid("network.pid");
+	//if (pid)
+	//{
+	//	fprintf(stderr, "network server is already running, pid = %d.\n", pid);
+	//	return 1;
+	//}
+	//pid = write_pid("network.pid");
+	//if (pid == 0)
+	//{
+	//	return 1;
+	//}
+
 	CNetworkMgr::Instance().Init();
 	CNetworkMgr::Instance().SetAsyncDBCallBack(std::make_shared<CNetworkAsyncCallBack>());
 	CNetworkMgr::Instance().TestMysql();

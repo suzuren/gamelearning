@@ -144,6 +144,7 @@
     <ClInclude Include="..\NetHttp\epoll_socket.h" />
     <ClInclude Include="..\NetHttp\http_header.h" />
     <ClInclude Include="..\NetPoll\poll_socket.h" />
+    <ClInclude Include="..\network_server\epoll_socket.h" />
     <ClInclude Include="..\network_server\network_async_callback.h" />
     <ClInclude Include="..\network_server\network_daemonize.h" />
     <ClInclude Include="..\network_server\network_mgr.h" />
@@ -487,6 +488,7 @@
     <ClCompile Include="..\NetSelect\client.c" />
     <ClCompile Include="..\NetSelect\select.h" />
     <ClCompile Include="..\NetSelect\server.c" />
+    <ClCompile Include="..\network_server\epoll_socket.cpp" />
     <ClCompile Include="..\network_server\main.cpp" />
     <ClCompile Include="..\network_server\network_async_callback.cpp" />
     <ClCompile Include="..\network_server\network_mgr.cpp" />

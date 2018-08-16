@@ -19,7 +19,7 @@ int CNetworkTask::OnDisposeEvents()
 				//int sock_err_len = sizeof(sock_err);
 				//int sockopt_ret = getsockopt(fd, SOL_SOCKET, SO_ERROR, &sock_err, (socklen_t*)&sock_err_len);
 
-				//HangupNotify();
+				HangupNotify(fd);
 			}
 			if (fd == m_listenfd)
 			{
@@ -64,8 +64,8 @@ int CNetworkTask::AcceptNotify(int fd)
 				break;
 			}
 			auto spAddr = std::make_shared<struct sockaddr_in>(std::move(client_addr));
-			std::pair< std::map<int, std::shared_ptr<struct sockaddr_in>>::iterator, bool > pairRet;
-			pairRet = m_peerfd.insert(std::make_pair(client_fd, spAddr));
+			//std::pair< std::map<int, std::shared_ptr<struct sockaddr_in>>::iterator, bool > pairRet;
+			auto pairRet = m_peerfd.insert(std::make_pair(client_fd, spAddr));
 			flag = pairRet.second;
 			if (flag == false)
 			{
@@ -78,10 +78,16 @@ int CNetworkTask::AcceptNotify(int fd)
 	}
 }
 
+int CNetworkTask::HangupNotify(int fd)
+{
+	close(fd);
+	//
+}
+
 int CNetworkTask::InputNotify(int fd)
 {
-	char buffer[SOCKET_TCP_BUFFER] = { 0 };
-	int nread = read(fd, buffer, SOCKET_TCP_BUFFER);
+	int maxCharCount = sizeof(m_rbuffer) - m_rlength;
+	int nread = read(fd, m_rbuffer + m_rlength, maxCharCount);
 	if (nread == 0)
 	{
 		return -1;
@@ -102,8 +108,28 @@ int CNetworkTask::InputNotify(int fd)
 	else
 	{
 		SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
-
-		return 1;
+		m_rlength += nread;
+		do
+		{
+			int size = ParsePacket(m_rbuffer, m_rlength);
+			if (size < 0)
+			{
+				// error
+			}
+			if (size > 0)
+			{
+				struct packet_header * ptr = (struct packet_header *)m_rbuffer;
+				struct packet_buffer pack;
+				pack.header.identity = ptr->identity;
+				pack.header.command = ptr->command;
+				pack.header.length = ptr->length;
+				memcpy(pack.buffer, m_rbuffer + GetPacketHeaderLength(), ptr->length);
+				
+				m_rlength -= size;
+				memcpy(m_rbuffer, m_rbuffer + size, m_rlength);
+			}
+			return 1;
+		} while (m_rlength >= GetPacketHeaderLength());
 	}
 	return -1;
 }
@@ -138,6 +164,8 @@ CNetworkTask::~CNetworkTask()
 bool CNetworkTask::Init()
 {
 	m_bRunFlag = true;
+	m_rlength = 0;
+	memset(m_rbuffer, 0, sizeof(m_rbuffer));
 	return true;
 }
 

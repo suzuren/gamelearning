@@ -4,6 +4,7 @@
 
 #include <string>
 #include <memory.h>
+#include "stream_decoder.h"
 // ---------------------------------------------------------------------------------------
 
 
@@ -33,8 +34,9 @@ struct tagEventRequest
 struct tagEventResponse
 {
 	int	eventid;
-	int callback;
-	long long params[MAX_EVENT_PARAM_COUNT];
+	int contextid;
+	int fd;
+	struct packet_buffer data;
 	tagEventResponse()
 	{
 		init();
@@ -42,8 +44,9 @@ struct tagEventResponse
 	void init()
 	{
 		eventid = 0;
-		callback = 0;
-		memset(params, 0, sizeof(params));
+		contextid = 0;
+		fd = -1;
+		data.init();
 	}
 };
 

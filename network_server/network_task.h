@@ -15,6 +15,7 @@
 #include<utility>
 
 #include "epoll_socket.h"
+#include "stream_decoder.h"
 
 #include "network_oper_define.h"
 
@@ -36,7 +37,9 @@ private:
 	int m_listenfd;
 	struct epoll_event m_events[MAX_SOCKET_CONNECT];
 	std::map<int, std::shared_ptr<struct sockaddr_in> > m_peerfd;
-	
+
+	int  m_rlength;
+	char m_rbuffer[MAX_PACKRT_BUFFER];
 private:
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	void AddEventResponse(std::shared_ptr<struct tagEventResponse> sptrResponse);

@@ -25,8 +25,8 @@ int main(int argc, const char** argv)
 	//}
 
 	CNetworkMgr::Instance().Init();
-	CNetworkMgr::Instance().SetAsyncDBCallBack(std::make_shared<CNetworkAsyncCallBack>());
-	CNetworkMgr::Instance().TestMysql();
+	CNetworkMgr::Instance().SetAsyncNetCallBack(std::make_shared<CNetworkAsyncCallBack>());
+	CNetworkMgr::Instance().TestNetwork();
 
 	while (g_run)
 	{

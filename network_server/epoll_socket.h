@@ -29,6 +29,8 @@
 #include <netdb.h>
 #include <stdbool.h>
 #include <string>
+#include <iomanip>
+#include <cstdarg>
 
 #define MAX_TIME_OUT		(30*1000)
 #define MAX_SOCKET_CONNECT	10240
@@ -44,6 +46,7 @@ int socket_connect(const char *ip, int port, int * fd);
 unsigned long long	GetMillisecond();
 std::string FormatToString(const char* fmt, ...);
 int socket_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);
+void thread_sleep(unsigned int msec);
 
 #endif
 

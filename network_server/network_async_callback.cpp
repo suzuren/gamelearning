@@ -1,13 +1,13 @@
 
 #include "network_async_callback.h"
 
-bool CNetworkAsyncCallBack::OnProcessDataBaseEvent(std::shared_ptr<struct tagEventResponse> sptrResponse)
+bool CNetworkAsyncCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEventResponse> sptrResponse)
 {
 	if (sptrResponse == nullptr)
 	{
 		return false;
 	}
-	if (sptrResponse->eventid == MYSQL_DATABASE_EVENT_TEST)
+	if (sptrResponse->eventid == NETWORK_EVENT_TEST)
 	{
 		return EventCallBackOnTest(sptrResponse);
 	}

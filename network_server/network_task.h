@@ -11,11 +11,12 @@
 #include <functional>
 #include <atomic>
 #include <iostream>
+#include <map>
+#include<utility>
 
-#include "mysql.hpp"
-#include "data_table.hpp"
+#include "epoll_socket.h"
 
-#include "mysql_oper_define.h"
+#include "network_oper_define.h"
 
 class CNetworkTask
 {
@@ -30,16 +31,26 @@ private:
 	std::mutex m_queue_mutex_response;
 	std::queue< std::shared_ptr<struct tagEventResponse> > m_queueResponse;
 	std::thread m_workThread;
+
+	int m_epfd;
+	int m_listenfd;
+	struct epoll_event m_events[MAX_SOCKET_CONNECT];
+	std::map<int, std::shared_ptr<struct sockaddr_in> > m_peerfd;
+	
 private:
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	void AddEventResponse(std::shared_ptr<struct tagEventResponse> sptrResponse);
 
 private:
 	static void runThreadFunction(CNetworkTask *pTask);
+	int OnDisposeEvents();
+
+	int AcceptNotify(int fd);
+	int InputNotify(int fd);
 
 public:
 	bool Init();
-	bool Start();
+	bool Start(std::string ip, int port);
 	bool ShutDown();
 	std::shared_ptr<struct tagEventRequest> MallocEventRequest(int eventid, int callback);
 	void AsyncExecute(std::shared_ptr<struct tagEventRequest>);

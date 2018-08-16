@@ -1,24 +1,125 @@
 
-#include "mysql_task.h"
+#include "network_task.h"
 #include <iomanip>
 
+
+int CNetworkTask::OnDisposeEvents()
+{
+	memset(m_events, 0, sizeof(m_events));
+	int nfds = socket_wait(m_epfd, m_events, MAX_SOCKET_CONNECT, 0);
+	if (nfds > 0)
+	{
+		for (int i = 0; i < nfds; i++)
+		{
+			int fd = m_events[i].data.fd;
+			int ev = m_events[i].events;
+			if (ev && (EPOLLHUP | EPOLLERR))
+			{
+				//int sock_err = 0;
+				//int sock_err_len = sizeof(sock_err);
+				//int sockopt_ret = getsockopt(fd, SOL_SOCKET, SO_ERROR, &sock_err, (socklen_t*)&sock_err_len);
+
+				//HangupNotify();
+			}
+			if (fd == m_listenfd)
+			{
+				AcceptNotify(fd);
+			}
+			if (ev && EPOLLIN)
+			{
+				InputNotify(fd);
+			}
+			if (ev && EPOLLOUT)
+			{
+				//OutputNotify();
+			}
+		}
+	}
+	return nfds;
+}
+
+int CNetworkTask::AcceptNotify(int fd)
+{
+	socklen_t client_addr_len = 0;
+	struct sockaddr_in client_addr;
+	memset(&client_addr, 0, sizeof(struct sockaddr_in));
+	int client_fd = accept(fd, (struct sockaddr *)&client_addr, &client_addr_len);
+	if (client_fd == -1)
+	{
+		return -1;
+	}
+	else
+	{
+		bool flag = false;
+		do
+		{
+			flag = SetSocketNonblock(client_fd);
+			if (flag == false)
+			{
+				break;
+			}
+			flag = SetSocketEvents(m_epfd, client_fd, EPOLL_CTL_ADD);
+			if (flag == false)
+			{
+				break;
+			}
+			auto spAddr = std::make_shared<struct sockaddr_in>(std::move(client_addr));
+			std::pair< std::map<int, std::shared_ptr<struct sockaddr_in>>::iterator, bool > pairRet;
+			pairRet = m_peerfd.insert(std::make_pair(client_fd, spAddr));
+			flag = pairRet.second;
+			if (flag == false)
+			{
+				break;
+			}
+			return 1;
+		} while (false);
+		close(client_fd);
+		return -1;
+	}
+}
+
+int CNetworkTask::InputNotify(int fd)
+{
+	char buffer[SOCKET_TCP_BUFFER] = { 0 };
+	int nread = read(fd, buffer, SOCKET_TCP_BUFFER);
+	if (nread == 0)
+	{
+		return -1;
+	}
+	else if (nread < 0)
+	{
+		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)
+		{
+			return 0;
+		}
+		else
+		{
+			close(fd);
+			return -1;
+		}
+		return -1;
+	}
+	else
+	{
+		SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
+
+		return 1;
+	}
+	return -1;
+}
 
 
 void CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 {
-	while (pTask != nullptr &&pTask->m_bRunFlag == true)
+	while (pTask != nullptr && pTask->m_bRunFlag == true)
 	{
-		if (pTask->m_queueRequest.empty() == false)
+		if (pTask->OnDisposeEvents() > 0)
 		{
 
 		}
 		else
 		{
-			unsigned int msec = 1000;
-			struct timespec tm;
-			tm.tv_sec = msec / 1000;
-			tm.tv_nsec = msec % 1000 * 1000000;
-			nanosleep(&tm, 0);
+			thread_sleep(30);
 		}
 	}
 }
@@ -62,9 +163,24 @@ void CNetworkTask::AddEventResponse(std::shared_ptr<struct tagEventResponse> spt
 	}
 }
 
-bool CNetworkTask::Start()
+bool CNetworkTask::Start(std::string ip,int port)
 {
 	m_bRunFlag = true;
+	m_epfd = epoll_create(MAX_SOCKET_CONNECT);
+	if (m_epfd == -1)
+	{
+		return false;
+	}
+	m_listenfd = socket_bind(ip.data(), port);
+	if (m_listenfd == -1)
+	{
+		return false;
+	}
+	bool flag = SetSocketEvents(m_epfd, m_listenfd, EPOLL_CTL_ADD);
+	if (flag == false)
+	{
+		return false;
+	}
 	auto startfunc = std::bind(runThreadFunction, this);
 	std::thread worker_thread(startfunc);
 	m_workThread = std::move(worker_thread);
@@ -75,7 +191,6 @@ bool CNetworkTask::Start()
 bool CNetworkTask::ShutDown()
 {
 	m_bRunFlag = false;
-	std::cout << "CNetworkTask::ShutDown - pid:" << m_workThread.get_id() << std::endl;
 	m_workThread.join();
 	return true;
 }

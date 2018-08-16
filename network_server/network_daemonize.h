@@ -142,7 +142,7 @@ void reload(int signal)
 	}
 }
 
-static std::atomic_bool g_run = true;
+static std::atomic_bool g_run;// = true;
 
 void shutdown(int signal)
 {

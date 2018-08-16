@@ -7,7 +7,11 @@ bool SetSocketEvents(int epfd, int fd, int op)
 	struct epoll_event ev;
 	ev.data.fd = fd;
 	ev.events = EPOLLIN | EPOLLOUT | EPOLLERR | EPOLLHUP;
-	epoll_ctl(epfd, op, fd, &ev);
+	int ret = epoll_ctl(epfd, op, fd, &ev);
+	if (ret == -1)
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -90,7 +94,7 @@ int socket_bind(const char *ip, int port)
 		}
 		return listen_fd;
 	} while (false);
-	close(client_fd);
+	close(listen_fd);
 	return -1;
 }
 
@@ -121,4 +125,12 @@ unsigned long long	GetMillisecond()
 	unsigned long long millisecond = _spec.tv_sec * 1000 + _spec.tv_nsec / 1000 / 1000;
 
 	return millisecond;
+}
+
+void thread_sleep(unsigned int msec)
+{
+	struct timespec tm;
+	tm.tv_sec = msec / 1000;
+	tm.tv_nsec = msec % 1000 * 1000000;
+	nanosleep(&tm, 0);
 }

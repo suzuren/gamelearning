@@ -10,7 +10,7 @@
 class AsyncNetCallBack
 {
 public:
-	virtual bool OnProcessNetworkEvent(std::shared_ptr<struct tagEventResponse> sptrResponse) = 0;
+	virtual bool OnProcessNetworkEvent(std::shared_ptr<struct tagEventRequest> sptrRequest) = 0;
 };
 
 class CNetworkMgr
@@ -29,11 +29,10 @@ public:
 private:
 	std::shared_ptr<CNetworkTask>  m_sptrNetAsyncOper;
 
-protected:
 	std::shared_ptr<AsyncNetCallBack> m_sptrAsyncNetCallBack;
 private:
-	void	DispatchNetworkEvent();
-	void	DispatchNetworkCallBack(std::shared_ptr<struct tagEventResponse> sptrResponse);
+	void	DispatchNetworkRequest();
+	void	DispatchNetworkCallBack(std::shared_ptr<struct tagEventRequest> sptrRequest);
 
 public:
 	bool	Init();

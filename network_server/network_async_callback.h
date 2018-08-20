@@ -7,10 +7,10 @@
 class CNetworkAsyncCallBack : public AsyncNetCallBack
 {
 public:
-	virtual bool OnProcessNetworkEvent(std::shared_ptr<struct tagEventResponse> sptrResponse);
+	virtual bool OnProcessNetworkEvent(std::shared_ptr<struct tagEventRequest> sptrRequest);
 
 private:
-	bool EventCallBackOnTest(std::shared_ptr<struct tagEventResponse> sptrResponse);
+	bool EventCallBackOnTest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 };
 
 

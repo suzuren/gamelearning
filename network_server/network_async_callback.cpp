@@ -1,15 +1,15 @@
 
 #include "network_async_callback.h"
 
-bool CNetworkAsyncCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEventResponse> sptrResponse)
+bool CNetworkAsyncCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
-	if (sptrResponse == nullptr)
+	if (sptrRequest == nullptr)
 	{
 		return false;
 	}
-	if (sptrResponse->eventid == NETWORK_EVENT_TEST)
+	if (sptrRequest->eventid == NETWORK_NOTIFY_ACCENT)
 	{
-		return EventCallBackOnTest(sptrResponse);
+		return EventCallBackOnTest(sptrRequest);
 	}
 	//else if ()
 	//{
@@ -17,7 +17,7 @@ bool CNetworkAsyncCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEven
 	return false;
 }
 
-bool CNetworkAsyncCallBack::EventCallBackOnTest(std::shared_ptr<struct tagEventResponse> sptrResponse)
+bool CNetworkAsyncCallBack::EventCallBackOnTest(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	return true;
 }

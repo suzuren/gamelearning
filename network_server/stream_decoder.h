@@ -1,9 +1,10 @@
 
 #ifndef __STREAM_DECODER_
 #define __STREAM_DECODER_
-
+#include <memory.h>
 
 #pragma  pack(1)
+
 struct packet_header
 {
 	unsigned int    identity;
@@ -38,6 +39,7 @@ struct packet_buffer
 };
 
 #pragma pack()
+
 int GetPacketHeaderLength();
 
 int ParsePacket(char * data, int len);

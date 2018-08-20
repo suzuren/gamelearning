@@ -3,17 +3,17 @@
 
 // ---------------------------------------------------------------------------------------
 
-void CNetworkMgr::DispatchNetworkEvent()
+void CNetworkMgr::DispatchNetworkRequest()
 {
-	auto sptrResponse = m_sptrNetAsyncOper->GetAsyncExecuteResult();
-	DispatchNetworkCallBack(std::move(sptrResponse));
+	auto sptrRequest = m_sptrNetAsyncOper->GetAsyncRequest();
+	DispatchNetworkCallBack(std::move(sptrRequest));
 }
 
-void CNetworkMgr::DispatchNetworkCallBack(std::shared_ptr<struct tagEventResponse> sptrResponse)
+void CNetworkMgr::DispatchNetworkCallBack(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	if (m_sptrAsyncNetCallBack != nullptr)
 	{
-		m_sptrAsyncNetCallBack->OnProcessNetworkEvent(sptrResponse);
+		m_sptrAsyncNetCallBack->OnProcessNetworkEvent(sptrRequest);
 	}
 }
 
@@ -21,7 +21,16 @@ void CNetworkMgr::DispatchNetworkCallBack(std::shared_ptr<struct tagEventRespons
 
 bool CNetworkMgr::Init()
 {
-
+	bool flag = m_sptrNetAsyncOper->Init();
+	if (flag == false)
+	{
+		return false;
+	}
+	flag = m_sptrNetAsyncOper->Start(IPADDR, PORT);
+	if (flag == false)
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -40,7 +49,7 @@ void CNetworkMgr::SetAsyncNetCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyn
 
 void CNetworkMgr::OnNetworkTick()
 {
-	DispatchNetworkEvent();
+	DispatchNetworkRequest();
 }
 
 void CNetworkMgr::TestNetwork()

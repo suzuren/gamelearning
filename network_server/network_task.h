@@ -29,8 +29,6 @@ private:
 	std::atomic_bool m_bRunFlag;
 	std::mutex m_queue_mutex_request;
 	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueRequest;
-	std::mutex m_queue_mutex_response;
-	std::queue< std::shared_ptr<struct tagEventResponse> > m_queueResponse;
 	std::thread m_workThread;
 
 	int m_epfd;
@@ -40,14 +38,14 @@ private:
 
 	int  m_rlength;
 	char m_rbuffer[MAX_PACKRT_BUFFER];
-private:
-	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
-	void AddEventResponse(std::shared_ptr<struct tagEventResponse> sptrResponse);
 
 private:
 	static void runThreadFunction(CNetworkTask *pTask);
+	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
+	std::shared_ptr<struct tagEventRequest> GetEventRequest();
 	int OnDisposeEvents();
 
+	int HangupNotify(int fd);
 	int AcceptNotify(int fd);
 	int InputNotify(int fd);
 
@@ -55,15 +53,8 @@ public:
 	bool Init();
 	bool Start(std::string ip, int port);
 	bool ShutDown();
-	std::shared_ptr<struct tagEventRequest> MallocEventRequest(int eventid, int callback);
-	void AsyncExecute(std::shared_ptr<struct tagEventRequest>);
-	bool OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequest);
-	std::shared_ptr<struct tagEventResponse> GetAsyncExecuteResult();
+	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
 };
-
-
-
-
 
 
 #endif

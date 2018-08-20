@@ -4,7 +4,9 @@
 
 #include <string>
 #include <memory.h>
+#include <netinet/in.h>
 #include "stream_decoder.h"
+
 // ---------------------------------------------------------------------------------------
 
 
@@ -17,8 +19,9 @@
 struct tagEventRequest
 {
 	int	eventid;
-	int callback;
-	long long params[MAX_EVENT_PARAM_COUNT];
+	int contextid;
+	struct sockaddr_in address;
+	struct packet_buffer data;
 	tagEventRequest()
 	{
 		init();
@@ -26,31 +29,18 @@ struct tagEventRequest
 	void init()
 	{
 		eventid = 0;
-		callback = 0;
-		memset(params, 0, sizeof(params));
-	}
-};
-
-struct tagEventResponse
-{
-	int	eventid;
-	int contextid;
-	int fd;
-	struct packet_buffer data;
-	tagEventResponse()
-	{
-		init();
-	}
-	void init()
-	{
-		eventid = 0;
-		contextid = 0;
-		fd = -1;
+		contextid = -1;
+		memset(&address, 0, sizeof(struct sockaddr_in));
 		data.init();
 	}
 };
 
 // ---------------------------------------------------------------------------------------
+enum NETWORK_NOTIFY_TYPE
+{
+	NETWORK_NOTIFY_ACCENT,
+	NETWORK_NOTIFY_READED,
+};
 
 enum emNETWORK_EVENT_TYPE
 {

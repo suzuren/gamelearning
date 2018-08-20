@@ -63,7 +63,7 @@ int CNetworkTask::AcceptNotify(int fd)
 			{
 				break;
 			}
-			auto spAddr = std::make_shared<struct sockaddr_in>(std::move(client_addr));
+			auto spAddr = std::make_shared<struct sockaddr_in>(client_addr);
 			//std::pair< std::map<int, std::shared_ptr<struct sockaddr_in>>::iterator, bool > pairRet;
 			auto pairRet = m_peerfd.insert(std::make_pair(client_fd, spAddr));
 			flag = pairRet.second;
@@ -71,6 +71,12 @@ int CNetworkTask::AcceptNotify(int fd)
 			{
 				break;
 			}
+			auto sptrRequest = std::make_shared<struct tagEventRequest>();
+			sptrRequest->init();
+			sptrRequest->eventid = NETWORK_NOTIFY_ACCENT;
+			sptrRequest->contextid = client_fd;
+			memcpy(&sptrRequest->address, &client_addr,sizeof(sptrRequest->address));
+			AddEventRequest(std::move(sptrRequest));
 			return 1;
 		} while (false);
 		close(client_fd);
@@ -82,6 +88,7 @@ int CNetworkTask::HangupNotify(int fd)
 {
 	close(fd);
 	//
+	return 1;
 }
 
 int CNetworkTask::InputNotify(int fd)
@@ -127,6 +134,19 @@ int CNetworkTask::InputNotify(int fd)
 				
 				m_rlength -= size;
 				memcpy(m_rbuffer, m_rbuffer + size, m_rlength);
+
+				//
+				auto sptrRequest = std::make_shared<struct tagEventRequest>();
+				sptrRequest->init();
+				sptrRequest->eventid = NETWORK_NOTIFY_READED;
+				sptrRequest->contextid = fd;
+				auto spAddr = m_peerfd.find(fd);
+				if (spAddr != m_peerfd.end() && spAddr->second != nullptr)
+				{
+					memcpy(&sptrRequest->address, &(*(spAddr->second)), sizeof(sptrRequest->address));
+				}
+				sptrRequest->data = std::move(pack);
+				AddEventRequest(std::move(sptrRequest));
 			}
 			return 1;
 		} while (m_rlength >= GetPacketHeaderLength());
@@ -181,14 +201,17 @@ void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrR
 	}
 }
 
-void CNetworkTask::AddEventResponse(std::shared_ptr<struct tagEventResponse> sptrResponse)
+std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()
 {
-	if (m_bRunFlag && sptrResponse != nullptr)
+	if (m_queueRequest.empty() == false)
 	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_response);
-		m_queueResponse.push(sptrResponse);
+		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
+		auto sptrRequest = m_queueRequest.front();
+		m_queueRequest.pop();
 		lock_front.unlock();
+		return sptrRequest;
 	}
+	return nullptr;
 }
 
 bool CNetworkTask::Start(std::string ip,int port)
@@ -223,29 +246,7 @@ bool CNetworkTask::ShutDown()
 	return true;
 }
 
-std::shared_ptr<struct tagEventRequest> CNetworkTask::MallocEventRequest(int eventid, int callback)
+std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
 {
-	auto sptrRequest = std::make_shared<struct tagEventRequest>();
-	sptrRequest->eventid = eventid;
-	sptrRequest->callback = callback;
-	return sptrRequest;
-}
-
-void CNetworkTask::AsyncExecute(std::shared_ptr<struct tagEventRequest> sptrRequest)
-{
-	AddEventRequest(sptrRequest);
-}
-
-
-
-
-bool CNetworkTask::OnProcessEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
-{
-
-	return false;
-}
-
-std::shared_ptr<struct tagEventResponse> CNetworkTask::GetAsyncExecuteResult()
-{
-	return nullptr;
+	return GetEventRequest();
 }

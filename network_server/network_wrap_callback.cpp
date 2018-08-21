@@ -1,7 +1,7 @@
 
-#include "network_async_callback.h"
+#include "network_wrap_callback.h"
 
-bool CNetworkAsyncCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
+bool CNetworkWrapCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	if (sptrRequest == nullptr)
 	{
@@ -22,21 +22,21 @@ bool CNetworkAsyncCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEven
 	return false;
 }
 
-bool CNetworkAsyncCallBack::OnNetworkNotifyClosed(std::shared_ptr<struct tagEventRequest> sptrRequest)
+bool CNetworkWrapCallBack::OnNetworkNotifyClosed(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	printf("OnNetworkNotifyClosed - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
 
 	return false;
 }
 
-bool CNetworkAsyncCallBack::OnNetworkNotifyAccept(std::shared_ptr<struct tagEventRequest> sptrRequest)
+bool CNetworkWrapCallBack::OnNetworkNotifyAccept(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	printf("OnNetworkNotifyAccept - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
 
 	return false;
 }
 
-bool CNetworkAsyncCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest)
+bool CNetworkWrapCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	printf("OnNetworkNotifyReaded - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
 
@@ -54,7 +54,7 @@ bool CNetworkAsyncCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEven
 }
 
 
-bool CNetworkAsyncCallBack::NetworkedReadedOnTest(struct packet_buffer & data)
+bool CNetworkWrapCallBack::NetworkedReadedOnTest(struct packet_buffer & data)
 {
 	printf("NetworkedReadedOnTest - identity:%d,command:%d,length:%d,buffer:%s\n", data.header.identity, data.header.command, data.header.length, data.buffer);
 

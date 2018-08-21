@@ -1,6 +1,6 @@
 
-#ifndef __NETWORK_TASK_H_
-#define __NETWORK_TASK_H_
+#ifndef __NETWORK_WRAP_H_
+#define __NETWORK_WRAP_H_
 
 
 #include <mutex>
@@ -19,11 +19,11 @@
 
 #include "network_oper_define.h"
 
-class CNetworkTask
+class CNetworkWrap
 {
 public:
-	CNetworkTask();
-	~CNetworkTask();
+	CNetworkWrap();
+	~CNetworkWrap();
 
 private:
 	std::atomic_bool m_bRunFlag;
@@ -33,8 +33,9 @@ private:
 
 	int m_port;
 	std::string m_strIP;
+
 	int m_epfd;
-	int m_listenfd;
+	int m_clientfd;
 	struct epoll_event m_events[MAX_SOCKET_CONNECT];
 	std::map<int, std::shared_ptr<struct sockaddr_in> > m_peerfd;
 
@@ -42,23 +43,24 @@ private:
 	char m_rbuffer[MAX_PACKRT_BUFFER];
 
 private:
-	static void runThreadFunction(CNetworkTask *pTask);
+	static void runThreadFunction(CNetworkWrap *pTask);
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	std::shared_ptr<struct tagEventRequest> GetEventRequest();
-	bool SocketListen();
+	bool SocketConnect();
 	int OnDisposeEvents();
 	
 
 	int HangupNotify(int fd);
-	int AcceptNotify(int fd);
 	int InputNotify(int fd);
+	int OutputNotify(int fd);
+
 
 public:
 	bool Init();
 	bool Start(std::string ip, int port);
 	bool ShutDown();
 	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
-	int GetListenFd();
+	int GetClientFd();
 
 };
 

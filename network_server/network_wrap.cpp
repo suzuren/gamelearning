@@ -1,94 +1,39 @@
 
-#include "network_task.h"
+#include "network_wrap.h"
 #include <iomanip>
 
 
-int CNetworkTask::OnDisposeEvents()
+int CNetworkWrap::OnDisposeEvents()
 {
 	memset(m_events, 0, sizeof(m_events));
-	int nfds = socket_wait(m_epfd, m_events, MAX_SOCKET_CONNECT, 0);
+	int nfds = socket_wait(m_epfd, m_events, 1, 0);
 	if (nfds > 0)
 	{
 		for (int i = 0; i < nfds; i++)
 		{
 			int fd = m_events[i].data.fd;
 			int ev = m_events[i].events;
-			if (fd == m_listenfd)
+
+			if (ev && (EPOLLHUP | EPOLLERR))
 			{
-				AcceptNotify(fd);
+				HangupNotify(fd);
+			}
+			if (ev && EPOLLIN)
+			{
+				InputNotify(fd);
 				SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 			}
-			else
+			if (ev && EPOLLOUT)
 			{
-				if (ev && (EPOLLHUP | EPOLLERR))
-				{
-					HangupNotify(fd);
-				}
-				if (ev && EPOLLIN)
-				{
-					InputNotify(fd);
-					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
-				}
-				if (ev && EPOLLOUT)
-				{
-					//OutputNotify();
-				}
+				//OutputNotify(fd);
 			}
 		}
 	}
 	return nfds;
 }
 
-int CNetworkTask::AcceptNotify(int fd)
-{
-	socklen_t client_addr_len = 0;
-	struct sockaddr_in client_addr;
-	memset(&client_addr, 0, sizeof(struct sockaddr_in));
-	int client_fd = accept(fd, (struct sockaddr *)&client_addr, &client_addr_len);
-	printf("CNetworkTask::AcceptNotify - fd:%d,client_fd:%d\n", fd, client_fd);
 
-	if (client_fd == -1)
-	{
-		printf("CNetworkTask::AcceptNotify - accept errno:%d,- %s.\n", errno,strerror(errno));
-		return -1;
-	}
-	else
-	{
-		bool flag = false;
-		do
-		{
-			flag = SetSocketNonblock(client_fd);
-			if (flag == false)
-			{
-				break;
-			}
-			flag = SetSocketEvents(m_epfd, client_fd, EPOLL_CTL_ADD);
-			if (flag == false)
-			{
-				break;
-			}
-			auto spAddr = std::make_shared<struct sockaddr_in>(client_addr);
-			//std::pair< std::map<int, std::shared_ptr<struct sockaddr_in>>::iterator, bool > pairRet;
-			auto pairRet = m_peerfd.insert(std::make_pair(client_fd, spAddr));
-			flag = pairRet.second;
-			if (flag == false)
-			{
-				break;
-			}
-			auto sptrRequest = std::make_shared<struct tagEventRequest>();
-			sptrRequest->init();
-			sptrRequest->eventid = NETWORK_NOTIFY_ACCENT;
-			sptrRequest->contextid = client_fd;
-			memcpy(&sptrRequest->address, &client_addr,sizeof(sptrRequest->address));
-			AddEventRequest(std::move(sptrRequest));
-			return 1;
-		} while (false);
-		close(client_fd);
-		return -1;
-	}
-}
-
-int CNetworkTask::HangupNotify(int fd)
+int CNetworkWrap::HangupNotify(int fd)
 {
 	int sock_err = 0;
 	int sock_err_len = sizeof(sock_err);
@@ -120,7 +65,7 @@ int CNetworkTask::HangupNotify(int fd)
 	return 1;
 }
 
-int CNetworkTask::InputNotify(int fd)
+int CNetworkWrap::InputNotify(int fd)
 {
 	int maxCharCount = sizeof(m_rbuffer) - m_rlength;
 	int nread = read(fd, m_rbuffer + m_rlength, maxCharCount);
@@ -183,20 +128,25 @@ int CNetworkTask::InputNotify(int fd)
 	return -1;
 }
 
-bool CNetworkTask::SocketListen()
+int CNetworkWrap::OutputNotify(int fd)
+{
+
+	return 1;
+}
+bool CNetworkWrap::SocketConnect()
 {
 	m_bRunFlag = true;
-	m_epfd = epoll_create(MAX_SOCKET_CONNECT);
+	m_epfd = epoll_create(1);
 	if (m_epfd == -1)
 	{
 		return false;
 	}
-	m_listenfd = socket_bind(m_strIP.data(), m_port);
-	if (m_listenfd == -1)
+	int ret = socket_connect(m_strIP.data(), m_port, &m_clientfd);
+	if (ret == -1)
 	{
 		return false;
 	}
-	bool flag = SetSocketEvents(m_epfd, m_listenfd, EPOLL_CTL_ADD);
+	bool flag = SetSocketEvents(m_epfd, m_clientfd, EPOLL_CTL_ADD);
 	if (flag == false)
 	{
 		return false;
@@ -204,16 +154,16 @@ bool CNetworkTask::SocketListen()
 	return true;
 }
 
-void CNetworkTask::runThreadFunction(CNetworkTask *pTask)
+void CNetworkWrap::runThreadFunction(CNetworkWrap *pTask)
 {
-	bool bListen = pTask->SocketListen();
-	if (bListen == true)
+	bool bConnect = pTask->SocketConnect();
+	if (bConnect == true)
 	{
 		while (pTask != nullptr && pTask->m_bRunFlag == true)
 		{
 			if (pTask->OnDisposeEvents() > 0)
 			{
-
+				break;
 			}
 			else
 			{
@@ -224,17 +174,17 @@ void CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 }
 
 
-CNetworkTask::CNetworkTask()
+CNetworkWrap::CNetworkWrap()
 {
 
 }
 
-CNetworkTask::~CNetworkTask()
+CNetworkWrap::~CNetworkWrap()
 {
 
 }
 
-bool CNetworkTask::Init()
+bool CNetworkWrap::Init()
 {
 	m_bRunFlag = true;
 	m_rlength = 0;
@@ -244,7 +194,7 @@ bool CNetworkTask::Init()
 	return true;
 }
 
-bool CNetworkTask::Start(std::string ip,int port)
+bool CNetworkWrap::Start(std::string ip,int port)
 {
 	m_port = port;
 	m_strIP = ip;
@@ -256,14 +206,14 @@ bool CNetworkTask::Start(std::string ip,int port)
 	return true;
 }
 
-bool CNetworkTask::ShutDown()
+bool CNetworkWrap::ShutDown()
 {
 	m_bRunFlag = false;
 	m_workThread.join();
 	return true;
 }
 
-void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
+void CNetworkWrap::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
 	if (m_bRunFlag && sptrRequest != nullptr)
 	{
@@ -273,7 +223,7 @@ void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrR
 	}
 }
 
-std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()
+std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetEventRequest()
 {
 	if (m_queueRequest.empty() == false)
 	{
@@ -286,13 +236,13 @@ std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()
 	return nullptr;
 }
 
-std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
+std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetAsyncRequest()
 {
 	return GetEventRequest();
 }
 
-int CNetworkTask::GetListenFd()
+int CNetworkWrap::GetClientFd()
 {
-	return m_listenfd;
+	return m_clientfd;
 }
 

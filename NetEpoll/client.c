@@ -11,7 +11,7 @@ int main(int argc, char const *argv[])
 	int iCount = 0;
 	char buffer[65535] = { 0 };	
 
-	while (false)
+	while (true)
 	{
 		memset(buffer, 0, sizeof(buffer));
 

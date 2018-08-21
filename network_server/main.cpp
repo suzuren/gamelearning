@@ -2,7 +2,8 @@
 #include <atomic>
 
 #include "network_mgr.h"
-#include "network_async_callback.h"
+#include "network_task_callback.h"
+#include "network_wrap_callback.h"
 #include "network_daemonize.h"
 
 
@@ -29,7 +30,8 @@ int main(int argc, const char** argv)
 
 
 	CNetworkMgr::Instance().Init();
-	CNetworkMgr::Instance().SetAsyncNetCallBack(std::make_shared<CNetworkAsyncCallBack>());
+	CNetworkMgr::Instance().SetAsyncNetTaskCallBack(std::make_shared<CNetworkTaskCallBack>());
+	CNetworkMgr::Instance().SetAsyncNetWrapCallBack(std::make_shared<CNetworkWrapCallBack>());
 	CNetworkMgr::Instance().TestNetwork();
 
 	while (g_run)

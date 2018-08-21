@@ -4,7 +4,7 @@
 
 #include "network_oper_define.h"
 #include "network_task.h"
-
+#include "network_wrap.h"
 
 
 class AsyncNetCallBack
@@ -27,18 +27,23 @@ public:
 		return  s_SingleObj;
 	}
 private:
-	std::shared_ptr<CNetworkTask>  m_sptrNetAsyncOper;
+	std::shared_ptr<CNetworkTask>  m_sptrNetTaskOper;
+	std::shared_ptr<CNetworkWrap>  m_sptrNetWrapOper;
 
-	std::shared_ptr<AsyncNetCallBack> m_sptrAsyncNetCallBack;
+	std::shared_ptr<AsyncNetCallBack> m_sptrAsyncNetTaskCallBack;
+	std::shared_ptr<AsyncNetCallBack> m_sptrAsyncNetWrapCallBack;
 private:
 	void	DispatchNetworkRequest();
-	void	DispatchNetworkCallBack(std::shared_ptr<struct tagEventRequest> sptrRequest);
+
+	bool StartTask();
+	bool StartWrap();
 
 public:
 	bool	Init();
 	void    ShutDown();
 	void    OnNetworkTick();
-	void	SetAsyncNetCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack);
+	void	SetAsyncNetTaskCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack);
+	void	SetAsyncNetWrapCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack);
 
 public:
 	void	TestNetwork();

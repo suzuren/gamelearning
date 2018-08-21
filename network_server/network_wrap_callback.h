@@ -1,10 +1,10 @@
 
-#ifndef __NETWORK_ASYNC_CALLBACK_H_
-#define __NETWORK_ASYNC_CALLBACK_H_
+#ifndef __NETWORK_WRAP_CALLBACK_H_
+#define __NETWORK_WRAP_CALLBACK_H_
 
 #include "network_mgr.h"
 
-class CNetworkAsyncCallBack : public AsyncNetCallBack
+class CNetworkWrapCallBack : public AsyncNetCallBack
 {
 public:
 	virtual bool OnProcessNetworkEvent(std::shared_ptr<struct tagEventRequest> sptrRequest);

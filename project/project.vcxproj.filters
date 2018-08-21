@@ -660,9 +660,6 @@
     <ClInclude Include="..\cpp_new_features\mempool.h">
       <Filter>cpp_new_features</Filter>
     </ClInclude>
-    <ClInclude Include="..\network_server\network_async_callback.h">
-      <Filter>network_server</Filter>
-    </ClInclude>
     <ClInclude Include="..\network_server\network_daemonize.h">
       <Filter>network_server</Filter>
     </ClInclude>
@@ -679,6 +676,15 @@
       <Filter>network_server</Filter>
     </ClInclude>
     <ClInclude Include="..\network_server\stream_decoder.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_wrap.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_task_callback.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server\network_wrap_callback.h">
       <Filter>network_server</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1706,9 +1712,6 @@
     <ClCompile Include="..\network_server\main.cpp">
       <Filter>network_server</Filter>
     </ClCompile>
-    <ClCompile Include="..\network_server\network_async_callback.cpp">
-      <Filter>network_server</Filter>
-    </ClCompile>
     <ClCompile Include="..\network_server\network_mgr.cpp">
       <Filter>network_server</Filter>
     </ClCompile>
@@ -1719,6 +1722,15 @@
       <Filter>network_server</Filter>
     </ClCompile>
     <ClCompile Include="..\network_server\stream_decoder.cpp">
+      <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\network_wrap.cpp">
+      <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\network_task_callback.cpp">
+      <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server\network_wrap_callback.cpp">
       <Filter>network_server</Filter>
     </ClCompile>
   </ItemGroup>

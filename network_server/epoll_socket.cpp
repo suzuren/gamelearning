@@ -59,6 +59,7 @@ int socket_connect(const char *ip, int port, int * fd)
 		{
 			return 1;
 		}
+		return 0;
 	}
 	while (false);
 	close(client_fd);

@@ -145,11 +145,13 @@
     <ClInclude Include="..\NetHttp\http_header.h" />
     <ClInclude Include="..\NetPoll\poll_socket.h" />
     <ClInclude Include="..\network_server\epoll_socket.h" />
-    <ClInclude Include="..\network_server\network_async_callback.h" />
+    <ClInclude Include="..\network_server\network_task_callback.h" />
     <ClInclude Include="..\network_server\network_daemonize.h" />
     <ClInclude Include="..\network_server\network_mgr.h" />
     <ClInclude Include="..\network_server\network_oper_define.h" />
     <ClInclude Include="..\network_server\network_task.h" />
+    <ClInclude Include="..\network_server\network_wrap.h" />
+    <ClInclude Include="..\network_server\network_wrap_callback.h" />
     <ClInclude Include="..\network_server\stream_decoder.h" />
     <ClInclude Include="..\post_mgr\epoll_socket.h" />
     <ClInclude Include="..\post_mgr\http_header.h" />
@@ -491,9 +493,11 @@
     <ClCompile Include="..\NetSelect\server.c" />
     <ClCompile Include="..\network_server\epoll_socket.cpp" />
     <ClCompile Include="..\network_server\main.cpp" />
-    <ClCompile Include="..\network_server\network_async_callback.cpp" />
+    <ClCompile Include="..\network_server\network_task_callback.cpp" />
     <ClCompile Include="..\network_server\network_mgr.cpp" />
     <ClCompile Include="..\network_server\network_task.cpp" />
+    <ClCompile Include="..\network_server\network_wrap.cpp" />
+    <ClCompile Include="..\network_server\network_wrap_callback.cpp" />
     <ClCompile Include="..\network_server\stream_decoder.cpp" />
     <ClCompile Include="..\post_mgr\client.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />

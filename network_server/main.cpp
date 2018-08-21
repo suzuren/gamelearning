@@ -1,4 +1,5 @@
 
+#include <atomic>
 
 #include "network_mgr.h"
 #include "network_async_callback.h"
@@ -23,6 +24,9 @@ int main(int argc, const char** argv)
 	//{
 	//	return 1;
 	//}
+
+	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
+
 
 	CNetworkMgr::Instance().Init();
 	CNetworkMgr::Instance().SetAsyncNetCallBack(std::make_shared<CNetworkAsyncCallBack>());

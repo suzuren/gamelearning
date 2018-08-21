@@ -1,6 +1,6 @@
 
-#ifndef __MYSQL_ASYNC_CALLBACK_H_
-#define __MYSQL_ASYNC_CALLBACK_H_
+#ifndef __NETWORK_ASYNC_CALLBACK_H_
+#define __NETWORK_ASYNC_CALLBACK_H_
 
 #include "network_mgr.h"
 

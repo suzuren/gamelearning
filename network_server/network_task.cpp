@@ -15,10 +15,6 @@ int CNetworkTask::OnDisposeEvents()
 			int ev = m_events[i].events;
 			if (ev && (EPOLLHUP | EPOLLERR))
 			{
-				//int sock_err = 0;
-				//int sock_err_len = sizeof(sock_err);
-				//int sockopt_ret = getsockopt(fd, SOL_SOCKET, SO_ERROR, &sock_err, (socklen_t*)&sock_err_len);
-
 				HangupNotify(fd);
 			}
 			if (fd == m_listenfd)
@@ -86,8 +82,33 @@ int CNetworkTask::AcceptNotify(int fd)
 
 int CNetworkTask::HangupNotify(int fd)
 {
+	int sock_err = 0;
+	int sock_err_len = sizeof(sock_err);
+	int sockopt_ret = getsockopt(fd, SOL_SOCKET, SO_ERROR, &sock_err, (socklen_t*)&sock_err_len);
+	if (sockopt_ret == 0)
+	{
+		//success
+	}
+	else
+	{
+		//flaited
+	}
+
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->init();
+	sptrRequest->eventid = NETWORK_NOTIFY_CLOSED;
+	sptrRequest->contextid = fd;
+	auto spAddr = m_peerfd.find(fd);
+	if (spAddr != m_peerfd.end() && spAddr->second != nullptr)
+	{
+		memcpy(&sptrRequest->address, &(*(spAddr->second)), sizeof(sptrRequest->address));
+	}
+	AddEventRequest(std::move(sptrRequest));
 	close(fd);
-	//
+	if (spAddr != m_peerfd.end())
+	{
+		m_peerfd.erase(spAddr);
+	}
 	return 1;
 }
 
@@ -107,7 +128,8 @@ int CNetworkTask::InputNotify(int fd)
 		}
 		else
 		{
-			close(fd);
+			//close(fd);
+			HangupNotify(fd);
 			return -1;
 		}
 		return -1;
@@ -188,8 +210,6 @@ bool CNetworkTask::Init()
 	memset(m_rbuffer, 0, sizeof(m_rbuffer));
 	return true;
 }
-
-
 
 void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {

@@ -1,6 +1,6 @@
 
-#ifndef __MYSQL_MGR_H_
-#define __MYSQL_MGR_H_
+#ifndef __NETWORK_MGR_H_
+#define __NETWORK_MGR_H_
 
 #include "network_oper_define.h"
 #include "network_task.h"

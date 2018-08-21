@@ -38,6 +38,7 @@ struct tagEventRequest
 // ---------------------------------------------------------------------------------------
 enum NETWORK_NOTIFY_TYPE
 {
+	NETWORK_NOTIFY_CLOSED,
 	NETWORK_NOTIFY_ACCENT,
 	NETWORK_NOTIFY_READED,
 };

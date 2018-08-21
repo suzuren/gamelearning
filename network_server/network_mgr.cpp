@@ -21,6 +21,11 @@ void CNetworkMgr::DispatchNetworkCallBack(std::shared_ptr<struct tagEventRequest
 
 bool CNetworkMgr::Init()
 {
+	m_sptrNetAsyncOper = std::make_shared<CNetworkTask>();
+	if (m_sptrNetAsyncOper == nullptr)
+	{
+		return false;
+	}
 	bool flag = m_sptrNetAsyncOper->Init();
 	if (flag == false)
 	{
@@ -36,6 +41,10 @@ bool CNetworkMgr::Init()
 
 void CNetworkMgr::ShutDown()
 {
+	m_sptrNetAsyncOper->ShutDown();
+	m_sptrNetAsyncOper.reset();
+	m_sptrNetAsyncOper = nullptr;
+
 }
 
 void CNetworkMgr::SetAsyncNetCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack)

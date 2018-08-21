@@ -1,6 +1,6 @@
 
-#ifndef __MYSQL_DAEMONIZE_H_
-#define __MYSQL_DAEMONIZE_H_
+#ifndef __NETWORK_DAEMONIZE_H_
+#define __NETWORK_DAEMONIZE_H_
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -42,7 +42,7 @@ void daemonize()
 	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
 }
 
-static int check_pid(const char *pidfile)
+int check_pid(const char *pidfile)
 {
 	char pidfilebuf[256] = { 0 };
 	int count = readlink("/proc/self/exe", pidfilebuf, sizeof(pidfilebuf));
@@ -77,7 +77,7 @@ static int check_pid(const char *pidfile)
 	return pid;
 }
 
-static int write_pid(const char *pidfile)
+int write_pid(const char *pidfile)
 {
 	char pidfilebuf[256] = { 0 };
 	int count = readlink("/proc/self/exe", pidfilebuf, sizeof(pidfilebuf));
@@ -142,14 +142,14 @@ void reload(int signal)
 	}
 }
 
-static std::atomic_bool g_run;// = true;
+static std::atomic_bool g_run(true);
 
 void shutdown(int signal)
 {
 	if (signal == SIGUSR1)
 	{
 		printf("shutdown ... \n");
-		g_run = false;
+		g_run = std::move(false);
 	}
 }
 

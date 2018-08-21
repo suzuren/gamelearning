@@ -54,6 +54,8 @@ public:
 	bool Start(std::string ip, int port);
 	bool ShutDown();
 	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
+	int GetListenFd();
+
 };
 
 

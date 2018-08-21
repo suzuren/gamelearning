@@ -36,6 +36,7 @@ bool CNetworkMgr::Init()
 	{
 		return false;
 	}
+	printf("CNetworkMgr::Init - flag:%d,fd:%d\n", flag, m_sptrNetAsyncOper->GetListenFd());
 	return true;
 }
 

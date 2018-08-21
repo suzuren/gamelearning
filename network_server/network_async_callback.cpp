@@ -7,18 +7,58 @@ bool CNetworkAsyncCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEven
 	{
 		return false;
 	}
+	if (sptrRequest->eventid == NETWORK_NOTIFY_CLOSED)
+	{
+		return OnNetworkNotifyClosed(sptrRequest);
+	}
 	if (sptrRequest->eventid == NETWORK_NOTIFY_ACCENT)
 	{
-		return EventCallBackOnTest(sptrRequest);
+		return OnNetworkNotifyAccept(sptrRequest);
 	}
-	//else if ()
-	//{
-	//}
+	if (sptrRequest->eventid == NETWORK_NOTIFY_READED)
+	{
+		return OnNetworkNotifyReaded(sptrRequest);
+	}
 	return false;
 }
 
-bool CNetworkAsyncCallBack::EventCallBackOnTest(std::shared_ptr<struct tagEventRequest> sptrRequest)
+bool CNetworkAsyncCallBack::OnNetworkNotifyClosed(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
+	printf("OnNetworkNotifyClosed - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
+
+	return false;
+}
+
+bool CNetworkAsyncCallBack::OnNetworkNotifyAccept(std::shared_ptr<struct tagEventRequest> sptrRequest)
+{
+	printf("OnNetworkNotifyAccept - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
+
+	return false;
+}
+
+bool CNetworkAsyncCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest)
+{
+	printf("OnNetworkNotifyReaded - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
+
+	struct packet_buffer & data = sptrRequest->data;
+	if (data.header.command <= NETWORK_EVENT_MIN || data.header.command >= NETWORK_EVENT_MAX)
+	{
+		return false;
+	}
+	if (data.header.command == NETWORK_EVENT_TEST)
+	{
+		return NetworkedReadedOnTest(data);
+	}
+
+	return false;
+}
+
+
+bool CNetworkAsyncCallBack::NetworkedReadedOnTest(struct packet_buffer & data)
+{
+	printf("NetworkedReadedOnTest - identity:%d,command:%d,length:%d,buffer:%s\n", data.header.identity, data.header.command, data.header.length, data.buffer);
+
+
 	return true;
 }
 

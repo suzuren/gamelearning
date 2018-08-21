@@ -24,7 +24,7 @@
 #include <stdbool.h>
 
 #define IPADDRESS "127.0.0.1"
-#define PORT 8790
+#define PORT 9876
 
 bool SetSocketEvents(int epfd,int fd, int op)
 {
@@ -33,7 +33,8 @@ bool SetSocketEvents(int epfd,int fd, int op)
 	/*设置监听描述符*/
 	ev.data.fd = fd;
 	/*设置处理事件类型*/
-	ev.events = EPOLLIN | EPOLLET | EPOLLERR | EPOLLOUT;
+	//ev.events = EPOLLIN | EPOLLET | EPOLLERR | EPOLLOUT;
+	ev.events = EPOLLIN | EPOLLERR | EPOLLOUT;
 	/*注册事件*/
 	epoll_ctl(epfd, op, fd, &ev);
 
@@ -113,6 +114,7 @@ int socket_connect(const char *ip, int port)
 			{
 				if (events[i].events & EPOLLIN)
 				{
+					// 115：当链接设置为非阻塞时，目标没有及时应答，返回此错误，socket可以继续使用
 					printf("epoll - EPOLLIN errno:%d\n", errno);
 				}
 				else if (events[i].events & EPOLLET)

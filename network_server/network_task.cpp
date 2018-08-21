@@ -40,8 +40,11 @@ int CNetworkTask::AcceptNotify(int fd)
 	struct sockaddr_in client_addr;
 	memset(&client_addr, 0, sizeof(struct sockaddr_in));
 	int client_fd = accept(fd, (struct sockaddr *)&client_addr, &client_addr_len);
+	printf("CNetworkTask::AcceptNotify - fd:%d,client_fd:%d\n", fd, client_fd);
+
 	if (client_fd == -1)
 	{
+		printf("CNetworkTask::AcceptNotify - accept errno:%d,- %s.\n", errno,strerror(errno));
 		return -1;
 	}
 	else
@@ -211,29 +214,6 @@ bool CNetworkTask::Init()
 	return true;
 }
 
-void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
-{
-	if (m_bRunFlag && sptrRequest != nullptr)
-	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
-		m_queueRequest.push(sptrRequest);
-		lock_front.unlock();
-	}
-}
-
-std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()
-{
-	if (m_queueRequest.empty() == false)
-	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
-		auto sptrRequest = m_queueRequest.front();
-		m_queueRequest.pop();
-		lock_front.unlock();
-		return sptrRequest;
-	}
-	return nullptr;
-}
-
 bool CNetworkTask::Start(std::string ip,int port)
 {
 	m_bRunFlag = true;
@@ -266,7 +246,35 @@ bool CNetworkTask::ShutDown()
 	return true;
 }
 
+void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
+{
+	if (m_bRunFlag && sptrRequest != nullptr)
+	{
+		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
+		m_queueRequest.push(sptrRequest);
+		lock_front.unlock();
+	}
+}
+
+std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()
+{
+	if (m_queueRequest.empty() == false)
+	{
+		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
+		auto sptrRequest = m_queueRequest.front();
+		m_queueRequest.pop();
+		lock_front.unlock();
+		return sptrRequest;
+	}
+	return nullptr;
+}
+
 std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
 {
 	return GetEventRequest();
+}
+
+int CNetworkTask::GetListenFd()
+{
+	return m_listenfd;
 }

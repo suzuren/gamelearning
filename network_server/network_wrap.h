@@ -26,10 +26,15 @@ public:
 	~CNetworkWrap();
 
 private:
+	std::thread m_workThread;
 	std::atomic_bool m_bRunFlag;
 	std::mutex m_queue_mutex_request;
 	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueRequest;
-	std::thread m_workThread;
+
+	std::mutex m_queue_mutex_send;
+	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueSend;
+
+	
 
 	int m_port;
 	std::string m_strIP;
@@ -41,6 +46,10 @@ private:
 
 	int  m_rlength;
 	char m_rbuffer[MAX_PACKRT_BUFFER];
+
+	int m_slength;
+	char m_sbuffer[MAX_PACKRT_BUFFER];
+
 
 private:
 	static void runThreadFunction(CNetworkWrap *pTask);
@@ -61,6 +70,7 @@ public:
 	bool ShutDown();
 	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
 	int GetClientFd();
+	bool SendData(std::shared_ptr<struct packet_buffer> sptrData);
 
 };
 

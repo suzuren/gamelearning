@@ -32,6 +32,22 @@ int CNetworkWrap::OnDisposeEvents()
 	return nfds;
 }
 
+int CNetworkWrap::OnSendQueueData()
+{
+	if (m_queueSend.empty() == true)
+	{
+		return -1;
+	}
+	std::unique_lock<std::mutex> lock_front(m_queue_mutex_send);
+	auto sptrData = m_queueSend.front();
+	m_queueSend.pop();
+	lock_front.unlock();
+
+
+
+	return -1;
+}
+
 
 int CNetworkWrap::HangupNotify(int fd)
 {
@@ -163,7 +179,11 @@ void CNetworkWrap::runThreadFunction(CNetworkWrap *pTask)
 		{
 			if (pTask->OnDisposeEvents() > 0)
 			{
-				break;
+				//break;
+			}
+			else if ( )
+			{
+
 			}
 			else
 			{
@@ -244,5 +264,16 @@ std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetAsyncRequest()
 int CNetworkWrap::GetClientFd()
 {
 	return m_clientfd;
+}
+
+bool CNetworkWrap::SendData(std::shared_ptr<struct packet_buffer> sptrData)
+{
+	if (sptrData !=  nullptr)
+	{
+		std::unique_lock<std::mutex> lock_front(m_queue_mutex_send);
+		m_queueSend.push(sptrData);
+		lock_front.unlock();
+	}
+	return true;
 }
 

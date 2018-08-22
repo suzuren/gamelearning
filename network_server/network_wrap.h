@@ -19,6 +19,13 @@
 
 #include "network_oper_define.h"
 
+
+enum emNET_WRAP_SOCKET_STATUS
+{
+	NET_WRAP_SOCKET_STATUS_CONNECTING,
+	NET_WRAP_SOCKET_STATUS_CONNECTED,
+};
+
 class CNetworkWrap
 {
 public:
@@ -32,7 +39,7 @@ private:
 	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueRequest;
 
 	std::mutex m_queue_mutex_send;
-	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueSend;
+	std::queue< std::shared_ptr<struct packet_buffer> > m_queueSend;
 
 	
 
@@ -48,16 +55,19 @@ private:
 	char m_rbuffer[MAX_PACKRT_BUFFER];
 
 	int m_slength;
+	int m_alength;
 	char m_sbuffer[MAX_PACKRT_BUFFER];
 
-
+	int m_status;
 private:
 	static void runThreadFunction(CNetworkWrap *pTask);
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	std::shared_ptr<struct tagEventRequest> GetEventRequest();
 	bool SocketConnect();
 	int OnDisposeEvents();
-	
+	int OnSendQueueData();
+	int SendBuffer();
+
 
 	int HangupNotify(int fd);
 	int InputNotify(int fd);
@@ -71,6 +81,8 @@ public:
 	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
 	int GetClientFd();
 	bool SendData(std::shared_ptr<struct packet_buffer> sptrData);
+	void SetStatus(int status) { m_status = status; }
+	int GetStatus() { return m_status; }
 
 };
 

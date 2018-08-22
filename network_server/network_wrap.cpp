@@ -6,7 +6,7 @@
 int CNetworkWrap::OnDisposeEvents()
 {
 	memset(m_events, 0, sizeof(m_events));
-	int nfds = socket_wait(m_epfd, m_events, 1, 0);
+	int nfds = socket_wait(m_epfd, m_events, 64, 0);
 	if (nfds > 0)
 	{
 		for (int i = 0; i < nfds; i++)
@@ -16,16 +16,29 @@ int CNetworkWrap::OnDisposeEvents()
 
 			if (ev && (EPOLLHUP | EPOLLERR))
 			{
-				HangupNotify(fd);
+				//printf("Wrap OnDisposeEvents - Hangup fd:%d,errno:%d,EALREADY:%d,EINPROGRESS:%d\n", fd, errno, EALREADY, EINPROGRESS);
+				if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR || errno == EALREADY || errno == EINPROGRESS)
+				{
+					//continue;
+				}
+				else
+				{
+					HangupNotify(fd);
+				}
 			}
 			if (ev && EPOLLIN)
 			{
+				printf("Wrap OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
+
 				InputNotify(fd);
 				SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 			}
 			if (ev && EPOLLOUT)
 			{
-				//OutputNotify(fd);
+				printf("Wrap OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
+
+				OutputNotify(fd);
+				SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 			}
 		}
 	}
@@ -38,16 +51,36 @@ int CNetworkWrap::OnSendQueueData()
 	{
 		return -1;
 	}
+	if (m_slength > 0)
+	{
+		return 0;
+	}
 	std::unique_lock<std::mutex> lock_front(m_queue_mutex_send);
 	auto sptrData = m_queueSend.front();
 	m_queueSend.pop();
 	lock_front.unlock();
+	if (sptrData == nullptr)
+	{
+		return -1;
+	}
+	m_alength = 0;
+	m_slength = PACKET_HEADER_SIZE + sptrData->header.length;
+	memcpy(m_sbuffer, &(*sptrData), m_slength);
 
-
-
-	return -1;
+	return 1;
 }
 
+int CNetworkWrap::SendBuffer()
+{
+	if (m_slength>0)
+	{
+		int slen = write(m_clientfd, m_sbuffer + m_alength, m_slength);
+		m_slength -= slen;
+		m_alength += slen;
+		return slen;
+	}
+	return -1;
+}
 
 int CNetworkWrap::HangupNotify(int fd)
 {
@@ -85,14 +118,18 @@ int CNetworkWrap::InputNotify(int fd)
 {
 	int maxCharCount = sizeof(m_rbuffer) - m_rlength;
 	int nread = read(fd, m_rbuffer + m_rlength, maxCharCount);
+	printf("Wrap InputNotify - nread:%d,fd:%d,errno:%d\n", nread, fd, errno);
+
 	if (nread == 0)
 	{
 		return -1;
 	}
 	else if (nread < 0)
 	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)
+		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR || errno == EMSGSIZE || errno == EALREADY || errno == EINPROGRESS)
 		{
+			printf("Wrap InputNotify - nread:%d,fd:%d,errno:%d\n", nread, fd, errno);
+
 			return 0;
 		}
 		else
@@ -146,13 +183,26 @@ int CNetworkWrap::InputNotify(int fd)
 
 int CNetworkWrap::OutputNotify(int fd)
 {
+	SetStatus(NET_WRAP_SOCKET_STATUS_CONNECTED);
+	printf("wrap OutputNotify - fd:%d,errno:%d \n", fd, errno);
 
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->init();
+	sptrRequest->eventid = NETWORK_NOTIFY_CONNECT;
+	sptrRequest->contextid = fd;
+	auto spAddr = m_peerfd.find(fd);
+	if (spAddr != m_peerfd.end() && spAddr->second != nullptr)
+	{
+		memcpy(&sptrRequest->address, &(*(spAddr->second)), sizeof(sptrRequest->address));
+	}
+	AddEventRequest(std::move(sptrRequest));
 	return 1;
 }
+
 bool CNetworkWrap::SocketConnect()
 {
 	m_bRunFlag = true;
-	m_epfd = epoll_create(1);
+	m_epfd = epoll_create(64);
 	if (m_epfd == -1)
 	{
 		return false;
@@ -181,9 +231,10 @@ void CNetworkWrap::runThreadFunction(CNetworkWrap *pTask)
 			{
 				//break;
 			}
-			else if ( )
+			if (pTask->GetStatus() == NET_WRAP_SOCKET_STATUS_CONNECTED)
 			{
-
+				pTask->OnSendQueueData();
+				pTask->SendBuffer();
 			}
 			else
 			{
@@ -210,7 +261,11 @@ bool CNetworkWrap::Init()
 	m_rlength = 0;
 	memset(m_rbuffer, 0, sizeof(m_rbuffer));
 
+	m_slength = 0;
+	m_alength = 0;
+	memset(m_sbuffer, 0, sizeof(m_sbuffer));
 
+	m_status = 0;
 	return true;
 }
 

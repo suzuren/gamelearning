@@ -12,7 +12,7 @@ public:
 private:
 	bool OnNetworkNotifyClosed(std::shared_ptr<struct tagEventRequest> sptrRequest);
 
-	bool OnNetworkNotifyAccept(std::shared_ptr<struct tagEventRequest> sptrRequest);
+	bool OnNetworkNotifyConnect(std::shared_ptr<struct tagEventRequest> sptrRequest);
 
 	bool OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest);
 private:

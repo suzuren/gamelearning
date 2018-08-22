@@ -22,14 +22,18 @@ int CNetworkTask::OnDisposeEvents()
 			{
 				if (ev && (EPOLLHUP | EPOLLERR))
 				{
-					HangupNotify(fd);
+					printf("Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
+					if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR || errno == EALREADY || errno == EINPROGRESS)
+					{
+						HangupNotify(fd);
+					}
 				}
-				if (ev && EPOLLIN)
+				else if (ev && EPOLLIN)
 				{
 					InputNotify(fd);
 					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 				}
-				if (ev && EPOLLOUT)
+				else if (ev && EPOLLOUT)
 				{
 					//OutputNotify();
 				}
@@ -130,7 +134,7 @@ int CNetworkTask::InputNotify(int fd)
 	}
 	else if (nread < 0)
 	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)
+		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR || errno == EMSGSIZE)
 		{
 			return 0;
 		}

@@ -539,6 +539,7 @@
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt" />
     <Text Include="..\lua-cjson\rfc4627.txt" />
     <Text Include="..\NetEpoll\readme.txt" />
+    <Text Include="..\network_server\read.txt" />
     <Text Include="..\shellcmd.txt" />
   </ItemGroup>
   <ItemGroup>

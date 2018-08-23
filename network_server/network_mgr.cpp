@@ -40,7 +40,7 @@ bool CNetworkMgr::StartTask()
 	{
 		return false;
 	}
-	printf("CNetworkMgr::StartTask - flag:%d,fd:%d\n", flag, m_sptrNetTaskOper->GetListenFd());
+	//printf("CNetworkMgr::StartTask - flag:%d,fd:%d\n", flag, m_sptrNetTaskOper->GetListenFd());
 
 	return true;
 }
@@ -62,7 +62,7 @@ bool CNetworkMgr::StartWrap()
 	{
 		return false;
 	}
-	printf("CNetworkMgr::StartWrap - flag:%d,fd:%d\n", flag, m_sptrNetWrapOper->GetClientFd());
+	//printf("CNetworkMgr::StartWrap - flag:%d,fd:%d\n", flag, m_sptrNetWrapOper->GetClientFd());
 
 	return true;
 }

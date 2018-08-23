@@ -1752,6 +1752,9 @@
       <Filter>NetEpoll</Filter>
     </Text>
     <Text Include="..\shellcmd.txt" />
+    <Text Include="..\network_server\read.txt">
+      <Filter>network_server</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

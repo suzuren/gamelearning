@@ -23,17 +23,18 @@ int CNetworkWrap::OnDisposeEvents()
 				}
 				else
 				{
+					printf("Wrap OnDisposeEvents - Hangup fd:%d,errno:%d,EALREADY:%d,EINPROGRESS:%d\n", fd, errno, EALREADY, EINPROGRESS);
 					HangupNotify(fd);
 				}
 			}
-			if (ev && EPOLLIN)
+			else if (ev && EPOLLIN)
 			{
 				printf("Wrap OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
 
 				InputNotify(fd);
 				SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 			}
-			if (ev && EPOLLOUT)
+			else if (ev && EPOLLOUT)
 			{
 				printf("Wrap OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
 
@@ -118,7 +119,7 @@ int CNetworkWrap::InputNotify(int fd)
 {
 	int maxCharCount = sizeof(m_rbuffer) - m_rlength;
 	int nread = read(fd, m_rbuffer + m_rlength, maxCharCount);
-	printf("Wrap InputNotify - nread:%d,fd:%d,errno:%d\n", nread, fd, errno);
+	//printf("Wrap InputNotify - nread:%d,fd:%d,errno:%d\n", nread, fd, errno);
 
 	if (nread == 0)
 	{
@@ -223,6 +224,7 @@ bool CNetworkWrap::SocketConnect()
 void CNetworkWrap::runThreadFunction(CNetworkWrap *pTask)
 {
 	bool bConnect = pTask->SocketConnect();
+	printf("Wrap connect - ip:%s,port:%d,clientfd:%d,bConnect:%d", pTask->GetIP().data(), pTask->GetPort(), pTask->GetClientFd(), bConnect);
 	if (bConnect == true)
 	{
 		while (pTask != nullptr && pTask->m_bRunFlag == true)
@@ -314,11 +316,6 @@ std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetEventRequest()
 std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetAsyncRequest()
 {
 	return GetEventRequest();
-}
-
-int CNetworkWrap::GetClientFd()
-{
-	return m_clientfd;
 }
 
 bool CNetworkWrap::SendData(std::shared_ptr<struct packet_buffer> sptrData)

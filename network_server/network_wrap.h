@@ -79,10 +79,14 @@ public:
 	bool Start(std::string ip, int port);
 	bool ShutDown();
 	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
-	int GetClientFd();
+
 	bool SendData(std::shared_ptr<struct packet_buffer> sptrData);
 	void SetStatus(int status) { m_status = status; }
 	int GetStatus() { return m_status; }
+
+	int GetClientFd() { return m_clientfd; }
+	int GetPort() { return m_port; }
+	std::string GetIP() { return m_strIP; }
 
 };
 

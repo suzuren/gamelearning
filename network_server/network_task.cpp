@@ -15,27 +15,63 @@ int CNetworkTask::OnDisposeEvents()
 			int ev = m_events[i].events;
 			if (fd == m_listenfd)
 			{
-				AcceptNotify(fd);
-				SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
+				//if (ev && EPOLLERR)
+				//{
+				//	printf("listen Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
+				//	HangupNotify(fd);
+				//	continue;
+				//}
+				//if (ev && EPOLLHUP)
+				//{
+				//	printf("listen Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
+				//	HangupNotify(fd);
+				//	continue;
+				//}
+				if (ev && EPOLLIN)
+				{
+					printf("listen Task OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
+					AcceptNotify(fd);
+					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
+					//InputNotify(fd);
+					//SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
+					continue;
+				}
+				if (ev && EPOLLOUT)
+				{
+					printf("listen Task OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
+
+					//OutputNotify();
+					continue;
+				}
 			}
 			else
 			{
-				if (ev && (EPOLLHUP | EPOLLERR))
+				//if (ev && EPOLLERR)
+				//{
+				//	printf("client Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
+				//	HangupNotify(fd);
+				//	continue;
+				//}
+				//if (ev && EPOLLHUP)
+				//{
+				//	printf("client Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
+				//	HangupNotify(fd);
+				//	continue;
+				//}
+				if (ev && EPOLLIN)
 				{
-					printf("Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
-					if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR || errno == EALREADY || errno == EINPROGRESS)
-					{
-						HangupNotify(fd);
-					}
-				}
-				else if (ev && EPOLLIN)
-				{
+					printf("client Task OnDisposeEvents - input fd:%d,errno:%d\n", fd, errno);
+
 					InputNotify(fd);
 					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
+					continue;
 				}
-				else if (ev && EPOLLOUT)
+				if (ev && EPOLLOUT)
 				{
+					printf("client Task OnDisposeEvents - output fd:%d,errno:%d\n", fd, errno);
+
 					//OutputNotify();
+					continue;
 				}
 			}
 		}
@@ -49,11 +85,11 @@ int CNetworkTask::AcceptNotify(int fd)
 	struct sockaddr_in client_addr;
 	memset(&client_addr, 0, sizeof(struct sockaddr_in));
 	int client_fd = accept(fd, (struct sockaddr *)&client_addr, &client_addr_len);
-	printf("CNetworkTask::AcceptNotify - fd:%d,client_fd:%d\n", fd, client_fd);
+	//printf("CNetworkTask::AcceptNotify - fd:%d,client_fd:%d\n", fd, client_fd);
 
 	if (client_fd == -1)
 	{
-		printf("CNetworkTask::AcceptNotify - accept errno:%d,- %s.\n", errno,strerror(errno));
+		//printf("CNetworkTask::AcceptNotify - accept errno:%d,- %s.\n", errno,strerror(errno));
 		return -1;
 	}
 	else
@@ -211,6 +247,8 @@ bool CNetworkTask::SocketListen()
 void CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 {
 	bool bListen = pTask->SocketListen();
+	printf("Task listen - ip:%s,port:%d,listenfd:%d,bListen:%d", pTask->GetIP().data(), pTask->GetPort(), pTask->GetListenFd(), bListen);
+
 	if (bListen == true)
 	{
 		while (pTask != nullptr && pTask->m_bRunFlag == true)
@@ -295,8 +333,5 @@ std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
 	return GetEventRequest();
 }
 
-int CNetworkTask::GetListenFd()
-{
-	return m_listenfd;
-}
+
 

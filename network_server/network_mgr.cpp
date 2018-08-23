@@ -25,6 +25,10 @@ void CNetworkMgr::DispatchNetworkRequest()
 
 bool CNetworkMgr::StartTask()
 {
+	if (m_sptrNetTaskOper != nullptr)
+	{
+		return false;
+	}
 	m_sptrNetTaskOper = std::make_shared<CNetworkTask>();
 	if (m_sptrNetTaskOper == nullptr)
 	{
@@ -40,13 +44,17 @@ bool CNetworkMgr::StartTask()
 	{
 		return false;
 	}
-	//printf("CNetworkMgr::StartTask - flag:%d,fd:%d\n", flag, m_sptrNetTaskOper->GetListenFd());
+	printf("CNetworkMgr::StartTask - flag:%d,fd:%d\n", flag, m_sptrNetTaskOper->GetListenFd());
 
 	return true;
 }
 
 bool CNetworkMgr::StartWrap()
 {
+	if (m_sptrNetWrapOper != nullptr)
+	{
+		return false;
+	}
 	m_sptrNetWrapOper = std::make_shared<CNetworkWrap>();
 	if (m_sptrNetWrapOper == nullptr)
 	{
@@ -76,10 +84,10 @@ bool CNetworkMgr::Init()
 	{
 		return false;
 	}
-	if (StartWrap() == false)
-	{
-		return false;
-	}
+	//if (StartWrap() == false)
+	//{
+	//	return false;
+	//}
 	return true;
 }
 
@@ -121,7 +129,17 @@ void CNetworkMgr::OnNetworkTick()
 
 void CNetworkMgr::TestNetwork()
 {
-
 }
 
+void CNetworkMgr::TestNetworkConnect()
+{
+	if (StartWrap() == false)
+	{
+		return;
+	}
+}
 
+void CNetworkMgr::TestNetworkSendData()
+{
+	m_sptrNetWrapOper->SendDataTest();
+}

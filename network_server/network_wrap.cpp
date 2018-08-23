@@ -224,7 +224,7 @@ bool CNetworkWrap::SocketConnect()
 void CNetworkWrap::runThreadFunction(CNetworkWrap *pTask)
 {
 	bool bConnect = pTask->SocketConnect();
-	printf("Wrap connect - ip:%s,port:%d,clientfd:%d,bConnect:%d", pTask->GetIP().data(), pTask->GetPort(), pTask->GetClientFd(), bConnect);
+	printf("Wrap connect - ip:%s,port:%d,clientfd:%d,bConnect:%d\n", pTask->GetIP().data(), pTask->GetPort(), pTask->GetClientFd(), bConnect);
 	if (bConnect == true)
 	{
 		while (pTask != nullptr && pTask->m_bRunFlag == true)
@@ -268,6 +268,8 @@ bool CNetworkWrap::Init()
 	memset(m_sbuffer, 0, sizeof(m_sbuffer));
 
 	m_status = 0;
+
+	m_sptrWorkThread = nullptr;
 	return true;
 }
 
@@ -277,16 +279,25 @@ bool CNetworkWrap::Start(std::string ip,int port)
 	m_strIP = ip;
 
 	auto startfunc = std::bind(runThreadFunction, this);
-	std::thread worker_thread(startfunc);
-	m_workThread = std::move(worker_thread);
-
+	//std::thread worker_thread(startfunc);
+	//m_workThread = std::move(worker_thread);
+	m_sptrWorkThread = std::make_shared<std::thread>(startfunc);
+	if (m_sptrWorkThread == nullptr)
+	{
+		return false;
+	}
 	return true;
 }
 
 bool CNetworkWrap::ShutDown()
 {
 	m_bRunFlag = false;
-	m_workThread.join();
+	//m_workThread.join();
+	if (m_sptrWorkThread != nullptr)
+	{
+		m_sptrWorkThread->join();
+		m_sptrWorkThread = nullptr;
+	}
 	return true;
 }
 
@@ -328,4 +339,22 @@ bool CNetworkWrap::SendData(std::shared_ptr<struct packet_buffer> sptrData)
 	}
 	return true;
 }
+#include "network_oper_define.h"
 
+bool CNetworkWrap::SendDataTest()
+{
+	//struct pakcet_buffer data;
+
+	//data.header.identity = 335;
+	//data.header.command = NETWORK_EVENT_TEST;
+	//strcpy(data.buffer, "hello world!");
+	//data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
+
+	//std::shared_ptr<struct pakcet_buffer> sptrData = std::make_shared<struct pakcet_buffer>();
+	//sptrData->header.identity = 335;
+	//sptrData->header.command = NETWORK_EVENT_TEST;
+	//strcpy(sptrData->buffer, "hello world!");
+	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
+	//SendData(sptrData);
+	return true;
+}

@@ -33,7 +33,9 @@ public:
 	~CNetworkWrap();
 
 private:
-	std::thread m_workThread;
+	//std::thread m_workThread;
+	std::shared_ptr<std::thread> m_sptrWorkThread;
+
 	std::atomic_bool m_bRunFlag;
 	std::mutex m_queue_mutex_request;
 	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueRequest;
@@ -87,6 +89,8 @@ public:
 	int GetClientFd() { return m_clientfd; }
 	int GetPort() { return m_port; }
 	std::string GetIP() { return m_strIP; }
+
+	bool SendDataTest();
 
 };
 

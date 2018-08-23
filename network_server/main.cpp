@@ -29,14 +29,29 @@ int main(int argc, const char** argv)
 	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
 
 
-	CNetworkMgr::Instance().Init();
 	CNetworkMgr::Instance().SetAsyncNetTaskCallBack(std::make_shared<CNetworkTaskCallBack>());
 	CNetworkMgr::Instance().SetAsyncNetWrapCallBack(std::make_shared<CNetworkWrapCallBack>());
-	CNetworkMgr::Instance().TestNetwork();
+	CNetworkMgr::Instance().Init();
+	//CNetworkMgr::Instance().TestNetwork();
+	
+	bool bStartConnect = false;
+	unsigned long long	ulStartTime = GetMillisecond();
 
 	while (g_run)
 	{
 		CNetworkMgr::Instance().OnNetworkTick();
+		if (!bStartConnect && ulStartTime + 1000 <= GetMillisecond())
+		{
+			CNetworkMgr::Instance().TestNetworkConnect();
+			bStartConnect = true;
+			ulStartTime = GetMillisecond();
+		}
+		if (bStartConnect && ulStartTime + 3000 <= GetMillisecond())
+		{
+			CNetworkMgr::Instance().TestNetworkSendData();
+
+			ulStartTime = GetMillisecond();
+		}
 	}
 	CNetworkMgr::Instance().ShutDown();
 	std::cout << "network server shutdown." << std::endl;

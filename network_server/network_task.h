@@ -29,7 +29,8 @@ private:
 	std::atomic_bool m_bRunFlag;
 	std::mutex m_queue_mutex_request;
 	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueRequest;
-	std::thread m_workThread;
+	//std::thread m_workThread;
+	std::shared_ptr<std::thread> m_sptrWorkThread;
 
 	int m_port;
 	std::string m_strIP;
@@ -43,6 +44,7 @@ private:
 
 private:
 	static void runThreadFunction(CNetworkTask *pTask);
+
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	std::shared_ptr<struct tagEventRequest> GetEventRequest();
 	bool SocketListen();

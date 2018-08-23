@@ -6,7 +6,6 @@
 #include "network_task.h"
 #include "network_wrap.h"
 
-
 class AsyncNetCallBack
 {
 public:
@@ -47,6 +46,9 @@ public:
 
 public:
 	void	TestNetwork();
+	void	TestNetworkConnect();
+	void	TestNetworkSendData();
+
 };
 
 

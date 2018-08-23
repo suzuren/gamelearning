@@ -5,6 +5,8 @@
 
 int CNetworkTask::OnDisposeEvents()
 {
+	//printf("listen Task OnDisposeEvents - Input fd:%d,errno:%d\n", 3, errno);
+
 	memset(m_events, 0, sizeof(m_events));
 	int nfds = socket_wait(m_epfd, m_events, MAX_SOCKET_CONNECT, 0);
 	if (nfds > 0)
@@ -15,18 +17,18 @@ int CNetworkTask::OnDisposeEvents()
 			int ev = m_events[i].events;
 			if (fd == m_listenfd)
 			{
-				//if (ev && EPOLLERR)
-				//{
-				//	printf("listen Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
-				//	HangupNotify(fd);
-				//	continue;
-				//}
-				//if (ev && EPOLLHUP)
-				//{
-				//	printf("listen Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
-				//	HangupNotify(fd);
-				//	continue;
-				//}
+				if (ev && EPOLLERR)
+				{
+					//printf("listen Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
+					//HangupNotify(fd);
+					continue;
+				}
+				if (ev && EPOLLHUP)
+				{
+					printf("listen Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
+					//HangupNotify(fd);
+					continue;
+				}
 				if (ev && EPOLLIN)
 				{
 					printf("listen Task OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
@@ -247,8 +249,7 @@ bool CNetworkTask::SocketListen()
 void CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 {
 	bool bListen = pTask->SocketListen();
-	printf("Task listen - ip:%s,port:%d,listenfd:%d,bListen:%d", pTask->GetIP().data(), pTask->GetPort(), pTask->GetListenFd(), bListen);
-
+	printf("Task listen - ip:%s,port:%d,listenfd:%d,bListen:%d\n", pTask->GetIP().data(), pTask->GetPort(), pTask->GetListenFd(), bListen);
 	if (bListen == true)
 	{
 		while (pTask != nullptr && pTask->m_bRunFlag == true)
@@ -281,7 +282,7 @@ bool CNetworkTask::Init()
 	m_bRunFlag = true;
 	m_rlength = 0;
 	memset(m_rbuffer, 0, sizeof(m_rbuffer));
-
+	m_sptrWorkThread = nullptr;
 
 	return true;
 }
@@ -290,18 +291,30 @@ bool CNetworkTask::Start(std::string ip,int port)
 {
 	m_port = port;
 	m_strIP = ip;
-
+	if (m_sptrWorkThread != nullptr)
+	{
+		return false;
+	}
 	auto startfunc = std::bind(runThreadFunction, this);
-	std::thread worker_thread(startfunc);
-	m_workThread = std::move(worker_thread);
-
+	//std::thread worker_thread(startfunc);
+	//m_workThread = std::move(worker_thread);
+	m_sptrWorkThread = std::make_shared<std::thread>(startfunc);
+	if (m_sptrWorkThread == nullptr)
+	{
+		return false;
+	}
 	return true;
 }
 
 bool CNetworkTask::ShutDown()
 {
 	m_bRunFlag = false;
-	m_workThread.join();
+	//m_workThread.join();
+	if (m_sptrWorkThread != nullptr)
+	{
+		m_sptrWorkThread->join();
+		m_sptrWorkThread = nullptr;
+	}
 	return true;
 }
 

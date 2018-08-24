@@ -152,6 +152,7 @@
     <ClInclude Include="..\network_server\network_task.h" />
     <ClInclude Include="..\network_server\network_wrap.h" />
     <ClInclude Include="..\network_server\network_wrap_callback.h" />
+    <ClInclude Include="..\network_server\pack_proto_define.h" />
     <ClInclude Include="..\network_server\stream_decoder.h" />
     <ClInclude Include="..\post_mgr\epoll_socket.h" />
     <ClInclude Include="..\post_mgr\http_header.h" />

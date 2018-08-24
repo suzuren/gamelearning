@@ -687,6 +687,9 @@
     <ClInclude Include="..\network_server\network_wrap_callback.h">
       <Filter>network_server</Filter>
     </ClInclude>
+    <ClInclude Include="..\network_server\pack_proto_define.h">
+      <Filter>network_server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

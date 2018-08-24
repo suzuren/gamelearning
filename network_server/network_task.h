@@ -16,8 +16,11 @@
 
 #include "epoll_socket.h"
 #include "stream_decoder.h"
+#include "pack_proto_define.h"
 
 #include "network_oper_define.h"
+
+
 
 class CNetworkTask
 {

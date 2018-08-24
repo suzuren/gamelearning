@@ -2,7 +2,6 @@
 #ifndef __NETWORK_MGR_H_
 #define __NETWORK_MGR_H_
 
-#include "network_oper_define.h"
 #include "network_task.h"
 #include "network_wrap.h"
 

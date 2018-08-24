@@ -15,9 +15,8 @@
 #include<utility>
 
 #include "epoll_socket.h"
-#include "stream_decoder.h"
-
 #include "network_oper_define.h"
+
 
 
 enum emNET_WRAP_SOCKET_STATUS

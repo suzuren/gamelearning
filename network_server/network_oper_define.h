@@ -6,6 +6,10 @@
 #include <memory.h>
 #include <netinet/in.h>
 
+#include "stream_decoder.h"
+#include "pack_proto_define.h"
+
+
 // ---------------------------------------------------------------------------------------
 
 
@@ -13,7 +17,7 @@
 
 // ---------------------------------------------------------------------------------------
 
-//#pragma  pack(1)
+#pragma  pack(1)
 
 struct packet_header
 {
@@ -31,6 +35,13 @@ struct packet_header
 #define MAX_PACKRT_BUFFER   (65535*5)
 #define SOCKET_TCP_BUFFER   65535
 
+
+#define MAX_PACKRT_BUFFER   (65535*5)
+#define SOCKET_TCP_BUFFER   65535
+
+#define PACKET_MAX_SIZE             4096*4
+
+
 #define PACKET_MAX_SIZE             4096*4
 #define PACKET_HEADER_SIZE          (sizeof(struct packet_header))
 #define PACKET_MAX_DATA_SIZE		(PACKET_MAX_SIZE - PACKET_HEADER_SIZE)
@@ -39,19 +50,16 @@ struct packet_buffer
 {
 	packet_header header;
 	char buffer[PACKET_MAX_DATA_SIZE];
-	//packet_buffer()
-	//{
-	//	init();
-	//}
+	packet_buffer()
+	{
+		init();
+	}
 	void init()
 	{
 		memset(buffer, 0, sizeof(buffer));
 	}
 };
 
-
-
-//#pragma pack()
 
 // ---------------------------------------------------------------------------------------
 

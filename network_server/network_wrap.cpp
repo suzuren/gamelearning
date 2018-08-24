@@ -1,6 +1,33 @@
 
 #include "network_wrap.h"
+
+#include "stream_decoder.h"
+
+#include "network_oper_define.h"
+
+#include "pack_proto_define.h"
+
 #include <iomanip>
+
+
+
+bool CNetworkWrap::SendDataTest()
+{
+	//struct pakcet_buffer data;
+
+	//data.header.identity = 335;
+	//data.header.command = NETWORK_EVENT_TEST;
+	//strcpy(data.buffer, "hello world!");
+	//data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
+
+	//std::shared_ptr<struct pakcet_buffer> sptrData = std::make_shared<struct pakcet_buffer>();
+	//sptrData->header.identity = 335;
+	//sptrData->header.command = NETWORK_EVENT_TEST;
+	//strcpy(sptrData->buffer, "hello world!");
+	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
+	//SendData(sptrData);
+	return true;
+}
 
 
 int CNetworkWrap::OnDisposeEvents()
@@ -337,24 +364,5 @@ bool CNetworkWrap::SendData(std::shared_ptr<struct packet_buffer> sptrData)
 		m_queueSend.push(sptrData);
 		lock_front.unlock();
 	}
-	return true;
-}
-#include "network_oper_define.h"
-
-bool CNetworkWrap::SendDataTest()
-{
-	//struct pakcet_buffer data;
-
-	//data.header.identity = 335;
-	//data.header.command = NETWORK_EVENT_TEST;
-	//strcpy(data.buffer, "hello world!");
-	//data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
-
-	//std::shared_ptr<struct pakcet_buffer> sptrData = std::make_shared<struct pakcet_buffer>();
-	//sptrData->header.identity = 335;
-	//sptrData->header.command = NETWORK_EVENT_TEST;
-	//strcpy(sptrData->buffer, "hello world!");
-	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
-	//SendData(sptrData);
 	return true;
 }

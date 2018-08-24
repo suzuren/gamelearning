@@ -1,13 +1,10 @@
 
-MYSQL_INC = /usr/include/mysql
-MYSQL_LIB = /usr/lib64/mysql
-
 TARGET := netServer
 CC := g++ -Wall
 CPPFLAGS := -DNDEBUG
 CFLAGS :=
-CXXFLAGS := -Wall -I$(MYSQL_INC) -D_FILE_OFFSET_BITS=64 -std=c++11
-LDFLAGS := -L$(MYSQL_LIB) -lpthread -lrt -lm -lmysqlclient
+CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++17
+LDFLAGS := -lpthread -lrt -lm
 CPP_SOURCES := $(wildcard *.cpp)
 CPP_SOURCES += $(wildcard ../hlib/*.cpp)
 CPP_SOURCES += $(wildcard ../hlib/json/*.cpp)

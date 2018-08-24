@@ -1,10 +1,12 @@
 
 #include <atomic>
 
-#include "network_mgr.h"
+#include "network_oper_define.h"
+
 #include "network_task_callback.h"
 #include "network_wrap_callback.h"
 #include "network_daemonize.h"
+#include "network_mgr.h"
 
 
 int main(int argc, const char** argv)

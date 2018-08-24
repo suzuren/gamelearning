@@ -25,6 +25,21 @@ enum emNET_WRAP_SOCKET_STATUS
 	NET_WRAP_SOCKET_STATUS_CONNECTED,
 };
 
+struct tagSendData
+{
+	int	length;
+	char buffer[PACKET_MAX_SIZE];
+	tagSendData()
+	{
+		init();
+	}
+	void init()
+	{
+		length = 0;
+		memset(buffer, 0, sizeof(buffer));
+	}
+};
+
 class CNetworkWrap
 {
 public:
@@ -40,9 +55,7 @@ private:
 	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueRequest;
 
 	std::mutex m_queue_mutex_send;
-	std::queue< std::shared_ptr<struct packet_buffer> > m_queueSend;
-
-	
+	std::queue< std::shared_ptr<struct tagSendData> > m_queueSend;
 
 	int m_port;
 	std::string m_strIP;
@@ -81,7 +94,7 @@ public:
 	bool ShutDown();
 	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
 
-	bool SendData(std::shared_ptr<struct packet_buffer> sptrData);
+	bool SendData(std::shared_ptr<struct tagSendData> sptrData);
 	void SetStatus(int status) { m_status = status; }
 	int GetStatus() { return m_status; }
 

@@ -1,8 +1,10 @@
 
 #include "network_task_callback.h"
+#include "network_oper_define.h"
 
 bool CNetworkTaskCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
+
 	if (sptrRequest == nullptr)
 	{
 		return false;

@@ -7,8 +7,6 @@
 
 
 
-#pragma pack()
-
 
 #endif
 

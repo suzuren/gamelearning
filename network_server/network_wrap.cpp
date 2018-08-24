@@ -9,27 +9,6 @@
 
 #include <iomanip>
 
-
-
-bool CNetworkWrap::SendDataTest()
-{
-	//struct pakcet_buffer data;
-
-	//data.header.identity = 335;
-	//data.header.command = NETWORK_EVENT_TEST;
-	//strcpy(data.buffer, "hello world!");
-	//data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
-
-	//std::shared_ptr<struct pakcet_buffer> sptrData = std::make_shared<struct pakcet_buffer>();
-	//sptrData->header.identity = 335;
-	//sptrData->header.command = NETWORK_EVENT_TEST;
-	//strcpy(sptrData->buffer, "hello world!");
-	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
-	//SendData(sptrData);
-	return true;
-}
-
-
 int CNetworkWrap::OnDisposeEvents()
 {
 	memset(m_events, 0, sizeof(m_events));
@@ -92,8 +71,8 @@ int CNetworkWrap::OnSendQueueData()
 		return -1;
 	}
 	m_alength = 0;
-	m_slength = PACKET_HEADER_SIZE + sptrData->header.length;
-	memcpy(m_sbuffer, &(*sptrData), m_slength);
+	m_slength = sptrData->length;
+	memcpy(m_sbuffer, sptrData->buffer, sptrData->length);
 
 	return 1;
 }
@@ -356,7 +335,7 @@ std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetAsyncRequest()
 	return GetEventRequest();
 }
 
-bool CNetworkWrap::SendData(std::shared_ptr<struct packet_buffer> sptrData)
+bool CNetworkWrap::SendData(std::shared_ptr<struct tagSendData> sptrData)
 {
 	if (sptrData !=  nullptr)
 	{
@@ -364,5 +343,24 @@ bool CNetworkWrap::SendData(std::shared_ptr<struct packet_buffer> sptrData)
 		m_queueSend.push(sptrData);
 		lock_front.unlock();
 	}
+	return true;
+}
+
+bool CNetworkWrap::SendDataTest()
+{
+	packet_buffer data;
+
+	//data.header.identity = 335;
+	//data.header.command = NETWORK_EVENT_TEST;
+	//strcpy(data.buffer, "hello world!");
+	//data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
+
+	//std::shared_ptr<pakcet_buffer> sptrData = std::make_shared<pakcet_buffer>(data);
+
+	//sptrData->header.identity = 335;
+	//sptrData->header.command = NETWORK_EVENT_TEST;
+	//strcpy(sptrData->buffer, "hello world!");
+	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
+	//SendData(sptrData);
 	return true;
 }

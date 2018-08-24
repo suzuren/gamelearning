@@ -141,12 +141,12 @@ void CNetworkMgr::TestNetworkConnect()
 
 void CNetworkMgr::TestNetworkSendData()
 {
-	packet_buffer data;
+	struct packet_buffer data;
 
-	//data.header.identity = 335;
-	//data.header.command = NETWORK_EVENT_TEST;
-	//strcpy(data.buffer, "hello world!");
-	//data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
+	data.header.identity = 335;
+	data.header.command = NETWORK_EVENT_TEST;
+	strcpy(data.buffer, "hello world!");
+	data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
 
 	//std::shared_ptr<struct pakcet_buffer> sptrData = std::make_shared<struct pakcet_buffer>();
 	//sptrData->header.identity = 335;
@@ -155,6 +155,10 @@ void CNetworkMgr::TestNetworkSendData()
 	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
 	//SendData(sptrData);
 
+	std::shared_ptr<struct tagSendData> sptrData = std::make_shared<struct tagSendData>();
+	memcpy(sptrData->buffer,&data, data.header.length);
+	sptrData->length = data.header.length;
+	m_sptrNetWrapOper->SendData(sptrData);
 
-	m_sptrNetWrapOper->SendDataTest();
+	//m_sptrNetWrapOper->SendDataTest();
 }

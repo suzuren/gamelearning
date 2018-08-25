@@ -690,6 +690,15 @@
     <ClInclude Include="..\network_server\pack_proto_define.h">
       <Filter>network_server</Filter>
     </ClInclude>
+    <ClInclude Include="..\virtual_destructor\test_class.h">
+      <Filter>virtual_destructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\virtual_destructor\test_string.h">
+      <Filter>virtual_destructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\virtual_destructor\test.h">
+      <Filter>virtual_destructor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

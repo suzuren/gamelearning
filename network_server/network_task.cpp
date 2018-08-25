@@ -10,6 +10,9 @@ int CNetworkTask::OnDisposeEvents()
 
 	memset(m_events, 0, sizeof(m_events));
 	int nfds = socket_wait(m_epfd, m_events, MAX_SOCKET_CONNECT, 0);
+
+	//printf("Task OnDisposeEvents - all nfds:%d,errno:%d\n", nfds, errno);
+
 	if (nfds > 0)
 	{
 		for (int i = 0; i < nfds; i++)
@@ -18,34 +21,34 @@ int CNetworkTask::OnDisposeEvents()
 			int ev = m_events[i].events;
 			if (fd == m_listenfd)
 			{
-				if (ev && EPOLLERR)
-				{
-					//printf("listen Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
-					//HangupNotify(fd);
-					continue;
-				}
-				if (ev && EPOLLHUP)
-				{
-					printf("listen Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
-					//HangupNotify(fd);
-					continue;
-				}
+				//if (ev && EPOLLERR)
+				//{
+				//	printf("listen Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
+				//	//HangupNotify(fd);
+				//	continue;
+				//}
+				//if (ev && EPOLLHUP)
+				//{
+				//	printf("listen Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
+				//	//HangupNotify(fd);
+				//	continue;
+				//}
 				if (ev && EPOLLIN)
 				{
 					printf("listen Task OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
 					AcceptNotify(fd);
-					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
+					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN);
 					//InputNotify(fd);
 					//SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 					continue;
 				}
-				if (ev && EPOLLOUT)
-				{
-					printf("listen Task OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
+				//if (ev && EPOLLOUT)
+				//{
+				//	printf("listen Task OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
 
-					//OutputNotify();
-					continue;
-				}
+				//	//OutputNotify();
+				//	continue;
+				//}
 			}
 			else
 			{
@@ -63,10 +66,10 @@ int CNetworkTask::OnDisposeEvents()
 				//}
 				if (ev && EPOLLIN)
 				{
-					printf("client Task OnDisposeEvents - input fd:%d,errno:%d\n", fd, errno);
+					//printf("client Task OnDisposeEvents - input fd:%d,errno:%d\n", fd, errno);
 
 					InputNotify(fd);
-					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
+					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN | EPOLLOUT);
 					continue;
 				}
 				if (ev && EPOLLOUT)
@@ -105,7 +108,8 @@ int CNetworkTask::AcceptNotify(int fd)
 			{
 				break;
 			}
-			flag = SetSocketEvents(m_epfd, client_fd, EPOLL_CTL_ADD);
+			
+			flag = SetSocketEvents(m_epfd, client_fd, EPOLL_CTL_ADD, EPOLLIN | EPOLLOUT);
 			if (flag == false)
 			{
 				break;
@@ -167,8 +171,12 @@ int CNetworkTask::InputNotify(int fd)
 {
 	int maxCharCount = sizeof(m_rbuffer) - m_rlength;
 	int nread = read(fd, m_rbuffer + m_rlength, maxCharCount);
+
+	//printf("Task InputNotify - nread:%d,m_rlength:%d\n", nread, m_rlength);
+
 	if (nread == 0)
 	{
+		HangupNotify(fd);
 		return -1;
 	}
 	else if (nread < 0)
@@ -188,6 +196,8 @@ int CNetworkTask::InputNotify(int fd)
 	else
 	{
 		m_rlength += nread;
+		printf("Task InputNotify - nread:%d,m_rlength:%d\n", nread, m_rlength);
+
 		do
 		{
 			int size = ParsePacket(m_rbuffer, m_rlength);
@@ -239,7 +249,7 @@ bool CNetworkTask::SocketListen()
 	{
 		return false;
 	}
-	bool flag = SetSocketEvents(m_epfd, m_listenfd, EPOLL_CTL_ADD);
+	bool flag = SetSocketEvents(m_epfd, m_listenfd, EPOLL_CTL_ADD, EPOLLIN);
 	if (flag == false)
 	{
 		return false;

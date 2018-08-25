@@ -27,6 +27,7 @@ int bd_string(char * instr)
 
 char * GetMemory()
 {
+	// 返回临时变量 所以错误 需要加上static 静态
 	char p[] = "hello";
 	printf("GetMemory - p:%s\n", p);
 

@@ -41,6 +41,7 @@
 #define PORT				9876
 
 bool SetSocketEvents(int epfd, int fd, int op);
+bool SetSocketEvents(int epfd, int fd, int op, unsigned int events);
 bool SetSocketNonblock(int fd);
 int socket_bind(const char *ip, int port);
 int socket_connect(const char *ip, int port, int * fd);

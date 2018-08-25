@@ -15,6 +15,19 @@ bool SetSocketEvents(int epfd, int fd, int op)
 	return true;
 }
 
+bool SetSocketEvents(int epfd, int fd, int op,unsigned int events)
+{
+	struct epoll_event ev;
+	ev.data.fd = fd;
+	ev.events = events;
+	int ret = epoll_ctl(epfd, op, fd, &ev);
+	if (ret == -1)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool SetSocketNonblock(int fd)
 {
 	int flag = fcntl(fd, F_GETFL, 0);

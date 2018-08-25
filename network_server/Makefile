@@ -3,7 +3,7 @@ TARGET := netServer
 CC := g++ -Wall
 CPPFLAGS := -DNDEBUG
 CFLAGS :=
-CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++17
+CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++11
 LDFLAGS := -lpthread -lrt -lm
 CPP_SOURCES := $(wildcard *.cpp)
 CPP_SOURCES += $(wildcard ../hlib/*.cpp)

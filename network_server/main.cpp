@@ -50,6 +50,7 @@ int main(int argc, const char** argv)
 		}
 		if (bStartConnect && ulStartTime + 3000 <= GetMillisecond())
 		{
+			//std::cout << "CNetworkMgr::Instance().TestNetworkSendData();" << std::endl;
 			CNetworkMgr::Instance().TestNetworkSendData();
 
 			ulStartTime = GetMillisecond();

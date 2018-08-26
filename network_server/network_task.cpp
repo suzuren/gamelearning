@@ -35,7 +35,7 @@ int CNetworkTask::OnDisposeEvents()
 				//}
 				if (ev && EPOLLIN)
 				{
-					printf("listen Task OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
+					//printf("listen Task OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
 					AcceptNotify(fd);
 					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN);
 					//InputNotify(fd);
@@ -196,7 +196,7 @@ int CNetworkTask::InputNotify(int fd)
 	else
 	{
 		m_rlength += nread;
-		printf("Task InputNotify - nread:%d,m_rlength:%d\n", nread, m_rlength);
+		//printf("Task InputNotify - nread:%d,m_rlength:%d\n", nread, m_rlength);
 
 		do
 		{

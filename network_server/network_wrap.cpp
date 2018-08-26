@@ -39,7 +39,7 @@ int CNetworkWrap::OnDisposeEvents()
 			//}
 			if (ev && EPOLLOUT)
 			{
-				printf("Wrap OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
+				//printf("Wrap OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
 
 				OutputNotify(fd);
 				SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN);
@@ -91,7 +91,7 @@ int CNetworkWrap::OnSendQueueData()
 	m_slength = sptrData->length;
 	memcpy(m_sbuffer, sptrData->buffer, sptrData->length);
 
-	printf("Wrap OnSendQueueData - m_alength:%d,m_slength:%d\n", m_alength, m_slength);
+	//printf("Wrap OnSendQueueData - m_alength:%d,m_slength:%d\n", m_alength, m_slength);
 
 	return 1;
 }
@@ -100,13 +100,13 @@ int CNetworkWrap::SendBuffer()
 {
 	if (m_slength>0)
 	{
-		int old_slength = m_slength;
+		//int old_slength = m_slength;
 		int slen = write(m_clientfd, m_sbuffer + m_alength, m_slength);
 		m_slength -= slen;
 		m_alength += slen;
 
-		printf("Wrap SendBuffer - m_alength:%d,m_slength:%d,old_slength:%d,slen:%d\n",
-			m_alength, m_slength, old_slength, slen);
+		//printf("Wrap SendBuffer - m_alength:%d,m_slength:%d,old_slength:%d,slen:%d\n",
+		//	m_alength, m_slength, old_slength, slen);
 
 		return slen;
 	}
@@ -292,6 +292,8 @@ CNetworkWrap::~CNetworkWrap()
 
 bool CNetworkWrap::Init()
 {
+	m_sptrWorkThread = nullptr;
+
 	m_bRunFlag = true;
 	m_rlength = 0;
 	memset(m_rbuffer, 0, sizeof(m_rbuffer));
@@ -301,8 +303,8 @@ bool CNetworkWrap::Init()
 	memset(m_sbuffer, 0, sizeof(m_sbuffer));
 
 	m_status = 0;
+	m_sendIndex = 0;
 
-	m_sptrWorkThread = nullptr;
 	return true;
 }
 
@@ -391,3 +393,39 @@ bool CNetworkWrap::SendDataTest()
 	//SendData(sptrData);
 	return true;
 }
+
+unsigned long long CNetworkWrap::GetThreadID()
+{
+	unsigned long long ullThreadID = 0;
+
+	if (m_sptrWorkThread == nullptr)
+	{
+		return ullThreadID;
+	}
+	std::thread::id this_id = m_sptrWorkThread->get_id();
+
+	std::ostringstream oss;
+	oss << this_id;
+	std::string strThreadID = oss.str();
+
+	for (unsigned int i = 0; i < strThreadID.size(); i++)
+	{
+		if (isdigit(strThreadID[i]) == false)
+		{
+			return ullThreadID;
+		}
+	}
+	ullThreadID = std::stoull(strThreadID);
+
+	return ullThreadID;
+}
+
+std::string CNetworkWrap::GetThreadFlag()
+{
+	std::string data;
+	char buffer[512] = { 0 };
+	snprintf(buffer, sizeof(buffer), "threadid = %llu sendIndex = %d", GetThreadID(), m_sendIndex++);
+	data.append((const char *)buffer, strnlen(buffer, sizeof(buffer)));
+	return data;
+}
+

@@ -141,34 +141,27 @@ void CNetworkMgr::TestNetworkConnect()
 
 void CNetworkMgr::TestNetworkSendData()
 {
-	struct packet_buffer data;
+	if (m_sptrNetWrapOper == nullptr)
+	{
+		return;
+	}
+	char buffer[PACKET_MAX_DATA_SIZE] = { 0 };
+	snprintf(buffer, sizeof(buffer), "%s -> hello world!", m_sptrNetWrapOper->GetThreadFlag().c_str());
 
+
+	struct packet_buffer data;
 	data.header.identity = 335;
 	data.header.command = NETWORK_EVENT_TEST;
-	strcpy(data.buffer, "hello world_1!");
+	strncpy(data.buffer, buffer, strnlen(buffer, sizeof(buffer)));
 	data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
-
 	int hsize = PACKET_HEADER_SIZE;
 	int bsize = strlen(data.buffer);
-	printf("CNetworkMgr::TestNetworkSendData - length:%d,hsize:%d,bsize:%d\n", data.header.length, hsize, bsize);
 
-
-	//std::shared_ptr<struct pakcet_buffer> sptrData = std::make_shared<struct pakcet_buffer>();
-	//sptrData->header.identity = 335;
-	//sptrData->header.command = NETWORK_EVENT_TEST;
-	//strcpy(sptrData->buffer, "hello world!");
-	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
-	//SendData(sptrData);
+	printf("\n\nCNetworkMgr::TestNetworkSendData - length:%d,hsize:%d,bsize:%d\n", data.header.length, hsize, bsize);
 
 	std::shared_ptr<struct tagSendData> sptrData = std::make_shared<struct tagSendData>();
 	memcpy(sptrData->buffer,&data, data.header.length);
 
-	//int busize = strlen(sptrData->buffer);
-	//printf("CNetworkMgr::TestNetworkSendData - length:%d,hsize:%d,bsize:%d,busize:%d\n",
-	//	data.header.length, hsize, bsize, busize);
-
 	sptrData->length = data.header.length;
 	m_sptrNetWrapOper->SendData(sptrData);
-
-	//m_sptrNetWrapOper->SendDataTest();
 }

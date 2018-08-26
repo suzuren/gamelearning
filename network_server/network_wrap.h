@@ -13,6 +13,7 @@
 #include <iostream>
 #include <map>
 #include<utility>
+#include <sstream>
 
 #include "epoll_socket.h"
 #include "network_oper_define.h"
@@ -73,6 +74,7 @@ private:
 	char m_sbuffer[MAX_PACKRT_BUFFER];
 
 	int m_status;
+	unsigned int m_sendIndex;
 private:
 	static void runThreadFunction(CNetworkWrap *pTask);
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
@@ -103,7 +105,8 @@ public:
 	std::string GetIP() { return m_strIP; }
 
 	bool SendDataTest();
-
+	unsigned long long GetThreadID();
+	std::string GetThreadFlag();
 };
 
 

@@ -85,6 +85,66 @@ int CNetworkTask::OnDisposeEvents()
 	return nfds;
 }
 
+int CNetworkTask::OnSendQueueData()
+{
+	m_queue_mutex_send.lock();
+	bool bIsEmpty = m_queueSend.empty();
+	m_queue_mutex_send.unlock();
+	//printf("1 Task OnSendQueueData - m_alength:%d,m_slength:%d,bIsEmpty:%d\n", m_alength, m_slength, bIsEmpty);
+
+	if (bIsEmpty == true)
+	{
+		return -1;
+	}
+	//printf("2 Task OnSendQueueData - m_alength:%d,m_slength:%d\n", m_alength, m_slength);
+
+	if (m_slength > 0)
+	{
+		return 0;
+	}
+	//printf("3 Task OnSendQueueData - m_alength:%d,m_slength:%d\n", m_alength, m_slength);
+
+	m_queue_mutex_send.lock();
+	auto sptrData = m_queueSend.front();
+	m_queueSend.pop();
+	m_queue_mutex_send.unlock();
+	if (sptrData == nullptr)
+	{
+		return -1;
+	}
+	//printf("4 Task OnSendQueueData - m_alength:%d,m_slength:%d\n", m_alength, m_slength);
+
+	m_alength = 0;
+	m_slength = sptrData->length;
+	m_sfd = sptrData->fd;
+	memcpy(m_sbuffer, sptrData->buffer, sptrData->length);
+
+	printf("Task OnSendQueueData - m_alength:%d,m_slength:%d,m_sfd:%d\n", m_alength, m_slength, m_sfd);
+
+	return 1;
+}
+
+int CNetworkTask::SendBuffer()
+{
+	if (m_slength <= 0 || m_sfd == -1)
+	{
+		return 0;
+	}
+	//int old_slength = m_slength;
+	int slen = write(m_sfd, m_sbuffer + m_alength, m_slength);
+	m_slength -= slen;
+	m_alength += slen;
+
+	if (m_slength <= 0)
+	{
+		m_sfd = -1;
+	}
+
+	return slen;
+}
+
+
+
 int CNetworkTask::AcceptNotify(int fd)
 {
 	socklen_t client_addr_len = 0;
@@ -269,10 +329,13 @@ void CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 			{
 
 			}
-			else
-			{
-				thread_sleep(1);
-			}
+			pTask->OnSendQueueData();
+			pTask->SendBuffer();
+
+			//else
+			//{
+			//	thread_sleep(1);
+			//}
 		}
 	}
 }
@@ -290,10 +353,16 @@ CNetworkTask::~CNetworkTask()
 
 bool CNetworkTask::Init()
 {
+	m_sptrWorkThread = nullptr;
+
 	m_bRunFlag = true;
 	m_rlength = 0;
 	memset(m_rbuffer, 0, sizeof(m_rbuffer));
-	m_sptrWorkThread = nullptr;
+
+	m_sfd = -1;
+	m_slength = 0;
+	m_alength = 0;
+	memset(m_sbuffer, 0, sizeof(m_sbuffer));
 
 	return true;
 }
@@ -333,9 +402,9 @@ void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrR
 {
 	if (m_bRunFlag && sptrRequest != nullptr)
 	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
+		m_queue_mutex_request.lock();
 		m_queueRequest.push(sptrRequest);
-		lock_front.unlock();
+		m_queue_mutex_request.unlock();
 	}
 }
 
@@ -343,10 +412,10 @@ std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()
 {
 	if (m_queueRequest.empty() == false)
 	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
+		m_queue_mutex_request.lock();
 		auto sptrRequest = m_queueRequest.front();
 		m_queueRequest.pop();
-		lock_front.unlock();
+		m_queue_mutex_request.unlock();
 		return sptrRequest;
 	}
 	return nullptr;
@@ -357,5 +426,13 @@ std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
 	return GetEventRequest();
 }
 
-
-
+bool CNetworkTask::SendData(std::shared_ptr<struct tagTaskSendData> sptrData)
+{
+	if (sptrData != nullptr)
+	{
+		m_queue_mutex_send.lock();
+		m_queueSend.push(sptrData);
+		m_queue_mutex_send.unlock();
+	}
+	return true;
+}

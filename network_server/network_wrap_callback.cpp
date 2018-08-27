@@ -58,7 +58,6 @@ bool CNetworkWrapCallBack::NetworkedReadedOnTest(struct packet_buffer & data)
 {
 	printf("Wrap NetworkedReadedOnTest - identity:%d,command:%d,length:%d,buffer:%s\n", data.header.identity, data.header.command, data.header.length, data.buffer);
 
-
 	return true;
 }
 

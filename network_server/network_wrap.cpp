@@ -40,10 +40,13 @@ int CNetworkWrap::OnDisposeEvents()
 			if (ev && EPOLLOUT)
 			{
 				//printf("Wrap OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
-
-				OutputNotify(fd);
-				SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN);
-				continue;
+				if (GetStatus() != NET_WRAP_SOCKET_STATUS_CONNECTED)
+				{
+					OutputNotify(fd);
+					//SetSocketEvents(m_epfd, fd, EPOLL_CTL_DEL, EPOLLOUT);
+					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN);
+					continue;
+				}
 			}
 			if (ev && EPOLLIN)
 			{
@@ -60,9 +63,9 @@ int CNetworkWrap::OnDisposeEvents()
 
 int CNetworkWrap::OnSendQueueData()
 {
-	std::unique_lock<std::mutex> lock_empty(m_queue_mutex_send);
+	m_queue_mutex_send.lock();
 	bool bIsEmpty = m_queueSend.empty();
-	lock_empty.unlock();
+	m_queue_mutex_send.unlock();
 	//printf("1 Wrap OnSendQueueData - m_alength:%d,m_slength:%d,bIsEmpty:%d\n", m_alength, m_slength, bIsEmpty);
 
 	if (bIsEmpty == true)
@@ -77,10 +80,10 @@ int CNetworkWrap::OnSendQueueData()
 	}
 	//printf("3 Wrap OnSendQueueData - m_alength:%d,m_slength:%d\n", m_alength, m_slength);
 
-	std::unique_lock<std::mutex> lock_front(m_queue_mutex_send);
+	m_queue_mutex_send.lock();
 	auto sptrData = m_queueSend.front();
 	m_queueSend.pop();
-	lock_front.unlock();
+	m_queue_mutex_send.unlock();
 	if (sptrData == nullptr)
 	{
 		return -1;
@@ -340,9 +343,9 @@ void CNetworkWrap::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrR
 {
 	if (m_bRunFlag && sptrRequest != nullptr)
 	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
+		m_queue_mutex_request.lock();
 		m_queueRequest.push(sptrRequest);
-		lock_front.unlock();
+		m_queue_mutex_request.unlock();
 	}
 }
 
@@ -350,10 +353,10 @@ std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetEventRequest()
 {
 	if (m_queueRequest.empty() == false)
 	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_request);
+		m_queue_mutex_request.lock();
 		auto sptrRequest = m_queueRequest.front();
 		m_queueRequest.pop();
-		lock_front.unlock();
+		m_queue_mutex_request.unlock();
 		return sptrRequest;
 	}
 	return nullptr;
@@ -364,13 +367,13 @@ std::shared_ptr<struct tagEventRequest> CNetworkWrap::GetAsyncRequest()
 	return GetEventRequest();
 }
 
-bool CNetworkWrap::SendData(std::shared_ptr<struct tagSendData> sptrData)
+bool CNetworkWrap::SendData(std::shared_ptr<struct tagWrapSendData> sptrData)
 {
 	if (sptrData !=  nullptr)
 	{
-		std::unique_lock<std::mutex> lock_front(m_queue_mutex_send);
+		m_queue_mutex_send.lock();
 		m_queueSend.push(sptrData);
-		lock_front.unlock();
+		m_queue_mutex_send.unlock();
 	}
 	return true;
 }

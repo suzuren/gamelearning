@@ -46,7 +46,8 @@ public:
 public:
 	void	TestNetwork();
 	void	TestNetworkConnect();
-	void	TestNetworkSendData();
+	void	TestNetworkWarpSendData();
+	void	TestNetworkTaskSendData(int contextid, struct packet_buffer & data);
 
 };
 

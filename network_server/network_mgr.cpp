@@ -139,7 +139,7 @@ void CNetworkMgr::TestNetworkConnect()
 	}
 }
 
-void CNetworkMgr::TestNetworkSendData()
+void CNetworkMgr::TestNetworkWarpSendData()
 {
 	if (m_sptrNetWrapOper == nullptr)
 	{
@@ -157,11 +157,24 @@ void CNetworkMgr::TestNetworkSendData()
 	int hsize = PACKET_HEADER_SIZE;
 	int bsize = strlen(data.buffer);
 
-	printf("\n\nCNetworkMgr::TestNetworkSendData - length:%d,hsize:%d,bsize:%d\n", data.header.length, hsize, bsize);
+	printf("\n\nCNetworkMgr::TestNetworkWarpSendData - length:%d,hsize:%d,bsize:%d\n", data.header.length, hsize, bsize);
 
-	std::shared_ptr<struct tagSendData> sptrData = std::make_shared<struct tagSendData>();
+	auto sptrData = std::make_shared<struct tagWrapSendData>();
 	memcpy(sptrData->buffer,&data, data.header.length);
-
 	sptrData->length = data.header.length;
 	m_sptrNetWrapOper->SendData(sptrData);
+}
+
+void CNetworkMgr::TestNetworkTaskSendData(int contextid, struct packet_buffer & data)
+{
+	if (m_sptrNetTaskOper == nullptr)
+	{
+		return;
+	}
+	std::shared_ptr<struct tagTaskSendData> sptrData = std::make_shared<struct tagTaskSendData>();
+	memcpy(sptrData->buffer, &data, data.header.length);
+	sptrData->length = data.header.length;
+	sptrData->fd = contextid;
+	m_sptrNetTaskOper->SendData(sptrData);
+
 }

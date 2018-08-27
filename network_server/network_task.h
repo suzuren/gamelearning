@@ -88,6 +88,7 @@ private:
 	int HangupNotify(int fd);
 	int AcceptNotify(int fd);
 	int InputNotify(int fd);
+	int OutputNotify(int fd);
 
 public:
 	bool Init();

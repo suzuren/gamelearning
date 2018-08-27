@@ -21,23 +21,23 @@ int CNetworkTask::OnDisposeEvents()
 			int ev = m_events[i].events;
 			if (fd == m_listenfd)
 			{
-				//if (ev && EPOLLERR)
+				//if (ev & EPOLLERR)
 				//{
 				//	printf("listen Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
 				//	//HangupNotify(fd);
 				//	continue;
 				//}
-				//if (ev && EPOLLHUP)
+				//if (ev & EPOLLHUP)
 				//{
 				//	printf("listen Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
 				//	//HangupNotify(fd);
 				//	continue;
 				//}
-				if (ev && EPOLLIN)
+				if (ev & EPOLLIN)
 				{
 					//printf("listen Task OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
 					AcceptNotify(fd);
-					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN);
+					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLERR | EPOLLHUP | EPOLLIN);
 					//InputNotify(fd);
 					//SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 					continue;
@@ -52,31 +52,31 @@ int CNetworkTask::OnDisposeEvents()
 			}
 			else
 			{
-				//if (ev && EPOLLERR)
-				//{
-				//	printf("client Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
-				//	HangupNotify(fd);
-				//	continue;
-				//}
-				//if (ev && EPOLLHUP)
-				//{
-				//	printf("client Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
-				//	HangupNotify(fd);
-				//	continue;
-				//}
-				if (ev && EPOLLIN)
+				if (ev & EPOLLERR)
+				{
+					printf("client Task OnDisposeEvents - Error fd:%d,errno:%d\n", fd, errno);
+					HangupNotify(fd);
+					continue;
+				}
+				if (ev & EPOLLHUP)
+				{
+					printf("client Task OnDisposeEvents - Hangup fd:%d,errno:%d\n", fd, errno);
+					HangupNotify(fd);
+					continue;
+				}
+				if (ev & EPOLLIN)
 				{
 					//printf("client Task OnDisposeEvents - input fd:%d,errno:%d\n", fd, errno);
 
 					InputNotify(fd);
-					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN | EPOLLOUT);
+					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLERR | EPOLLHUP | EPOLLIN);
 					continue;
 				}
-				if (ev && EPOLLOUT)
+				if (ev & EPOLLOUT)
 				{
 					printf("client Task OnDisposeEvents - output fd:%d,errno:%d\n", fd, errno);
 
-					//OutputNotify();
+					OutputNotify(fd);
 					continue;
 				}
 			}
@@ -169,7 +169,7 @@ int CNetworkTask::AcceptNotify(int fd)
 				break;
 			}
 			
-			flag = SetSocketEvents(m_epfd, client_fd, EPOLL_CTL_ADD, EPOLLIN | EPOLLOUT);
+			flag = SetSocketEvents(m_epfd, client_fd, EPOLL_CTL_ADD, EPOLLERR | EPOLLHUP | EPOLLIN);
 			if (flag == false)
 			{
 				break;
@@ -296,6 +296,11 @@ int CNetworkTask::InputNotify(int fd)
 	return -1;
 }
 
+int CNetworkTask::OutputNotify(int fd)
+{
+	return 1;
+}
+
 bool CNetworkTask::SocketListen()
 {
 	m_bRunFlag = true;
@@ -309,7 +314,7 @@ bool CNetworkTask::SocketListen()
 	{
 		return false;
 	}
-	bool flag = SetSocketEvents(m_epfd, m_listenfd, EPOLL_CTL_ADD, EPOLLIN);
+	bool flag = SetSocketEvents(m_epfd, m_listenfd, EPOLL_CTL_ADD, EPOLLERR | EPOLLHUP | EPOLLIN);
 	if (flag == false)
 	{
 		return false;

@@ -23,7 +23,7 @@ int CNetworkWrap::OnDisposeEvents()
 			int fd = m_events[i].data.fd;
 			int ev = m_events[i].events;
 
-			//if (ev && (EPOLLHUP | EPOLLERR))
+			//if (ev & (EPOLLHUP | EPOLLERR))
 			//{
 			//	//printf("Wrap OnDisposeEvents - Hangup fd:%d,errno:%d,EALREADY:%d,EINPROGRESS:%d\n", fd, errno, EALREADY, EINPROGRESS);
 			//	if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR || errno == EALREADY || errno == EINPROGRESS)
@@ -37,18 +37,19 @@ int CNetworkWrap::OnDisposeEvents()
 			//	}
 			//	continue;
 			//}
-			if (ev && EPOLLOUT)
+			if (ev & EPOLLOUT)
 			{
 				//printf("Wrap OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
-				if (GetStatus() != NET_WRAP_SOCKET_STATUS_CONNECTED)
+
+				//if (GetStatus() != NET_WRAP_SOCKET_STATUS_CONNECTED)
 				{
 					OutputNotify(fd);
-					//SetSocketEvents(m_epfd, fd, EPOLL_CTL_DEL, EPOLLOUT);
+					//SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, ~EPOLLOUT);
 					SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD, EPOLLIN);
 					continue;
 				}
 			}
-			if (ev && EPOLLIN)
+			if (ev & EPOLLIN)
 			{
 				//printf("Wrap OnDisposeEvents - Input fd:%d,errno:%d\n", fd, errno);
 

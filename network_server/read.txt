@@ -27,3 +27,5 @@ EPOLLINÊÂ¼þÔòÖ»ÓÐµ±¶Ô¶ËÓÐÊý¾ÝÐ´ÈëÊ±²Å»á´¥·¢£¬ËùÒÔ´¥·¢Ò»´ÎºóÐèÒª²»¶Ï¶ÁÈ¡ËùÓÐÊý¾ÝÖ
 ÄÇÃ´×îÖÕ¾Í»áÔÚ¶ÂËÀÔÚ×èÈûÀï¡£
 
 
+¶ÔÓÚLT Ä£Ê½£¬Èç¹û×¢²áÁËEPOLLOUT,Ö»Òª¸Ãsocket¿ÉÐ´(·¢ËÍ»º³åÇø)Î´Âú£¬ÄÇÃ´¾Í»á´¥·¢EPOLLOUT¡£
+¶ÔÓÚET Ä£Ê½£¬Èç¹û×¢²áÁËEPOLLOUT,Ö»ÓÐµ±socket´Ó²»¿ÉÐ´±äÎª¿ÉÐ´µÄÊ±ºò£¬»á´¥·¢EPOLLOUT¡£

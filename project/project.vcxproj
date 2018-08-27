@@ -163,6 +163,10 @@
     <ClInclude Include="..\referlib\iobuffer.h" />
     <ClInclude Include="..\referlib\notification.h" />
     <ClInclude Include="..\referlib\tcp.h" />
+    <ClInclude Include="..\socket-server\socket_epoll.h" />
+    <ClInclude Include="..\socket-server\socket_kqueue.h" />
+    <ClInclude Include="..\socket-server\socket_poll.h" />
+    <ClInclude Include="..\socket-server\socket_server.h" />
     <ClInclude Include="..\test_curl\curl_per.h" />
     <ClInclude Include="..\test_curl\logger.h" />
     <ClInclude Include="..\test_curl\curl_mgr.h" />
@@ -342,6 +346,7 @@
     <None Include="..\referlib\start_server.sh" />
     <None Include="..\referlib\stop_client.sh" />
     <None Include="..\referlib\stop_server.sh" />
+    <None Include="..\socket-server\Makefile" />
     <None Include="..\test\Makefile" />
     <None Include="..\test_curl\Makefile" />
     <None Include="..\test_curl\reload.sh" />
@@ -513,6 +518,8 @@
     <ClCompile Include="..\referlib\server.cpp" />
     <ClCompile Include="..\referlib\tcp.cc" />
     <ClCompile Include="..\referlib\tcp_test.cc" />
+    <ClCompile Include="..\socket-server\socket_server.c" />
+    <ClCompile Include="..\socket-server\test.c" />
     <ClCompile Include="..\test\helloworld.cpp" />
     <ClCompile Include="..\test_curl\logger.cpp" />
     <ClCompile Include="..\test_curl\curl_mgr.cpp" />

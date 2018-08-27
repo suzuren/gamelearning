@@ -205,6 +205,9 @@
     <Filter Include="network_server">
       <UniqueIdentifier>{7b7bcc9e-1576-4436-a94e-ddc3db0db22f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="socket-server">
+      <UniqueIdentifier>{61c6fc17-f7cd-4571-b9f5-f1afa560d349}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -698,6 +701,18 @@
     </ClInclude>
     <ClInclude Include="..\virtual_destructor\test.h">
       <Filter>virtual_destructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\socket-server\socket_epoll.h">
+      <Filter>socket-server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\socket-server\socket_kqueue.h">
+      <Filter>socket-server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\socket-server\socket_poll.h">
+      <Filter>socket-server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\socket-server\socket_server.h">
+      <Filter>socket-server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1217,6 +1232,9 @@
     </None>
     <None Include="..\network_server\stop.sh">
       <Filter>network_server</Filter>
+    </None>
+    <None Include="..\socket-server\Makefile">
+      <Filter>socket-server</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1744,6 +1762,12 @@
     </ClCompile>
     <ClCompile Include="..\network_server\network_wrap_callback.cpp">
       <Filter>network_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\socket-server\socket_server.c">
+      <Filter>socket-server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\socket-server\test.c">
+      <Filter>socket-server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

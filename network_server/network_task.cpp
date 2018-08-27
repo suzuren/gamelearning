@@ -42,7 +42,7 @@ int CNetworkTask::OnDisposeEvents()
 					//SetSocketEvents(m_epfd, fd, EPOLL_CTL_MOD);
 					continue;
 				}
-				//if (ev && EPOLLOUT)
+				//if (ev & EPOLLOUT)
 				//{
 				//	printf("listen Task OnDisposeEvents - Output fd:%d,errno:%d\n", fd, errno);
 

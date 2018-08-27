@@ -552,6 +552,7 @@
     <Text Include="..\NetEpoll\readme.txt" />
     <Text Include="..\network_server\read.txt" />
     <Text Include="..\shellcmd.txt" />
+    <Text Include="..\socket-server\read.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />

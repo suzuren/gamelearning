@@ -37,7 +37,7 @@
 #define SOCKET_TYPE_PACCEPT 7
 #define SOCKET_TYPE_BIND 8
 
-#define MAX_SOCKET (1<<MAX_SOCKET_P)
+#define MAX_SOCKET (1<<MAX_SOCKET_P)   // 2^16 = 65535
 
 #define PRIORITY_HIGH 0
 #define PRIORITY_LOW 1

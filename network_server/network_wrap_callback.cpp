@@ -38,7 +38,7 @@ bool CNetworkWrapCallBack::OnNetworkNotifyConnect(std::shared_ptr<struct tagEven
 
 bool CNetworkWrapCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
-	printf("Wrap OnNetworkNotifyReaded - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
+	//printf("Wrap OnNetworkNotifyReaded - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
 
 	struct packet_buffer & data = sptrRequest->data;
 	if (data.header.command <= NETWORK_EVENT_MIN || data.header.command >= NETWORK_EVENT_MAX)

@@ -192,7 +192,7 @@ int CNetworkWrap::InputNotify(int fd)
 				pack.header.identity = ptr->identity;
 				pack.header.command = ptr->command;
 				pack.header.length = ptr->length;
-				memcpy(pack.buffer, m_rbuffer + GetPacketHeaderLength(), ptr->length);
+				memcpy(pack.buffer, m_rbuffer + GetPacketHeaderLength(), ptr->length - GetPacketHeaderLength());
 				
 				m_rlength -= size;
 				memcpy(m_rbuffer, m_rbuffer + size, m_rlength);
@@ -309,6 +309,7 @@ bool CNetworkWrap::Init()
 	m_status = 0;
 	m_sendIndex = 0;
 
+	m_uid = 0;
 	return true;
 }
 
@@ -381,20 +382,25 @@ bool CNetworkWrap::SendData(std::shared_ptr<struct tagWrapSendData> sptrData)
 
 bool CNetworkWrap::SendDataTest()
 {
-	packet_buffer data;
+	char buffer[PACKET_MAX_DATA_SIZE] = { 0 };
+	snprintf(buffer, sizeof(buffer), "%s -> hello world!", GetThreadFlag().c_str());
 
-	//data.header.identity = 335;
-	//data.header.command = NETWORK_EVENT_TEST;
-	//strcpy(data.buffer, "hello world!");
-	//data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
+	struct packet_buffer data;
+	data.header.identity = GetUID();
+	data.header.command = NETWORK_EVENT_TEST;
+	strncpy(data.buffer, buffer, strnlen(buffer, sizeof(buffer)));
+	data.header.length = PACKET_HEADER_SIZE + strnlen(data.buffer, sizeof(data.buffer));
 
-	//std::shared_ptr<pakcet_buffer> sptrData = std::make_shared<pakcet_buffer>(data);
+	auto sptrData = std::make_shared<struct tagWrapSendData>();
+	if (sptrData == nullptr)
+	{
+		return false;
+	}
+	sptrData->init();
+	memcpy(sptrData->buffer, &data, data.header.length);
+	sptrData->length = data.header.length;
+	SendData(sptrData);
 
-	//sptrData->header.identity = 335;
-	//sptrData->header.command = NETWORK_EVENT_TEST;
-	//strcpy(sptrData->buffer, "hello world!");
-	//sptrData->header.length = PACKET_HEADER_SIZE + strlen(sptrData->buffer);
-	//SendData(sptrData);
 	return true;
 }
 
@@ -428,7 +434,7 @@ std::string CNetworkWrap::GetThreadFlag()
 {
 	std::string data;
 	char buffer[512] = { 0 };
-	snprintf(buffer, sizeof(buffer), "threadid = %llu sendIndex = %d", GetThreadID(), m_sendIndex++);
+	snprintf(buffer, sizeof(buffer), " uid = %03d threadid = %llu sendIndex = %03d", GetUID(),GetThreadID(), m_sendIndex++);
 	data.append((const char *)buffer, strnlen(buffer, sizeof(buffer)));
 	return data;
 }

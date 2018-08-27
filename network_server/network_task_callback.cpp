@@ -42,7 +42,7 @@ bool CNetworkTaskCallBack::OnNetworkNotifyAccept(std::shared_ptr<struct tagEvent
 
 bool CNetworkTaskCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
-	printf("Task OnNetworkNotifyReaded - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
+	//printf("Task OnNetworkNotifyReaded - eventid:%d,contextid:%d,addr:%s\n", sptrRequest->eventid, sptrRequest->contextid, inet_ntoa(sptrRequest->address.sin_addr));
 
 	struct packet_buffer & data = sptrRequest->data;
 	if (data.header.command <= NETWORK_EVENT_MIN || data.header.command >= NETWORK_EVENT_MAX)

@@ -119,7 +119,7 @@ int CNetworkTask::OnSendQueueData()
 	m_sfd = sptrData->fd;
 	memcpy(m_sbuffer, sptrData->buffer, sptrData->length);
 
-	printf("Task OnSendQueueData - m_alength:%d,m_slength:%d,m_sfd:%d\n", m_alength, m_slength, m_sfd);
+	//printf("Task OnSendQueueData - m_alength:%d,m_slength:%d,m_sfd:%d\n", m_alength, m_slength, m_sfd);
 
 	return 1;
 }
@@ -264,6 +264,7 @@ int CNetworkTask::InputNotify(int fd)
 			if (size < 0)
 			{
 				// error
+				return -1;
 			}
 			if (size > 0)
 			{
@@ -272,9 +273,10 @@ int CNetworkTask::InputNotify(int fd)
 				pack.header.identity = ptr->identity;
 				pack.header.command = ptr->command;
 				pack.header.length = ptr->length;
-				memcpy(pack.buffer, m_rbuffer + GetPacketHeaderLength(), ptr->length);
+				memcpy(pack.buffer, m_rbuffer + GetPacketHeaderLength(), ptr->length - GetPacketHeaderLength());
 				
 				m_rlength -= size;
+				
 				memcpy(m_rbuffer, m_rbuffer + size, m_rlength);
 
 				//

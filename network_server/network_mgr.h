@@ -5,6 +5,8 @@
 #include "network_task.h"
 #include "network_wrap.h"
 
+#include <vector>
+
 class AsyncNetCallBack
 {
 public:
@@ -27,6 +29,9 @@ public:
 private:
 	std::shared_ptr<CNetworkTask>  m_sptrNetTaskOper;
 	std::shared_ptr<CNetworkWrap>  m_sptrNetWrapOper;
+
+	std::vector<std::shared_ptr<CNetworkWrap>>  m_vecNetWrapOper;
+
 
 	std::shared_ptr<AsyncNetCallBack> m_sptrAsyncNetTaskCallBack;
 	std::shared_ptr<AsyncNetCallBack> m_sptrAsyncNetWrapCallBack;

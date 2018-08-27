@@ -21,6 +21,16 @@ void CNetworkMgr::DispatchNetworkRequest()
 			m_sptrAsyncNetWrapCallBack->OnProcessNetworkEvent(sptrRequest);
 		}
 	}
+	for (unsigned int i = 0; i < m_vecNetWrapOper.size(); i++)
+	{
+		auto & sptrNetWrapOper = m_vecNetWrapOper[i];
+		if (sptrNetWrapOper == nullptr)continue;
+		auto sptrRequest = sptrNetWrapOper->GetAsyncRequest();
+		if (m_sptrAsyncNetWrapCallBack != nullptr)
+		{
+			m_sptrAsyncNetWrapCallBack->OnProcessNetworkEvent(sptrRequest);
+		}
+	}
 }
 
 bool CNetworkMgr::StartTask()
@@ -105,6 +115,15 @@ void CNetworkMgr::ShutDown()
 		m_sptrNetWrapOper.reset();
 		m_sptrNetWrapOper = nullptr;
 	}
+	for (unsigned int i = 0; i < m_vecNetWrapOper.size(); i++)
+	{
+		auto & sptrNetWrapOper = m_vecNetWrapOper[i];
+		if (sptrNetWrapOper == nullptr)continue;
+		sptrNetWrapOper->ShutDown();
+		sptrNetWrapOper.reset();
+		sptrNetWrapOper = nullptr;
+	}
+	m_vecNetWrapOper.clear();
 }
 
 void CNetworkMgr::SetAsyncNetTaskCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack)
@@ -137,6 +156,19 @@ void CNetworkMgr::TestNetworkConnect()
 	{
 		return;
 	}
+
+	m_vecNetWrapOper.clear();
+	for (unsigned int i = 16; i < 26; i++)
+	{
+		auto sptrNetWrapOper = std::make_shared<CNetworkWrap>();
+		if (sptrNetWrapOper == nullptr) continue;
+		bool flag = sptrNetWrapOper->Init();
+		if (flag == false) continue;
+		sptrNetWrapOper->SetUID(i);
+		flag = sptrNetWrapOper->Start("127.0.0.1", PORT);
+		if (flag == false) continue;
+		m_vecNetWrapOper.emplace_back(std::move(sptrNetWrapOper));
+	}
 }
 
 void CNetworkMgr::TestNetworkWarpSendData()
@@ -153,16 +185,26 @@ void CNetworkMgr::TestNetworkWarpSendData()
 	data.header.identity = 335;
 	data.header.command = NETWORK_EVENT_TEST;
 	strncpy(data.buffer, buffer, strnlen(buffer, sizeof(buffer)));
-	data.header.length = PACKET_HEADER_SIZE + strlen(data.buffer);
-	int hsize = PACKET_HEADER_SIZE;
-	int bsize = strlen(data.buffer);
-
-	printf("\n\nCNetworkMgr::TestNetworkWarpSendData - length:%d,hsize:%d,bsize:%d\n", data.header.length, hsize, bsize);
+	data.header.length = PACKET_HEADER_SIZE + strnlen(data.buffer, sizeof(data.buffer));
+	//int hsize = PACKET_HEADER_SIZE;
+	//int bsize = strlen(data.buffer);
+	//printf("\n\nCNetworkMgr::TestNetworkWarpSendData - length:%d,hsize:%d,bsize:%d\n", data.header.length, hsize, bsize);
 
 	auto sptrData = std::make_shared<struct tagWrapSendData>();
-	memcpy(sptrData->buffer,&data, data.header.length);
-	sptrData->length = data.header.length;
-	m_sptrNetWrapOper->SendData(sptrData);
+	if (sptrData != nullptr)
+	{
+		sptrData->init();
+		memcpy(sptrData->buffer, &data, data.header.length);
+		sptrData->length = data.header.length;
+		m_sptrNetWrapOper->SendData(sptrData);
+	}
+
+	for (unsigned int i = 0; i < m_vecNetWrapOper.size(); i++)
+	{
+		auto & sptrNetWrapOper = m_vecNetWrapOper[i];
+		if (sptrNetWrapOper == nullptr)continue;
+		sptrNetWrapOper->SendDataTest();
+	}
 }
 
 void CNetworkMgr::TestNetworkTaskSendData(int contextid, struct packet_buffer & data)

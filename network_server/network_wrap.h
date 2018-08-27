@@ -78,6 +78,8 @@ private:
 
 	int m_status;
 	unsigned int m_sendIndex;
+	
+	unsigned int m_uid;
 private:
 	static void runThreadFunction(CNetworkWrap *pTask);
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
@@ -110,6 +112,9 @@ public:
 	bool SendDataTest();
 	unsigned long long GetThreadID();
 	std::string GetThreadFlag();
+
+	unsigned int GetUID() { return m_uid; }
+	void SetUID(unsigned int uid) { m_uid = uid; }
 };
 
 

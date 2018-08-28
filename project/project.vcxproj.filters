@@ -714,6 +714,9 @@
     <ClInclude Include="..\socket-server\socket_server.h">
       <Filter>socket-server</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\test_helloworld.h">
+      <Filter>test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1768,6 +1771,9 @@
     </ClCompile>
     <ClCompile Include="..\socket-server\test.c">
       <Filter>socket-server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\test_socket_server.h">
+      <Filter>test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

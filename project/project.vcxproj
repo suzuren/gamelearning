@@ -167,6 +167,7 @@
     <ClInclude Include="..\socket-server\socket_kqueue.h" />
     <ClInclude Include="..\socket-server\socket_poll.h" />
     <ClInclude Include="..\socket-server\socket_server.h" />
+    <ClInclude Include="..\test\test_helloworld.h" />
     <ClInclude Include="..\test_curl\curl_per.h" />
     <ClInclude Include="..\test_curl\logger.h" />
     <ClInclude Include="..\test_curl\curl_mgr.h" />
@@ -521,6 +522,7 @@
     <ClCompile Include="..\socket-server\socket_server.c" />
     <ClCompile Include="..\socket-server\test.c" />
     <ClCompile Include="..\test\helloworld.cpp" />
+    <ClCompile Include="..\test\test_socket_server.h" />
     <ClCompile Include="..\test_curl\logger.cpp" />
     <ClCompile Include="..\test_curl\curl_mgr.cpp" />
     <ClCompile Include="..\test_curl\test.cpp" />

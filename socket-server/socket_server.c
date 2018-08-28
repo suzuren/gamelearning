@@ -1179,11 +1179,15 @@ clear_closed_event(struct socket_server *ss, struct socket_message * result, int
 // return type
 int
 socket_server_poll(struct socket_server *ss, struct socket_message * result, int * more) {
-	for (;;) {
-		if (ss->checkctrl) {
-			if (has_cmd(ss)) {
+	for (;;)
+	{
+		if (ss->checkctrl)
+		{
+			if (has_cmd(ss))
+			{
 				int type = ctrl_cmd(ss, result);
-				if (type != -1) {
+				if (type != -1)
+				{
 					clear_closed_event(ss, result, type);
 					return type;
 				} else
@@ -1192,7 +1196,8 @@ socket_server_poll(struct socket_server *ss, struct socket_message * result, int
 				ss->checkctrl = 0;
 			}
 		}
-		if (ss->event_index == ss->event_n) {
+		if (ss->event_index == ss->event_n)
+		{
 			ss->event_n = sp_wait(ss->event_fd, ss->ev, MAX_EVENT);
 			ss->checkctrl = 1;
 			if (more) {

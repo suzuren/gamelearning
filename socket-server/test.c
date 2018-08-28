@@ -49,7 +49,7 @@ test(struct socket_server *ss) {
 	int b = socket_server_bind(ss,300,1);
 	printf("binding stdin %d\n",b);
 	int i;
-	for (i=0;i<100;i++) {
+	for (i=0;i<3;i++) {
 		socket_server_connect(ss, 400+i, "127.0.0.1", 8888);
 	}
 	sleep(5);

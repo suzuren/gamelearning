@@ -25,17 +25,17 @@
 #define MAX_INFO 128
 // MAX_SOCKET will be 2^MAX_SOCKET_P
 #define MAX_SOCKET_P 16
-#define MAX_EVENT 64
-#define MIN_READ_BUFFER 64
-#define SOCKET_TYPE_INVALID 0
-#define SOCKET_TYPE_RESERVE 1
-#define SOCKET_TYPE_PLISTEN 2
-#define SOCKET_TYPE_LISTEN 3
-#define SOCKET_TYPE_CONNECTING 4
-#define SOCKET_TYPE_CONNECTED 5
-#define SOCKET_TYPE_HALFCLOSE 6
-#define SOCKET_TYPE_PACCEPT 7
-#define SOCKET_TYPE_BIND 8
+#define MAX_EVENT 64				// 用于epoll_wait的第三个参数 每次返回事件的多少
+#define MIN_READ_BUFFER 64			// 最小分配的读缓冲大小 为了减少read的调用 尽可能分配大的读缓冲区 muduo是用了reav来减少read系统调用次数的 它可以准备多块缓冲区
+#define SOCKET_TYPE_INVALID 0		// 无效的sock 类型
+#define SOCKET_TYPE_RESERVE 1		// 预留已经被申请 即将被使用
+#define SOCKET_TYPE_PLISTEN 2		// listen fd但是未加入epoll管理
+#define SOCKET_TYPE_LISTEN 3		// 监听到套接字已经加入epoll管理
+#define SOCKET_TYPE_CONNECTING 4	// 尝试连接的socket fd
+#define SOCKET_TYPE_CONNECTED 5		// 已经建立连接的socket 主动conn或者被动accept的套接字 已经加入epoll管理
+#define SOCKET_TYPE_HALFCLOSE 6		// 已经在应用层关闭了fd 但是数据还没有发送完 还没有close
+#define SOCKET_TYPE_PACCEPT 7		// accept返回的fd 未加入epoll
+#define SOCKET_TYPE_BIND 8			// 其他类型的fd 如 stdin stdout等
 
 #define MAX_SOCKET (1<<MAX_SOCKET_P)   // 2^16 = 65535
 
@@ -87,13 +87,13 @@ struct socket {
 struct socket_server {
 	int recvctrl_fd;
 	int sendctrl_fd;
-	int checkctrl;
+	int checkctrl;						// 释放检测命令
 	poll_fd event_fd;
 	int alloc_id;
-	int event_n;
-	int event_index;
+	int event_n;						// epoll_wait 返回的事件数
+	int event_index;					// 当前处理的事件序号
 	struct socket_object_interface soi;
-	struct event ev[MAX_EVENT];
+	struct event ev[MAX_EVENT];			// epoll_wait返回的事件集
 	struct socket slot[MAX_SOCKET];
 	char buffer[MAX_INFO];
 	uint8_t udpbuffer[MAX_UDP_PACKAGE];
@@ -404,6 +404,7 @@ new_fd(struct socket_server *ss, int id, int fd, int protocol, uintptr_t opaque,
 // return -1 when connecting
 static int
 open_socket(struct socket_server *ss, struct request_open * request, struct socket_message *result) {
+
 	int id = request->id;
 	result->opaque = request->opaque;
 	result->id = id;
@@ -441,6 +442,7 @@ open_socket(struct socket_server *ss, struct request_open * request, struct sock
 		}
 		break;
 	}
+	//printf("open_socket - id:%d,port:%d,sock:%d,opaque:%lu,host:%s\n", request->id, request->port, sock, request->opaque, request->host);
 
 	if (sock < 0) {
 		goto _failed;
@@ -693,6 +695,8 @@ send_buffer_empty(struct socket *s) {
  */
 static int
 send_socket(struct socket_server *ss, struct request_send * request, struct socket_message *result, int priority, const uint8_t *udp_address) {
+
+
 	int id = request->id;
 	struct socket * s = &ss->slot[HASH_ID(id)];
 	struct send_object so;
@@ -703,10 +707,18 @@ send_socket(struct socket_server *ss, struct request_send * request, struct sock
 		so.free_func(request->buffer);
 		return -1;
 	}
+
+	//printf("send_socket - id:%d,sz:%d,buffer:%s - socket - id:%d,type:%d,fd:%d,empty:%d,protocol:%d,so.sz:%d\n",
+	//	request->id, request->sz, request->buffer,s->id,s->type, s->fd, send_buffer_empty(s), s->protocol, so.sz);
+
 	assert(s->type != SOCKET_TYPE_PLISTEN && s->type != SOCKET_TYPE_LISTEN);
 	if (send_buffer_empty(s) && s->type == SOCKET_TYPE_CONNECTED) {
 		if (s->protocol == PROTOCOL_TCP) {
 			int n = write(s->fd, so.buffer, so.sz);
+
+			//printf("send_socket - id:%d,sz:%d,buffer:%s - socket - id:%d,type:%d,fd:%d,empty:%d,protocol:%d,so.sz:%d,n:%d\n",
+			//	request->id, request->sz, request->buffer, s->id, s->type, s->fd, send_buffer_empty(s), s->protocol, so.sz,n);
+
 			if (n<0) {
 				switch(errno) {
 				case EINTR:
@@ -759,6 +771,9 @@ send_socket(struct socket_server *ss, struct request_send * request, struct sock
 
 static int
 listen_socket(struct socket_server *ss, struct request_listen * request, struct socket_message *result) {
+
+	//printf("listen_socket - id:%d,fd:%d,opaque:%lu\n", request->id, request->fd, request->opaque);
+
 	int id = request->id;
 	int listen_fd = request->fd;
 	struct socket *s = new_fd(ss, id, listen_fd, PROTOCOL_TCP, request->opaque, false);
@@ -807,6 +822,9 @@ close_socket(struct socket_server *ss, struct request_close *request, struct soc
 
 static int
 bind_socket(struct socket_server *ss, struct request_bind *request, struct socket_message *result) {
+
+	printf("bind_socket - id:%d,fd:%d,opaque:%lu\n", request->id, request->fd, request->opaque);
+
 	int id = request->id;
 	result->id = id;
 	result->opaque = request->opaque;
@@ -824,12 +842,17 @@ bind_socket(struct socket_server *ss, struct request_bind *request, struct socke
 
 static int
 start_socket(struct socket_server *ss, struct request_start *request, struct socket_message *result) {
+
 	int id = request->id;
 	result->id = id;
 	result->opaque = request->opaque;
 	result->ud = 0;
 	result->data = NULL;
 	struct socket *s = &ss->slot[HASH_ID(id)];
+
+	//printf("start_socket 1 - id:%d,opaque:%lu,type:%d\n", request->id, request->opaque, s->type);
+
+
 	if (s->type == SOCKET_TYPE_INVALID || s->id !=id) {
 		return SOCKET_ERROR;
 	}
@@ -841,6 +864,9 @@ start_socket(struct socket_server *ss, struct request_start *request, struct soc
 		s->type = (s->type == SOCKET_TYPE_PACCEPT) ? SOCKET_TYPE_CONNECTED : SOCKET_TYPE_LISTEN;
 		s->opaque = request->opaque;
 		result->data = "start";
+
+		//printf("start_socket 2 - id:%d,opaque:%lu,type:%d\n", request->id, request->opaque, s->type);
+
 		return SOCKET_OPEN;
 	} else if (s->type == SOCKET_TYPE_CONNECTED) {
 		s->opaque = request->opaque;
@@ -908,6 +934,7 @@ add_udp_socket(struct socket_server *ss, struct request_udp *udp) {
 	}
 	ns->type = SOCKET_TYPE_CONNECTED;
 	memset(ns->p.udp_address, 0, sizeof(ns->p.udp_address));
+	printf("add_udp_socket - id:%d,type:%d\n",id,ns->type);
 }
 
 static int
@@ -947,6 +974,7 @@ ctrl_cmd(struct socket_server *ss, struct socket_message *result) {
 	int len = header[1];
 	block_readpipe(fd, buffer, len);
 	// ctrl command only exist in local fd, so don't worry about endian.
+	printf("ctrl_cmd - type:%c,len:%d,alloc_id:%d\n",type,len,ss->alloc_id);
 	switch (type) {
 	case 'S':
 		return start_socket(ss,(struct request_start *)buffer, result);
@@ -1293,6 +1321,8 @@ open_request(struct socket_server *ss, struct request_package *req, uintptr_t op
 	req->u.open.port = port;
 	memcpy(req->u.open.host, addr, len);
 	req->u.open.host[len] = '\0';
+	
+	//printf("open_request - len:%d,id:%d,alloc_id:%d,host:%lu - %s\n", len, id, ss->alloc_id,sizeof(req->u.open.host), req->u.open.host);
 
 	return len;
 }
@@ -1318,6 +1348,9 @@ free_buffer(struct socket_server *ss, const void * buffer, int sz) {
 int64_t
 socket_server_send(struct socket_server *ss, int id, const void * buffer, int sz) {
 	struct socket * s = &ss->slot[HASH_ID(id)];
+
+	//printf("socket_server_send - sz:%d,id:%d,alloc_id:%d,socket type:%d id:%d\n", sz, id,ss->alloc_id, s->type, s->id);
+
 	if (s->id != id || s->type == SOCKET_TYPE_INVALID) {
 		free_buffer(ss, buffer, sz);
 		return -1;
@@ -1518,6 +1551,8 @@ socket_server_udp(struct socket_server *ss, uintptr_t opaque, const char * addr,
 int64_t
 socket_server_udp_send(struct socket_server *ss, int id, const struct socket_udp_address *addr, const void *buffer, int sz) {
 	struct socket * s = &ss->slot[HASH_ID(id)];
+
+
 	if (s->id != id || s->type == SOCKET_TYPE_INVALID) {
 		free_buffer(ss, buffer, sz);
 		return -1;
@@ -1529,6 +1564,9 @@ socket_server_udp_send(struct socket_server *ss, int id, const struct socket_udp
 	request.u.send_udp.send.buffer = (char *)buffer;
 
 	const uint8_t *udp_address = (const uint8_t *)addr;
+
+	printf("socket_server_udp_send - id:%d,socket - id:%d,type:%d,udp_address:%d\n", id, s->id, s->type, udp_address[0]);
+
 	int addrsz;
 	switch (udp_address[0]) {
 	case PROTOCOL_UDP:

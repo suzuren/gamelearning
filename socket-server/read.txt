@@ -38,41 +38,60 @@ I/O 函数都可以用于管道，如close、read、write等等。
 
 
 
+type __sync_fetch_and_add(type *ptr, type value, ...)
+// 将value加到*ptr上，结果更新到*ptr，并返回操作之前*ptr的值
+type __sync_fetch_and_sub(type *ptr, type value, ...)
+// 从*ptr减去value，结果更新到*ptr，并返回操作之前*ptr的值
+type __sync_fetch_and_or(type *ptr, type value, ...)
+// 将*ptr与value相或，结果更新到*ptr， 并返回操作之前*ptr的值
+type __sync_fetch_and_and(type *ptr, type value, ...)
+// 将*ptr与value相与，结果更新到*ptr，并返回操作之前*ptr的值
+type __sync_fetch_and_xor(type *ptr, type value, ...)
+// 将*ptr与value异或，结果更新到*ptr，并返回操作之前*ptr的值
+type __sync_fetch_and_nand(type *ptr, type value, ...)
+// 将*ptr取反后，与value相与，结果更新到*ptr，并返回操作之前*ptr的值
+type __sync_add_and_fetch(type *ptr, type value, ...)
+// 将value加到*ptr上，结果更新到*ptr，并返回操作之后新*ptr的值
+type __sync_sub_and_fetch(type *ptr, type value, ...)
+// 从*ptr减去value，结果更新到*ptr，并返回操作之后新*ptr的值
+type __sync_or_and_fetch(type *ptr, type value, ...)
+// 将*ptr与value相或， 结果更新到*ptr，并返回操作之后新*ptr的值
+type __sync_and_and_fetch(type *ptr, type value, ...)
+// 将*ptr与value相与，结果更新到*ptr，并返回操作之后新*ptr的值
+type __sync_xor_and_fetch(type *ptr, type value, ...)
+// 将*ptr与value异或，结果更新到*ptr，并返回操作之后新*ptr的值
+type __sync_nand_and_fetch(type *ptr, type value, ...)
+// 将*ptr取反后，与value相与，结果更新到*ptr，并返回操作之后新*ptr的值
+bool __sync_bool_compare_and_swap(type *ptr, type oldval type newval, ...)
+// 比较*ptr与oldval的值，如果两者相等，则将newval更新到*ptr并返回true
+type __sync_val_compare_and_swap(type *ptr, type oldval type newval, ...)
+// 比较*ptr与oldval的值，如果两者相等，则将newval更新到*ptr并返回操作之前*ptr的值
+__sync_synchronize(...)
+// 发出完整内存栅栏
+type __sync_lock_test_and_set(type *ptr, type value, ...)
+// 将value写入*ptr，对*ptr加锁，并返回操作之前*ptr的值。即，try spinlock语义
+void __sync_lock_release(type *ptr, ...)
+// 将0写入到*ptr，并对*ptr解锁。即，unlock spinlock语义
 
 
 
 
-//type __sync_fetch_and_add(type *ptr, type value, ...)
-//// 将value加到*ptr上，结果更新到*ptr，并返回操作之前*ptr的值
-//type __sync_fetch_and_sub(type *ptr, type value, ...)
-//// 从*ptr减去value，结果更新到*ptr，并返回操作之前*ptr的值
-//type __sync_fetch_and_or(type *ptr, type value, ...)
-//// 将*ptr与value相或，结果更新到*ptr， 并返回操作之前*ptr的值
-//type __sync_fetch_and_and(type *ptr, type value, ...)
-//// 将*ptr与value相与，结果更新到*ptr，并返回操作之前*ptr的值
-//type __sync_fetch_and_xor(type *ptr, type value, ...)
-//// 将*ptr与value异或，结果更新到*ptr，并返回操作之前*ptr的值
-//type __sync_fetch_and_nand(type *ptr, type value, ...)
-//// 将*ptr取反后，与value相与，结果更新到*ptr，并返回操作之前*ptr的值
-//type __sync_add_and_fetch(type *ptr, type value, ...)
-//// 将value加到*ptr上，结果更新到*ptr，并返回操作之后新*ptr的值
-//type __sync_sub_and_fetch(type *ptr, type value, ...)
-//// 从*ptr减去value，结果更新到*ptr，并返回操作之后新*ptr的值
-//type __sync_or_and_fetch(type *ptr, type value, ...)
-//// 将*ptr与value相或， 结果更新到*ptr，并返回操作之后新*ptr的值
-//type __sync_and_and_fetch(type *ptr, type value, ...)
-//// 将*ptr与value相与，结果更新到*ptr，并返回操作之后新*ptr的值
-//type __sync_xor_and_fetch(type *ptr, type value, ...)
-//// 将*ptr与value异或，结果更新到*ptr，并返回操作之后新*ptr的值
-//type __sync_nand_and_fetch(type *ptr, type value, ...)
-//// 将*ptr取反后，与value相与，结果更新到*ptr，并返回操作之后新*ptr的值
-//bool __sync_bool_compare_and_swap(type *ptr, type oldval type newval, ...)
-//// 比较*ptr与oldval的值，如果两者相等，则将newval更新到*ptr并返回true
-//type __sync_val_compare_and_swap(type *ptr, type oldval type newval, ...)
-//// 比较*ptr与oldval的值，如果两者相等，则将newval更新到*ptr并返回操作之前*ptr的值
-//__sync_synchronize(...)
-//// 发出完整内存栅栏
-//type __sync_lock_test_and_set(type *ptr, type value, ...)
-//// 将value写入*ptr，对*ptr加锁，并返回操作之前*ptr的值。即，try spinlock语义
-//void __sync_lock_release(type *ptr, ...)
-//// 将0写入到*ptr，并对*ptr解锁。即，unlock spinlock语义
+
+函数原型
+int getaddrinfo( const char *hostname, const char *service, const struct addrinfo *hints, struct addrinfo **result );
+参数说明
+hostname:一个主机名或者地址串(IPv4的点分十进制串或者IPv6的16进制串)
+service：服务名可以是十进制的端口号，也可以是已定义的服务名称，如ftp、http等
+hints：可以是一个空指针，也可以是一个指向某个addrinfo结构体的指针，调用者在这个结构中填入关于期望返回的信息类型的暗示。
+	举例来说：指定的服务既可支持TCP也可支持UDP，所以调用者可以把hints结构中的ai_socktype成员设置成SOCK_DGRAM使得返回的仅仅是适用于数据报套接口的信息。
+result：本函数通过result指针参数返回一个指向addrinfo结构体链表的指针。
+返回值：0——成功，非0——出错
+
+
+
+getsockname函数用于获取与某个套接字关联的本地协议地址 
+getpeername函数用于获取与某个套接字关联的外地协议地址
+
+int getsockname(int sockfd, struct sockaddr *localaddr, socklen_t *addrlen);  
+  
+int getpeername(int sockfd, struct sockaddr *peeraddr, socklen_t *addrlen);  

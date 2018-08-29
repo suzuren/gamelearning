@@ -52,6 +52,22 @@
 typedef int poll_fd;
 
 
+struct write_buffer {
+	struct write_buffer * next;
+	void *buffer;
+	char *ptr;
+	int sz;
+	bool userobject;
+	uint8_t udp_address[UDP_ADDRESS_SIZE];
+};
+
+// C 库宏 offsetof(type, member - designator) 会生成一个类型为 size_t 的整型常量，它是一个结构成员相对于结构开头的字节偏移量。
+// 成员是由 member - designator 给定的，结构的名称是在 type 中给定的
+
+#define SIZEOF_TCPBUFFER (offsetof(struct write_buffer, udp_address[0]))
+#define SIZEOF_UDPBUFFER (sizeof(struct write_buffer))
+
+
 struct wb_list {
 	struct write_buffer * head;
 	struct write_buffer * tail;
@@ -74,18 +90,6 @@ struct socket {
 };
 
 
-
-struct write_buffer {
-	struct write_buffer * next;
-	void *buffer;
-	char *ptr;
-	int sz;
-	bool userobject;
-	uint8_t udp_address[UDP_ADDRESS_SIZE];
-};
-
-#define SIZEOF_TCPBUFFER (offsetof(struct write_buffer, udp_address[0]))
-#define SIZEOF_UDPBUFFER (sizeof(struct write_buffer))
 
 
 
@@ -121,8 +125,8 @@ struct socket_server {
 
 
 // int [-2^31 , 2^31-1] -> [-2147483648，2147483647]
-// 0x7fffffff -> ‭2147483647‬
-//
+//       0x7fffffff ->  ‭2147483647‬  ->                                  ‭01111111111111111111111111111111‬
+// ‭FFFFFFFF80000000‬ -> -2147483648  ->  ‭1111111111111111111111111111111110000000000000000000000000000000‬
 
 static int reserve_id(struct socket_server *ss)
 {
@@ -199,10 +203,14 @@ void test_socket_server()
 	int_test &= 0x7fffffff;
 	printf("test_socket_server 3 - int_test:%d\n", int_test);
 
+
+	printf("test_socket_server - SIZEOF_TCPBUFFER:%ld\n", SIZEOF_TCPBUFFER);
+	printf("test_socket_server - SIZEOF_UDPBUFFER:%ld\n", SIZEOF_UDPBUFFER);
+
+
+
 	//int id = reserve_id(ss);
 	//printf("test_socket_server - id:%d\n", id);
-
-
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -210,8 +218,11 @@ void test_socket_server()
 		struct socket *s = &ss->slot[HASH_ID(id)];
 		printf("test_socket_server - reserve_id:%10d,alloc_id:%10d,type:%d,id:%10d,fd:%d\n",
 			id,ss->alloc_id,s->type,s->id,s->fd);
-
-
 	}
+
+
+
+
+
 
 }

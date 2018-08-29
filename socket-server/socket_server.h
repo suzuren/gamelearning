@@ -11,7 +11,7 @@
 #define SOCKET_DATA 0
 #define SOCKET_CLOSE 1
 #define SOCKET_OPEN 2
-#define SOCKET_ACCEPT 3
+#define SOCKET_ACCEPT 3	// 被动连接建立消息（Accept返回了连接的fd句柄，但此连接还未被假如epoll中管理）
 #define SOCKET_ERROR 4
 #define SOCKET_EXIT 5
 #define SOCKET_UDP 6
@@ -20,7 +20,7 @@ struct socket_server;
 
 struct socket_message {
 	int id;
-	uintptr_t opaque;
+	uintptr_t opaque;	// 在skynet中对应一个actor实体的handler
 	int ud;	// for accept, ud is listen id ; for data, ud is size of data
 	char * data;
 };

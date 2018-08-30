@@ -27,12 +27,12 @@
 
 struct packet_header
 {
-	unsigned int    identity;
-	int				command;
-	int				length;
+	unsigned long long	handler;
+	int					command;
+	int					length;
 	packet_header()
 	{
-		identity = 0;
+		handler = 0;
 		command = 0;
 		length = 0;
 	}
@@ -72,7 +72,6 @@ struct tagEventRequest
 {
 	int	eventid;
 	int contextid;
-	struct sockaddr_in address;
 	struct packet_buffer data;
 	tagEventRequest()
 	{
@@ -82,7 +81,6 @@ struct tagEventRequest
 	{
 		eventid = 0;
 		contextid = -1;
-		memset(&address, 0, sizeof(struct sockaddr_in));
 		data.init();
 	}
 };

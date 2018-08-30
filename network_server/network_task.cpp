@@ -432,14 +432,3 @@ std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
 {
 	return GetEventRequest();
 }
-
-bool CNetworkTask::SendData(std::shared_ptr<struct tagTaskSendData> sptrData)
-{
-	if (sptrData != nullptr)
-	{
-		m_queue_mutex_send.lock();
-		m_queueSend.push(sptrData);
-		m_queue_mutex_send.unlock();
-	}
-	return true;
-}

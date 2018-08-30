@@ -17,9 +17,6 @@
 #include "network_oper_define.h"
 #include "./lib_socketserver/socket_server.hpp"
 
-
-
-
 struct tagTaskSendData
 {
 	int fd;
@@ -46,9 +43,7 @@ public:
 	~CNetworkTask();
 
 private:
-
 	struct socket_server * m_socketserver;
-
 	std::shared_ptr<std::thread> m_sptrWorkThread;
 
 	std::atomic_bool m_bRunFlag;
@@ -62,30 +57,32 @@ private:
 	uintptr_t m_hstart;
 
 private:
-	static void runThreadFunction(CNetworkTask *pTask);
+	bool SocketListen();
+	static void * runThreadFunction(CNetworkTask *pTask);
+
+	int NotifyExit(struct socket_message & result);
+	int NotifyData(struct socket_message & result);
+	int NotifyClose(struct socket_message & result);
+	int NotifyOpen(struct socket_message & result);
+	int NotifyError(struct socket_message & result);
+	int NotifyAccept(struct socket_message & result);
+
+	// ----------------------------------------------------------------------------------------------------------
 
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	std::shared_ptr<struct tagEventRequest> GetEventRequest();
-	bool SocketListen();
-	int OnDisposeEvents();
 
-
-	int HangupNotify(int fd);
-	int AcceptNotify(int fd);
-	int InputNotify(int fd);
-	int OutputNotify(int fd);
+	// ----------------------------------------------------------------------------------------------------------
+public:
+	int GetPort() { return m_port; }
+	std::string GetIP() { return m_strIP; }
 
 public:
 	bool Init();
 	bool Start(std::string ip, int port);
 	bool ShutDown();
-	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
 	bool SendData(std::shared_ptr<struct tagTaskSendData> sptrData);
-
-	int GetPort() { return m_port; }
-	std::string GetIP() { return m_strIP; }
-
-
+	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
 };
 
 

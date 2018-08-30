@@ -41,8 +41,6 @@ bool CNetworkMgr::StartTask()
 	return true;
 }
 
-
-
 // ---------------------------------------------------------------------------------------
 
 bool CNetworkMgr::Init()
@@ -81,7 +79,6 @@ void CNetworkMgr::TestNetwork()
 {
 }
 
-
 void CNetworkMgr::TestNetworkTaskSendData(int contextid, struct packet_buffer & data)
 {
 	if (m_sptrNetTaskOper == nullptr)
@@ -93,5 +90,4 @@ void CNetworkMgr::TestNetworkTaskSendData(int contextid, struct packet_buffer & 
 	sptrData->length = data.header.length;
 	sptrData->fd = contextid;
 	m_sptrNetTaskOper->SendData(sptrData);
-
 }

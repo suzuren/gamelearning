@@ -15,7 +15,7 @@ static void *
 _poll(void * ud) {
 	struct socket_server *ss = ud;
 	struct socket_message result;
-	char buffer[512];
+	char buffer[1024];
 	for (;;) {
 		int type = socket_server_poll(ss, &result, NULL);
 		// DO NOT use any ctrl command (socket_server_close , etc. ) in this thread.

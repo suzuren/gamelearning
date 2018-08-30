@@ -478,11 +478,14 @@ _failed:
 
 static int
 send_list_tcp(struct socket_server *ss, struct socket *s, struct wb_list *list, struct socket_message *result) {
-	while (list->head) {
+	while (list->head)
+	{
 		struct write_buffer * tmp = list->head;
-		for (;;) {
+		for (;;)
+		{
 			int sz = write(s->fd, tmp->ptr, tmp->sz);
-			if (sz < 0) {
+			if (sz < 0)
+			{
 				switch(errno) {
 				case EINTR:
 					continue;
@@ -493,7 +496,8 @@ send_list_tcp(struct socket_server *ss, struct socket *s, struct wb_list *list, 
 				return SOCKET_CLOSE;
 			}
 			s->wb_size -= sz;
-			if (sz != tmp->sz) {
+			if (sz != tmp->sz)
+			{
 				tmp->ptr += sz;
 				tmp->sz -= sz;
 				return -1;
@@ -617,9 +621,11 @@ send_buffer(struct socket_server *ss, struct socket *s, struct socket_message *r
 	if (send_list(ss,s,&s->high,result) == SOCKET_CLOSE) {
 		return SOCKET_CLOSE;
 	}
-	if (s->high.head == NULL) {
+	if (s->high.head == NULL)
+	{
 		// step 2
-		if (s->low.head != NULL) {
+		if (s->low.head != NULL)
+		{
 			if (send_list(ss,s,&s->low,result) == SOCKET_CLOSE) {
 				return SOCKET_CLOSE;
 			}
@@ -627,7 +633,9 @@ send_buffer(struct socket_server *ss, struct socket *s, struct socket_message *r
 			if (list_uncomplete(&s->low)) {
 				raise_uncomplete(s);
 			}
-		} else {
+		}
+		else
+		{
 			// step 4
 			sp_write(ss->event_fd, s->fd, s, false);
 
@@ -712,8 +720,10 @@ send_socket(struct socket_server *ss, struct request_send * request, struct sock
 	//	request->id, request->sz, request->buffer,s->id,s->type, s->fd, send_buffer_empty(s), s->protocol, so.sz);
 
 	assert(s->type != SOCKET_TYPE_PLISTEN && s->type != SOCKET_TYPE_LISTEN);
-	if (send_buffer_empty(s) && s->type == SOCKET_TYPE_CONNECTED) {
-		if (s->protocol == PROTOCOL_TCP) {
+	if (send_buffer_empty(s) && s->type == SOCKET_TYPE_CONNECTED)
+	{
+		if (s->protocol == PROTOCOL_TCP)
+		{
 			int n = write(s->fd, so.buffer, so.sz);
 
 			//printf("send_socket - id:%d,sz:%d,buffer:%s - socket - id:%d,type:%d,fd:%d,empty:%d,protocol:%d,so.sz:%d,n:%d\n",
@@ -752,8 +762,11 @@ send_socket(struct socket_server *ss, struct request_send * request, struct sock
 			}
 		}
 		sp_write(ss->event_fd, s->fd, s, true);
-	} else {
-		if (s->protocol == PROTOCOL_TCP) {
+	}
+	else
+	{
+		if (s->protocol == PROTOCOL_TCP)
+		{
 			if (priority == PRIORITY_LOW) {
 				append_sendbuffer_low(ss, s, request);
 			} else {
@@ -823,7 +836,7 @@ close_socket(struct socket_server *ss, struct request_close *request, struct soc
 static int
 bind_socket(struct socket_server *ss, struct request_bind *request, struct socket_message *result) {
 
-	printf("bind_socket - id:%d,fd:%d,opaque:%lu\n", request->id, request->fd, request->opaque);
+	//printf("bind_socket - id:%d,fd:%d,opaque:%lu\n", request->id, request->fd, request->opaque);
 
 	int id = request->id;
 	result->id = id;
@@ -909,7 +922,7 @@ has_cmd(struct socket_server *ss) {
 	int retval;
 
 	FD_SET(ss->recvctrl_fd, &ss->rfds);
-
+	// 判断管道是否有命名 使用select来管理 没有使用epoll时为了提高命令的检测频率
 	retval = select(ss->recvctrl_fd+1, &ss->rfds, NULL, NULL, &tv);
 	if (retval == 1) {
 		return 1;
@@ -934,7 +947,7 @@ add_udp_socket(struct socket_server *ss, struct request_udp *udp) {
 	}
 	ns->type = SOCKET_TYPE_CONNECTED;
 	memset(ns->p.udp_address, 0, sizeof(ns->p.udp_address));
-	printf("add_udp_socket - id:%d,type:%d\n",id,ns->type);
+	//printf("add_udp_socket - id:%d,type:%d\n",id,ns->type);
 }
 
 static int
@@ -974,7 +987,7 @@ ctrl_cmd(struct socket_server *ss, struct socket_message *result) {
 	int len = header[1];
 	block_readpipe(fd, buffer, len);
 	// ctrl command only exist in local fd, so don't worry about endian.
-	printf("ctrl_cmd - type:%c,len:%d,alloc_id:%d\n",type,len,ss->alloc_id);
+	//printf("ctrl_cmd - type:%c,len:%d,alloc_id:%d\n",type,len,ss->alloc_id);
 	switch (type) {
 	case 'S':
 		return start_socket(ss,(struct request_start *)buffer, result);
@@ -1224,7 +1237,7 @@ socket_server_poll(struct socket_server *ss, struct socket_message * result, int
 				ss->checkctrl = 0;
 			}
 		}
-		if (ss->event_index == ss->event_n)
+		if (ss->event_index == ss->event_n) // 当前的处理序号最大了，即处理完了，继续等待事件的到来
 		{
 			ss->event_n = sp_wait(ss->event_fd, ss->ev, MAX_EVENT);
 			ss->checkctrl = 1;
@@ -1255,19 +1268,25 @@ socket_server_poll(struct socket_server *ss, struct socket_message * result, int
 			fprintf(stderr, "socket-server: invalid socket\n");
 			break;
 		default:
-			if (e->read) {
+			if (e->read)
+			{
 				int type;
-				if (s->protocol == PROTOCOL_TCP) {
+				if (s->protocol == PROTOCOL_TCP)
+				{
 					type = forward_message_tcp(ss, s, result);
-				} else {
+				}
+				else
+				{
 					type = forward_message_udp(ss, s, result);
-					if (type == SOCKET_UDP) {
+					if (type == SOCKET_UDP)
+					{
 						// try read again
 						--ss->event_index;
 						return SOCKET_UDP;
 					}
 				}
-				if (e->write) {
+				if (e->write)
+				{
 					// Try to dispatch write message next step if write flag set.
 					e->read = false;
 					--ss->event_index;
@@ -1277,7 +1296,8 @@ socket_server_poll(struct socket_server *ss, struct socket_message * result, int
 				clear_closed_event(ss, result, type);
 				return type;
 			}
-			if (e->write) {
+			if (e->write)
+			{
 				int type = send_buffer(ss, s, result);
 				if (type == -1)
 					break;
@@ -1565,7 +1585,7 @@ socket_server_udp_send(struct socket_server *ss, int id, const struct socket_udp
 
 	const uint8_t *udp_address = (const uint8_t *)addr;
 
-	printf("socket_server_udp_send - id:%d,socket - id:%d,type:%d,udp_address:%d\n", id, s->id, s->type, udp_address[0]);
+	//printf("socket_server_udp_send - id:%d,socket - id:%d,type:%d,udp_address:%d\n", id, s->id, s->type, udp_address[0]);
 
 	int addrsz;
 	switch (udp_address[0]) {

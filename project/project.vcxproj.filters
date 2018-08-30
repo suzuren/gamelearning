@@ -208,6 +208,12 @@
     <Filter Include="socket-server">
       <UniqueIdentifier>{61c6fc17-f7cd-4571-b9f5-f1afa560d349}</UniqueIdentifier>
     </Filter>
+    <Filter Include="network_server_socket_server">
+      <UniqueIdentifier>{7a2460a5-93d9-40c6-835b-a16c00682b07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="network_server_socket_server\lib_socketserver">
+      <UniqueIdentifier>{aaf19664-f7f1-4478-adb2-e27226b781dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -716,6 +722,36 @@
     </ClInclude>
     <ClInclude Include="..\test\test_helloworld.h">
       <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\network_daemonize.h">
+      <Filter>network_server_socket_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\network_mgr.h">
+      <Filter>network_server_socket_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\network_oper_define.h">
+      <Filter>network_server_socket_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\network_task.h">
+      <Filter>network_server_socket_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\network_task_callback.h">
+      <Filter>network_server_socket_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_epoll.h">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_kqueue.h">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_poll.h">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_server.h">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_server.hpp">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1238,6 +1274,18 @@
     </None>
     <None Include="..\socket-server\Makefile">
       <Filter>socket-server</Filter>
+    </None>
+    <None Include="..\network_server_socket_server\reload.sh">
+      <Filter>network_server_socket_server</Filter>
+    </None>
+    <None Include="..\network_server_socket_server\stop.sh">
+      <Filter>network_server_socket_server</Filter>
+    </None>
+    <None Include="..\network_server_socket_server\lib_socketserver\makefile">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </None>
+    <None Include="..\network_server_socket_server\makefile">
+      <Filter>network_server_socket_server</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1775,6 +1823,24 @@
     <ClCompile Include="..\test\test_socket_server.h">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="..\network_server_socket_server\main.cpp">
+      <Filter>network_server_socket_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server_socket_server\network_mgr.cpp">
+      <Filter>network_server_socket_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server_socket_server\network_task.cpp">
+      <Filter>network_server_socket_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server_socket_server\network_task_callback.cpp">
+      <Filter>network_server_socket_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server_socket_server\lib_socketserver\socket_server.c">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\network_server_socket_server\lib_socketserver\test.c">
+      <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -1799,6 +1865,9 @@
     </Text>
     <Text Include="..\socket-server\read.txt">
       <Filter>socket-server</Filter>
+    </Text>
+    <Text Include="..\network_server_socket_server\read.txt">
+      <Filter>network_server_socket_server</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

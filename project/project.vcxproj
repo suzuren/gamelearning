@@ -154,6 +154,16 @@
     <ClInclude Include="..\network_server\network_wrap_callback.h" />
     <ClInclude Include="..\network_server\pack_proto_define.h" />
     <ClInclude Include="..\network_server\stream_decoder.h" />
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_epoll.h" />
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_kqueue.h" />
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_poll.h" />
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_server.h" />
+    <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_server.hpp" />
+    <ClInclude Include="..\network_server_socket_server\network_daemonize.h" />
+    <ClInclude Include="..\network_server_socket_server\network_mgr.h" />
+    <ClInclude Include="..\network_server_socket_server\network_oper_define.h" />
+    <ClInclude Include="..\network_server_socket_server\network_task.h" />
+    <ClInclude Include="..\network_server_socket_server\network_task_callback.h" />
     <ClInclude Include="..\post_mgr\epoll_socket.h" />
     <ClInclude Include="..\post_mgr\http_header.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
@@ -336,6 +346,10 @@
     <None Include="..\network_server\Makefile" />
     <None Include="..\network_server\reload.sh" />
     <None Include="..\network_server\stop.sh" />
+    <None Include="..\network_server_socket_server\lib_socketserver\makefile" />
+    <None Include="..\network_server_socket_server\makefile" />
+    <None Include="..\network_server_socket_server\reload.sh" />
+    <None Include="..\network_server_socket_server\stop.sh" />
     <None Include="..\post_mgr\Makefile" />
     <None Include="..\proxy_epoll\Makefile" />
     <None Include="..\proxy_epoll\Readme.md" />
@@ -509,6 +523,12 @@
     <ClCompile Include="..\network_server\network_wrap.cpp" />
     <ClCompile Include="..\network_server\network_wrap_callback.cpp" />
     <ClCompile Include="..\network_server\stream_decoder.cpp" />
+    <ClCompile Include="..\network_server_socket_server\lib_socketserver\socket_server.c" />
+    <ClCompile Include="..\network_server_socket_server\lib_socketserver\test.c" />
+    <ClCompile Include="..\network_server_socket_server\main.cpp" />
+    <ClCompile Include="..\network_server_socket_server\network_mgr.cpp" />
+    <ClCompile Include="..\network_server_socket_server\network_task.cpp" />
+    <ClCompile Include="..\network_server_socket_server\network_task_callback.cpp" />
     <ClCompile Include="..\post_mgr\client.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
     <ClCompile Include="..\referlib\client.cpp" />
@@ -553,6 +573,7 @@
     <Text Include="..\lua-cjson\rfc4627.txt" />
     <Text Include="..\NetEpoll\readme.txt" />
     <Text Include="..\network_server\read.txt" />
+    <Text Include="..\network_server_socket_server\read.txt" />
     <Text Include="..\shellcmd.txt" />
     <Text Include="..\socket-server\read.txt" />
   </ItemGroup>

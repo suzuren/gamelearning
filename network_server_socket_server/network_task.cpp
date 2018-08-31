@@ -16,10 +16,16 @@ CNetworkTask::~CNetworkTask()
 bool CNetworkTask::Init()
 {
 	m_sptrWorkThread = nullptr;
+
 	m_socketserver = NULL;
+	m_port = 0;
+	m_strIP.clear();
 	m_listenid = -1;
 	m_hlisten = 200;
 	m_hstart = 201;
+
+	m_rlength = 0;
+	memset(m_rbuffer, 0, sizeof(m_rbuffer));
 	return true;
 }
 
@@ -141,7 +147,39 @@ int CNetworkTask::NotifyExit(struct socket_message & result)
 int CNetworkTask::NotifyData(struct socket_message & result)
 {
 	printf("Task message(%lu) [id=%d] size=%d\n", result.opaque, result.id, result.ud);
+
+	memcpy(m_rbuffer + m_rlength, result.data, result.ud);
+	m_rlength += result.ud;
 	free(result.data);
+
+	do
+	{
+		if (m_rlength < (int)PACKET_HEADER_SIZE)
+		{
+			return 1;
+		}
+		struct packet_header * ptr = (struct packet_header *)m_rbuffer;
+		int size = ptr->length;
+		if (size > m_rlength)
+		{
+			return -1;
+		}
+		struct packet_buffer pack;
+		if (size <= (int)sizeof(struct packet_buffer))
+		{
+			memcpy(&pack, m_rbuffer, size);
+		}
+		m_rlength -= size;
+		memcpy(m_rbuffer, m_rbuffer + size, m_rlength);
+		//send
+		auto sptrRequest = std::make_shared<struct tagEventRequest>();
+		sptrRequest->eventid = NETWORK_NOTIFY_READED;
+		sptrRequest->contextid = result.id;
+		sptrRequest->handle = result.opaque;
+		sptrRequest->data = std::move(pack);
+		AddEventRequest(std::move(sptrRequest));
+	} while (true);
+
 	return 0;
 }
 int CNetworkTask::NotifyClose(struct socket_message & result)
@@ -164,12 +202,27 @@ int CNetworkTask::NotifyAccept(struct socket_message & result)
 	printf("Task accept(%lu) [id=%d %s] from [%d]\n", result.opaque, result.ud, result.data, result.id);
 	struct socket_server *ss = m_socketserver;
 	socket_server_start(ss, result.opaque, result.ud);
+	
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->eventid = NETWORK_NOTIFY_ACCENT;
+	sptrRequest->contextid = result.id;
+	sptrRequest->handle = result.opaque;
+	
+	AddEventRequest(std::move(sptrRequest));
+
 	return 0;
 }
+
 // ----------------------------------------------------------------------------------------------------------
 
 void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
+	if (sptrRequest != nullptr)
+	{
+		m_queue_mutex_request.lock();
+		m_queueRequest.push(sptrRequest);
+		m_queue_mutex_request.unlock();
+	}
 }
 
 std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()

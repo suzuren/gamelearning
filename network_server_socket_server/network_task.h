@@ -43,18 +43,19 @@ public:
 	~CNetworkTask();
 
 private:
-	struct socket_server * m_socketserver;
 	std::shared_ptr<std::thread> m_sptrWorkThread;
-
-	std::atomic_bool m_bRunFlag;
 	std::mutex m_queue_mutex_request;
 	std::queue< std::shared_ptr<struct tagEventRequest> > m_queueRequest;
 
+	struct socket_server * m_socketserver;
 	int m_port;
 	std::string m_strIP;
 	int m_listenid;
 	uintptr_t m_hlisten;
 	uintptr_t m_hstart;
+
+	int  m_rlength;
+	char m_rbuffer[MAX_RECV_BUFFER_SIZE];
 
 private:
 	bool SocketListen();
@@ -68,7 +69,6 @@ private:
 	int NotifyAccept(struct socket_message & result);
 
 	// ----------------------------------------------------------------------------------------------------------
-
 	void AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrRequest);
 	std::shared_ptr<struct tagEventRequest> GetEventRequest();
 

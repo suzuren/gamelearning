@@ -24,14 +24,10 @@ int GenCoreDumpFile(size_t size = 1024 * 1024 * 32)
 
 void daemonize()
 {
-	struct sigaction sa;
-	sa.sa_handler = SIG_IGN;
-	sigaction(SIGPIPE, &sa, 0);
+	char curdir[2048] = { 0 };
+	getcwd(curdir, sizeof(curdir));
 
 	pid_t pid;
-	signal(SIGTTOU, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
 	umask(0);
 	if ((pid = fork()) < 0)
 	{
@@ -41,8 +37,29 @@ void daemonize()
 	{
 		exit(0);
 	}
+
 	setsid();
-	chdir("/");
+
+	struct sigaction sa;
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGPIPE, &sa, 0);
+
+	struct sigaction sig;
+	sig.sa_handler = SIG_IGN;
+	sig.sa_flags = 0;
+	sigemptyset(&sig.sa_mask);
+	sigaction(SIGHUP, &sig, NULL);
+
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGHUP, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
+	signal(SIGCHLD, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
+
+	chdir(curdir);
 	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
 }
 
@@ -157,6 +174,25 @@ void shutdown(int signal)
 	}
 }
 
+int daemo_start()
+{
+	signal(SIGUSR2, reload);
+	signal(SIGUSR1, shutdown);
+	daemonize();
+	int pid = check_pid("network.pid");
+	if (pid)
+	{
+		fprintf(stderr, "network server is already running, pid = %d.\n", pid);
+		return 0;
+	}
+	pid = write_pid("network.pid");
+	if (pid == 0)
+	{
+		return 0;
+	}
+	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
+	return 1;
+}
 
 #endif
 

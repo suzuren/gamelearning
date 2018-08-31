@@ -8,28 +8,26 @@
 
 // ---------------------------------------------------------------------------------------
 
-
 #define CHECK_CONNECT_TIME (20*1000)
 
 // ---------------------------------------------------------------------------------------
 
-
 #define MAX_TIME_OUT		(30*1000)
 #define MAX_SOCKET_CONNECT	10240
 
-
-
 #define IPADDR				"127.0.0.1"
 #define PORT				9876
-// ---------------------------------------------------------------------------------------
 
-#define MAX_EVENT_PARAM_COUNT 3
+#define MAX_RECV_BUFFER_SIZE (65535*5)
+
+// ---------------------------------------------------------------------------------------
+#pragma  pack(1)
 
 struct packet_header
 {
-	unsigned long long	handler;
 	int					command;
 	int					length;
+	unsigned long long	handler;
 	packet_header()
 	{
 		handler = 0;
@@ -67,11 +65,13 @@ struct packet_buffer
 		memset(buffer, 0, sizeof(buffer));
 	}
 };
+#pragma pack()
 
 struct tagEventRequest
 {
 	int	eventid;
 	int contextid;
+	unsigned long long handle;
 	struct packet_buffer data;
 	tagEventRequest()
 	{

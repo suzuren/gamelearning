@@ -1,10 +1,10 @@
 
 TARGET := test
-CC := g++ -Wall
+CC := gcc -Wall
 CPPFLAGS := -DNDEBUG
-CFLAGS :=
-CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++98
-LDFLAGS := -L/root/code/jemalloc/lib -lpthread -lrt -lm -ljemalloc
+CFLAGS := -g -O2 -Wall
+CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++11
+LDFLAGS := -pthread -ldl -lrt -lm
 CPP_SOURCES := $(wildcard *.cpp)
 CPP_SOURCES += $(wildcard ../hlib/*.cpp)
 CPP_SOURCES += $(wildcard ../hlib/json/*.cpp)
@@ -22,7 +22,7 @@ embedded:all
 all:$(TARGET)
 
 $(TARGET) : $(COBJS) $(CPPOBJS)
-	$(CC) $(LDFLAGS) -o $(TARGET) $(COBJS) $(CPPOBJS)
+	$(CC) $(LDFLAGS) -o $(TARGET) $(COBJS) $(CPPOBJS) /root/code/jemalloc/lib/libjemalloc_pic.a
 install:
 clean:
 	rm -f *.o *.so $(TARGET)

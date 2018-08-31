@@ -182,8 +182,6 @@
     <ClInclude Include="..\test_curl\logger.h" />
     <ClInclude Include="..\test_curl\curl_mgr.h" />
     <ClInclude Include="..\test_curl\singleton.h" />
-    <ClInclude Include="..\test_jemalloc\atomic.h" />
-    <ClInclude Include="..\test_jemalloc\malloc_hook.h" />
     <ClInclude Include="..\test_lib\testadd.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
     <ClInclude Include="..\timer\timer.h" />
@@ -546,8 +544,7 @@
     <ClCompile Include="..\test_curl\logger.cpp" />
     <ClCompile Include="..\test_curl\curl_mgr.cpp" />
     <ClCompile Include="..\test_curl\test.cpp" />
-    <ClCompile Include="..\test_jemalloc\main.cpp" />
-    <ClCompile Include="..\test_jemalloc\malloc_hook.c" />
+    <ClCompile Include="..\test_jemalloc\main.c" />
     <ClCompile Include="..\test_lib\testadd.c" />
     <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
@@ -576,6 +573,7 @@
     <Text Include="..\network_server_socket_server\read.txt" />
     <Text Include="..\shellcmd.txt" />
     <Text Include="..\socket-server\read.txt" />
+    <Text Include="..\test_jemalloc\read.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />

@@ -1,0 +1,31 @@
+
+
+1.
+https://github.com/jemalloc/jemalloc
+
+2.
+./autogen.sh --with-jemalloc-prefix=je_ --disable-valgrind
+make CC=gcc
+
+
+realloc
+原型是extern void *realloc(void *mem_address, unsigned int newsize);
+指针名=（数据类型*）realloc（要改变内存大小的指针名，新的大小）。
+新的大小可大可小（如果新的大小大于原内存大小，则新分配部分不会被初始化；如果新的大小小于原内存大小，可能会导致数据丢失[1-2]）
+头文件#include <stdlib.h> 有些编译器需要#include <malloc.h>，在TC2.0中可以使用alloc.h头文件
+功能
+先判断当前的指针是否有足够的连续空间，如果有，扩大mem_address指向的地址，并且将mem_address返回，
+如果空间不够，先按照newsize指定的大小分配空间，将原有数据从头到尾拷贝到新分配的内存区域，而后释放原来mem_address所指内存区域
+（注意：原来指针是自动释放，不需要使用free），同时返回新分配的内存区域的首地址。即重新分配存储器块的地址。
+返回值
+如果重新分配成功则返回指向被分配内存的指针，否则返回空指针NULL。
+
+
+函数原型：void *calloc(size_t n, size_t size)；
+功 能： 在内存的动态存储区中分配n个长度为size的连续空间，函数返回一个指向分配起始地址的指针；如果分配不成功，返回NULL。
+
+
+函数：void * memalign (size_t boundary, size_t size) 
+
+函数memalign将分配一个由size指定大小，地址是boundary的倍数的内存块。参数boundary必须是2的幂！
+函数memalign可以分配较大的内存块，并且可以为返回的地址指定粒度。

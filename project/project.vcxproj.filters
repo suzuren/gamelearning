@@ -618,12 +618,6 @@
     <ClInclude Include="..\cpp_new_features\cplusplus_extern.h">
       <Filter>cpp_new_features</Filter>
     </ClInclude>
-    <ClInclude Include="..\test_jemalloc\malloc_hook.h">
-      <Filter>test_jemalloc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\test_jemalloc\atomic.h">
-      <Filter>test_jemalloc</Filter>
-    </ClInclude>
     <ClInclude Include="..\cpp_new_features\template.h">
       <Filter>cpp_new_features</Filter>
     </ClInclude>
@@ -1763,12 +1757,6 @@
     <ClCompile Include="..\cpp_new_features\main.cpp">
       <Filter>cpp_new_features</Filter>
     </ClCompile>
-    <ClCompile Include="..\test_jemalloc\malloc_hook.c">
-      <Filter>test_jemalloc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\test_jemalloc\main.cpp">
-      <Filter>test_jemalloc</Filter>
-    </ClCompile>
     <ClCompile Include="..\test_lib\testadd.c">
       <Filter>test_lib</Filter>
     </ClCompile>
@@ -1841,6 +1829,9 @@
     <ClCompile Include="..\network_server_socket_server\lib_socketserver\test.c">
       <Filter>network_server_socket_server\lib_socketserver</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_jemalloc\main.c">
+      <Filter>test_jemalloc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -1868,6 +1859,9 @@
     </Text>
     <Text Include="..\network_server_socket_server\read.txt">
       <Filter>network_server_socket_server</Filter>
+    </Text>
+    <Text Include="..\test_jemalloc\read.txt">
+      <Filter>test_jemalloc</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

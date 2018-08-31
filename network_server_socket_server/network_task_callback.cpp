@@ -24,6 +24,14 @@ bool CNetworkTaskCallBack::OnProcessNetworkEvent(std::shared_ptr<struct tagEvent
 	{
 		return OnNetworkNotifyReaded(sptrRequest);
 	}
+	if (sptrRequest->eventid == NETWORK_NOTIFY_OPENED)
+	{
+		return OnNetworkNotifyOpened(sptrRequest);
+	}
+	if (sptrRequest->eventid == NETWORK_NOTIFY_EXITED)
+	{
+		return OnNetworkNotifyExited(sptrRequest);
+	}
 	return false;
 }
 
@@ -36,14 +44,14 @@ bool CNetworkTaskCallBack::OnNetworkNotifyClosed(std::shared_ptr<struct tagEvent
 
 bool CNetworkTaskCallBack::OnNetworkNotifyAccept(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
-	printf("Task OnNetworkNotifyAccept - eventid:%d,contextid:%d\n", sptrRequest->eventid, sptrRequest->contextid);
+	printf("Task OnNetworkNotifyAccept - eventid:%d,contextid:%d,handle:%llu,header.handler:%llu\n", sptrRequest->eventid, sptrRequest->contextid, sptrRequest->handle, sptrRequest->data.header.handler);
 
 	return false;
 }
 
 bool CNetworkTaskCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest)
 {
-	//printf("Task OnNetworkNotifyReaded - eventid:%d,contextid:%d\n", sptrRequest->eventid, sptrRequest->contextid);
+	printf("Task OnNetworkNotifyReaded - eventid:%d,contextid:%d,handle:%llu\n", sptrRequest->eventid, sptrRequest->contextid, sptrRequest->handle);
 
 	struct packet_buffer & data = sptrRequest->data;
 	if (data.header.command <= NETWORK_EVENT_MIN || data.header.command >= NETWORK_EVENT_MAX)
@@ -58,23 +66,26 @@ bool CNetworkTaskCallBack::OnNetworkNotifyReaded(std::shared_ptr<struct tagEvent
 	return false;
 }
 
+bool CNetworkTaskCallBack::OnNetworkNotifyOpened(std::shared_ptr<struct tagEventRequest> sptrRequest)
+{
+	printf("Task OnNetworkNotifyOpened - eventid:%d,contextid:%d,handle:%llu,buffer:%s\n", sptrRequest->eventid, sptrRequest->contextid, sptrRequest->handle, sptrRequest->data.buffer);
+
+	return false;
+}
+
+bool CNetworkTaskCallBack::OnNetworkNotifyExited(std::shared_ptr<struct tagEventRequest> sptrRequest)
+{
+	printf("Task OnNetworkNotifyExited - eventid:%d,contextid:%d,handle:%llu,buffer:%s\n", sptrRequest->eventid, sptrRequest->contextid, sptrRequest->handle, sptrRequest->data.buffer);
+
+	return false;
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------------
 
 bool CNetworkTaskCallBack::NetworkedReadedOnTest(int contextid, struct packet_buffer & data)
 {
 	printf("Task NetworkedReadedOnTest - handler:%llu,command:%d,length:%d,buffer:%s\n", data.header.handler, data.header.command, data.header.length, data.buffer);
 
-
-	struct packet_buffer repData;
-	repData.header.handler = 336;
-	repData.header.command = data.header.command;
-
-	snprintf(repData.buffer, sizeof(repData.buffer), "Task rep ->");
-	int alen = strnlen(repData.buffer, sizeof(repData.buffer));
-	strncpy(repData.buffer + alen, data.buffer, strnlen(data.buffer, sizeof(data.buffer)));
-	//
-	repData.header.length = alen + data.header.length;
-
-	CNetworkMgr::Instance().TestNetworkTaskSendData(contextid, repData);
 
 	return true;
 }

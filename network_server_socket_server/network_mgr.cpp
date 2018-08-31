@@ -3,7 +3,7 @@
 
 // ---------------------------------------------------------------------------------------
 
-void CNetworkMgr::DispatchNetworkRequest()
+void CNetworkMgr::DispatchNetRequest()
 {
 	if (m_sptrNetTaskOper != nullptr)
 	{
@@ -52,6 +52,20 @@ bool CNetworkMgr::Init()
 	return true;
 }
 
+bool CNetworkMgr::Connect()
+{
+	if (m_sptrNetTaskOper == nullptr)
+	{
+		return false;
+	}
+	bool flag = m_sptrNetTaskOper->Connect("127.0.0.1", PORT);
+	if (flag == false)
+	{
+		return false;
+	}
+	return true;
+}
+
 void CNetworkMgr::ShutDown()
 {
 	if (m_sptrNetTaskOper != nullptr)
@@ -72,22 +86,26 @@ void CNetworkMgr::SetAsyncNetTaskCallBack(std::shared_ptr<AsyncNetCallBack> sptr
 
 void CNetworkMgr::OnNetworkTick()
 {
-	DispatchNetworkRequest();
+	DispatchNetRequest();
 }
 
-void CNetworkMgr::TestNetwork()
-{
-}
+// ---------------------------------------------------------------------------------------
 
-void CNetworkMgr::TestNetworkTaskSendData(int contextid, struct packet_buffer & data)
+void CNetworkMgr::TestClientSendData()
 {
-	if (m_sptrNetTaskOper == nullptr)
+	char * buffer = (char *)malloc(1024);
+	memset(buffer, 0, 1024);
+
+	struct packet_header * ptrHeader = (struct packet_header *)buffer;
+	ptrHeader->command = NETWORK_EVENT_TEST;
+	ptrHeader->handler = 203;
+
+	const char * ptrHello = "hello world tcp!";
+	strcpy(buffer + PACKET_HEADER_SIZE, ptrHello);
+	unsigned int size = PACKET_HEADER_SIZE + strlen(ptrHello);
+	ptrHeader->length = (int)size;
+	if (m_sptrNetTaskOper != nullptr)
 	{
-		return;
+		m_sptrNetTaskOper->SendData((const void *)buffer, ptrHeader->length);
 	}
-	std::shared_ptr<struct tagTaskSendData> sptrData = std::make_shared<struct tagTaskSendData>();
-	memcpy(sptrData->buffer, &data, data.header.length);
-	sptrData->length = data.header.length;
-	sptrData->fd = contextid;
-	m_sptrNetTaskOper->SendData(sptrData);
 }

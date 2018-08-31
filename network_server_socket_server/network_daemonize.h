@@ -22,6 +22,15 @@ int GenCoreDumpFile(size_t size = 1024 * 1024 * 32)
 	return 0;
 }
 
+unsigned long long	GetMillisecond()
+{
+	timespec _spec;
+	clock_gettime(CLOCK_MONOTONIC, &_spec);
+	unsigned long long millisecond = _spec.tv_sec * 1000 + _spec.tv_nsec / 1000 / 1000;
+
+	return millisecond;
+}
+
 void daemonize()
 {
 	char curdir[2048] = { 0 };
@@ -159,7 +168,6 @@ void reload(int signal)
 	if (signal == SIGUSR2)
 	{
 		printf("reload config ... \n");
-		CNetworkMgr::Instance().TestNetwork();
 	}
 }
 

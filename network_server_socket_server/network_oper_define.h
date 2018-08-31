@@ -8,17 +8,13 @@
 
 // ---------------------------------------------------------------------------------------
 
-#define CHECK_CONNECT_TIME (20*1000)
+#define IPADDR						"127.0.0.1"
+#define PORT						9876
 
 // ---------------------------------------------------------------------------------------
 
-#define MAX_TIME_OUT		(30*1000)
-#define MAX_SOCKET_CONNECT	10240
-
-#define IPADDR				"127.0.0.1"
-#define PORT				9876
-
-#define MAX_RECV_BUFFER_SIZE (65535*5)
+#define SOCKET_TCP_BUFFER			65535
+#define MAX_RECV_BUFFER_SIZE		(SOCKET_TCP_BUFFER*5)
 
 // ---------------------------------------------------------------------------------------
 #pragma  pack(1)
@@ -27,7 +23,7 @@ struct packet_header
 {
 	int					command;
 	int					length;
-	unsigned long long	handler;
+	unsigned long long	handler; // 接受事件的 handler
 	packet_header()
 	{
 		handler = 0;
@@ -36,21 +32,8 @@ struct packet_header
 	}
 };
 
-
-#define MAX_PACKRT_BUFFER   (65535*5)
-#define SOCKET_TCP_BUFFER   65535
-
-
-#define MAX_PACKRT_BUFFER   (65535*5)
-#define SOCKET_TCP_BUFFER   65535
-
-#define PACKET_MAX_SIZE             4096*4
-
-
-#define PACKET_MAX_SIZE             4096*4
 #define PACKET_HEADER_SIZE          (sizeof(struct packet_header))
-#define PACKET_MAX_DATA_SIZE		(PACKET_MAX_SIZE - PACKET_HEADER_SIZE)
-
+#define PACKET_MAX_DATA_SIZE		(SOCKET_TCP_BUFFER - PACKET_HEADER_SIZE)
 
 struct packet_buffer
 {
@@ -65,13 +48,14 @@ struct packet_buffer
 		memset(buffer, 0, sizeof(buffer));
 	}
 };
+
 #pragma pack()
 
 struct tagEventRequest
 {
 	int	eventid;
 	int contextid;
-	unsigned long long handle;
+	unsigned long long handle; // 触发事件的 handler
 	struct packet_buffer data;
 	tagEventRequest()
 	{
@@ -89,9 +73,12 @@ struct tagEventRequest
 enum NETWORK_NOTIFY_TYPE
 {
 	NETWORK_NOTIFY_INITIO,
+	NETWORK_NOTIFY_ERROR,
 	NETWORK_NOTIFY_CLOSED,
 	NETWORK_NOTIFY_ACCENT,
 	NETWORK_NOTIFY_CONNECT,
+	NETWORK_NOTIFY_OPENED,
+	NETWORK_NOTIFY_EXITED,
 	NETWORK_NOTIFY_READED,
 	NETWORK_NOTIFY_SENDED,
 };

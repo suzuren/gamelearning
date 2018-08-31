@@ -15,6 +15,11 @@ private:
 	bool OnNetworkNotifyAccept(std::shared_ptr<struct tagEventRequest> sptrRequest);
 
 	bool OnNetworkNotifyReaded(std::shared_ptr<struct tagEventRequest> sptrRequest);
+
+	bool OnNetworkNotifyOpened(std::shared_ptr<struct tagEventRequest> sptrRequest);
+
+	bool OnNetworkNotifyExited(std::shared_ptr<struct tagEventRequest> sptrRequest);
+
 private:
 
 	bool NetworkedReadedOnTest(int contextid, struct packet_buffer & data);

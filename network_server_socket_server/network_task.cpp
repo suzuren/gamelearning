@@ -21,8 +21,10 @@ bool CNetworkTask::Init()
 	m_port = 0;
 	m_strIP.clear();
 	m_listenid = -1;
+	m_connectid = -1;
 	m_hlisten = 200;
 	m_hstart = 201;
+	m_hconnect = 202;
 
 	m_rlength = 0;
 	memset(m_rbuffer, 0, sizeof(m_rbuffer));
@@ -33,6 +35,15 @@ bool CNetworkTask::Start(std::string ip,int port)
 {
 	m_port = port;
 	m_strIP = ip;
+	if (m_socketserver != NULL)
+	{
+		return false;
+	}
+	m_socketserver = socket_server_create();
+	if (m_socketserver == NULL)
+	{
+		return false;
+	}
 	if (m_sptrWorkThread != nullptr)
 	{
 		return false;
@@ -46,32 +57,68 @@ bool CNetworkTask::Start(std::string ip,int port)
 	return true;
 }
 
+bool CNetworkTask::Connect(std::string ip, int port)
+{
+	if (m_connectid != -1)
+	{
+		return false;
+	}
+	if (m_socketserver == NULL)
+	{
+		return false;
+	}
+	if (m_sptrWorkThread == nullptr)
+	{
+		return false;
+	}
+	if (ip.empty() || port == 0)
+	{
+		return false;
+	}
+	//const char * ptrIP = "127.0.0.1";
+	m_connectid = socket_server_connect(m_socketserver, m_hconnect, ip.data(), port);
+	printf("Task connect - ip:%s,port:%d,connectid:%d\n", ip.data(), port, m_connectid);
+	if (m_connectid == -1)
+	{
+		return false;
+	}
+	return true;
+}
+
 bool CNetworkTask::ShutDown()
 {
 	if (m_socketserver != NULL)
 	{
 		socket_server_exit(m_socketserver);
 	}
-
-	//if (m_socketserver != NULL)
-	//{
-	//	free(m_socketserver);
-	//}
-	//if (m_sptrWorkThread != nullptr)
-	//{
-	//	m_sptrWorkThread->join();
-	//	m_sptrWorkThread = nullptr;
-	//}
-
+	if (m_sptrWorkThread != nullptr)
+	{
+		m_sptrWorkThread->join();
+	}
+	if (m_socketserver != NULL)
+	{
+		free(m_socketserver);
+	}
+	m_sptrWorkThread = nullptr;
 	return true;
 }
 
-bool CNetworkTask::SendData(std::shared_ptr<struct tagTaskSendData> sptrData)
+bool CNetworkTask::SendData(const void * buffer, int size)
 {
-	if (sptrData != nullptr)
+	if (buffer == NULL || size == 0)
 	{
+		return false;
 	}
-	return true;
+	if (m_socketserver == NULL || m_connectid == -1)
+	{
+		return false;
+	}
+	int64_t wb_size = socket_server_send(m_socketserver, m_connectid, buffer, size);
+	if (wb_size == -1)
+	{
+		return false;
+	}
+	return wb_size >= 0;
 }
 
 std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
@@ -83,15 +130,6 @@ std::shared_ptr<struct tagEventRequest> CNetworkTask::GetAsyncRequest()
 
 bool CNetworkTask::SocketListen()
 {
-	if (m_socketserver != NULL)
-	{
-		return false;
-	}
-	m_socketserver = socket_server_create();
-	if (m_socketserver == NULL)
-	{
-		return false;
-	}
 	m_listenid = socket_server_listen(m_socketserver, m_hlisten, m_strIP.c_str(), m_port, 32);
 	if (m_listenid == -1)
 	{
@@ -113,7 +151,8 @@ void * CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 		{
 			int type = socket_server_poll(ss, &result, NULL);
 			// DO NOT use any ctrl command (socket_server_close , etc. ) in this thread.
-			switch (type) {
+			switch (type)
+			{
 			case SOCKET_EXIT:
 				pTask->NotifyExit(result);
 				return NULL;
@@ -141,12 +180,17 @@ void * CNetworkTask::runThreadFunction(CNetworkTask *pTask)
 
 int CNetworkTask::NotifyExit(struct socket_message & result)
 {
-	printf("Task exit(%lu) [id=%d] size=%d\n", result.opaque, result.id, result.ud);
+	//printf("Task exit(%lu) [id=%d] size=%d\n", result.opaque, result.id, result.ud);
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->eventid = NETWORK_NOTIFY_EXITED;
+	sptrRequest->contextid = result.id;
+	sptrRequest->handle = result.opaque;
+	AddEventRequest(std::move(sptrRequest));
 	return 0;
 }
 int CNetworkTask::NotifyData(struct socket_message & result)
 {
-	printf("Task message(%lu) [id=%d] size=%d\n", result.opaque, result.id, result.ud);
+	//printf("Task message(%lu) [id=%d] size=%d\n", result.opaque, result.id, result.ud);
 
 	memcpy(m_rbuffer + m_rlength, result.data, result.ud);
 	m_rlength += result.ud;
@@ -184,22 +228,40 @@ int CNetworkTask::NotifyData(struct socket_message & result)
 }
 int CNetworkTask::NotifyClose(struct socket_message & result)
 {
-	printf("Task close(%lu) [id=%d]\n", result.opaque, result.id);
+	//printf("Task close(%lu) [id=%d]\n", result.opaque, result.id);
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->eventid = NETWORK_NOTIFY_CLOSED;
+	sptrRequest->contextid = result.id;
+	sptrRequest->handle = result.opaque;
+	AddEventRequest(std::move(sptrRequest));
 	return 0;
 }
 int CNetworkTask::NotifyOpen(struct socket_message & result)
 {
-	printf("Task open(%lu) [id=%d] %s\n", result.opaque, result.id, result.data);
+	//printf("Task open(%lu) [id=%d] %s\n", result.opaque, result.id, result.data);
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->eventid = NETWORK_NOTIFY_OPENED;
+	sptrRequest->contextid = result.id;
+	sptrRequest->handle = result.opaque;
+	strcpy(sptrRequest->data.buffer, result.data);
+
+	AddEventRequest(std::move(sptrRequest));
 	return 0;
 }
 int CNetworkTask::NotifyError(struct socket_message & result)
 {
-	printf("Task error(%lu) [id=%d]\n", result.opaque, result.id);
+	//printf("Task error(%lu) [id=%d]\n", result.opaque, result.id);
+	auto sptrRequest = std::make_shared<struct tagEventRequest>();
+	sptrRequest->eventid = NETWORK_NOTIFY_ERROR;
+	sptrRequest->contextid = result.id;
+	sptrRequest->handle = result.opaque;
+	AddEventRequest(std::move(sptrRequest));
 	return 0;
 }
 int CNetworkTask::NotifyAccept(struct socket_message & result)
 {
-	printf("Task accept(%lu) [id=%d %s] from [%d]\n", result.opaque, result.ud, result.data, result.id);
+	//printf("Task accept(%lu) [id=%d %s] from [%d]\n", result.opaque, result.ud, result.data, result.id);
+
 	struct socket_server *ss = m_socketserver;
 	socket_server_start(ss, result.opaque, result.ud);
 	
@@ -207,7 +269,7 @@ int CNetworkTask::NotifyAccept(struct socket_message & result)
 	sptrRequest->eventid = NETWORK_NOTIFY_ACCENT;
 	sptrRequest->contextid = result.id;
 	sptrRequest->handle = result.opaque;
-	
+	//sptrRequest->data.header.handler = result.ud;	
 	AddEventRequest(std::move(sptrRequest));
 
 	return 0;
@@ -227,7 +289,16 @@ void CNetworkTask::AddEventRequest(std::shared_ptr<struct tagEventRequest> sptrR
 
 std::shared_ptr<struct tagEventRequest> CNetworkTask::GetEventRequest()
 {
-	return nullptr;
+	std::shared_ptr<struct tagEventRequest> sptrRequest = nullptr;
+
+	m_queue_mutex_request.lock();
+	if (m_queueRequest.empty() == false)
+	{
+		sptrRequest = m_queueRequest.front();
+		m_queueRequest.pop();
+	}
+	m_queue_mutex_request.unlock();
+	return sptrRequest;
 }
 
 // ----------------------------------------------------------------------------------------------------------

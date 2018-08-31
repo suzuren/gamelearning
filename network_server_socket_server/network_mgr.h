@@ -27,25 +27,20 @@ public:
 	}
 private:
 	std::shared_ptr<CNetworkTask>  m_sptrNetTaskOper;
-
-
-
 	std::shared_ptr<AsyncNetCallBack> m_sptrAsyncNetTaskCallBack;
 private:
-	void	DispatchNetworkRequest();
-
-	bool StartTask();
-	bool StartWrap();
+	void	DispatchNetRequest();
+	bool	StartTask();
 
 public:
 	bool	Init();
+	bool	Connect();
 	void    ShutDown();
 	void    OnNetworkTick();
 	void	SetAsyncNetTaskCallBack(std::shared_ptr<AsyncNetCallBack> sptrAsyncNetCallBack);
 
 public:
-	void	TestNetwork();
-	void	TestNetworkTaskSendData(int contextid, struct packet_buffer & data);
+	void TestClientSendData();
 
 };
 

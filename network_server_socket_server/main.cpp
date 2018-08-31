@@ -20,11 +20,28 @@ int main(int argc, const char** argv)
 	CNetworkMgr::Instance().Init();
 	//CNetworkMgr::Instance().TestNetwork();
 	
-	//unsigned long long	ulStartTime = GetMillisecond();
+	bool bStartConnect = false;
+	unsigned long long	ulStartTime = GetMillisecond();
 
 	while (g_run)
 	{
 		CNetworkMgr::Instance().OnNetworkTick();
+
+		if (!bStartConnect && ulStartTime + 1000 <= GetMillisecond())
+		{
+			CNetworkMgr::Instance().Connect();
+			bStartConnect = true;
+			ulStartTime = GetMillisecond();
+			CNetworkMgr::Instance().TestClientSendData();
+
+		}
+		if (bStartConnect && ulStartTime + 1 <= GetMillisecond())
+		{
+			//std::cout << "CNetworkMgr::Instance().TestNetworkSendData();" << std::endl;
+			//CNetworkMgr::Instance().TestClientSendData();
+
+			ulStartTime = GetMillisecond();
+		}
 	}
 	CNetworkMgr::Instance().ShutDown();
 	std::cout << "network server shutdown." << std::endl;

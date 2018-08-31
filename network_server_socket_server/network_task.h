@@ -17,25 +17,6 @@
 #include "network_oper_define.h"
 #include "./lib_socketserver/socket_server.hpp"
 
-struct tagTaskSendData
-{
-	int fd;
-	int borad;
-	int	length;
-	char buffer[PACKET_MAX_SIZE];
-	tagTaskSendData()
-	{
-		init();
-	}
-	void init()
-	{
-		fd = -1;
-		borad = 0;
-		length = 0;
-		memset(buffer, 0, sizeof(buffer));
-	}
-};
-
 class CNetworkTask
 {
 public:
@@ -51,8 +32,10 @@ private:
 	int m_port;
 	std::string m_strIP;
 	int m_listenid;
+	int m_connectid;
 	uintptr_t m_hlisten;
 	uintptr_t m_hstart;
+	uintptr_t m_hconnect;
 
 	int  m_rlength;
 	char m_rbuffer[MAX_RECV_BUFFER_SIZE];
@@ -80,8 +63,9 @@ public:
 public:
 	bool Init();
 	bool Start(std::string ip, int port);
+	bool Connect(std::string ip, int port);
 	bool ShutDown();
-	bool SendData(std::shared_ptr<struct tagTaskSendData> sptrData);
+	bool SendData(const void * buffer, int size);
 	std::shared_ptr<struct tagEventRequest> GetAsyncRequest();
 };
 

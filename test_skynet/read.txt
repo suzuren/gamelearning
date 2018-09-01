@@ -1,0 +1,114 @@
+
+-----------------------------------------------------------------------------------
+
+int luaL_loadbufferx (lua_State *L,
+                      const char *buff,
+                      size_t sz,
+                      const char *name,
+                      const char *mode);
+把一段缓存加载为一个 Lua 代码块。 这个函数使用 lua_load 来加载 buff 指向的长度为 sz 的内存区。
+
+这个函数和 lua_load 返回值相同。 name 作为代码块的名字，用于调试信息和错误消息。 mode 字符串的作用同函数 lua_load。
+
+-----------------------------------------------------------------------------------
+
+nargs 是你压入栈的参数个数。 当函数调用完毕后，所有的参数以及函数本身都会出栈。 而函数的返回值这时则被压栈。
+返回值的个数将被调整为 nresults 个， 除非 nresults 被设置成 LUA_MULTRET。 在这种情况下，所有的返回值都被压入堆栈中。
+Lua 会保证返回值都放入栈空间中。 函数返回值将按正序压栈（第一个返回值首先压栈）， 因此在调用结束后，最后一个返回值将被放在栈顶。
+
+
+int lua_pcall (lua_State *L, int nargs, int nresults, int msgh);
+以保护模式调用一个函数。
+
+nargs 和 nresults 的含义与 lua_call 中的相同。 如果在调用过程中没有发生错误， lua_pcall 的行为和 lua_call 完全一致。
+但是，如果有错误发生的话， lua_pcall 会捕获它， 然后把唯一的值（错误消息）压栈，然后返回错误码。 同 lua_call 一样，
+lua_pcall 总是把函数本身和它的参数从栈上移除。
+
+如果 msgh 是 0 ， 返回在栈顶的错误消息就和原始错误消息完全一致。 否则， msgh 就被当成是 错误处理函数 在栈上的索引位置。
+（在当前的实现里，这个索引不能是伪索引。） 在发生运行时错误时， 这个函数会被调用而参数就是错误消息。 错误处理函数的返回
+值将被 lua_pcall 作为错误消息返回在堆栈上。
+
+典型的用法中，错误处理函数被用来给错误消息加上更多的调试信息， 比如栈跟踪信息。 这些信息在 lua_pcall 返回后， 由于栈已
+经展开，所以收集不到了。
+
+lua_pcall 函数会返回下列常数 （定义在 lua.h 内）中的一个：
+
+LUA_OK (0): 成功。
+LUA_ERRRUN: 运行时错误。
+LUA_ERRMEM: 内存分配错误。对于这种错，Lua 不会调用错误处理函数。
+LUA_ERRERR: 在运行错误处理函数时发生的错误。
+LUA_ERRGCMM: 在运行 __gc 元方法时发生的错误。 （这个错误和被调用的函数无关。）
+
+-----------------------------------------------------------------------------------
+
+int lua_getglobal (lua_State *L, const char *name);
+把全局变量 name 里的值压栈，返回该值的类型
+
+void lua_setglobal (lua_State *L, const char *name);
+从堆栈上弹出一个值，并将其设为全局变量 name 的新值。
+
+-----------------------------------------------------------------------------------
+
+void lua_pushnil (lua_State *L);
+将空值压栈。
+
+int lua_isnil (lua_State *L, int index);
+当给定索引的值是 nil 时，返回 1 ，否则返回 0 。
+
+void lua_pop (lua_State *L, int n);
+从栈中弹出 n 个元素。
+
+const char *lua_pushstring (lua_State *L, const char *s);
+将指针 s 指向的零结尾的字符串压栈。Lua 对这个字符串做一个内部副本（或是复用一个副本），
+因此 s 处的内存在函数返回后，可以释放掉或是立刻重用于其它用途。返回内部副本的指针。
+如果 s 为 NULL，将 nil 压栈并返回 NULL。
+
+int lua_toboolean (lua_State *L, int index);
+把给定索引处的 Lua 值转换为一个 C 中的布尔量（ 0 或是 1 ）。 和 Lua 中做的所有测试一样，
+lua_toboolean 会把任何不同于 false 和 nil 的值当作真返回； 否则就返回假。 （如果你想只
+接收真正的 boolean 值， 就需要使用 lua_isboolean 来测试值的类型。）
+
+-----------------------------------------------------------------------------------
+
+int lua_type (lua_State *L, int index);
+返回给定有效索引处值的类型， 当索引无效（或无法访问）时则返回 LUA_TNONE。 lua_type 返回的类
+型被编码为一些个在 lua.h 中定义的常量： LUA_TNIL， LUA_TNUMBER， LUA_TBOOLEAN， LUA_TSTRING，
+LUA_TTABLE， LUA_TFUNCTION， LUA_TUSERDATA， LUA_TTHREAD， LUA_TLIGHTUSERDATA。
+
+
+int lua_next (lua_State *L, int index);
+从栈顶弹出一个键， 然后把索引指定的表中的一个键值对压栈 （弹出的键之后的 “下一” 对）。 
+如果表中以无更多元素， 那么 lua_next 将返回 0 （什么也不压栈）。
+
+典型的遍历方法是这样的：
+
+     /*  表放在索引 't' 处 */
+     lua_pushnil(L);  /* 第一个键 */
+     while (lua_next(L, t) != 0) {
+       /* 使用 '键' （在索引 -2 处） 和 '值' （在索引 -1 处）*/
+       printf("%s - %s\n",
+              lua_typename(L, lua_type(L, -2)),
+              lua_typename(L, lua_type(L, -1)));
+       /* 移除 '值' ；保留 '键' 做下一次迭代 */
+       lua_pop(L, 1);
+     }
+在遍历一张表的时候， 不要直接对键调用 lua_tolstring ， 除非你知道这个键一定是一个字符串。
+调用 lua_tolstring 有可能改变给定索引位置的值； 这会对下一次调用 lua_next 造成影响。
+
+关于迭代过程中修改被迭代的表的注意事项参见 next 函数。
+
+-----------------------------------------------------------------------------------
+
+lua中索引index的表示方法
+在使用下面的函数前必须弄懂lua中索引的表示方法
+当索引为正值时，表示从栈底的索引，从1开始。
+当索引为负值时，表示从栈顶的索引，从-1开始。
+如果我们使用lua_pushnumber依次添加3个数分别1,2,3
+则栈的结构为:
+[3]    ( 访问index为:-1 或者 3 )
+[2]    ( 访问index为:-2 或者 2 )
+[1]    ( 访问index为:-3 或者 1 )
+
+-----------------------------------------------------------------------------------
+
+

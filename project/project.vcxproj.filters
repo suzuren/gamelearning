@@ -214,6 +214,9 @@
     <Filter Include="network_server_socket_server\lib_socketserver">
       <UniqueIdentifier>{aaf19664-f7f1-4478-adb2-e27226b781dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="memorypoll">
+      <UniqueIdentifier>{f3c56080-0a43-4848-b6de-9259830a12f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -746,6 +749,12 @@
     </ClInclude>
     <ClInclude Include="..\network_server_socket_server\lib_socketserver\socket_server.hpp">
       <Filter>network_server_socket_server\lib_socketserver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\memorypoll\memory_cache.h">
+      <Filter>memorypoll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\memorypoll\memory_pool.h">
+      <Filter>memorypoll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1280,6 +1289,9 @@
     </None>
     <None Include="..\network_server_socket_server\makefile">
       <Filter>network_server_socket_server</Filter>
+    </None>
+    <None Include="..\memorypoll\makefile">
+      <Filter>memorypoll</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1831,6 +1843,15 @@
     </ClCompile>
     <ClCompile Include="..\test_jemalloc\main.c">
       <Filter>test_jemalloc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\memorypoll\memory_cache.cpp">
+      <Filter>memorypoll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\memorypoll\memory_pool.cpp">
+      <Filter>memorypoll</Filter>
+    </ClCompile>
+    <ClCompile Include="..\memorypoll\test.cpp">
+      <Filter>memorypoll</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

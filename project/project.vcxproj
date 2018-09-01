@@ -584,6 +584,7 @@
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />
     <Image Include="..\lua-5.3.4-src\doc\osi-certified-72x60.png" />
+    <Image Include="..\test_jemalloc\jemalloc-arena-thread-cache.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9CE8AE1B-F8B0-478D-845D-E86CFC4F5882}</ProjectGuid>

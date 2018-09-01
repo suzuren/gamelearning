@@ -1892,5 +1892,8 @@
     <Image Include="..\lua-5.3.4-src\doc\osi-certified-72x60.png">
       <Filter>lua-5.3.4-src\doc</Filter>
     </Image>
+    <Image Include="..\test_jemalloc\jemalloc-arena-thread-cache.png">
+      <Filter>test_jemalloc</Filter>
+    </Image>
   </ItemGroup>
 </Project>

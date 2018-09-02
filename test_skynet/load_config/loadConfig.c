@@ -226,6 +226,8 @@ main(int argc, char *argv[])
 
     const char * standalone = optstring("standalone", NULL);
     printf("struct skynet_config - standalone:%s\n",standalone);
+    const char * logpath = skynet_getenv("logpath");
+    printf("struct skynet_config - logpath:%s\n",logpath);
 }
 
 

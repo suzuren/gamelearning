@@ -1,0 +1,123 @@
+
+
+-----------------------------------------------------------------------------------
+
+在Linux中提供了如下函数来对线程局部数据进行操作
+#include <pthread.h>
+
+// Returns 0 on success, or a positive error number on error
+int pthread_key_create (pthread_key_t *key, void (*destructor)(void *));
+
+// Returns 0 on success, or a positive error number on error
+int pthread_key_delete (pthread_key_t key);
+
+// Returns 0 on success, or a positive error number on error
+int pthread_setspecific (pthread_key_t key, const void *value);
+
+// Returns pointer, or NULL if no thread-specific data is associated with key
+void *pthread_getspecific (pthread_key_t key);
+
+
+函数pthread_key_create()为线程局部数据创建一个新键，并通过key指向新创建的键缓冲区。因为所有线程都
+可以使用返回的新键，所以参数key可以是一个全局变量。destructor所指向的是一个自定义的函数，其格式如下：
+void Dest (void *value)
+{
+    // Release storage pointed to by 'value'
+}
+只要线程终止时与key关联的值不为NULL，则destructor所指的函数将会自动被调用。如果一个线程中有多个线程
+局部存储变量，那么对各个变量所对应的destructor函数的调用顺序是不确定的，因此，每个变量的destructor函
+数的设计应该相互独立。
+
+
+函数pthread_key_delete()并不检查当前是否有线程正在使用该线程局部数据变量，也不会调用清理函数destructor，
+而只是将其释放以供下一次调用pthread_key_create()使用。在Linux线程中，它还会将与之相关的线程数据项设置为NULL。
+
+函数pthread_setspecific()用于将value的副本存储于一数据结构中，并将其与调用线程以及key相关联。参数
+value通常指向由调用者分配的一块内存，当线程终止时，会将该指针作为参数传递给与key相关联的destructor函数。
+当线程被创建时，会将所有的线程局部存储变量初始化为NULL，因此第一次使用此类变量前必须先调用pthread_getspecific()
+函数来确认是否已经与对应的key相关联，如果没有，那么pthread_getspecific()会分配一块内存并通过pthread_setspecific()
+函数保存指向该内存块的指针。
+参数value的值也可以不是一个指向调用者分配的内存区域，也可以是任何强制转换为void*的变量值，在这种情况下，
+先前的pthread_key_create()函数应将参数destructor设置为NULL
+
+函数pthread_getspecific()正好与pthread_setspecific()相反，其是将pthread_setspecific()设置的value取出。
+在使用取出的值前最好是将void*转换成原始数据类型的指针。
+
+-----------------------------------------------------------------------------------
+
+	int nfd = open("/dev/null", O_RDWR);
+	if (nfd == -1) {
+		perror("Unable to open /dev/null: ");
+		return -1;
+	}
+	if (dup2(nfd, 0) < 0) {
+		perror("Unable to dup2 stdin(0): ");
+		return -1;
+	}
+	if (dup2(nfd, 1) < 0) {
+		perror("Unable to dup2 stdout(1): ");
+		return -1;
+	}
+	if (dup2(nfd, 2) < 0) {
+		perror("Unable to dup2 stderr(2): ");
+		return -1;
+	}
+	close(nfd);
+写入/dev/null的东西会被系统丢掉
+就像注释写的那样，对stdin/stdout/stderr进行保护,把文件描述符0，1，2分配出去，以后再分配
+的时候就不会将 stdin/stdout/stderr 打开，以达到保护目的。
+
+重定向编程 dup和dup2函数
+   函数dup和dup2提供了复制文件描述符的功能。他们通常用于stdin,stdout或进程的stderr的重定向。一般来说，
+   普通输出函数（如：printf），默认是将某信息写入到文件描述符为1的文件中，普通输入函数都默认从文件描述
+   符为0的文件中读取数据。因此重定向操作实际上是关闭某个标准输入输出设备（文件描述符为0、1、2），而将另
+   一个打开的普通文件的文件描述符设置为0、1、2.
+
+   输入重定向：关闭标准输入设备，打开（或复制）某普通文件，使其文件描述符为0.
+   输出重定向：关闭标准输出设备，打开（或复制）某普通文件，使其文件描述符为1.
+   错误输出重定向：关闭标准错误输入设备，打开（或复制）某普通文件，使其文件描述符为2.
+
+dup函数的作用：复制一个现有的句柄，产生一个与“源句柄特性”完全一样的新句柄（也即生成一个新的句柄号，并关
+联到同一个设备）
+dup2函数的作用：复制一个现有的句柄到另一个句柄上，目标句柄的特性与“源句柄特性”完全一样（也即首先关闭目
+标句柄，与设备断连
+
+-----------------------------------------------------------------------------------
+
+函数原型
+int pthread_mutex_lock(pthread_mutex_t *mutex);
+返回值
+在成功完成之后会返回零。其他任何返回值都表示出现了错误。
+
+函数原型
+int pthread_mutex_unlock(pthread_mutex_t *mutex);
+返回值
+在成功完成之后会返回零。其他任何返回值都表示出现了错误。
+
+-----------------------------------------------------------------------------------
+
+
+int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -65,7 +65,7 @@ write_pid(const char *pidfile) {
 	return pid;
 }
 
-static int
+int
 redirect_fds() {
 	int nfd = open("/dev/null", O_RDWR);
 	if (nfd == -1) {
@@ -113,9 +113,9 @@ daemon_init(const char *pidfile) {
 		return 1;
 	}
 
-	if (redirect_fds()) {
-		return 1;
-	}
+	//if (redirect_fds()) {
+	//	return 1;
+	//}
 
 	return 0;
 }

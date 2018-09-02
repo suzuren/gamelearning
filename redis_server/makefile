@@ -3,7 +3,7 @@ TARGET := redisServer
 CC := g++ -Wall
 CPPFLAGS := -DNDEBUG
 CFLAGS :=
-CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++11
+CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++11 -I../3rd/hiredis/
 LDFLAGS := -lpthread -lrt -lm
 CPP_SOURCES := $(wildcard *.cpp)
 CPP_SOURCES += $(wildcard ../hlib/*.cpp)
@@ -22,7 +22,7 @@ embedded:all
 all:$(TARGET)
 
 $(TARGET) : $(COBJS) $(CPPOBJS)
-	$(CC) $(LDFLAGS) -o $(TARGET) $(COBJS) $(CPPOBJS) ./libhiredis.a
+	$(CC) $(LDFLAGS) -o $(TARGET) $(COBJS) $(CPPOBJS) ../3rd/hiredis/libhiredis.a
 install:
 clean:
 	rm -f *.o *.so *.a *.pid core.* $(TARGET)

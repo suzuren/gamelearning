@@ -16,7 +16,7 @@ clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_C
  "logger" "loggercpp" "loggersafe" "demo_php_connect_server" "NetHttp" "timer" "luafunc" "test_curl" "post_mgr" "http_client"
  "test_string" "mysql_connect" "mysql_client" "database_server" "cpp_new_features" "test_jemalloc" "test_lib" "virtual_destructor"
  "network_server" "socket-server" "network_server_socket_server" "memorypoll" "3rd/lua" "test_skynet/load_config" 
- "test_skynet/daemon" "test_skynet/harbor" "redis_server")
+ "test_skynet/daemon" "test_skynet/harbor" "3rd/hiredis" "redis_server")
 
 clean_len=${#clean_dir[@]}
 

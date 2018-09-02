@@ -771,9 +771,6 @@
     <ClInclude Include="..\memorypoll\memory_pool.h">
       <Filter>memorypoll</Filter>
     </ClInclude>
-    <ClInclude Include="..\redis_server\hiredis.h">
-      <Filter>redis_server</Filter>
-    </ClInclude>
     <ClInclude Include="..\redis_server\hiredis_operate.h">
       <Filter>redis_server</Filter>
     </ClInclude>

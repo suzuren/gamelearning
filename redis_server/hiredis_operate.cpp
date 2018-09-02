@@ -219,7 +219,7 @@ unsigned int CHiredisOperate::GetHashBinData(const char* key, unsigned int pid, 
 	CHECK_RET(NULL != key &&  pid > 0 && NULL != pdata && len > 0, 0);
 	m_reply = reinterpret_cast<redisReply*>(redisCommand(m_redis,"HGET %s %d",key, pid));
 	CHECK_RET(NULL != m_reply, 0);
-	CHECK_RET((int)len >= m_reply->len, 0);
+	CHECK_RET(len >= m_reply->len, 0);
 	memcpy(pdata, m_reply->str, m_reply->len);
 	unsigned int datalen = m_reply->len;
 	FreeReply();	
@@ -251,7 +251,7 @@ unsigned int  CHiredisOperate::GetBinData(const char* key, unsigned long long pi
 	CHECK_RET(NULL != key &&  pid > 0 && NULL != pdata && len > 0, 0);
 	m_reply = reinterpret_cast<redisReply*>(redisCommand(m_redis,"GET %s%llu",key, pid));
 	CHECK_RET(NULL != m_reply, 0);
-	CHECK_RET((int)len >= m_reply->len, 0);
+	CHECK_RET(len >= m_reply->len, 0);
 	memcpy(pdata, m_reply->str, m_reply->len);
 
 	unsigned int datalen = m_reply->len;

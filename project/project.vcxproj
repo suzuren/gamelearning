@@ -170,7 +170,6 @@
     <ClInclude Include="..\post_mgr\http_header.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
     <ClInclude Include="..\redis_server\comm_macro.h" />
-    <ClInclude Include="..\redis_server\hiredis.h" />
     <ClInclude Include="..\redis_server\hiredis_mgr.h" />
     <ClInclude Include="..\redis_server\hiredis_operate.h" />
     <ClInclude Include="..\referlib\barrier.h" />

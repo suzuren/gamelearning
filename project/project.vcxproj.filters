@@ -217,6 +217,21 @@
     <Filter Include="memorypoll">
       <UniqueIdentifier>{f3c56080-0a43-4848-b6de-9259830a12f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="redis_server">
+      <UniqueIdentifier>{c925ee15-3734-4a36-9bca-72dd2f115d6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test_skynet">
+      <UniqueIdentifier>{0b19c2c9-190f-4bff-9d77-506af9293edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test_skynet\daemon">
+      <UniqueIdentifier>{c6529a69-6ed2-4c17-a97f-942d4079fcad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test_skynet\harbor">
+      <UniqueIdentifier>{78c757c0-fed9-412f-9770-cfe9b02a4d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test_skynet\load_config">
+      <UniqueIdentifier>{33787984-ec1d-43c1-8a5a-c5aa4e3b4780}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -756,6 +771,24 @@
     <ClInclude Include="..\memorypoll\memory_pool.h">
       <Filter>memorypoll</Filter>
     </ClInclude>
+    <ClInclude Include="..\redis_server\hiredis.h">
+      <Filter>redis_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\redis_server\hiredis_operate.h">
+      <Filter>redis_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\daemon\skynet_daemon.h">
+      <Filter>test_skynet\daemon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\load_config\spinlock.h">
+      <Filter>test_skynet\load_config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\redis_server\hiredis_mgr.h">
+      <Filter>redis_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\redis_server\comm_macro.h">
+      <Filter>redis_server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1292,6 +1325,27 @@
     </None>
     <None Include="..\memorypoll\makefile">
       <Filter>memorypoll</Filter>
+    </None>
+    <None Include="..\test_skynet\daemon\makefile">
+      <Filter>test_skynet\daemon</Filter>
+    </None>
+    <None Include="..\test_skynet\daemon\stop.sh">
+      <Filter>test_skynet\daemon</Filter>
+    </None>
+    <None Include="..\test_skynet\harbor\makefile">
+      <Filter>test_skynet\harbor</Filter>
+    </None>
+    <None Include="..\test_skynet\load_config\config">
+      <Filter>test_skynet\load_config</Filter>
+    </None>
+    <None Include="..\test_skynet\load_config\config.path">
+      <Filter>test_skynet\load_config</Filter>
+    </None>
+    <None Include="..\test_skynet\load_config\makefile">
+      <Filter>test_skynet\load_config</Filter>
+    </None>
+    <None Include="..\redis_server\makefile">
+      <Filter>redis_server</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1853,6 +1907,27 @@
     <ClCompile Include="..\memorypoll\test.cpp">
       <Filter>memorypoll</Filter>
     </ClCompile>
+    <ClCompile Include="..\redis_server\hiredis_operate.cpp">
+      <Filter>redis_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\daemon\main.c">
+      <Filter>test_skynet\daemon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\daemon\skynet_daemon.c">
+      <Filter>test_skynet\daemon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\harbor\harbor.c">
+      <Filter>test_skynet\harbor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\load_config\loadConfig.c">
+      <Filter>test_skynet\load_config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\redis_server\hiredis_mgr.cpp">
+      <Filter>redis_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\redis_server\main.cpp">
+      <Filter>redis_server</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -1883,6 +1958,18 @@
     </Text>
     <Text Include="..\test_jemalloc\read.txt">
       <Filter>test_jemalloc</Filter>
+    </Text>
+    <Text Include="..\test_skynet\daemon\read.txt">
+      <Filter>test_skynet\daemon</Filter>
+    </Text>
+    <Text Include="..\test_skynet\harbor\read.txt">
+      <Filter>test_skynet\harbor</Filter>
+    </Text>
+    <Text Include="..\test_skynet\load_config\read.txt">
+      <Filter>test_skynet\load_config</Filter>
+    </Text>
+    <Text Include="..\redis_server\read.txt">
+      <Filter>redis_server</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

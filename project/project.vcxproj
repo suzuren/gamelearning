@@ -169,6 +169,10 @@
     <ClInclude Include="..\post_mgr\epoll_socket.h" />
     <ClInclude Include="..\post_mgr\http_header.h" />
     <ClInclude Include="..\proxy_epoll\proxy_epoll.h" />
+    <ClInclude Include="..\redis_server\comm_macro.h" />
+    <ClInclude Include="..\redis_server\hiredis.h" />
+    <ClInclude Include="..\redis_server\hiredis_mgr.h" />
+    <ClInclude Include="..\redis_server\hiredis_operate.h" />
     <ClInclude Include="..\referlib\barrier.h" />
     <ClInclude Include="..\referlib\eventmanager.h" />
     <ClInclude Include="..\referlib\future.h" />
@@ -185,6 +189,8 @@
     <ClInclude Include="..\test_curl\curl_mgr.h" />
     <ClInclude Include="..\test_curl\singleton.h" />
     <ClInclude Include="..\test_lib\testadd.h" />
+    <ClInclude Include="..\test_skynet\daemon\skynet_daemon.h" />
+    <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
     <ClInclude Include="..\timer\timer.h" />
     <ClInclude Include="..\virtual_destructor\test.h" />
@@ -358,6 +364,7 @@
     <None Include="..\proxy_epoll\stop_proxy.sh" />
     <None Include="..\proxy_epoll\subproxy\start_proxy.sh" />
     <None Include="..\proxy_epoll\subproxy\stop_proxy.sh" />
+    <None Include="..\redis_server\makefile" />
     <None Include="..\referlib\Makefile" />
     <None Include="..\referlib\start_server.sh" />
     <None Include="..\referlib\stop_client.sh" />
@@ -370,6 +377,12 @@
     <None Include="..\test_jemalloc\Makefile" />
     <None Include="..\test_lib\makefile" />
     <None Include="..\test_lib\makefile_lib_back" />
+    <None Include="..\test_skynet\daemon\makefile" />
+    <None Include="..\test_skynet\daemon\stop.sh" />
+    <None Include="..\test_skynet\harbor\makefile" />
+    <None Include="..\test_skynet\load_config\config" />
+    <None Include="..\test_skynet\load_config\config.path" />
+    <None Include="..\test_skynet\load_config\makefile" />
     <None Include="..\test_string\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
@@ -535,6 +548,9 @@
     <ClCompile Include="..\network_server_socket_server\network_task_callback.cpp" />
     <ClCompile Include="..\post_mgr\client.cpp" />
     <ClCompile Include="..\proxy_epoll\proxy_epoll.c" />
+    <ClCompile Include="..\redis_server\hiredis_mgr.cpp" />
+    <ClCompile Include="..\redis_server\hiredis_operate.cpp" />
+    <ClCompile Include="..\redis_server\main.cpp" />
     <ClCompile Include="..\referlib\client.cpp" />
     <ClCompile Include="..\referlib\eventmanager.cc" />
     <ClCompile Include="..\referlib\eventmanager_test.cc" />
@@ -552,6 +568,10 @@
     <ClCompile Include="..\test_curl\test.cpp" />
     <ClCompile Include="..\test_jemalloc\main.c" />
     <ClCompile Include="..\test_lib\testadd.c" />
+    <ClCompile Include="..\test_skynet\daemon\main.c" />
+    <ClCompile Include="..\test_skynet\daemon\skynet_daemon.c" />
+    <ClCompile Include="..\test_skynet\harbor\harbor.c" />
+    <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
     <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />
@@ -577,9 +597,13 @@
     <Text Include="..\NetEpoll\readme.txt" />
     <Text Include="..\network_server\read.txt" />
     <Text Include="..\network_server_socket_server\read.txt" />
+    <Text Include="..\redis_server\read.txt" />
     <Text Include="..\shellcmd.txt" />
     <Text Include="..\socket-server\read.txt" />
     <Text Include="..\test_jemalloc\read.txt" />
+    <Text Include="..\test_skynet\daemon\read.txt" />
+    <Text Include="..\test_skynet\harbor\read.txt" />
+    <Text Include="..\test_skynet\load_config\read.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />

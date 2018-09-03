@@ -1,8 +1,9 @@
 
 
+TARGET = testHandle
 
-testHandle : main.c
+$(TARGET) : main.c skynet_handle.c
 	gcc -g -Wall -o $@ $^ -lm -ldl
 
 clean:
-	rm -rf testHandle
+	rm -rf $(TARGET)

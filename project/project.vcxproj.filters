@@ -798,6 +798,9 @@
     <ClInclude Include="..\test_skynet\skynet_handle\rwlock.h">
       <Filter>test_skynet\skynet_handle</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_handle\skynet_handle.h">
+      <Filter>test_skynet\skynet_handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1947,6 +1950,9 @@
       <Filter>test_skynet\databuffer_hashid</Filter>
     </ClCompile>
     <ClCompile Include="..\test_skynet\skynet_handle\main.c">
+      <Filter>test_skynet\skynet_handle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c">
       <Filter>test_skynet\skynet_handle</Filter>
     </ClCompile>
   </ItemGroup>

@@ -192,6 +192,7 @@
     <ClInclude Include="..\test_skynet\databuffer_hashid\hashid.h" />
     <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
     <ClInclude Include="..\test_skynet\skynet_handle\rwlock.h" />
+    <ClInclude Include="..\test_skynet\skynet_handle\skynet_handle.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
     <ClInclude Include="..\timer\timer.h" />
     <ClInclude Include="..\virtual_destructor\test.h" />
@@ -577,6 +578,7 @@
     <ClCompile Include="..\test_skynet\harbor\harbor.c" />
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\main.c" />
+    <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c" />
     <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />

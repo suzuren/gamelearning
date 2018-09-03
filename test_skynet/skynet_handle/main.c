@@ -1,4 +1,4 @@
-
+﻿
 #include <stdio.h>
 
 #include <stdint.h>
@@ -17,6 +17,36 @@
 int main(int argc, char *argv[])
 {
     printf("test skynet handle.\n");
+
+	int handle_index = 1;
+	int slot_size = 4;
+	int handle_count = 0;
+	uint32_t arr_handle[512] = { 0 };
+	for (int i=0; i<slot_size; i++)
+	{
+		uint32_t handle = (i + handle_index) & HANDLE_MASK;
+		int hash = handle & (slot_size - 1);
+		handle_index = handle + 1;
+
+		arr_handle[handle_count++] = handle;
+		printf("test handle sa -slot_size:%d, handle:%02d,handle_index:%02d,hash:%d\n",
+			slot_size, handle, handle_index, hash);
+	}
+
+	slot_size *= 2;
+	for (int i=0; i<handle_count; i++)
+	{
+		uint32_t handle = arr_handle[i];
+		uint32_t hash = handle & (slot_size - 1);
+
+		printf("test handle ar -slot_size:%d, handle:%02d,handle_index:%02d,hash:%d\n",
+			slot_size, handle, handle_index, hash);
+
+	}
+
+
+
+	// ‭0011‬
 
 	int harbor = 1;
 	skynet_handle_init(harbor);

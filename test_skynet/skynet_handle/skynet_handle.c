@@ -1,4 +1,4 @@
-//#include "skynet.h"
+﻿//#include "skynet.h"
 
 #include "skynet_handle.h"
 //#include "skynet_server.h"
@@ -82,6 +82,9 @@ skynet_handle_register(struct skynet_context *ctx) {
 		for (i=0;i<s->slot_size;i++) {
 			uint32_t handle = (i+s->handle_index) & HANDLE_MASK;
 			int hash = handle & (s->slot_size-1);
+			//slot_size = 4的时候handle和‭0011‬最大也就是3 (slot_size-1 == 0011)
+			//slot_size = 8的时候handle和‭0111‬最大也就是7 (slot_size-1 == 0111)
+			//可以防止hash越界
 			if (s->slot[hash] == NULL)			
 			{
 				printf("skynet_handle_register - slot_size:%d,i:%d,handle_index:%d,handle:%d,hash:%d\n",
@@ -99,7 +102,11 @@ skynet_handle_register(struct skynet_context *ctx) {
 		assert((s->slot_size*2 - 1) <= HANDLE_MASK);
 		struct skynet_context ** new_slot = skynet_malloc(s->slot_size * 2 * sizeof(struct skynet_context *));
 		memset(new_slot, 0, s->slot_size * 2 * sizeof(struct skynet_context *));
-		for (i=0;i<s->slot_size;i++) {
+		// 分配新的 slot 之后，把旧的 handle 重新和 (s->slot_size * 2 - 1)相与操作，
+		// 这样子可以继续通过 handle & (s->slot_size-1)操作找出slot的hash下标，
+		// 也就找到对应的 skynet_context 指针
+		for (i=0;i<s->slot_size;i++)
+		{
 			int hash = skynet_context_handle(s->slot[i]) & (s->slot_size * 2 - 1);
 			assert(new_slot[hash] == NULL);
 			new_slot[hash] = s->slot[i];

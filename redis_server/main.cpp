@@ -16,28 +16,27 @@ int main(int argc, const char** argv)
 {
 	printf("redis server start ...\n");
 	
-
-	bool bStartConnect = false;
 	unsigned long long	ulStartTime = GetMillisecond();
 
-	CNetworkMgr::Instance().Init();
+	CRedisMgr::Instance().Init();
+	bool bStartConnect = CRedisMgr::Instance().Connect();
+	printf("main - bStartConnect:%d\n", bStartConnect);
 
-	while (true)
+	while (bStartConnect)
 	{
-		CNetworkMgr::Instance().OnNetworkTick();
-
-		if (!bStartConnect && ulStartTime + 1000 <= GetMillisecond())
+		CRedisMgr::Instance().OnTick();
+		if (ulStartTime + 1000 <= GetMillisecond())
 		{
-			CNetworkMgr::Instance().Connect();
-			bStartConnect = true;
 			ulStartTime = GetMillisecond();
+			CRedisMgr::Instance().Test();
 		}
-		if (bStartConnect && ulStartTime + 1000 <= GetMillisecond())
+		if (ulStartTime + 1000 <= GetMillisecond())
 		{
 			ulStartTime = GetMillisecond();
 		}
+		
 	}
-	CNetworkMgr::Instance().ShutDown();
+	CRedisMgr::Instance().ShutDown();
 
 	printf("redis server shutdown ...\n");
 	return 0;

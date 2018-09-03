@@ -12,11 +12,11 @@ public:
 	CHiredisOperate();
 	~CHiredisOperate();
 	
-	bool	SetRedisConf(const char * ip, unsigned int port);
+	bool	SetConfig(const char * ip, unsigned int port);
+	bool	Connect();
 	bool	IsConnect();
-	void	CheckReconnectRedis();
+	void	CheckReconnect();
 	
-	bool	ConnectRedis();
 	void	FreeReply();
 	void 	FreeRedis();
 
@@ -52,7 +52,7 @@ protected:
 	redisContext *          m_redis;				    //连接hiredis
     redisReply *            m_reply;					//hiredis回复
 	std::string				m_redisIp;
-	unsigned int					m_redisPort;
+	unsigned int			m_redisPort;
 
 };
 

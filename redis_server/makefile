@@ -1,5 +1,5 @@
 
-TARGET := redisServer
+TARGET := testRedis
 CC := g++ -Wall
 CPPFLAGS := -DNDEBUG
 CFLAGS :=

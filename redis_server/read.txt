@@ -1,9 +1,514 @@
 
 
+-----------------------------------------------------------------------------------
 
 git clone https://github.com/redis/hiredis
 
 make
+
+-----------------------------------------------------------------------------------
+
+定义函数 int strcasecmp (const char *s1, const char *s2);
+函数说明 strcasecmp()用来比较参数s1和s2字符串，比较时会自动忽略大小写的差异。
+返回值 若参数s1和s2字符串相等则返回0。s1大于s2则返回大于0 的值，s1 小于s2 则返回小于0的值。
+
+表头文件：#include <strings.h>
+函数定义：int strncasecmp(const char *s1, const char *s2, size_t n)
+函数说明：strncasecmp()用来比较参数s1和s2字符串前n个字符，比较时会自动忽略大小写的差异。
+
+
+reinterpret_cast<type-id> (expression)
+type-id 必须是一个指针、引用、算术类型、函数指针或者成员指针。它可以把一个指针转换成一个整数，
+也可以把一个整数转换成一个指针（先把一个指针转换成一个整数，再把该整数转换成原类型的指针，还
+可以得到原先的指针值）。
+reinterpret_cast是为了映射到一个完全不同类型的意思，这个关键词在我们需要把类型映射回原有类型
+时用到它。我们映射到的类型仅仅是为了故弄玄虚和其他目的，这是所有映射中最危险的。
+
+-----------------------------------------------------------------------------------
+
+1 /* Context for a connection to Redis */
+ 2 typedef struct redisContext {
+ 3     int err; /* Error flags, 0 when there is no error */
+ 4     char errstr[128]; /* String representation of error when applicable */
+ 5     int fd; 
+ 6     int flags;
+ 7     char *obuf; /* Write buffer */
+ 8     redisReader *reader; /* Protocol reader */
+ 9 
+10     enum redisConnectionType connection_type;
+11     struct timeval *timeout;
+12 
+13     struct {
+14         char *host;
+15         char *source_addr;
+16         int port;
+17     } tcp;
+18 
+19     struct {
+20         char *path;
+21     } unix_sock;
+22 
+23 } redisContext;
+
+ 1 #define REDIS_ERR -1
+ 2 #define REDIS_OK 0
+ 3 #define REDIS_ERR_IO 1 /* Error in read or write */
+ 4 #define REDIS_ERR_EOF 3 /* End of file */
+ 5 #define REDIS_ERR_PROTOCOL 4 /* Protocol error */
+ 6 #define REDIS_ERR_OOM 5 /* Out of memory */
+ 7 #define REDIS_ERR_OTHER 2 /* Everything else... */
+ 8     
+ 9 #define REDIS_REPLY_STRING 1   //返回字符串，查看str,len字段
+10 #define REDIS_REPLY_ARRAY 2    //返回一个数组，查看elements的值（数组个数），通过element[index]的方式访问数组元素，每个数组元素是一个redisReply对象的指针
+11 #define REDIS_REPLY_INTEGER 3  //返回整数，从integer字段获取值
+12 #define REDIS_REPLY_NIL 4      //没有数据返回
+13 #define REDIS_REPLY_STATUS 5   //表示状态，内容通过str字段查看，字符串长度是len字段
+14 #define REDIS_REPLY_ERROR 6    //表示出错，查看出错信息，如上的str,len字段
+
+-----------------------------------------------------------------------------------
+
+1 /* This is the reply object returned by redisCommand() */
+2 typedef struct redisReply {
+3     int type; /* REDIS_REPLY_* */
+4     long long integer; /* The integer when type is REDIS_REPLY_INTEGER */
+5     size_t len; /* Length of string */
+6     char *str; /* Used for both REDIS_REPLY_ERROR and REDIS_REPLY_STRING */
+7     size_t elements; /* number of elements, for REDIS_REPLY_ARRAY */
+8     struct redisReply **element; /* elements vector for REDIS_REPLY_ARRAY */
+9 } redisReply;
+
+-----------------------------------------------------------------------------------
+
+1  redisContext *redisConnect(const char *ip, int port);
+2 //说明：该函数用来连接redis数据库，参数为数据库的ip地址和端口，一般redis数据库的端口为6379该函数返回一个结构体redisContext。
+
+-----------------------------------------------------------------------------------
+
+1 void *redisCommand(redisContext *c, const char *format, ...);
+2 /*说明：该函数执行命令，就如sql数据库中的SQL语句一样，只是执行的是redis数据库中的操作命令，
+3 第一个参数为连接数据库时返回的redisContext，
+4 后面为可变参数列表，跟C语言printf函数类似，
+5 返回值为void*，一般强制转换成为redisReply类型的进行进一步的处理。*/
+
+-----------------------------------------------------------------------------------
+
+1 /* Free a reply object */
+2 void freeReplyObject(void *reply)
+3 //该函数用于回收释放redisCommand返回值redisReply所占用的内存
+
+-----------------------------------------------------------------------------------
+
+1 void redisFree(redisContext *c)
+2 //用于释放redisConnect产生的连接
+
+-----------------------------------------------------------------------------------
+
+EXISTS key
+
+检查给定 key 是否存在。
+
+可用版本：
+>= 1.0.0
+时间复杂度：
+O(1)
+返回值：
+若 key 存在，返回 1 ，否则返回 0 。
+redis> SET db "redis"
+OK
+
+redis> EXISTS db
+(integer) 1
+
+redis> DEL db
+(integer) 1
+
+redis> EXISTS db
+(integer) 0
+
+-----------------------------------------------------------------------------------
+
+Redis Incrby 命令将 key 中储存的数字加上指定的增量值。
+
+如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCRBY 命令。
+
+如果值包含错误的类型，或字符串类型的值不能表示为数字，那么返回一个错误。
+
+本操作的值限制在 64 位(bit)有符号数字表示之内。
+
+语法
+redis Incrby 命令基本语法如下：
+
+redis 127.0.0.1:6379> INCRBY KEY_NAME INCR_AMOUNT
+可用版本
+>= 1.0.0
+
+返回值
+加上指定的增量值之后， key 的值。
+
+实例
+# key 存在且是数字值
+ 
+redis> SET rank 50
+OK
+ 
+redis> INCRBY rank 20
+(integer) 70
+ 
+redis> GET rank
+"70"
+ 
+ 
+# key 不存在时
+ 
+redis> EXISTS counter
+(integer) 0
+ 
+redis> INCRBY counter 30
+(integer) 30
+ 
+redis> GET counter
+"30"
+ 
+ 
+# key 不是数字值时
+ 
+redis> SET book "long long ago..."
+OK
+ 
+redis> INCRBY book 200
+(error) ERR value is not an integer or out of range
+
+-----------------------------------------------------------------------------------
+
+Redis Expire 命令用于设置 key 的过期时间。key 过期后将不再可用。
+
+语法
+redis Expire 命令基本语法如下：
+
+redis 127.0.0.1:6379> Expire KEY_NAME TIME_IN_SECONDS
+可用版本
+>= 1.0.0
+
+返回值
+设置成功返回 1 。 当 key 不存在或者不能为 key 设置过期时间时(比如在低于 2.1.3 版本的 Redis 中你尝试更新 key 的过期时间)返回 0 。
+
+实例
+首先创建一个 key 并赋值：
+
+redis 127.0.0.1:6379> SET w3ckey redis
+OK
+为 key 设置过期时间：
+
+redis 127.0.0.1:6379> EXPIRE w3ckey 60
+(integer) 1
+以上实例中我们为键 w3ckey 设置了过期时间为 1 分钟，1分钟后该键会自动删除。
+
+-----------------------------------------------------------------------------------
+
+Redis Select 命令用于切换到指定的数据库，数据库索引号 index 用数字值指定，以 0 作为起始索引值。
+
+语法
+redis Select 命令基本语法如下：
+
+redis 127.0.0.1:6379> SELECT index 
+可用版本
+>= 1.0.0
+
+返回值
+总是返回 OK 。
+
+实例
+redis 127.0.0.1:6379> SET db_number 0         # 默认使用 0 号数据库
+OK
+ 
+redis 127.0.0.1:6379> SELECT 1                # 使用 1 号数据库
+OK
+ 
+redis 127.0.0.1:6379[1]> GET db_number        # 已经切换到 1 号数据库，注意 Redis 现在的命令提示符多了个 [1]
+(nil)
+ 
+redis 127.0.0.1:6379[1]> SET db_number 1
+OK
+ 
+redis 127.0.0.1:6379[1]> GET db_number
+"1"
+ 
+redis 127.0.0.1:6379[1]> SELECT 3             # 再切换到 3 号数据库
+OK
+ 
+redis 127.0.0.1:6379[3]>                      # 提示符从 [1] 改变成了 [3]
+
+-----------------------------------------------------------------------------------
+
+清除所有数据库
+FLUSHALL
+
+获取配置
+CONFIG GET *
+
+查看redis日志等级
+CONFIG GET loglevel
+
+查看redis有几个数据库
+CONFIG GET databases
+
+-----------------------------------------------------------------------------------
+
+  1) "dbfilename" //指定本地数据库文件名，默认值为dump.rdb
+  2) "dump.rdb"
+  3) "requirepass"
+  //设置Redis连接密码，如果配置了连接密码，客户端在连接Redis时需要通过AUTH <password>命令提供密码，默认关闭
+  //在登录的时候的时候输入密码：
+  // redis-cli -p 6379 -a 密码（a =auth）
+  4) ""
+  5) "masterauth"
+  // 当master服务设置了密码保护时，slav服务连接master的密码 这个就是权限验证
+  6) ""
+  7) "unixsocket"
+  8) ""
+  9) "logfile"
+  //日志记录方式，默认为标准输出，如果配置Redis为守护进程方式运行，而这里又配置为日志记录方式为标准输出
+ 10) "/var/log/redis/redis-server.log"
+ 11) "pidfile"
+ 12) "/var/run/redis/redis-server.pid"
+ 13) "maxmemory" 
+ // 指定Redis最大内存限制，Redis在启动时会把数据加载到内存中，
+ //达到最大内存后，Redis会先尝试清除已到期或即将到期的Key，当此方法处理 后，
+ //仍然到达最大内存设置，将无法再进行写入操作，但仍然可以进行读取操作。
+ //Redis新的vm机制，会把Key存放内存，Value会存放在swap区
+ 14) "0"
+ 15) "maxmemory-samples"
+ 16) "3"
+ 17) "timeout" 
+ //当 客户端闲置多长时间后关闭连接，如果指定为0，表示关闭该功能
+ 18) "0"
+ 19) "tcp-keepalive"
+ 20) "0"
+ 21) "auto-aof-rewrite-percentage"
+ 22) "100"
+ 23) "auto-aof-rewrite-min-size"
+ 24) "67108864"
+ 25) "hash-max-ziplist-entries"
+ 26) "512"
+ 27) "hash-max-ziplist-value"
+ 28) "64"
+ 29) "list-max-ziplist-entries"
+ 30) "512"
+ 31) "list-max-ziplist-value"
+ 32) "64"
+ 33) "set-max-intset-entries"
+ 34) "512"
+ 35) "zset-max-ziplist-entries"
+ 36) "128"
+ 37) "zset-max-ziplist-value"
+ 38) "64"
+ 39) "lua-time-limit"
+ 40) "5000"
+ 41) "slowlog-log-slower-than"
+ 42) "10000"
+ 43) "slowlog-max-len"
+ 44) "128"
+ 45) "port" //端口号
+ 46) "6379"
+ 47) "databases" //设置数据库的数量，默认数据库为0
+ 48) "16"
+ 49) "repl-ping-slave-period"
+ 50) "10"
+ 51) "repl-timeout"
+ 52) "60"
+ 53) "repl-backlog-size"
+ 54) "1048576"
+ 55) "repl-backlog-ttl"
+ 56) "3600"
+ 57) "maxclients"
+ //设置同一时间最大客户端连接数，默认无限制，Redis可以同时打开的客户端连接数为
+ //Redis进程可以打开的最大文件描述符数，如果设 置 maxclients 0，表示不作限制。
+ //当客户端连接数到达限制时，
+ //Redis会关闭新的连接并向客户端返回max number of clients reached错误信息
+ 58) "3984"
+ 59) "watchdog-period"
+ 60) "0"
+ 61) "slave-priority"
+ 62) "100"
+ 63) "min-slaves-to-write"
+ 64) "0"
+ 65) "min-slaves-max-lag"
+ 66) "10"
+ 67) "hz"
+ 68) "10"
+ 69) "no-appendfsync-on-rewrite"
+ 70) "no"
+ 71) "slave-serve-stale-data"
+ 72) "yes"
+ 73) "slave-read-only"
+ 74) "yes"
+ 75) "stop-writes-on-bgsave-error"
+ 76) "yes"
+ 77) "daemonize" //以守护进程的方式运行
+ 78) "yes"
+ 79) "rdbcompression"
+ //指定存储至本地数据库时是否压缩数据，默认为yes，Redis采用LZF压缩，
+ //如果为了节省CPU时间，可以关闭该选项，但会导致数据库文件变的巨大
+ 80) "yes"
+ 81) "rdbchecksum"
+ 82) "yes"
+ 
+ 83) "activerehashing"
+ // 指定是否激活重置哈希，默认为开启
+ 84) "yes" 
+ 
+ 85) "repl-disable-tcp-nodelay"
+ 86) "no"
+ 87) "aof-rewrite-incremental-fsync"
+ 88) "yes"
+ 89) "appendonly"
+ //. 指定是否在每次更新操作后进行日志记录，Redis在默认情况下是异步的把数据写入磁盘，
+ //如果不开启，可能会在断电时导致一段时间内//的数据丢失。 
+ //因为 redis本身同步数据文件是按上面save条件来同步的，所以有的数据会在一段时间内只存在于内存中。默认为no
+ // 这个和save 保存同步有关系
+ 90) "no"
+ 91) "dir" //指定本地数据库存放目录
+ 92) "/var/lib/redis"
+ 
+ 93) "maxmemory-policy"
+ 94) "volatile-lru"
+ 
+ 95) "appendfsync"
+ //之前的那个是否记录日志，这里表示记录日志的类型
+ // 指定更新日志条件，共有3个可选值：     
+ //no：表示等操作系统进行数据缓存同步到磁盘（快）     
+ //always：表示每次更新操作后手动调用fsync()将数据写到磁盘（慢，安全）     
+ //everysec：表示每秒同步一次（折衷，默认值）
+ 96) "everysec"
+ 
+ 97) "save" 
+ //指定在多长时间内，有多少次更新操作，就将数据同步到数据文件，可以多个条件配合 (让数据一致性，内存的数据和磁盘的数据)
+ 98) "900 1 300 10 60 10000"
+// 分别表示900秒（15分钟）内有1个更改，300秒（5分钟）内有10个更改以及60秒内有10000个更改。 
+ 
+ 99) "loglevel"
+//日志记录级别，Redis总共支持四个级别：debug、verbose、notice、warning
+100) "notice"
+ 
+101) "client-output-buffer-limit"
+102) "normal 0 0 0 slave 268435456 67108864 60 pubsub 33554432 8388608 60"
+103) "unixsocketperm"
+104) "0" 
+ 
+105) "slaveof" 
+//slave 奴隶主要指从数据库 主从数据库就是集群环境中使用的
+//设置当本机为slav服务时，设置master服务的IP地址及端口，在Redis启动时，它会自动从master进行数据同步
+106) ""
+107) "notify-keyspace-events"
+108) ""
+109) "bind" //绑定的主机的ip
+110) "0.0.0.0"
+
+-----------------------------------------------------------------------------------
+
+
+Redis SET命令用于在Redis键中设置一些字符串值。
+
+返回值
+
+如果在键中设置了值，返回简单字符串回复：OK。如果值没有设置则返回 Null。
+语法
+下面是Redis SET命令的基本语法。
+
+redis 127.0.0.1:6379> SET KEY_NAME VALUE
+Shell
+示例
+
+redis 127.0.0.1:6379> SET mykey "redis" 
+OK
+Shell
+选项
+在SET命令中，有很多选项可用来修改命令的行为。 以下是SET命令可用选项的基本语法。
+
+redis 127.0.0.1:6379> SET KEY VALUE [EX seconds] [PX milliseconds] [NX|XX]
+Shell
+EX seconds ? 设置指定的到期时间(以秒为单位)。
+PX milliseconds - 设置指定的到期时间(以毫秒为单位)。
+NX - 仅在键不存在时设置键。
+XX - 只有在键已存在时才设置。
+示例
+
+redis 127.0.0.1:6379> SET mykey "redis" EX 60 NX
+OK
+Shell
+以上示例将在键“mykey”不存在时，设置键的值，到期时间为60秒。
+
+-----------------------------------------------------------------------------------
+
+HSET key field value
+
+将哈希表 key 中的域 field 的值设为 value 。
+
+如果 key 不存在，一个新的哈希表被创建并进行 HSET 操作。
+
+如果域 field 已经存在于哈希表中，旧值将被覆盖。
+
+可用版本：
+>= 2.0.0
+时间复杂度：
+O(1)
+返回值：
+如果 field 是哈希表中的一个新建域，并且值设置成功，返回 1 。
+如果哈希表中域 field 已经存在且旧值已被新值覆盖，返回 0 。
+redis> HSET website google "www.g.cn"       # 设置一个新域
+(integer) 1
+
+redis> HSET website google "www.google.com" # 覆盖一个旧域
+(integer) 0
+
+-----------------------------------------------------------------------------------
+
+HSET key field value
+
+将哈希表 key 中的域 field 的值设为 value 。
+
+如果 key 不存在，一个新的哈希表被创建并进行 HSET 操作。
+
+如果域 field 已经存在于哈希表中，旧值将被覆盖。
+
+可用版本：
+>= 2.0.0
+时间复杂度：
+O(1)
+返回值：
+如果 field 是哈希表中的一个新建域，并且值设置成功，返回 1 。
+如果哈希表中域 field 已经存在且旧值已被新值覆盖，返回 0 。
+redis> HSET website google "www.g.cn"       # 设置一个新域
+(integer) 1
+
+redis> HSET website google "www.google.com" # 覆盖一个旧域
+(integer) 0
+
+-----------------------------------------------------------------------------------
+
+HMGET key field [field ...]
+
+返回哈希表 key 中，一个或多个给定域的值。
+
+如果给定的域不存在于哈希表，那么返回一个 nil 值。
+
+因为不存在的 key 被当作一个空哈希表来处理，所以对一个不存在的 key 进行 HMGET 操作将返回一个只带有 nil 值的表。
+
+可用版本：
+>= 2.0.0
+时间复杂度：
+O(N)， N 为给定域的数量。
+返回值：
+一个包含多个给定域的关联值的表，表值的排列顺序和给定域参数的请求顺序一样。
+redis> HMSET pet dog "doudou" cat "nounou"    # 一次设置多个域
+OK
+
+redis> HMGET pet dog cat fake_pet             # 返回值的顺序和传入参数的顺序一样
+1) "doudou"
+2) "nounou"
+3) (nil)                                      # 不存在的域返回nil值
+
+-----------------------------------------------------------------------------------
 
 
 

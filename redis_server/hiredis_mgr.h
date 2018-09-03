@@ -2,30 +2,33 @@
 #ifndef __NETWORK_MGR_H_
 #define __NETWORK_MGR_H_
 
-class CNetworkMgr
+#include "hiredis_operate.h"
+
+class CRedisMgr
 {
 protected:
-	CNetworkMgr() {}
-	~CNetworkMgr()	{}
+	CRedisMgr() {}
+	~CRedisMgr()	{}
 private:
-	const CNetworkMgr & operator=(const CNetworkMgr &);
+	const CRedisMgr & operator=(const CRedisMgr &);
 public:
-	static  CNetworkMgr & Instance()
+	static  CRedisMgr & Instance()
 	{
-		static  CNetworkMgr  s_SingleObj;
+		static  CRedisMgr  s_SingleObj;
 		return  s_SingleObj;
 	}
 private:
-
+	CHiredisOperate m_RedisHandle;
 
 public:
 	bool	Init();
 	bool	Connect();
 	void    ShutDown();
-	void    OnNetworkTick();
+	void    OnTick();
 
 public:
 
+	void Test();
 
 };
 

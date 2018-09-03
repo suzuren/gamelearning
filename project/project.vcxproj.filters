@@ -783,9 +783,6 @@
     <ClInclude Include="..\redis_server\hiredis_mgr.h">
       <Filter>redis_server</Filter>
     </ClInclude>
-    <ClInclude Include="..\redis_server\comm_macro.h">
-      <Filter>redis_server</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

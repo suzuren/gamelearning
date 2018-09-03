@@ -188,7 +188,10 @@
     <ClInclude Include="..\test_curl\singleton.h" />
     <ClInclude Include="..\test_lib\testadd.h" />
     <ClInclude Include="..\test_skynet\daemon\skynet_daemon.h" />
+    <ClInclude Include="..\test_skynet\databuffer_hashid\databuffer.h" />
+    <ClInclude Include="..\test_skynet\databuffer_hashid\hashid.h" />
     <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
+    <ClInclude Include="..\test_skynet\skynet_handle\rwlock.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
     <ClInclude Include="..\timer\timer.h" />
     <ClInclude Include="..\virtual_destructor\test.h" />
@@ -377,10 +380,12 @@
     <None Include="..\test_lib\makefile_lib_back" />
     <None Include="..\test_skynet\daemon\makefile" />
     <None Include="..\test_skynet\daemon\stop.sh" />
+    <None Include="..\test_skynet\databuffer_hashid\makefile" />
     <None Include="..\test_skynet\harbor\makefile" />
     <None Include="..\test_skynet\load_config\config" />
     <None Include="..\test_skynet\load_config\config.path" />
     <None Include="..\test_skynet\load_config\makefile" />
+    <None Include="..\test_skynet\skynet_handle\makefile" />
     <None Include="..\test_string\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
@@ -568,8 +573,10 @@
     <ClCompile Include="..\test_lib\testadd.c" />
     <ClCompile Include="..\test_skynet\daemon\main.c" />
     <ClCompile Include="..\test_skynet\daemon\skynet_daemon.c" />
+    <ClCompile Include="..\test_skynet\databuffer_hashid\main.c" />
     <ClCompile Include="..\test_skynet\harbor\harbor.c" />
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
+    <ClCompile Include="..\test_skynet\skynet_handle\main.c" />
     <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />
@@ -600,6 +607,7 @@
     <Text Include="..\socket-server\read.txt" />
     <Text Include="..\test_jemalloc\read.txt" />
     <Text Include="..\test_skynet\daemon\read.txt" />
+    <Text Include="..\test_skynet\databuffer_hashid\read.txt" />
     <Text Include="..\test_skynet\harbor\read.txt" />
     <Text Include="..\test_skynet\load_config\read.txt" />
   </ItemGroup>

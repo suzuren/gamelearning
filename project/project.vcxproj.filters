@@ -232,6 +232,12 @@
     <Filter Include="test_skynet\load_config">
       <UniqueIdentifier>{33787984-ec1d-43c1-8a5a-c5aa4e3b4780}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\databuffer_hashid">
+      <UniqueIdentifier>{f94bbc9c-5d3c-4603-a9e1-b88d1b7c7e49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test_skynet\skynet_handle">
+      <UniqueIdentifier>{de7101bd-5ffd-4bb4-adb8-f070a720c251}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -782,6 +788,15 @@
     </ClInclude>
     <ClInclude Include="..\redis_server\hiredis_mgr.h">
       <Filter>redis_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\databuffer_hashid\databuffer.h">
+      <Filter>test_skynet\databuffer_hashid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\databuffer_hashid\hashid.h">
+      <Filter>test_skynet\databuffer_hashid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_handle\rwlock.h">
+      <Filter>test_skynet\skynet_handle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1340,6 +1355,12 @@
     </None>
     <None Include="..\redis_server\makefile">
       <Filter>redis_server</Filter>
+    </None>
+    <None Include="..\test_skynet\databuffer_hashid\makefile">
+      <Filter>test_skynet\databuffer_hashid</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_handle\makefile">
+      <Filter>test_skynet\skynet_handle</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1922,6 +1943,12 @@
     <ClCompile Include="..\redis_server\main.cpp">
       <Filter>redis_server</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\databuffer_hashid\main.c">
+      <Filter>test_skynet\databuffer_hashid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_handle\main.c">
+      <Filter>test_skynet\skynet_handle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -1964,6 +1991,9 @@
     </Text>
     <Text Include="..\redis_server\read.txt">
       <Filter>redis_server</Filter>
+    </Text>
+    <Text Include="..\test_skynet\databuffer_hashid\read.txt">
+      <Filter>test_skynet\databuffer_hashid</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

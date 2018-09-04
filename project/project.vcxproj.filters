@@ -238,6 +238,9 @@
     <Filter Include="test_skynet\skynet_handle">
       <UniqueIdentifier>{de7101bd-5ffd-4bb4-adb8-f070a720c251}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\skynet_mq">
+      <UniqueIdentifier>{4cc99c09-4d6a-4992-87f3-542447dab35c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -800,6 +803,12 @@
     </ClInclude>
     <ClInclude Include="..\test_skynet\skynet_handle\skynet_handle.h">
       <Filter>test_skynet\skynet_handle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_mq\skynet_mq.h">
+      <Filter>test_skynet\skynet_mq</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_mq\spinlock.h">
+      <Filter>test_skynet\skynet_mq</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1364,6 +1373,9 @@
     </None>
     <None Include="..\test_skynet\skynet_handle\makefile">
       <Filter>test_skynet\skynet_handle</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_mq\makefile">
+      <Filter>test_skynet\skynet_mq</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1955,6 +1967,12 @@
     <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c">
       <Filter>test_skynet\skynet_handle</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_mq\main.c">
+      <Filter>test_skynet\skynet_mq</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_mq\skynet_mq.c">
+      <Filter>test_skynet\skynet_mq</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2000,6 +2018,9 @@
     </Text>
     <Text Include="..\test_skynet\databuffer_hashid\read.txt">
       <Filter>test_skynet\databuffer_hashid</Filter>
+    </Text>
+    <Text Include="..\test_skynet\skynet_mq\read.txt">
+      <Filter>test_skynet\skynet_mq</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

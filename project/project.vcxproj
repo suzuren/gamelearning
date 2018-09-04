@@ -195,6 +195,8 @@
     <ClInclude Include="..\test_skynet\skynet_handle\skynet_handle.h" />
     <ClInclude Include="..\test_skynet\skynet_mq\skynet_mq.h" />
     <ClInclude Include="..\test_skynet\skynet_mq\spinlock.h" />
+    <ClInclude Include="..\test_skynet\skynet_timer\skynet_timer.h" />
+    <ClInclude Include="..\test_skynet\skynet_timer\spinlock.h" />
     <ClInclude Include="..\ThreadPool\ThreadPool.h" />
     <ClInclude Include="..\timer\timer.h" />
     <ClInclude Include="..\virtual_destructor\test.h" />
@@ -390,6 +392,7 @@
     <None Include="..\test_skynet\load_config\makefile" />
     <None Include="..\test_skynet\skynet_handle\makefile" />
     <None Include="..\test_skynet\skynet_mq\makefile" />
+    <None Include="..\test_skynet\skynet_timer\makefile" />
     <None Include="..\test_string\Makefile" />
     <None Include="..\ThreadPool\Makefile" />
     <None Include="..\ThreadPool\README.md" />
@@ -584,6 +587,8 @@
     <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c" />
     <ClCompile Include="..\test_skynet\skynet_mq\main.c" />
     <ClCompile Include="..\test_skynet\skynet_mq\skynet_mq.c" />
+    <ClCompile Include="..\test_skynet\skynet_timer\main.c" />
+    <ClCompile Include="..\test_skynet\skynet_timer\skynet_timer.c" />
     <ClCompile Include="..\test_string\test_string.cpp" />
     <ClCompile Include="..\ThreadPool\example.cpp" />
     <ClCompile Include="..\timer\test.c" />
@@ -618,6 +623,7 @@
     <Text Include="..\test_skynet\harbor\read.txt" />
     <Text Include="..\test_skynet\load_config\read.txt" />
     <Text Include="..\test_skynet\skynet_mq\read.txt" />
+    <Text Include="..\test_skynet\skynet_timer\read.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />

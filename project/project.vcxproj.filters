@@ -241,6 +241,9 @@
     <Filter Include="test_skynet\skynet_mq">
       <UniqueIdentifier>{4cc99c09-4d6a-4992-87f3-542447dab35c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\skynet_timer">
+      <UniqueIdentifier>{bff0bf05-aa8a-4524-80d1-1fc8887d0ce0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -810,6 +813,12 @@
     <ClInclude Include="..\test_skynet\skynet_mq\spinlock.h">
       <Filter>test_skynet\skynet_mq</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_timer\skynet_timer.h">
+      <Filter>test_skynet\skynet_timer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_timer\spinlock.h">
+      <Filter>test_skynet\skynet_timer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1376,6 +1385,9 @@
     </None>
     <None Include="..\test_skynet\skynet_mq\makefile">
       <Filter>test_skynet\skynet_mq</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_timer\makefile">
+      <Filter>test_skynet\skynet_timer</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1973,6 +1985,12 @@
     <ClCompile Include="..\test_skynet\skynet_mq\skynet_mq.c">
       <Filter>test_skynet\skynet_mq</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_timer\main.c">
+      <Filter>test_skynet\skynet_timer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_timer\skynet_timer.c">
+      <Filter>test_skynet\skynet_timer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2021,6 +2039,9 @@
     </Text>
     <Text Include="..\test_skynet\skynet_mq\read.txt">
       <Filter>test_skynet\skynet_mq</Filter>
+    </Text>
+    <Text Include="..\test_skynet\skynet_timer\read.txt">
+      <Filter>test_skynet\skynet_timer</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

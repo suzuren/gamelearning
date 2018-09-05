@@ -1,1 +1,110 @@
 
+//struct timespec
+//{
+//time_t tv_sec; // seconds[秒]
+//long tv_nsec; // nanoseconds[纳秒]
+//};
+//int clock_gettime(clockid_t clk_id, struct timespect *tp);
+////@clk_id:
+//CLOCK_REALTIME:系统实时时间,随系统实时时间改变而改变
+//CLOCK_MONOTONIC:从系统启动这一刻起开始计时,不受系统时间被用户改变的影响
+//CLOCK_PROCESS_CPUTIME_ID:本进程到当前代码系统CPU花费的时间
+//CLOCK_THREAD_CPUTIME_ID:本线程到当前代码系统CPU花费的时间
+
+
+
+首先 skynet 的定时器 node->time 类型为 uint32_t , 范围是 0 ~ 2^32 - 1 ,  skynet 实现的 时间轮的思路是这样的（我想linux也是这样）：
+
+将 32 位 分为五个部分，
+struct link_list near[TIME_NEAR];　(000000 000000 000000 000000 11111111)  低8位 表示 0 ~ 2^8 - 1 即 0 ~ 255 个 tick ，
+这里每个 near[x] 的精度是一个 tick  ，即 10 毫秒
+
+下面是四个数组，每个数组有 TIME_LEVEL  个 slot ，即 2^6 = 64 个 slot， 
+
+link_list[0] 数组， 每个 slot 表示的精度是 2^8 ， 即在这个数组中 每一个 slot 比上一个 slot 多 256 个 tick ，
+link_list[0] 表示的范围是 (2^8 ~ 2^14 - 1), 即 node->expire 时间在这个范围内的，都被分到这个数组里
+
+link_list[1]数组， 每个 slot 表示的精度是 2^8 * 2^6 ,
+link_list[1] 表示的范围是 (2^14 ~ 2^20 - 1), 即 node->expire 时间在这个范围内的 (2^14 ~ 2^20 - 1)，都被分到这个数组里
+
+link_list[2]数组， 每个 slot 表示的精度是 2^8 * 2^6 * 2^6 ,
+link_list[2] 表示的范围是 (2^20 ~ 2^26 - 1), 即 node->expire 时间在这个范围内的 (2^20 ~ 2^26 - 1)，都被分到这个数组里
+
+link_list[3]数组， 每个 slot 表示的精度是 2^8 * 2^6 * 2^6 * 2^6 , 
+link_list[3] 表示的范围是 (2^26 ~ 2^32 - 1), 即 node->expire 时间在 这个范围内的  (2^26 ~ 2^32 - 1),，都被分到这个数组里
+
+
+
+
+
+
+
+
+ while ((ct & (mask-1))==0)
+(ct & (mask-1)) -> ct & 0000 1111 1111
+ct就是低八位都要是0的时候 这个条件才成立
+也就是 需要 ++T->time 这个累加 256次
+当256次的时候
+    ct = 0001 0000 0000
+mask-1 = 0000 1111 1111
+这个时候相与操作 才有可能等于0
+所以需要执行256次tic才会去移动t数组的定时器
+在256次之前的定时器都是放在near里面
+所以在执行256次tick之前也不需要关心t数组远时间的定时器
+这个时候肯定是不会执行到的
+
+
+每帧除了触发定时器外，还需重新分配定时器所在区间(timer_shift)，因为T->near里保存即将触发的定时器，
+所以每TIME_NEAR-1（2^8-1）个滴答数才有可能需要分配（第22行）。否则，分配T->t中某个等级即可。
+
+当T->time的低8位不全为0时，不需要分配，所以每2^8个滴答数才有需要分配一次；
+
+当T->time的第9-14位不全为0时，重新分配T[0]等级，每2^8个滴答数分配一次，idx从1开始，每次分配+1；
+
+当T->time的第15-20位不全为0时，重新分配T[1]等级，每2^(8+6)个滴答数分配一次，idx从1开始，每次分配+1；
+
+当T->time的第21-26位不全为0时，重新分配T[2]等级，每2^(8+6+6)个滴答数分配一次，idx从1开始，每次分配+1；
+
+当T->time的第27-32位不全为0时，重新分配T[3]等级，每2^(8+6+6+6)个滴答数分配一次，idx从1开始，每次分配+1；
+
+即等级越大的定时器越遥远，越不关注，需要重新分配的次数也就越少。
+
+ 1 // skynet-src/skynet_timer.c
+ 2 static void
+ 3 move_list(struct timer *T, int level, int idx) {
+ 4     struct timer_node *current = link_clear(&T->t[level][idx]);
+ 5     while (current) {
+ 6         struct timer_node *temp=current->next;
+ 7         add_node(T,current);
+ 8         current=temp;
+ 9     }
+10 }
+11 
+12 static void
+13 timer_shift(struct timer *T) {
+14     int mask = TIME_NEAR; // 2^8 = 256 -> 0001 0000 0000
+15     uint32_t ct = ++T->time;
+16     if (ct == 0) {
+17         move_list(T, 3, 0);
+18     } else {
+19         uint32_t time = ct >> TIME_NEAR_SHIFT; //  8
+20         int i=0;
+21 
+22         while ((ct & (mask-1))==0) {           // 当 ct 低八位不全为0,(ct & (mask-1)) -> ct & 0000 1111 1111  !=   0 这个时候就不需要分配
+23             int idx=time & TIME_LEVEL_MASK;    // 63 -> 0011 1111
+24             if (idx!=0) {
+25                 move_list(T, i, idx);
+26                 break;                          
+27             }
+28             mask <<= TIME_LEVEL_SHIFT;         //  6 左移6位
+29             time >>= TIME_LEVEL_SHIFT;
+30             ++i;
+31         }
+32     }
+33 }
+
+
+
+
+
+

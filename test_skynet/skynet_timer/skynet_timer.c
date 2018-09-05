@@ -1,4 +1,4 @@
-//#include "skynet.h"
+﻿//#include "skynet.h"
 
 #include "skynet_timer.h"
 //#include "skynet_mq.h"
@@ -35,14 +35,14 @@ skynet_context_push(uint32_t handle, struct skynet_message *message)
 	printf("skynet_context_push - sizeof(size_t):%lu - >%lu,SIZE_MAX:%lu,MESSAGE_TYPE_MASK:%lu\n", sizeof(size_t), (sizeof(size_t) - 1) * 8, SIZE_MAX, MESSAGE_TYPE_MASK);
 	//skynet_context_push - sizeof(size_t) : 8 - >56 ,SIZE_MAX:18446744073709551615,MESSAGE_TYPE_MASK:72057594037927935
 
-	// 18446744073709551615 ����8λ�����ǰ�����8λȥ����ǰ�油��8��0 ����
+	// 18446744073709551615 右移8位操作是把最后的8位去掉在前面补充8个0 如下
 	// 1844 6744 0737 0955 1615
 	// FFFF FFFF FFFF FFFF
-	// 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 ��������ƽ�������8λ����
-	// 0000 0000 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 -> ?FFFFFFFFFFFFFF? -> ?72057594037927935? == MESSAGE_TYPE_MASK
+	// 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 这个二进制进行右移8位操作
+	// 0000 0000 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 -> FFFFFFFFFFFFFF -> 72057594037927935 == MESSAGE_TYPE_MASK
 	
 
-	// ���ֽ� 64λ
+	// 八字节 64位
 	// message->sz       = 72057594037927936 ->0000 0001 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 	// MESSAGE_TYPE_MASK = 72057594037927935 ->0000 0000 11111111 11111111 11111111 11111111 11111111 11111111 11111111
 	size_t sz = message->sz & MESSAGE_TYPE_MASK;
@@ -86,14 +86,14 @@ skynet_error(struct skynet_context * context, const char *msg, ...) {
 typedef void (*timer_execute_func)(void *ud,void *arg);
 
 #define TIME_NEAR_SHIFT 8
-#define TIME_NEAR (1 << TIME_NEAR_SHIFT)	// 2^8 = 256 -> ?0001 0000 0000?
-#define TIME_NEAR_MASK (TIME_NEAR-1)		//       255 -> 0000 ?1111 1111?
+#define TIME_NEAR (1 << TIME_NEAR_SHIFT)	// 2^8 = 256 -> 0001 0000 0000
+#define TIME_NEAR_MASK (TIME_NEAR-1)		//       255 -> 0000 1111 1111
 
 #define TIME_LEVEL_SHIFT 6					// 6
-#define TIME_LEVEL (1 << TIME_LEVEL_SHIFT)	// 2^6 = 64  -> ?0100 0000?
-#define TIME_LEVEL_MASK (TIME_LEVEL-1)		// 64-1= 63  -> ?0011 1111?
+#define TIME_LEVEL (1 << TIME_LEVEL_SHIFT)	// 2^6 = 64  -> 0100 0000
+#define TIME_LEVEL_MASK (TIME_LEVEL-1)		// 64-1= 63  -> 0011 1111
 
-//ÿ����ʱ���¼��ص� 
+//每个计时器事件回调 
 struct timer_event {
 	uint32_t handle;
 	int session;
@@ -101,7 +101,7 @@ struct timer_event {
 
 struct timer_node {
 	struct timer_node *next;
-	uint32_t expire; // //��ʱ���¼�����ʱ��
+	uint32_t expire; // //计时器事件触发时间
 };
 
 struct link_list {
@@ -110,13 +110,13 @@ struct link_list {
 };
 
 struct timer {
-	struct link_list near[TIME_NEAR];	// 256 �����ʱ��
-	struct link_list t[4][TIME_LEVEL];	// 64   ����ʱ���Զ�ּ�
+	struct link_list near[TIME_NEAR];	// 256 最近的时间
+	struct link_list t[4][TIME_LEVEL];	// 64   根据时间久远分级
 	struct spinlock lock;
-	uint32_t time;						// ��ʱ����ÿ�ٷ�֮һ�����һ�� -> ������������tick ���� ÿ10���� tick һ�Σ�T->time ����1��
-	uint32_t starttime;					// ��ʼʱ�� ��
-	uint64_t current;					// ��ǰʱ��gettime��current_point��ʱ��� ��λΪ�ٷ�֮һ��
-	uint64_t current_point;				// ��һ��update��ʱ�䣬 �ٷ�֮һ��
+	uint32_t time;						// 计时器，每百分之一秒更新一次 -> 服务器经过的tick 数， 每10毫秒 tick 一次，T->time 增加1；
+	uint32_t starttime;					// 起始时间 秒
+	uint64_t current;					// 当前时间gettime与current_point的时间差 单位为百分之一秒
+	uint64_t current_point;				// 上一次update的时间， 百分之一秒
 };
 
 static struct timer * TI = NULL;
@@ -139,22 +139,48 @@ link(struct link_list *list,struct timer_node *node) {
 
 static void
 add_node(struct timer *T,struct timer_node *node) {
-	uint32_t time=node->expire;
-	uint32_t current_time=T->time;
+	uint32_t time=node->expire;    // 加上了超时的时间 ，绝对时间
+	uint32_t current_time=T->time; // 当前时间，绝对时间
 	
-	if ((time|TIME_NEAR_MASK)==(current_time|TIME_NEAR_MASK)) {
+//#define TIME_NEAR_MASK  255 ->  0000  0000   0000 0000   0000 0000   1111 1111
+
+	// uint32_t 类型需要32位表示，把超时时间的高24位等于当前时间的高24位来判断是否是近的时间
+	// near 这个数组大小正好是256大小，0-255表示，
+	// time&TIME_NEAR_MASK 这个time是32位只能取出低八位，所以 time&TIME_NEAR_MASK 范围是 0 - 255
+	// 所以这个 time&TIME_NEAR_MASK 这个数值做 near 数组的下标是永远都不会越界的
+	// 相当于低八位不考虑，time - current_time <= 255算近的时
+	if ((time|TIME_NEAR_MASK)==(current_time|TIME_NEAR_MASK))
+	{
 		link(&T->near[time&TIME_NEAR_MASK],node);
-	} else {
-		int i;
+	}
+	else
+	{
+//#define TIME_NEAR  256 ->  0000  0000   0000 0000   0000 0001   0000 0000
+//#       mask     16384 ->  0000  0000   0000 0000   0100 0000   0000 0000
+//#       mask-1   16383 ->  0000  0000   0000 0000   ‭0011 1111   1111 1111‬
+		int i; 
 		uint32_t mask=TIME_NEAR << TIME_LEVEL_SHIFT;
-		for (i=0;i<3;i++) {
-			if ((time|(mask-1))==(current_time|(mask-1))) {
+		for (i=0;i<3;i++)
+		{
+// i = 0    mask         ->  ‭0000  0000   0000 0000   0100 0000   0000 0000  - 1 -> 0000  0000   0000 0000   ‭0011 1111   1111 1111‬ -> 所以 i=0 存放超时时间 2^14-1 到 2^8 （因为 0 到 2^8-1 的时间已经给near近的时间数组了）
+// i = 1    mask         ->  ‭0000  0000   0001 0000   0000 0000   0000 0000  - 1 -> 0000  0000   0000 1111   ‭1111 1111   1111 1111‬ -> 所以 i=1 存放超时时间 2^20-1 到 2^14
+// i = 2    mask         ->  ‭0000  0100   0000 0000   0000 0000   0000 0000  - 1 -> 0000  0011   1111 1111   ‭1111 1111   1111 1111‬ -> 所以 i=2 存放超时时间 2^26-1 到 2^20
+// i = 3    mask         ->  ‭0000  0100   0000 0000   0000 0000   0000 0000  - 1 -> 0000  0011   1111 1111   ‭1111 1111   1111 1111‬ -> 所以 i=3 存放超时时间 2^32-1 到 2^26
+// 因为 i 为 3 的时候，不能进入循环，所以 mask 的值和 i 为 2 的值是一样的
+// 所以当超时时间是和当前时间的高 18 位一样的时候可以进入 i = 0 的 t[0][x] 数组里面
+// 所以当超时时间是和当前时间的高 12 位一样的时候可以进入 i = 1 的 t[1][x] 数组里面
+// 所以当超时时间是和当前时间的高  6 位一样的时候可以进入 i = 2 的 t[2][x] 数组里面
+// 剩下的都是直接进入到 i = 3 的数组里面
+			if ((time|(mask-1))==(current_time|(mask-1)))
+			{
 				break;
 			}
 			mask <<= TIME_LEVEL_SHIFT;
 		}
+//  t[4][TIME_LEVEL];	// 64
+//#define TIME_LEVEL_MASK 63  ->  0000  0000   0000 0000   0000 0000   0011 1111 这个保证数组不会越界
 
-		link(&T->t[i][((time>>(TIME_NEAR_SHIFT + i*TIME_LEVEL_SHIFT)) & TIME_LEVEL_MASK)],node);	
+		link(&T->t[i][((time>>(TIME_NEAR_SHIFT + i*TIME_LEVEL_SHIFT)) & TIME_LEVEL_MASK)],node);
 	}
 }
 
@@ -172,7 +198,11 @@ timer_add(struct timer *T,void *arg,size_t sz,int time) {
 }
 
 static void
-move_list(struct timer *T, int level, int idx) {
+move_list(struct timer *T, int level, int idx)
+{
+	//直接把t数组level下标的链表直接拿出来
+	//通过add_node(T, current); 这样子，
+	//数组t -> level idx 下标下面的链表每一个节点都重新计算
 	struct timer_node *current = link_clear(&T->t[level][idx]);
 	while (current) {
 		struct timer_node *temp=current->next;
@@ -183,22 +213,42 @@ move_list(struct timer *T, int level, int idx) {
 
 static void
 timer_shift(struct timer *T) {
-	int mask = TIME_NEAR;
-	uint32_t ct = ++T->time;
-	if (ct == 0) {
+	int mask = TIME_NEAR; // 256
+	uint32_t ct = ++T->time; // tick 一次
+	if (ct == 0)
+	{
+		// 当前时间为0时，需要处理之前溢出情况下加入的计时器，也就是timer.t[3][0]中的计时器。
+		// timer.t[3][i](i != 0)中的计时器会在之后跨level的时候处理
 		move_list(T, 3, 0);
-	} else {
-		uint32_t time = ct >> TIME_NEAR_SHIFT;
-		int i=0;
+	}
+	else
+	{
+		//                time = T->time
+		//link(&T->t[i][((time >> (TIME_NEAR_SHIFT + i*TIME_LEVEL_SHIFT)) & TIME_LEVEL_MASK)], node);
+		//            idx=time >> (8 + i*6) & 63
 
-		while ((ct & (mask-1))==0) {
-			int idx=time & TIME_LEVEL_MASK;
-			if (idx!=0) {
+		// i=0 link(&T->t[i][((time >> TIME_NEAR_SHIFT) & TIME_LEVEL_MASK)], node); = link(&T->t[i][((time >> 8) & 63)]
+		// i=0        idx=time >>   8 & 63
+		// i=1        idx=time >>  (8 + 1*6) & 63
+		// i=1        idx=time >>  (8 + 2*6) & 63
+		// i=1        idx=time >>  (8 + 3*6) & 63
+		uint32_t time = ct >> TIME_NEAR_SHIFT; // 8
+		int i=0;
+// i = 0  mask  ->  ‭0000  0000   0000 0000   0000 0001   0000 0000  - 1 -> 0000  0000   0000 0000   ‭0000 0000   1111 1111‬
+// i = 1  mask  ->  ‭0000  0000   0000 0000   0100 0000   0000 0000  - 1 -> 0000  0000   0000 0000   ‭0011 1111   1111 1111‬
+// i = 2  mask  ->  ‭0000  0000   0001 0000   0000 0000   0000 0000  - 1 -> 0000  0000   0000 1111   ‭1111 1111   1111 1111‬
+// i = 3  mask  ->  ‭0000  0100   0000 0000   0000 0000   0000 0000  - 1 -> 0000  0011   1111 1111   ‭1111 1111   1111 1111‬
+// i = 4  mask  ->  ‭0000  0000   0000 0000   0000 0000   0000 0000  - 1 -> 0000  0011   1111 1111   ‭1111 1111   1111 1111‬
+		while ((ct & (mask-1))==0) // 走到尽头，就是mask在下面每次右移6位
+		{
+			int idx=time & TIME_LEVEL_MASK; // 63 -> ct >> 8 & 63
+			if (idx!=0)
+			{
 				move_list(T, i, idx);
 				break;				
 			}
-			mask <<= TIME_LEVEL_SHIFT;
-			time >>= TIME_LEVEL_SHIFT;
+			mask <<= TIME_LEVEL_SHIFT; // 6
+			time >>= TIME_LEVEL_SHIFT; // 6
 			++i;
 		}
 	}
@@ -224,7 +274,7 @@ dispatch_list(struct timer_node *current) {
 
 static inline void
 timer_execute(struct timer *T) {
-	int idx = T->time & TIME_NEAR_MASK;
+	int idx = T->time & TIME_NEAR_MASK; // 在add_node函数的时候把节点也是通过相与放入 link(&T->near[time&TIME_NEAR_MASK],node);
 	
 	while (T->near[idx].head.next) {
 		struct timer_node *current = link_clear(&T->near[idx]);
@@ -253,10 +303,10 @@ timer_update(struct timer *T) {
 static struct timer *
 timer_create_timer() {
 	struct timer *r=(struct timer *)skynet_malloc(sizeof(struct timer));
-	memset(r,0,sizeof(*r));
-	// �����������, ÿ�������ÿ�� slot ��ʾһ��ʱ��� ͬʱ���Ǹ������������洢
-	// struct link_list near[TIME_NEAR];	// 256 �����ʱ��
-	// struct link_list t[4][TIME_LEVEL];	// 64   ����ʱ���Զ�ּ�
+	memset(r,0,sizeof(*r)); // 初始化0 ，time字段也是在这个时候初始化0，后面shift的时候++time;
+	// 创建五个数组, 每个数组的每个 slot 表示一个时间段 同时又是个链表，用来存储
+	// struct link_list near[TIME_NEAR];	// 256 最近的时间
+	// struct link_list t[4][TIME_LEVEL];	// 64  根据时间久远分级
 
 
 	int i,j;
@@ -305,9 +355,9 @@ static void
 systime(uint32_t *sec, uint32_t *cs) {
 #if !defined(__APPLE__) || defined(AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER)
 	struct timespec ti;
-	clock_gettime(CLOCK_REALTIME, &ti);		 // ϵͳʵʱʱ��,��ϵͳʵʱʱ��ı���ı�
-	*sec = (uint32_t)ti.tv_sec;				 // struct timer -> starttime ��ֵ��ʱ�侫�� ��
-	*cs = (uint32_t)(ti.tv_nsec / 10000000); // struct timer -> current ��ֵ���ٷ�֮һ��ľ���
+	clock_gettime(CLOCK_REALTIME, &ti);		 // 系统实时时间,随系统实时时间改变而改变
+	*sec = (uint32_t)ti.tv_sec;				 // struct timer -> starttime 赋值，时间精度 秒
+	*cs = (uint32_t)(ti.tv_nsec / 10000000); // struct timer -> current 赋值，百分之一秒的精度
 #else
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -321,9 +371,9 @@ gettime() {
 	uint64_t t;
 #if !defined(__APPLE__) || defined(AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER)
 	struct timespec ti;
-	clock_gettime(CLOCK_MONOTONIC, &ti); // ��ϵͳ������һ����ʼ��ʱ,����ϵͳʱ�䱻�û��ı��Ӱ��
+	clock_gettime(CLOCK_MONOTONIC, &ti); // 从系统启动这一刻起开始计时,不受系统时间被用户改变的影响
 	t = (uint64_t)ti.tv_sec * 100;
-	t += ti.tv_nsec / 10000000;			 // �ٷ�֮һ��ľ��� Ҳ����10����ľ���
+	t += ti.tv_nsec / 10000000;			 // 百分之一秒的精度 也就是10毫秒的精度
 #else
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -342,7 +392,7 @@ skynet_updatetime(void) {
 	} else if (cp != TI->current_point) {
 		uint32_t diff = (uint32_t)(cp - TI->current_point);
 		printf("skynet_updatetime - cp:%lu,current_point:%lu,diff:%u,current:%lu\n", cp, TI->current_point, diff, TI->current);
-		// ����������Ա�֤diff ��ֵΪ1�� Ҳ����10 �����ʱ���� ��Ϊ�߳�ֻ˯���� usleep(2500);  2500΢��
+		// 这里基本可以保证diff 的值为1， 也就是10 毫秒的时间间隔 因为线程只睡眠了 usleep(2500);  2500微妙
 		TI->current_point = cp;
 		TI->current += diff;
 		int i;
@@ -357,7 +407,7 @@ skynet_starttime(void) {
 	return TI->starttime;
 }
 
-// Ŀǰ����ӿ�����
+// 目前这个接口弃用
 uint64_t 
 skynet_now(void) {
 	return TI->current;
@@ -377,27 +427,16 @@ skynet_timer_init(void) {
 
 // for profile
 
-#define NANOSEC 1000000000 //1�� = 1000 000 000 ����
-#define MICROSEC 1000000  // 1�� = 1000 000 ΢��
+#define NANOSEC 1000000000 //1秒 = 1000 000 000 纳秒
+#define MICROSEC 1000000  // 1秒 = 1000 000 微妙
 
-//struct timespec
-//{
-//time_t tv_sec; // seconds[��]
-//long tv_nsec; // nanoseconds[����]
-//};
-//int clock_gettime(clockid_t clk_id, struct timespect *tp);
-////@clk_id:
-//CLOCK_REALTIME:ϵͳʵʱʱ��,��ϵͳʵʱʱ��ı���ı�
-//CLOCK_MONOTONIC:��ϵͳ������һ����ʼ��ʱ,����ϵͳʱ�䱻�û��ı��Ӱ��
-//CLOCK_PROCESS_CPUTIME_ID:�����̵���ǰ����ϵͳCPU���ѵ�ʱ��
-//CLOCK_THREAD_CPUTIME_ID:���̵߳���ǰ����ϵͳCPU���ѵ�ʱ��
 
 uint64_t
 skynet_thread_time(void) {
 #if  !defined(__APPLE__) || defined(AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER)
 	struct timespec ti;
-	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ti); // ���̵߳���ǰ����ϵͳCPU���ѵ�ʱ��
-	// ����΢��								��ת��Ϊ΢��					����ת��Ϊ΢�룬�ȳ�
+	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ti); // 本线程到当前代码系统CPU花费的时间
+	// 返回微妙								秒转化为微秒					纳秒转化为微秒，先出
 	uint64_t micro_second = (uint64_t)ti.tv_sec * MICROSEC + (uint64_t)ti.tv_nsec / (NANOSEC / MICROSEC);
 
 	//printf("skynet_thread_time - micro_second:%lu\n", micro_second);

@@ -26,6 +26,28 @@
 int
 skynet_context_push(uint32_t handle, struct skynet_message *message)
 {
+	printf("skynet_context_push - handle:%u,session:%d,source:%d,sz:%ld,data:%p\n",
+		handle, message->session, message->source, message->sz, message->data);
+
+	//skynet_context_push - handle:16777217,session:5678,source:0,sz:72057594037927936,data:(nil)
+	//														  2^56 = 72057594037927936
+	// #define MESSAGE_TYPE_SHIFT ((sizeof(size_t)-1) * 8)
+	printf("skynet_context_push - sizeof(size_t):%lu - >%lu,SIZE_MAX:%lu,MESSAGE_TYPE_MASK:%lu\n", sizeof(size_t), (sizeof(size_t) - 1) * 8, SIZE_MAX, MESSAGE_TYPE_MASK);
+	//skynet_context_push - sizeof(size_t) : 8 - >56 ,SIZE_MAX:18446744073709551615,MESSAGE_TYPE_MASK:72057594037927935
+
+	// 18446744073709551615 右移8位操作是把最后的8位去掉在前面补充8个0 如下
+	// 1844 6744 0737 0955 1615
+	// FFFF FFFF FFFF FFFF
+	// 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 这个二进制进行右移8位操作
+	// 0000 0000 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 -> ?FFFFFFFFFFFFFF? -> ?72057594037927935? == MESSAGE_TYPE_MASK
+	
+
+	// 八字节 64位
+	// message->sz       = 72057594037927936 ->0000 0001 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+	// MESSAGE_TYPE_MASK = 72057594037927935 ->0000 0000 11111111 11111111 11111111 11111111 11111111 11111111 11111111
+	size_t sz = message->sz & MESSAGE_TYPE_MASK;
+	printf("skynet_context_push - mask sz:%lu\n", sz);
+
 	//struct skynet_context * ctx = skynet_handle_grab(handle);
 	//if (ctx == NULL) {
 	//	return -1;
@@ -57,18 +79,21 @@ struct skynet_context {
 
 void
 skynet_error(struct skynet_context * context, const char *msg, ...) {
+	printf("skynet_error - context:%p,msg:%s\n", context, msg);
 }
 //--------------------------------------------------------------------------
 
 typedef void (*timer_execute_func)(void *ud,void *arg);
 
 #define TIME_NEAR_SHIFT 8
-#define TIME_NEAR (1 << TIME_NEAR_SHIFT)
-#define TIME_LEVEL_SHIFT 6
-#define TIME_LEVEL (1 << TIME_LEVEL_SHIFT)
-#define TIME_NEAR_MASK (TIME_NEAR-1)
-#define TIME_LEVEL_MASK (TIME_LEVEL-1)
+#define TIME_NEAR (1 << TIME_NEAR_SHIFT)	// 2^8 = 256 -> ?0001 0000 0000?
+#define TIME_NEAR_MASK (TIME_NEAR-1)		//       255 -> 0000 ?1111 1111?
 
+#define TIME_LEVEL_SHIFT 6					// 6
+#define TIME_LEVEL (1 << TIME_LEVEL_SHIFT)	// 2^6 = 64  -> ?0100 0000?
+#define TIME_LEVEL_MASK (TIME_LEVEL-1)		// 64-1= 63  -> ?0011 1111?
+
+//每个计时器事件回调 
 struct timer_event {
 	uint32_t handle;
 	int session;
@@ -76,7 +101,7 @@ struct timer_event {
 
 struct timer_node {
 	struct timer_node *next;
-	uint32_t expire;
+	uint32_t expire; // //计时器事件触发时间
 };
 
 struct link_list {
@@ -85,13 +110,13 @@ struct link_list {
 };
 
 struct timer {
-	struct link_list near[TIME_NEAR];
-	struct link_list t[4][TIME_LEVEL];
+	struct link_list near[TIME_NEAR];	// 256 最近的时间
+	struct link_list t[4][TIME_LEVEL];	// 64   根据时间久远分级
 	struct spinlock lock;
-	uint32_t time;
-	uint32_t starttime;
-	uint64_t current;
-	uint64_t current_point;
+	uint32_t time;						// 计时器，每百分之一秒更新一次 -> 服务器经过的tick 数， 每10毫秒 tick 一次，T->time 增加1；
+	uint32_t starttime;					// 起始时间 秒
+	uint64_t current;					// 当前时间gettime与current_point的时间差 单位为百分之一秒
+	uint64_t current_point;				// 上一次update的时间， 百分之一秒
 };
 
 static struct timer * TI = NULL;
@@ -229,6 +254,10 @@ static struct timer *
 timer_create_timer() {
 	struct timer *r=(struct timer *)skynet_malloc(sizeof(struct timer));
 	memset(r,0,sizeof(*r));
+	// 创建五个数组, 每个数组的每个 slot 表示一个时间段 同时又是个链表，用来存储
+	// struct link_list near[TIME_NEAR];	// 256 最近的时间
+	// struct link_list t[4][TIME_LEVEL];	// 64   根据时间久远分级
+
 
 	int i,j;
 
@@ -276,9 +305,9 @@ static void
 systime(uint32_t *sec, uint32_t *cs) {
 #if !defined(__APPLE__) || defined(AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER)
 	struct timespec ti;
-	clock_gettime(CLOCK_REALTIME, &ti);
-	*sec = (uint32_t)ti.tv_sec;
-	*cs = (uint32_t)(ti.tv_nsec / 10000000);
+	clock_gettime(CLOCK_REALTIME, &ti);		 // 系统实时时间,随系统实时时间改变而改变
+	*sec = (uint32_t)ti.tv_sec;				 // struct timer -> starttime 赋值，时间精度 秒
+	*cs = (uint32_t)(ti.tv_nsec / 10000000); // struct timer -> current 赋值，百分之一秒的精度
 #else
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -292,9 +321,9 @@ gettime() {
 	uint64_t t;
 #if !defined(__APPLE__) || defined(AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER)
 	struct timespec ti;
-	clock_gettime(CLOCK_MONOTONIC, &ti);
+	clock_gettime(CLOCK_MONOTONIC, &ti); // 从系统启动这一刻起开始计时,不受系统时间被用户改变的影响
 	t = (uint64_t)ti.tv_sec * 100;
-	t += ti.tv_nsec / 10000000;
+	t += ti.tv_nsec / 10000000;			 // 百分之一秒的精度 也就是10毫秒的精度
 #else
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -312,6 +341,8 @@ skynet_updatetime(void) {
 		TI->current_point = cp;
 	} else if (cp != TI->current_point) {
 		uint32_t diff = (uint32_t)(cp - TI->current_point);
+		printf("skynet_updatetime - cp:%lu,current_point:%lu,diff:%u,current:%lu\n", cp, TI->current_point, diff, TI->current);
+		// 这里基本可以保证diff 的值为1， 也就是10 毫秒的时间间隔 因为线程只睡眠了 usleep(2500);  2500微妙
 		TI->current_point = cp;
 		TI->current += diff;
 		int i;
@@ -326,6 +357,7 @@ skynet_starttime(void) {
 	return TI->starttime;
 }
 
+// 目前这个接口弃用
 uint64_t 
 skynet_now(void) {
 	return TI->current;
@@ -338,20 +370,38 @@ skynet_timer_init(void) {
 	systime(&TI->starttime, &current);
 	TI->current = current;
 	TI->current_point = gettime();
+
+	printf("skynet_timer_init - starttime:%u,current:%lu,current_point:%lu\n", TI->starttime, TI->current, TI->current_point);
+
 }
 
 // for profile
 
-#define NANOSEC 1000000000
-#define MICROSEC 1000000
+#define NANOSEC 1000000000 //1秒 = 1000 000 000 纳秒
+#define MICROSEC 1000000  // 1秒 = 1000 000 微妙
+
+//struct timespec
+//{
+//time_t tv_sec; // seconds[秒]
+//long tv_nsec; // nanoseconds[纳秒]
+//};
+//int clock_gettime(clockid_t clk_id, struct timespect *tp);
+////@clk_id:
+//CLOCK_REALTIME:系统实时时间,随系统实时时间改变而改变
+//CLOCK_MONOTONIC:从系统启动这一刻起开始计时,不受系统时间被用户改变的影响
+//CLOCK_PROCESS_CPUTIME_ID:本进程到当前代码系统CPU花费的时间
+//CLOCK_THREAD_CPUTIME_ID:本线程到当前代码系统CPU花费的时间
 
 uint64_t
 skynet_thread_time(void) {
 #if  !defined(__APPLE__) || defined(AVAILABLE_MAC_OS_X_VERSION_10_12_AND_LATER)
 	struct timespec ti;
-	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ti);
+	clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ti); // 本线程到当前代码系统CPU花费的时间
+	// 返回微妙								秒转化为微秒					纳秒转化为微秒，先出
+	uint64_t micro_second = (uint64_t)ti.tv_sec * MICROSEC + (uint64_t)ti.tv_nsec / (NANOSEC / MICROSEC);
 
-	return (uint64_t)ti.tv_sec * MICROSEC + (uint64_t)ti.tv_nsec / (NANOSEC / MICROSEC);
+	//printf("skynet_thread_time - micro_second:%lu\n", micro_second);
+	return micro_second;
 #else
 	struct task_thread_times_info aTaskInfo;
 	mach_msg_type_number_t aTaskInfoCount = TASK_THREAD_TIMES_INFO_COUNT;

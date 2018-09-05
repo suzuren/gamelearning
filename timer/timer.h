@@ -23,4 +23,8 @@ void timer_test();
 
 
 
+void test_diffTimeDay();
+
+
+
 #endif //__TIMER_H__

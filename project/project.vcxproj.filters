@@ -244,6 +244,9 @@
     <Filter Include="test_skynet\skynet_timer">
       <UniqueIdentifier>{bff0bf05-aa8a-4524-80d1-1fc8887d0ce0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\skynet_module">
+      <UniqueIdentifier>{37aa986c-0eed-4bb3-90e3-157d98c184c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -819,6 +822,15 @@
     <ClInclude Include="..\test_skynet\skynet_timer\spinlock.h">
       <Filter>test_skynet\skynet_timer</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_module\skynet.h">
+      <Filter>test_skynet\skynet_module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_module\skynet_module.h">
+      <Filter>test_skynet\skynet_module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_module\spinlock.h">
+      <Filter>test_skynet\skynet_module</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1388,6 +1400,9 @@
     </None>
     <None Include="..\test_skynet\skynet_timer\makefile">
       <Filter>test_skynet\skynet_timer</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_module\makefile">
+      <Filter>test_skynet\skynet_module</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1991,6 +2006,15 @@
     <ClCompile Include="..\test_skynet\skynet_timer\skynet_timer.c">
       <Filter>test_skynet\skynet_timer</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_module\main.c">
+      <Filter>test_skynet\skynet_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_module\service_logger.c">
+      <Filter>test_skynet\skynet_module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_module\skynet_module.c">
+      <Filter>test_skynet\skynet_module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2042,6 +2066,9 @@
     </Text>
     <Text Include="..\test_skynet\skynet_timer\read.txt">
       <Filter>test_skynet\skynet_timer</Filter>
+    </Text>
+    <Text Include="..\test_skynet\skynet_module\read.txt">
+      <Filter>test_skynet\skynet_module</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

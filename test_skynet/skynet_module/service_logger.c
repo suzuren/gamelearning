@@ -19,7 +19,9 @@ skynet_error(struct skynet_context * context, const char *msg, ...) {
 	printf("skynet_error - context:%p,msg:%s\n", context, msg);
 }
 
-
+// logger_create return inst
+// function static int logger_cb
+//skynet_callback(ctx, inst, logger_cb);  
 void
 skynet_callback(struct skynet_context * context, void *ud, skynet_cb cb) {
 	context->cb = cb;
@@ -59,13 +61,15 @@ cmd_timeout(struct skynet_context * context, const char * param) {
 	return context->result;
 }
 
+//cmd_reg(ctx, ".logger");
 static const char *
 cmd_reg(struct skynet_context * context, const char * param) {
+	printf("cmd_reg - context:%p,param:%s\n", context, param);
 	if (param == NULL || param[0] == '\0') {
 		sprintf(context->result, ":%x", context->handle);
 		return context->result;
 	}
-	else if (param[0] == '.') {
+	else if (param[0] == '.') { // 单节点有效("."开头)
 		return skynet_handle_namehandle(context->handle, param + 1);
 	}
 	else {
@@ -332,6 +336,8 @@ static struct command_func cmd_funcs[] = {
 	{ NULL, NULL },
 };
 
+// skynet_command(ctx, "REG", ".logger");
+
 const char *
 skynet_command(struct skynet_context * context, const char * cmd, const char * param) {
 	struct command_func * method = &cmd_funcs[0];
@@ -361,11 +367,14 @@ logger_create(void) {
 	inst->close = 0;
 	inst->filename = NULL;
 
+	printf("logger_create - inst:%p\n", inst);
 	return inst;
 }
 
 void
 logger_release(struct logger * inst) {
+	printf("logger_release - filename:%s,close:%d,handle:%p\n", inst->filename, inst->close, inst->handle);
+
 	if (inst->close) {
 		fclose(inst->handle);
 	}
@@ -395,7 +404,9 @@ logger_cb(struct skynet_context * context, void *ud, int type, int session, uint
 
 int
 logger_init(struct logger * inst, struct skynet_context *ctx, const char * parm) {
-	if (parm) {
+
+	if (parm)
+	{
 		inst->handle = fopen(parm,"w");
 		if (inst->handle == NULL) {
 			return 1;
@@ -406,9 +417,12 @@ logger_init(struct logger * inst, struct skynet_context *ctx, const char * parm)
 	} else {
 		inst->handle = stdout;
 	}
+	printf("logger_init - parm:%s,filename:%s,handle:%p\n", parm, inst->filename, inst->handle);
+
 	if (inst->handle) {
 		skynet_callback(ctx, inst, logger_cb);
 		skynet_command(ctx, "REG", ".logger");
+
 		return 0;
 	}
 	return 1;

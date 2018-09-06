@@ -94,13 +94,14 @@ get_api(struct skynet_module *mod, const char *api_name) {
 	size_t api_size = strlen(api_name);
 	char tmp[name_size + api_size + 1];
 	memcpy(tmp, mod->name, name_size);
-	memcpy(tmp+name_size, api_name, api_size+1);
+	memcpy(tmp+name_size, api_name, api_size+1);	
 	char *ptr = strrchr(tmp, '.');
 	if (ptr == NULL) {
 		ptr = tmp;
 	} else {
 		ptr = ptr + 1;
 	}
+	printf("get_api - tmp:%s\t,ptr:%s\n", tmp, ptr);
 	return dlsym(mod->module, ptr);
 }
 
@@ -124,11 +125,7 @@ skynet_module_query(const char * name) {
 
 	result = _query(name); // double check
 
-	if (result != NULL)
-	{
-		printf("skynet_module_query -  name:%s,module:%p,create:%p,init:%p,release:%p,signal:%p\n",
-			result->name, result->module, result->create, result->init, result->release, result->signal);
-	}
+
 
 	if (result == NULL && M->count < MAX_MODULE_TYPE)
 	{
@@ -149,6 +146,11 @@ skynet_module_query(const char * name) {
 
 	SPIN_UNLOCK(M)
 
+	if (result != NULL)
+	{
+		printf("skynet_module_query -  name:%s,module:%p,create:%p,init:%p,release:%p,signal:%p\n",
+			result->name, result->module, result->create, result->init, result->release, result->signal);
+	}
 	return result;
 }
 

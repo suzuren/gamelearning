@@ -38,8 +38,17 @@ skynet_error(struct skynet_context * context, const char *msg, ...) {
 }
 //--------------------------------------------------------------------------
 
+void test_func()
+{
+	void *  par = (void *)(intptr_t)(~0);
+	printf("test func - par:%p\n", par);
+	// 0xffffffffffffffff
+}
+
 int main(int argc, char *argv[])
 {
+	test_func();
+
     printf("test skynet module.\n");
 
 	skynet_module_init("./?.so");
@@ -62,6 +71,9 @@ int main(int argc, char *argv[])
 
 	struct skynet_context * ctx = skynet_malloc(sizeof(*ctx));
 
+	// logger_init(struct logger * inst, struct skynet_context *ctx, const char * parm)
+	// return 0 success
+	// return 1 failed
 	int r = skynet_module_instance_init(mod, inst, ctx, param);
 	if (r == 0)
 	{
@@ -75,7 +87,7 @@ int main(int argc, char *argv[])
 		{
 			skynet_error(ret, "LAUNCH %s %s", name, param ? param : "");
 		}
-		return 1;
+		//return 1;
 	}
 	else {
 		skynet_error(ctx, "FAILED launch %s", name);
@@ -86,6 +98,9 @@ int main(int argc, char *argv[])
 		//skynet_mq_release(queue, drop_message, &d);
 		return 0;
 	}
+
+	skynet_module_instance_release(mod, inst);
+
      return 1;
 }
 

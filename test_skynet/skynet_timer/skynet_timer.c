@@ -85,13 +85,6 @@ skynet_error(struct skynet_context * context, const char *msg, ...) {
 
 typedef void (*timer_execute_func)(void *ud,void *arg);
 
-#define TIME_NEAR_SHIFT 8
-#define TIME_NEAR (1 << TIME_NEAR_SHIFT)	// 2^8 = 256 -> 0001 0000 0000
-#define TIME_NEAR_MASK (TIME_NEAR-1)		//       255 -> 0000 1111 1111
-
-#define TIME_LEVEL_SHIFT 6					// 6
-#define TIME_LEVEL (1 << TIME_LEVEL_SHIFT)	// 2^6 = 64  -> 0100 0000
-#define TIME_LEVEL_MASK (TIME_LEVEL-1)		// 64-1= 63  -> 0011 1111
 
 //每个计时器事件回调 
 struct timer_event {
@@ -204,7 +197,7 @@ move_list(struct timer *T, int level, int idx)
 	//通过add_node(T, current); 这样子，
 	//数组t -> level idx 下标下面的链表每一个节点都重新计算
 	struct timer_node *current = link_clear(&T->t[level][idx]);
-	while (current) {
+	while (current) {// 如果该数组元素的链表为空，则不移动
 		struct timer_node *temp=current->next;
 		add_node(T,current);
 		current=temp;
@@ -238,7 +231,7 @@ timer_shift(struct timer *T) {
 // i = 1  mask  ->  ‭0000  0000   0000 0000   0100 0000   0000 0000  - 1 -> 0000  0000   0000 0000   ‭0011 1111   1111 1111‬
 // i = 2  mask  ->  ‭0000  0000   0001 0000   0000 0000   0000 0000  - 1 -> 0000  0000   0000 1111   ‭1111 1111   1111 1111‬
 // i = 3  mask  ->  ‭0000  0100   0000 0000   0000 0000   0000 0000  - 1 -> 0000  0011   1111 1111   ‭1111 1111   1111 1111‬
-// i = 4  mask  ->  ‭0000  0000   0000 0000   0000 0000   0000 0000  - 1 -> 0000  0011   1111 1111   ‭1111 1111   1111 1111‬
+// i = 4  mask  ->  ‭0000  0000   0000 0000   0000 0000   0000 0000  - 1 -> 1111  1111   1111 1111   ‭1111 1111   1111 1111‬
 		while ((ct & (mask-1))==0) // 走到尽头，就是mask在下面每次右移6位
 		{
 			int idx=time & TIME_LEVEL_MASK; // 63 -> ct >> 8 & 63

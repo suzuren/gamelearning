@@ -14,13 +14,29 @@
 
 //--------------------------------------------------------------------------
 
-
+void test_mask()
+{
+	int mask = TIME_NEAR;
+	for (int i = 0; i <= 5; i++)
+	{
+		printf("mian - i:%d,mask:%d,mask-1:%d\n", i, mask, mask - 1);
+		mask <<= TIME_LEVEL_SHIFT;
+	}
+	//mian - i:0,mask:256,     mask-1:255
+	//mian - i:1,mask:16384,   mask-1:16383
+	//mian - i:2,mask:1048576, mask-1:1048575
+	//mian - i:3,mask:67108864,mask-1:67108863
+	//mian - i:4,mask:0,mask-1:-1
+	//mian - i:5,mask:0,mask-1:-1
+}
 
 //--------------------------------------------------------------------------
 
 int main(int argc, char *argv[])
 {
     printf("test skynet timer.\n");
+
+	test_mask();
 
 	uint64_t start_time = skynet_thread_time();
 
@@ -45,6 +61,7 @@ int main(int argc, char *argv[])
 		
 		usleep(2500);
 	}
+
 
 
      return 0;

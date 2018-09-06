@@ -36,6 +36,16 @@ struct skynet_message {
 
 //--------------------------------------------------------------------------
 
+#define TIME_NEAR_SHIFT 8
+#define TIME_NEAR (1 << TIME_NEAR_SHIFT)	// 2^8 = 256 -> 0001 0000 0000
+#define TIME_NEAR_MASK (TIME_NEAR-1)		//       255 -> 0000 1111 1111
+
+#define TIME_LEVEL_SHIFT 6					// 6
+#define TIME_LEVEL (1 << TIME_LEVEL_SHIFT)	// 2^6 = 64  -> 0100 0000
+#define TIME_LEVEL_MASK (TIME_LEVEL-1)		// 64-1= 63  -> 0011 1111
+
+//--------------------------------------------------------------------------
+
 //设置超时时间及相应的回调消息，如果time <= 0, 立马派送消息，如果time>0, 将其加入计时器列表中，等时间到达后派发。time时间精度为百分之一秒
 int skynet_timeout(uint32_t handle, int time, int session);
 //程序更新时间并触发相应计时器事件

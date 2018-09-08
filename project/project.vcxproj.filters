@@ -247,6 +247,12 @@
     <Filter Include="test_skynet\skynet_module">
       <UniqueIdentifier>{37aa986c-0eed-4bb3-90e3-157d98c184c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\snlua_bootstrap">
+      <UniqueIdentifier>{9f543780-0cc7-4236-852c-a72082d2d8cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test_skynet\snlua_bootstrap\service">
+      <UniqueIdentifier>{21129eb0-7648-4285-a16f-ae6c7fd37f3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -831,6 +837,9 @@
     <ClInclude Include="..\test_skynet\skynet_module\spinlock.h">
       <Filter>test_skynet\skynet_module</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\snlua_bootstrap\xxx_test.h">
+      <Filter>test_skynet\snlua_bootstrap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1403,6 +1412,18 @@
     </None>
     <None Include="..\test_skynet\skynet_module\makefile">
       <Filter>test_skynet\skynet_module</Filter>
+    </None>
+    <None Include="..\test_skynet\snlua_bootstrap\makefile">
+      <Filter>test_skynet\snlua_bootstrap</Filter>
+    </None>
+    <None Include="..\test_skynet\snlua_bootstrap\loader.lua">
+      <Filter>test_skynet\snlua_bootstrap</Filter>
+    </None>
+    <None Include="..\test_skynet\snlua_bootstrap\service\bootstrap.lua">
+      <Filter>test_skynet\snlua_bootstrap\service</Filter>
+    </None>
+    <None Include="..\test_skynet\snlua_bootstrap\print_r.lua">
+      <Filter>test_skynet\snlua_bootstrap</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2015,6 +2036,9 @@
     <ClCompile Include="..\test_skynet\skynet_module\skynet_module.c">
       <Filter>test_skynet\skynet_module</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\snlua_bootstrap\main.c">
+      <Filter>test_skynet\snlua_bootstrap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2069,6 +2093,9 @@
     </Text>
     <Text Include="..\test_skynet\skynet_module\read.txt">
       <Filter>test_skynet\skynet_module</Filter>
+    </Text>
+    <Text Include="..\test_skynet\snlua_bootstrap\read.txt">
+      <Filter>test_skynet\snlua_bootstrap</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

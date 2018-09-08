@@ -17,7 +17,7 @@ clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_C
  "test_string" "mysql_connect" "mysql_client" "database_server" "cpp_new_features" "test_jemalloc" "test_lib" "virtual_destructor"
  "network_server" "socket-server" "network_server_socket_server" "memorypoll" "3rd/lua" "test_skynet/load_config" 
  "test_skynet/daemon" "test_skynet/databuffer_hashid" "test_skynet/harbor" "test_skynet/skynet_handle" "test_skynet/skynet_mq"
- "test_skynet/skynet_timer" "test_skynet/skynet_module" "3rd/hiredis" "redis_server")
+ "test_skynet/skynet_timer" "test_skynet/skynet_module" "test_skynet/snlua_bootstrap" "3rd/hiredis" "redis_server")
 
 clean_len=${#clean_dir[@]}
 

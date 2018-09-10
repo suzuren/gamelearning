@@ -193,6 +193,7 @@
     <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
     <ClInclude Include="..\test_skynet\skynet_handle\rwlock.h" />
     <ClInclude Include="..\test_skynet\skynet_handle\skynet_handle.h" />
+    <ClInclude Include="..\test_skynet\skynet_lua\lua-seri.h" />
     <ClInclude Include="..\test_skynet\skynet_module\skynet.h" />
     <ClInclude Include="..\test_skynet\skynet_module\skynet_module.h" />
     <ClInclude Include="..\test_skynet\skynet_module\spinlock.h" />
@@ -395,6 +396,9 @@
     <None Include="..\test_skynet\load_config\config.path" />
     <None Include="..\test_skynet\load_config\makefile" />
     <None Include="..\test_skynet\skynet_handle\makefile" />
+    <None Include="..\test_skynet\skynet_lua\makefile" />
+    <None Include="..\test_skynet\skynet_lua\skynet.lua" />
+    <None Include="..\test_skynet\skynet_lua\testString.lua" />
     <None Include="..\test_skynet\skynet_module\makefile" />
     <None Include="..\test_skynet\skynet_mq\makefile" />
     <None Include="..\test_skynet\skynet_timer\makefile" />
@@ -594,6 +598,8 @@
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\main.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c" />
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-seri.c" />
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-skynet.c" />
     <ClCompile Include="..\test_skynet\skynet_module\main.c" />
     <ClCompile Include="..\test_skynet\skynet_module\service_logger.c" />
     <ClCompile Include="..\test_skynet\skynet_module\skynet_module.c" />
@@ -635,6 +641,7 @@
     <Text Include="..\test_skynet\databuffer_hashid\read.txt" />
     <Text Include="..\test_skynet\harbor\read.txt" />
     <Text Include="..\test_skynet\load_config\read.txt" />
+    <Text Include="..\test_skynet\skynet_lua\read.txt" />
     <Text Include="..\test_skynet\skynet_module\read.txt" />
     <Text Include="..\test_skynet\skynet_mq\read.txt" />
     <Text Include="..\test_skynet\skynet_timer\read.txt" />

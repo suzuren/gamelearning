@@ -253,6 +253,9 @@
     <Filter Include="test_skynet\snlua_bootstrap\service">
       <UniqueIdentifier>{21129eb0-7648-4285-a16f-ae6c7fd37f3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\skynet_lua">
+      <UniqueIdentifier>{6619fdcd-e1dc-429b-bf0b-c24414637465}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -840,6 +843,9 @@
     <ClInclude Include="..\test_skynet\snlua_bootstrap\xxx_test.h">
       <Filter>test_skynet\snlua_bootstrap</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_lua\lua-seri.h">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -1424,6 +1430,15 @@
     </None>
     <None Include="..\test_skynet\snlua_bootstrap\print_r.lua">
       <Filter>test_skynet\snlua_bootstrap</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_lua\testString.lua">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_lua\makefile">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_lua\skynet.lua">
+      <Filter>test_skynet\skynet_lua</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2039,6 +2054,12 @@
     <ClCompile Include="..\test_skynet\snlua_bootstrap\main.c">
       <Filter>test_skynet\snlua_bootstrap</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-skynet.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-seri.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2096,6 +2117,9 @@
     </Text>
     <Text Include="..\test_skynet\snlua_bootstrap\read.txt">
       <Filter>test_skynet\snlua_bootstrap</Filter>
+    </Text>
+    <Text Include="..\test_skynet\skynet_lua\read.txt">
+      <Filter>test_skynet\skynet_lua</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

@@ -139,10 +139,58 @@ loadfile ([filename [, mode [, env]]])
 
 --------------------------------------------------------------------------
 
+pcall (f [, arg1, ···])
+传入参数，以 保护模式 调用函数 f 。 这意味着 f 中的任何错误不会抛出； 取而代之的是，pcall 会将错误捕获到，并返回一个状态码。 
+第一个返回值是状态码（一个布尔量）， 当没有错误时，其为真。 此时，pcall 同样会在状态码后返回所有调用的结果。 在有错误时，pcall 返回 false 加错误消息。
+
+--------------------------------------------------------------------------
+skynet.lua -- 
+
+function skynet.newservice(name, ...)
+	return skynet.call(".launcher", "lua" , "LAUNCH", "snlua", name, ...)
+end
+
+function skynet.call(addr, typename, ...)
+	local tag = session_coroutine_tracetag[running_thread]
+	if tag then
+		c.trace(tag, "call", 2)
+		c.send(addr, skynet.PTYPE_TRACE, 0, tag)
+	end
+
+	local p = proto[typename]
+	local session = c.send(addr, p.id , nil , p.pack(...))
+	if session == nil then
+		error("call to invalid address " .. skynet.address(addr))
+	end
+	return p.unpack(yield_call(addr, session))
+end
+
 
 
 --------------------------------------------------------------------------
 
+lua_upvalueindex
+[-0, +0, –]
+int lua_upvalueindex (int i);
+返回当前运行的函数（参见 §4.4）的第 i 个上值的伪索引。
+
+
+4.4 – C 闭包
+当 C 函数被创建出来， 我们有可能会把一些值关联在一起， 也就是创建一个 C 闭包 （参见 lua_pushcclosure）； 
+这些被关联起来的值被叫做 上值 ， 它们可以在函数被调用的时候访问的到。
+
+无论何时去调用 C 函数， 函数的上值都可以用伪索引定位。 我们可以用 lua_upvalueindex 这个宏来生成这些伪索引。 
+第一个关联到函数的值放在 lua_upvalueindex(1) 位置处，依此类推。 使用 lua_upvalueindex(n) 时， 
+若 n 大于当前函数的总上值个数 （但不可以大于 256）会产生一个可接受的但无效的索引。
+
+--------------------------------------------------------------------------
+
+lua_pushinteger
+[-0, +1, –]
+void lua_pushinteger (lua_State *L, lua_Integer n);
+把值为 n 的整数压栈。
+
+--------------------------------------------------------------------------
 
 
 

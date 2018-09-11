@@ -2060,6 +2060,9 @@
     <ClCompile Include="..\test_skynet\skynet_lua\lua-seri.c">
       <Filter>test_skynet\skynet_lua</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">

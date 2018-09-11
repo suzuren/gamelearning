@@ -598,6 +598,7 @@
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\main.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c" />
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-seri.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-skynet.c" />
     <ClCompile Include="..\test_skynet\skynet_module\main.c" />

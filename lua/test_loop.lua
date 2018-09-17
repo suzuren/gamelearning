@@ -26,3 +26,7 @@ printr(protocalObj)
 
 
 print("-------------------------------------------------------------")
+
+for i=0, 10 do
+	print("loop for - i: ",i)
+end

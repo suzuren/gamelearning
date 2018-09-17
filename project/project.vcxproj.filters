@@ -1440,6 +1440,15 @@
     <None Include="..\test_skynet\skynet_lua\skynet.lua">
       <Filter>test_skynet\skynet_lua</Filter>
     </None>
+    <None Include="..\lua\test_load.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\test_coroutine.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\lua\test_producer_consumer.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">

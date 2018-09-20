@@ -348,6 +348,7 @@
     <None Include="..\lua\table_self.lua" />
     <None Include="..\lua\table_setmetatable.lua" />
     <None Include="..\lua\test_coroutine.lua" />
+    <None Include="..\lua\test_environment.lua" />
     <None Include="..\lua\test_load.lua" />
     <None Include="..\lua\test_loop.lua" />
     <None Include="..\lua\test_Markov_Chain.lua" />

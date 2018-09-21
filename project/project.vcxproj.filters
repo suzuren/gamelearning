@@ -1455,6 +1455,9 @@
     <None Include="..\lua\test_environment.lua">
       <Filter>lua</Filter>
     </None>
+    <None Include="..\lua\test_string.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">

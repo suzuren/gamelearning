@@ -353,6 +353,7 @@
     <None Include="..\lua\test_loop.lua" />
     <None Include="..\lua\test_Markov_Chain.lua" />
     <None Include="..\lua\test_producer_consumer.lua" />
+    <None Include="..\lua\test_string.lua" />
     <None Include="..\lua\test_table.lua" />
     <None Include="..\lua\test_timer.lua" />
     <None Include="..\lua\timer.lua" />

@@ -198,8 +198,8 @@ BYTE GetCardType(const BYTE cbCardData[], BYTE cbCardCount)
 
 		return CT_ERROR;
 	}
-	printf("GetCardType cbBlockCount:%d %d %d %d,cbCardCount:%d\n",
-		AnalyseResult.cbBlockCount[0],AnalyseResult.cbBlockCount[1], AnalyseResult.cbBlockCount[2],AnalyseResult.cbBlockCount[3], cbCardCount);
+	//printf("GetCardType cbBlockCount:%d %d %d %d,cbCardCount:%d\n",
+	//	AnalyseResult.cbBlockCount[0],AnalyseResult.cbBlockCount[1], AnalyseResult.cbBlockCount[2],AnalyseResult.cbBlockCount[3], cbCardCount);
 
 	//三牌判断
 	if (AnalyseResult.cbBlockCount[2] > 0)
@@ -220,9 +220,9 @@ BYTE GetCardType(const BYTE cbCardData[], BYTE cbCardCount)
 				BYTE cbCardData = AnalyseResult.cbCardData[2][i * 3];
 				if (cbFirstLogicValue != (GetCardLogicValue(cbCardData) + i))
 				{
-					printf("GetCardType - i:%d,cbCardData:0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X	0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X \n",
-						i, AnalyseResult.cbCardData[2][0], AnalyseResult.cbCardData[2][1], AnalyseResult.cbCardData[2][2], AnalyseResult.cbCardData[2][3], AnalyseResult.cbCardData[2][4], AnalyseResult.cbCardData[2][5], AnalyseResult.cbCardData[2][6], AnalyseResult.cbCardData[2][7], AnalyseResult.cbCardData[2][8], AnalyseResult.cbCardData[2][9], AnalyseResult.cbCardData[2][10], AnalyseResult.cbCardData[2][11], AnalyseResult.cbCardData[2][12], AnalyseResult.cbCardData[2][13], AnalyseResult.cbCardData[2][14], AnalyseResult.cbCardData[2][15], AnalyseResult.cbCardData[2][16], AnalyseResult.cbCardData[2][17], AnalyseResult.cbCardData[2][18], AnalyseResult.cbCardData[2][19]);
-					printf("GetCardType - cbFirstLogicValue:%d,cbCardCount:%d\n", cbFirstLogicValue, GetCardLogicValue(cbCardData) +i);
+					//printf("GetCardType - i:%d,cbCardData:0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X	0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X \n",
+					//	i, AnalyseResult.cbCardData[2][0], AnalyseResult.cbCardData[2][1], AnalyseResult.cbCardData[2][2], AnalyseResult.cbCardData[2][3], AnalyseResult.cbCardData[2][4], AnalyseResult.cbCardData[2][5], AnalyseResult.cbCardData[2][6], AnalyseResult.cbCardData[2][7], AnalyseResult.cbCardData[2][8], AnalyseResult.cbCardData[2][9], AnalyseResult.cbCardData[2][10], AnalyseResult.cbCardData[2][11], AnalyseResult.cbCardData[2][12], AnalyseResult.cbCardData[2][13], AnalyseResult.cbCardData[2][14], AnalyseResult.cbCardData[2][15], AnalyseResult.cbCardData[2][16], AnalyseResult.cbCardData[2][17], AnalyseResult.cbCardData[2][18], AnalyseResult.cbCardData[2][19]);
+					//printf("GetCardType - cbFirstLogicValue:%d,cbCardCount:%d\n", cbFirstLogicValue, GetCardLogicValue(cbCardData) +i);
 
 					return CT_ERROR;
 				}
@@ -300,7 +300,7 @@ bool CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirst
 	BYTE cbNextType = GetCardType(cbNextCard, cbNextCount);
 	BYTE cbFirstType = GetCardType(cbFirstCard, cbFirstCount);
 
-	printf("CompareCard - cbFirstCount:%d,cbNextCount:%d,cbFirstType:%d,cbNextType:%d.\n", cbFirstCount, cbNextCount, cbFirstType, cbNextType);
+	//printf("CompareCard - cbFirstCount:%d,cbNextCount:%d,cbFirstType:%d,cbNextType:%d.\n", cbFirstCount, cbNextCount, cbFirstType, cbNextType);
 	//		CompareCard - cbFirstCount:2, cbNextCount : 4, cbFirstType : 12, cbNextType : 11.
 	//类型判断
 	if (cbNextType == CT_ERROR) return false;
@@ -311,7 +311,7 @@ bool CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirst
 	if ((cbFirstType != CT_BOMB_CARD) && (cbNextType == CT_BOMB_CARD)) return true;
 	if ((cbFirstType == CT_BOMB_CARD) && (cbNextType != CT_BOMB_CARD)) return false;
 
-	printf("CompareCard 2 - cbFirstCount:%d,cbNextCount:%d,cbFirstType:%d,cbNextType:%d.\n", cbFirstCount, cbNextCount, cbFirstType, cbNextType);
+	//printf("CompareCard 2 - cbFirstCount:%d,cbNextCount:%d,cbFirstType:%d,cbNextType:%d.\n", cbFirstCount, cbNextCount, cbFirstType, cbNextType);
 
 
 	//规则判断
@@ -371,3 +371,72 @@ bool CompareCard(const BYTE cbFirstCard[], const BYTE cbNextCard[], BYTE cbFirst
 
 	return false;
 }
+
+
+
+//enum emLAND_CARD_TYPE
+//{
+//	CT_ERROR = 0,                                 //错误类型  0
+//	CT_SINGLE,                                    //单牌类型  1
+//	CT_DOUBLE,                                    //对牌类型  2
+//	CT_THREE,                                     //三条类型  3
+//	CT_SINGLE_LINE,                               //单连类型  4
+//	CT_DOUBLE_LINE,                               //对连类型  5
+//	CT_THREE_LINE,                                //三连类型  6
+//	CT_THREE_TAKE_ONE,                            //三带一单  7
+//	CT_THREE_TAKE_TWO,                            //三带一对  8
+//	CT_FOUR_TAKE_ONE,                             //四带两单  9
+//	CT_FOUR_TAKE_TWO,                             //四带两对  10
+//	CT_BOMB_CARD,                                 //炸弹类型  11
+//	CT_MISSILE_CARD,                              //火箭类型  12
+//};
+
+void testLandServer()
+{
+	//land server
+
+	//unsigned char turnCardData[] = { 0x4f,0x4e };
+	//unsigned char turnCardCount = 2;
+
+	//unsigned char cardData[] = { 0x3b,0x2b,0x1b,0x0b };
+	//unsigned char cardCount = 4;
+
+	bool bIsRet = false;// CompareCard(turnCardData, cardData, turnCardCount, cardCount);
+
+						//printf("land_server CompareCard - bIsRet:%d\n", bIsRet);
+
+						//unsigned char cbCardData[] = { 0x03,0x13,0x23,0x04,0x14,0x24 };
+						//unsigned char cbCardCount = 6;
+
+						//unsigned char cbCardData[] = { 0x03,0x13,0x23,0x04,0x14,0x24,0x05,0x15,0x25,0x1C,0x1D,0x1B };
+						//unsigned char cbCardCount = 12;
+
+						//unsigned char cbCardData[] = { 0x3b,0x2b,0x1b,0x0b };
+
+						//unsigned char cbCardData[] = { 0x03,0x13 }; // 2
+
+						//unsigned char cbCardData[] = { 0x03,0x13,0x23 }; // 3
+
+						//unsigned char cbCardData[] = { 0x03,0x13,0x23,0x14 }; // 7
+
+						//unsigned char cbCardData[] = { 0x03,0x13,0x23,0x14,0x24 }; // 8
+
+						//unsigned char cbCardData[] = { 0x15,0x25,0x35, 0x14,0x24,0x34,0x03,0x13,0x23, }; // 6
+
+						//unsigned char cbCardData[] = { 0x14,0x24,0x34,0x03,0x13,0x23,0x05,0x06 }; // 7
+
+						//unsigned char cbCardData[] = { 0x14,0x24,0x34,0x03,0x13,0x23,0x05,0x15,0x06,0x16 }; // 8
+
+	unsigned char cbCardData[] = { 0x03,0x13,0x23,0x14,0x24,0x34,0x05,0x15,0x06,0x16 }; // 8
+
+	SortCardList(cbCardData, sizeof(cbCardData), ST_ORDER);
+
+	BYTE cbCardType = GetCardType(cbCardData, sizeof(cbCardData));
+
+	printf("land_server CompareCard - bIsRet:%d,cbCardType:%d\n", bIsRet, cbCardType);
+
+}
+
+
+
+

@@ -35,6 +35,7 @@
     <ClInclude Include="..\candlua\pbc\stringpool.h" />
     <ClInclude Include="..\candlua\pbc\varint.h" />
     <ClInclude Include="..\card\land_logic.h" />
+    <ClInclude Include="..\card\show_hand_logic.h" />
     <ClInclude Include="..\ConnectSkynet\pbc\alloc.h" />
     <ClInclude Include="..\ConnectSkynet\pbc\array.h" />
     <ClInclude Include="..\ConnectSkynet\pbc\bootstrap.h" />
@@ -446,6 +447,7 @@
     <ClCompile Include="..\candlua\test_clib.c" />
     <ClCompile Include="..\candlua\test_clib2.c" />
     <ClCompile Include="..\card\main.cpp" />
+    <ClCompile Include="..\card\show_hand_logic.cpp" />
     <ClCompile Include="..\ConnectSkynet\client.c" />
     <ClCompile Include="..\ConnectSkynet\lua-pbcc.c" />
     <ClCompile Include="..\ConnectSkynet\pbc\alloc.c" />

@@ -846,6 +846,9 @@
     <ClInclude Include="..\test_skynet\skynet_lua\lua-seri.h">
       <Filter>test_skynet\skynet_lua</Filter>
     </ClInclude>
+    <ClInclude Include="..\card\show_hand_logic.h">
+      <Filter>card</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -2080,6 +2083,9 @@
     </ClCompile>
     <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack.c">
       <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\card\show_hand_logic.cpp">
+      <Filter>card</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

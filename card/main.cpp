@@ -1,6 +1,7 @@
 
 #include "land_logic.h"
 #include "show_hand_logic.h"
+#include "rand_table.h"
 
 //const BYTE    CLandLogic::m_cbCardData[FULL_POKER_COUNT] =
 //{
@@ -14,11 +15,13 @@ int main(int argc, const char** argv)
 {
 	printf("hello world!\n");
 
-	testLandServer();
+	//testLandServer();
 
-	game_show_hand::CShowHandLogic ShowHandLogic;
-	ShowHandLogic.testShowHand();
+	//game_show_hand::CShowHandLogic ShowHandLogic;
+	//ShowHandLogic.testShowHand();
 
+
+	test_randTable();
 
 	return 0;
 }

@@ -852,6 +852,9 @@
     <ClInclude Include="..\card\rand_table.h">
       <Filter>card</Filter>
     </ClInclude>
+    <ClInclude Include="..\card\majiang_logic.h">
+      <Filter>card</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -2091,6 +2094,9 @@
       <Filter>card</Filter>
     </ClCompile>
     <ClCompile Include="..\card\rand_table.cpp">
+      <Filter>card</Filter>
+    </ClCompile>
+    <ClCompile Include="..\card\majiang_logic.cpp">
       <Filter>card</Filter>
     </ClCompile>
   </ItemGroup>

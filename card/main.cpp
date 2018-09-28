@@ -2,7 +2,7 @@
 #include "land_logic.h"
 #include "show_hand_logic.h"
 #include "rand_table.h"
-
+#include "majiang_logic.h"
 //const BYTE    CLandLogic::m_cbCardData[FULL_POKER_COUNT] =
 //{
 //	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,    //·½¿é A - K
@@ -21,7 +21,9 @@ int main(int argc, const char** argv)
 	//ShowHandLogic.testShowHand();
 
 
-	test_randTable();
+	//test_randTable();
+	
+	test_majiang();
 
 	return 0;
 }

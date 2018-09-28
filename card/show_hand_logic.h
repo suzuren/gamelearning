@@ -8,7 +8,6 @@
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
-#define GAME_PLAYER					2									//游戏人数
 
 
 
@@ -16,6 +15,8 @@ using namespace std;
 
 namespace game_show_hand
 {
+#define GAME_PLAYER					2									//游戏人数
+
 //宏定义
 	typedef unsigned char		BYTE;
 	typedef unsigned int		uint32;

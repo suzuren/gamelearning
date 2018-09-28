@@ -35,6 +35,7 @@
     <ClInclude Include="..\candlua\pbc\stringpool.h" />
     <ClInclude Include="..\candlua\pbc\varint.h" />
     <ClInclude Include="..\card\land_logic.h" />
+    <ClInclude Include="..\card\majiang_logic.h" />
     <ClInclude Include="..\card\rand_table.h" />
     <ClInclude Include="..\card\show_hand_logic.h" />
     <ClInclude Include="..\ConnectSkynet\pbc\alloc.h" />
@@ -448,6 +449,7 @@
     <ClCompile Include="..\candlua\test_clib.c" />
     <ClCompile Include="..\candlua\test_clib2.c" />
     <ClCompile Include="..\card\main.cpp" />
+    <ClCompile Include="..\card\majiang_logic.cpp" />
     <ClCompile Include="..\card\rand_table.cpp" />
     <ClCompile Include="..\card\show_hand_logic.cpp" />
     <ClCompile Include="..\ConnectSkynet\client.c" />

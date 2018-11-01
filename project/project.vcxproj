@@ -38,6 +38,8 @@
     <ClInclude Include="..\card\majiang_logic.h" />
     <ClInclude Include="..\card\rand_table.h" />
     <ClInclude Include="..\card\show_hand_logic.h" />
+    <ClInclude Include="..\chinese_chess\CMD_CChess.h" />
+    <ClInclude Include="..\chinese_chess\GameLogic.h" />
     <ClInclude Include="..\ConnectSkynet\pbc\alloc.h" />
     <ClInclude Include="..\ConnectSkynet\pbc\array.h" />
     <ClInclude Include="..\ConnectSkynet\pbc\bootstrap.h" />
@@ -234,6 +236,7 @@
     <None Include="..\candlua\test_sui.lua" />
     <None Include="..\candlua\test_wordfilter.lua" />
     <None Include="..\card\Makefile" />
+    <None Include="..\chinese_chess\Makefile" />
     <None Include="..\clean.sh" />
     <None Include="..\ConnectSkynet\loginServer.login.c2s.proto" />
     <None Include="..\ConnectSkynet\loginServer.login.s2c.proto" />
@@ -452,6 +455,8 @@
     <ClCompile Include="..\card\majiang_logic.cpp" />
     <ClCompile Include="..\card\rand_table.cpp" />
     <ClCompile Include="..\card\show_hand_logic.cpp" />
+    <ClCompile Include="..\chinese_chess\GameLogic.cpp" />
+    <ClCompile Include="..\chinese_chess\main.cpp" />
     <ClCompile Include="..\ConnectSkynet\client.c" />
     <ClCompile Include="..\ConnectSkynet\lua-pbcc.c" />
     <ClCompile Include="..\ConnectSkynet\pbc\alloc.c" />

@@ -256,6 +256,9 @@
     <Filter Include="test_skynet\skynet_lua">
       <UniqueIdentifier>{6619fdcd-e1dc-429b-bf0b-c24414637465}</UniqueIdentifier>
     </Filter>
+    <Filter Include="chinese_chess">
+      <UniqueIdentifier>{ca5769d2-ffb2-43a1-9853-eadcd9872d46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -854,6 +857,12 @@
     </ClInclude>
     <ClInclude Include="..\card\majiang_logic.h">
       <Filter>card</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chinese_chess\CMD_CChess.h">
+      <Filter>chinese_chess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chinese_chess\GameLogic.h">
+      <Filter>chinese_chess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1466,6 +1475,9 @@
     </None>
     <None Include="..\lua\test_string.lua">
       <Filter>lua</Filter>
+    </None>
+    <None Include="..\chinese_chess\Makefile">
+      <Filter>chinese_chess</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2098,6 +2110,12 @@
     </ClCompile>
     <ClCompile Include="..\card\majiang_logic.cpp">
       <Filter>card</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chinese_chess\main.cpp">
+      <Filter>chinese_chess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chinese_chess\GameLogic.cpp">
+      <Filter>chinese_chess</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

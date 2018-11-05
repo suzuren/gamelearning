@@ -1,5 +1,5 @@
 
-
+#include <stdio.h>
 #include "GameLogic.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ const tagChessItem * CGameLogic::GetChessItem(BYTE cbXPos, BYTE cbYPos)
 void CGameLogic::ResetChessBorad()
 {
 	//变量定义
-	BYTE cbChessInfo[9]={CHESS_ROOK,CHESS_HORSE,CHESS_ELEPHANT,CHESS_KAVASS,CHESS_GENERAL,
-		CHESS_KAVASS,CHESS_ELEPHANT,CHESS_HORSE,CHESS_ROOK};
+	//						车			马			象				士			将				士			象			马				车
+	BYTE cbChessInfo[9]={CHESS_ROOK,CHESS_HORSE,CHESS_ELEPHANT,CHESS_KAVASS,CHESS_GENERAL,CHESS_KAVASS,CHESS_ELEPHANT,CHESS_HORSE,CHESS_ROOK};
 
 	//设置变量
 	//m_ChessManualInfo.RemoveAll();
@@ -80,8 +80,11 @@ void CGameLogic::ResetChessBorad()
 			m_ChessItem[cbUserIndex][cbExcursion].cbChess=cbChessInfo[nIndex];
 			m_ChessItem[cbUserIndex][cbExcursion].cbColor=BLACK_CHESS+cbUserIndex;
 			m_ChessBorad[nIndex][cbYPos]=&m_ChessItem[cbUserIndex][cbExcursion];
-		}
 
+			printf("ResetChessBorad 主线棋子 - cbUserIndex:%d,nIndex:%d,cbXPos:%d, cbYPos:%d, cbChessID:%02d, cbChess:%d, cbChessName:%s, cbColor:%d\n",
+				cbUserIndex, nIndex, m_ChessItem[cbUserIndex][cbExcursion].cbXPos, cbYPos, m_ChessItem[cbUserIndex][cbExcursion].cbChessID, m_ChessItem[cbUserIndex][cbExcursion].cbChess, g_chess_name[m_ChessItem[cbUserIndex][cbExcursion].cbChess].c_str(), m_ChessItem[cbUserIndex][cbExcursion].cbColor);
+		}
+		printf("\n\n");
 		//兵的棋子
 		cbYPos=(cbUserIndex==0)?6:3;
 		for (BYTE nIndex=0;nIndex<5;nIndex++,cbExcursion++)
@@ -92,8 +95,11 @@ void CGameLogic::ResetChessBorad()
 			m_ChessItem[cbUserIndex][cbExcursion].cbChessID=cbExcursion;
 			m_ChessItem[cbUserIndex][cbExcursion].cbColor=BLACK_CHESS+cbUserIndex;
 			m_ChessBorad[nIndex*2][cbYPos]=&m_ChessItem[cbUserIndex][cbExcursion];
-		}
 
+			printf("ResetChessBorad 兵的棋子 - cbUserIndex:%d,nIndex:%d,cbXPos:%d, cbYPos:%d, cbChessID:%02d, cbChess:%d, cbChessName:%s, cbColor:%d\n",
+				cbUserIndex, nIndex, m_ChessItem[cbUserIndex][cbExcursion].cbXPos, cbYPos, m_ChessItem[cbUserIndex][cbExcursion].cbChessID, m_ChessItem[cbUserIndex][cbExcursion].cbChess, g_chess_name[m_ChessItem[cbUserIndex][cbExcursion].cbChess].c_str(), m_ChessItem[cbUserIndex][cbExcursion].cbColor);
+		}
+		printf("\n\n");
 		//炮的棋子
 		cbYPos=(cbUserIndex==0)?7:2;
 		for (BYTE nIndex=0;nIndex<2;nIndex++,cbExcursion++)
@@ -104,7 +110,12 @@ void CGameLogic::ResetChessBorad()
 			m_ChessItem[cbUserIndex][cbExcursion].cbChessID=cbExcursion;
 			m_ChessItem[cbUserIndex][cbExcursion].cbColor=BLACK_CHESS+cbUserIndex;
 			m_ChessBorad[1+nIndex*6][cbYPos]=&m_ChessItem[cbUserIndex][cbExcursion];
+
+			printf("ResetChessBorad 炮的棋子 - cbUserIndex:%d,nIndex:%d,cbXPos:%d, cbYPos:%d, cbChessID:%02d, cbChess:%d, cbChessName:%s, cbColor:%d\n",
+				cbUserIndex, nIndex, m_ChessItem[cbUserIndex][cbExcursion].cbXPos, cbYPos, m_ChessItem[cbUserIndex][cbExcursion].cbChessID, m_ChessItem[cbUserIndex][cbExcursion].cbChess, g_chess_name[m_ChessItem[cbUserIndex][cbExcursion].cbChess].c_str(), m_ChessItem[cbUserIndex][cbExcursion].cbColor);
+
 		}
+		printf("\n\n");
 	}
 
 	return;

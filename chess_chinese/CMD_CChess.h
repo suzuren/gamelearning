@@ -1,7 +1,89 @@
 #ifndef CMD_CHESS_HEAD_FILE
 #define CMD_CHESS_HEAD_FILE
 
+/*
+
+白 cbColor - 2 cbUserIndex:1
+
+0     1     2     3     4     5     6     7     8
+┏━━┯━━┯━━┯━━┯━━┯━━┯━━┯━━┓0
+┃	  │    │	  │    │	  │	│	  │    ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨1
+┃	  │    │	  │    │	  │	│	  │    ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨2
+┃	  │    │	  │    │	  │	│	  │    ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨3
+┃	  │    │	  │    │	  │	│	  │    ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨4
+┃	                                            ┃
+┃	       楚河                    汉界         ┃
+┃	                                            ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨5
+┃	  │    │	  │    │	  │	│	  │    ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨6
+┃	  │    │	  │    │	  │	│	  │    ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨7
+┃	  │    │	  │    │	  │	│	  │    ┃
+┠──┼──┼──┼──┼──┼──┼──┼──┨8
+┃	  │    │	  │    │	  │	│	  │    ┃
+┗━━┷━━┷━━┷━━┷━━┷━━┷━━┷━━┛9
+0      1     2     3     4     5     6     7    8
+
+黑 cbColor - 1 cbUserIndex:0
+
+*/
+
+/*
+
+
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:0,cbXPos:0, cbYPos:9, cbChessID:00, cbChess:5, cbChessName:车, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:1,cbXPos:1, cbYPos:9, cbChessID:01, cbChess:4, cbChessName:马, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:2,cbXPos:2, cbYPos:9, cbChessID:02, cbChess:3, cbChessName:象, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:3,cbXPos:3, cbYPos:9, cbChessID:03, cbChess:2, cbChessName:士, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:4,cbXPos:4, cbYPos:9, cbChessID:04, cbChess:1, cbChessName:将, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:5,cbXPos:5, cbYPos:9, cbChessID:05, cbChess:2, cbChessName:士, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:6,cbXPos:6, cbYPos:9, cbChessID:06, cbChess:3, cbChessName:象, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:7,cbXPos:7, cbYPos:9, cbChessID:07, cbChess:4, cbChessName:马, cbColor:1
+ResetChessBorad 主线棋子 - cbUserIndex:0,nIndex:8,cbXPos:8, cbYPos:9, cbChessID:08, cbChess:5, cbChessName:车, cbColor:1
+
+
+ResetChessBorad 兵的棋子 - cbUserIndex:0,nIndex:0,cbXPos:0, cbYPos:6, cbChessID:09, cbChess:7, cbChessName:兵, cbColor:1
+ResetChessBorad 兵的棋子 - cbUserIndex:0,nIndex:1,cbXPos:2, cbYPos:6, cbChessID:10, cbChess:7, cbChessName:兵, cbColor:1
+ResetChessBorad 兵的棋子 - cbUserIndex:0,nIndex:2,cbXPos:4, cbYPos:6, cbChessID:11, cbChess:7, cbChessName:兵, cbColor:1
+ResetChessBorad 兵的棋子 - cbUserIndex:0,nIndex:3,cbXPos:6, cbYPos:6, cbChessID:12, cbChess:7, cbChessName:兵, cbColor:1
+ResetChessBorad 兵的棋子 - cbUserIndex:0,nIndex:4,cbXPos:8, cbYPos:6, cbChessID:13, cbChess:7, cbChessName:兵, cbColor:1
+
+
+ResetChessBorad 炮的棋子 - cbUserIndex:0,nIndex:0,cbXPos:1, cbYPos:7, cbChessID:14, cbChess:6, cbChessName:炮, cbColor:1
+ResetChessBorad 炮的棋子 - cbUserIndex:0,nIndex:1,cbXPos:7, cbYPos:7, cbChessID:15, cbChess:6, cbChessName:炮, cbColor:1
+
+
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:0,cbXPos:0, cbYPos:0, cbChessID:00, cbChess:5, cbChessName:车, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:1,cbXPos:1, cbYPos:0, cbChessID:01, cbChess:4, cbChessName:马, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:2,cbXPos:2, cbYPos:0, cbChessID:02, cbChess:3, cbChessName:象, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:3,cbXPos:3, cbYPos:0, cbChessID:03, cbChess:2, cbChessName:士, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:4,cbXPos:4, cbYPos:0, cbChessID:04, cbChess:1, cbChessName:将, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:5,cbXPos:5, cbYPos:0, cbChessID:05, cbChess:2, cbChessName:士, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:6,cbXPos:6, cbYPos:0, cbChessID:06, cbChess:3, cbChessName:象, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:7,cbXPos:7, cbYPos:0, cbChessID:07, cbChess:4, cbChessName:马, cbColor:2
+ResetChessBorad 主线棋子 - cbUserIndex:1,nIndex:8,cbXPos:8, cbYPos:0, cbChessID:08, cbChess:5, cbChessName:车, cbColor:2
+
+
+ResetChessBorad 兵的棋子 - cbUserIndex:1,nIndex:0,cbXPos:0, cbYPos:3, cbChessID:09, cbChess:7, cbChessName:兵, cbColor:2
+ResetChessBorad 兵的棋子 - cbUserIndex:1,nIndex:1,cbXPos:2, cbYPos:3, cbChessID:10, cbChess:7, cbChessName:兵, cbColor:2
+ResetChessBorad 兵的棋子 - cbUserIndex:1,nIndex:2,cbXPos:4, cbYPos:3, cbChessID:11, cbChess:7, cbChessName:兵, cbColor:2
+ResetChessBorad 兵的棋子 - cbUserIndex:1,nIndex:3,cbXPos:6, cbYPos:3, cbChessID:12, cbChess:7, cbChessName:兵, cbColor:2
+ResetChessBorad 兵的棋子 - cbUserIndex:1,nIndex:4,cbXPos:8, cbYPos:3, cbChessID:13, cbChess:7, cbChessName:兵, cbColor:2
+
+
+ResetChessBorad 炮的棋子 - cbUserIndex:1,nIndex:0,cbXPos:1, cbYPos:2, cbChessID:14, cbChess:6, cbChessName:炮, cbColor:2
+ResetChessBorad 炮的棋子 - cbUserIndex:1,nIndex:1,cbXPos:7, cbYPos:2, cbChessID:15, cbChess:6, cbChessName:炮, cbColor:2
+
+
+*/
+
 #include <assert.h>
+#include <string>
 
 #define ASSERT(EXPR)\
 do{\
@@ -54,6 +136,8 @@ typedef long LONG;
 #define CHESS_ROOK					5									//车
 #define CHESS_CANNON				6									//炮
 #define CHESS_SOLDIER				7									//兵
+
+static const std::string g_chess_name[] = {"","将","士","象","马","车","炮","兵"};
 
 //请求状态
 #define GU_WAIT_PEACE				0x01								//等待求和

@@ -256,8 +256,14 @@
     <Filter Include="test_skynet\skynet_lua">
       <UniqueIdentifier>{6619fdcd-e1dc-429b-bf0b-c24414637465}</UniqueIdentifier>
     </Filter>
-    <Filter Include="chinese_chess">
-      <UniqueIdentifier>{ca5769d2-ffb2-43a1-9853-eadcd9872d46}</UniqueIdentifier>
+    <Filter Include="chess_chinese">
+      <UniqueIdentifier>{f1814831-071a-481f-93d9-be82dc6a0e82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chess_gobang">
+      <UniqueIdentifier>{097144d8-a4ef-4635-af6c-2d8dde8336fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="chess_weiqi">
+      <UniqueIdentifier>{7118ac54-a13a-4b4d-bc47-e2b0f7b36287}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -858,11 +864,23 @@
     <ClInclude Include="..\card\majiang_logic.h">
       <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="..\chinese_chess\CMD_CChess.h">
-      <Filter>chinese_chess</Filter>
+    <ClInclude Include="..\chess_chinese\CMD_CChess.h">
+      <Filter>chess_chinese</Filter>
     </ClInclude>
-    <ClInclude Include="..\chinese_chess\GameLogic.h">
-      <Filter>chinese_chess</Filter>
+    <ClInclude Include="..\chess_chinese\GameLogic.h">
+      <Filter>chess_chinese</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chess_gobang\CMD_GoBang.h">
+      <Filter>chess_gobang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chess_gobang\GameLogic.h">
+      <Filter>chess_gobang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chess_weiqi\CMD_WeiQi.h">
+      <Filter>chess_weiqi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\chess_weiqi\GameLogic.h">
+      <Filter>chess_weiqi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1476,8 +1494,14 @@
     <None Include="..\lua\test_string.lua">
       <Filter>lua</Filter>
     </None>
-    <None Include="..\chinese_chess\Makefile">
-      <Filter>chinese_chess</Filter>
+    <None Include="..\chess_chinese\Makefile">
+      <Filter>chess_chinese</Filter>
+    </None>
+    <None Include="..\chess_gobang\Makefile">
+      <Filter>chess_gobang</Filter>
+    </None>
+    <None Include="..\chess_weiqi\Makefile">
+      <Filter>chess_weiqi</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2111,11 +2135,23 @@
     <ClCompile Include="..\card\majiang_logic.cpp">
       <Filter>card</Filter>
     </ClCompile>
-    <ClCompile Include="..\chinese_chess\main.cpp">
-      <Filter>chinese_chess</Filter>
+    <ClCompile Include="..\chess_chinese\GameLogic.cpp">
+      <Filter>chess_chinese</Filter>
     </ClCompile>
-    <ClCompile Include="..\chinese_chess\GameLogic.cpp">
-      <Filter>chinese_chess</Filter>
+    <ClCompile Include="..\chess_chinese\main.cpp">
+      <Filter>chess_chinese</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chess_gobang\GameLogic.cpp">
+      <Filter>chess_gobang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chess_gobang\main.cpp">
+      <Filter>chess_gobang</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chess_weiqi\GameLogic.cpp">
+      <Filter>chess_weiqi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\chess_weiqi\main.cpp">
+      <Filter>chess_weiqi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

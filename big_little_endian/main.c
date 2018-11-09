@@ -19,7 +19,7 @@ bool CheckStorageModeEx()
 	return(*cByte == 0x12);
 }
 
-int GetPacketLen(const char * data)
+int GetPacketLen(const char unsigned * data)
 {
 	static unsigned char buffer[2];
 	buffer[0] = 0;
@@ -36,12 +36,13 @@ int GetPacketLen(const char * data)
 void BigLittleStorage()
 {
 	// 两个字节最大能表示65535
-	char buffer[2] = { 0 };
-	unsigned short pack_size = 65535;
+	unsigned char buffer[2] = { 0 };
+	//unsigned short pack_size = 65535;
+	unsigned short pack_size = 6553;
 	// 按照大端存进buffer
-	buffer[0] = (pack_size >> 8) & 0xff;
-	buffer[1] = pack_size & 0xff;
-	printf("big storage - pack_size:%d,buffer:%d,%d\n", pack_size,buffer[0],buffer[1]);
+	buffer[0] = (pack_size >> 8) & 0xff; // 把高位的字节移动地位字节，移动 8 位，也就是移动了 1 字节，与 0xff 相与，保证只取一字节数值
+	buffer[1] = pack_size & 0xff; // 与 0xff 相与，保证只取一字节数值，并且取的是最低字节的数值
+	printf("big storage - pack_size:%d,>>8:%d - &0xff:%d,,buffer:%d,%d\n", pack_size, (pack_size >> 8),(pack_size & 0xff),buffer[0],buffer[1]);
 
 	static unsigned char data[2];
 	data[0] = 0;

@@ -57,6 +57,15 @@
     <ClInclude Include="..\ConnectSkynet\pbc\varint.h" />
     <ClInclude Include="..\ConnectSkynet\readfile.h" />
     <ClInclude Include="..\ConnectSkynet\select.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpcap.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpcode.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpprint.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lptree.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lptypes.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpvm.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\select.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\sproto\msvcint.h" />
+    <ClInclude Include="..\ConnnectSkynet_sproto\sproto\sproto.h" />
     <ClInclude Include="..\cpp11\shared.hpp" />
     <ClInclude Include="..\cpp11\SyncQueue.hpp" />
     <ClInclude Include="..\cpp11\test_chrono_time.hpp" />
@@ -248,6 +257,21 @@
     <None Include="..\ConnectSkynet\loginServer.login.s2c.proto" />
     <None Include="..\ConnectSkynet\Makefile" />
     <None Include="..\ConnectSkynet\pbc\Makefile" />
+    <None Include="..\ConnnectSkynet_sproto\lpeg\HISTORY" />
+    <None Include="..\ConnnectSkynet_sproto\lpeg\lpeg.html" />
+    <None Include="..\ConnnectSkynet_sproto\lpeg\makefile" />
+    <None Include="..\ConnnectSkynet_sproto\lpeg\re.html" />
+    <None Include="..\ConnnectSkynet_sproto\lpeg\re.lua" />
+    <None Include="..\ConnnectSkynet_sproto\lpeg\test.lua" />
+    <None Include="..\ConnnectSkynet_sproto\Makefile" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\Makefile" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\print_r.lua" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\README.md" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\sproto.lua" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\sprotoparser.lua" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\test.lua" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\testall.lua" />
+    <None Include="..\ConnnectSkynet_sproto\sproto\testrpc.lua" />
     <None Include="..\cpp11\Makefile" />
     <None Include="..\cpp_new_features\Makefile" />
     <None Include="..\database_server\databases.sql" />
@@ -482,6 +506,15 @@
     <ClCompile Include="..\ConnectSkynet\pbc\stringpool.c" />
     <ClCompile Include="..\ConnectSkynet\pbc\varint.c" />
     <ClCompile Include="..\ConnectSkynet\pbc\wmessage.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\client.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpcap.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpcode.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpprint.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lptree.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpvm.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\sproto\lsproto.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\sproto\sproto.c" />
+    <ClCompile Include="..\ConnnectSkynet_sproto\sproto\testsproto.c" />
     <ClCompile Include="..\cpp11\main.cpp" />
     <ClCompile Include="..\cpp_new_features\main.cpp" />
     <ClCompile Include="..\database_server\mysql_async_callback.cpp" />
@@ -676,6 +709,7 @@
     <Text Include="..\test_skynet\snlua_bootstrap\read.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\ConnnectSkynet_sproto\lpeg\lpeg-128.gif" />
     <Image Include="..\lua-5.3.4-src\doc\logo.gif" />
     <Image Include="..\lua-5.3.4-src\doc\osi-certified-72x60.png" />
     <Image Include="..\test_jemalloc\jemalloc-arena-thread-cache.png" />

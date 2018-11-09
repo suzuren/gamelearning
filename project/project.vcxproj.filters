@@ -265,6 +265,15 @@
     <Filter Include="chess_weiqi">
       <UniqueIdentifier>{7118ac54-a13a-4b4d-bc47-e2b0f7b36287}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ConnnectSkynet_sproto">
+      <UniqueIdentifier>{6cb17b28-098c-4a78-986d-7bf8d48ab1c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ConnnectSkynet_sproto\sproto">
+      <UniqueIdentifier>{b5bc53b6-800e-4c4d-b362-db5e47e78bd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ConnnectSkynet_sproto\lpeg">
+      <UniqueIdentifier>{f9aa5cda-ac83-4877-833e-cfbdc8ef7ea5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -881,6 +890,33 @@
     </ClInclude>
     <ClInclude Include="..\chess_weiqi\GameLogic.h">
       <Filter>chess_weiqi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\sproto\msvcint.h">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\sproto\sproto.h">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\select.h">
+      <Filter>ConnnectSkynet_sproto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpcap.h">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpcode.h">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpprint.h">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lptree.h">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lptypes.h">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpvm.h">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1502,6 +1538,51 @@
     </None>
     <None Include="..\chess_weiqi\Makefile">
       <Filter>chess_weiqi</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\Makefile">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\print_r.lua">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\README.md">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\sproto.lua">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\sprotoparser.lua">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\test.lua">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\testall.lua">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\sproto\testrpc.lua">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\Makefile">
+      <Filter>ConnnectSkynet_sproto</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\lpeg\HISTORY">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\lpeg\lpeg.html">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\lpeg\makefile">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\lpeg\re.html">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\lpeg\re.lua">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </None>
+    <None Include="..\ConnnectSkynet_sproto\lpeg\test.lua">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2153,6 +2234,33 @@
     <ClCompile Include="..\chess_weiqi\main.cpp">
       <Filter>chess_weiqi</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\sproto\lsproto.c">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\sproto\sproto.c">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\client.c">
+      <Filter>ConnnectSkynet_sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\sproto\testsproto.c">
+      <Filter>ConnnectSkynet_sproto\sproto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpcap.c">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpcode.c">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpprint.c">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lptree.c">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpvm.c">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2224,6 +2332,9 @@
     </Image>
     <Image Include="..\test_jemalloc\jemalloc-arena-thread-cache.png">
       <Filter>test_jemalloc</Filter>
+    </Image>
+    <Image Include="..\ConnnectSkynet_sproto\lpeg\lpeg-128.gif">
+      <Filter>ConnnectSkynet_sproto\lpeg</Filter>
     </Image>
   </ItemGroup>
 </Project>

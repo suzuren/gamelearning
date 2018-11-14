@@ -2261,6 +2261,9 @@
     <ClCompile Include="..\ConnnectSkynet_sproto\lpeg\lpvm.c">
       <Filter>ConnnectSkynet_sproto\lpeg</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack-test.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">

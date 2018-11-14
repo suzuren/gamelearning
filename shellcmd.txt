@@ -51,3 +51,71 @@ find ./ -name '*.sh' | xargs chmod +x
 
 ------------------------------------------------------------------------------------------------------------
 
+
+
+环境搭建：
+
+tar -xvf file.tar
+tar -xzvf file.tar.gz
+tar -jxvf file.tar.bz2
+unzip file.zip
+
+
+安装 g++
+
+gcc: yum install gcc
+g++: yum install gcc-c++
+
+
+cmake-2.8.8/Readme.txt
+$ ./bootstrap; make; make install
+
+
+hiredis-master/
+make;make install;
+
+jemalloc-3.4.1/INSTALL
+    ./configure
+    make
+    make install
+
+libiconv-1.14/README
+    $ ./configure --prefix=/usr/local
+    $ make
+    $ make install
+
+	(/usr/local/lib/libiconv.so.2)
+	在/etc/ld.so.conf中添加/usr/local/lib，再执行一下ldconfig命令
+	
+	不安装会出现如下错误
+	/usr/bin/ld: cannot find -liconv
+	collect2: error: ld returned 1 exit status
+
+
+protobuf-2.5.0/README.txt
+  $ ./configure
+  $ make
+  $ make check
+  $ make install
+
+redis-2.8.9/README
+	make
+	make install
+
+
+curl:
+
+	rpm -qa | grep curl
+	yum list | grep curl
+
+	yum install curl
+	yum install curl-devel
+
+	ln -s curl.h types.h
+
+network insatll
+
+yum install zlib-devel
+
+
+------------------------------------------------------------------------------------------------------------

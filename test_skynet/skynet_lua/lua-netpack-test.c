@@ -99,11 +99,17 @@ lclear(lua_State *L) {
 	return 0;
 }
 
+// HASHSIZE -> 4096
+// oxfff ->4095 -> 24λ
+
 static inline int
 hash_fd(int fd) {
 	int a = fd >> 24;
 	int b = fd >> 12;
 	int c = fd;
+
+	printf("func hash_fd - a:%d,b:%d,c:%d\n", a, b, c);
+
 	return (int)(((uint32_t)(a + b + c)) % HASHSIZE);
 }
 
@@ -343,5 +349,16 @@ write_size(uint8_t * buffer, int len) {
 int main()
 {
 	printf("hello world!\n");
+
+
+	int fds[] = { 1,2,3, 4096 };
+
+	for (int i = 0; i < sizeof(fds) / sizeof(fds[0]); i++)
+	{
+		int h = hash_fd(fds[i]);
+		printf("func main - i:%d,fds:%d,h:%d\n\n", i, fds[i], h);
+	}
+	printf("\n");
+
 	return 1;
 }

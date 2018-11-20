@@ -49,6 +49,12 @@ set character_set_server=utf8;
 
 find ./ -name '*.sh' | xargs chmod +x
 
+netstat -anp | grep 9799
+
+tcpdump -i lo -tt -vv -nn -X port 9998
+
+tcpdump -i any -tt -vv -nn -X port 9999
+
 ------------------------------------------------------------------------------------------------------------
 
 

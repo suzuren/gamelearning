@@ -440,7 +440,9 @@
     <None Include="..\test_skynet\skynet_handle\makefile" />
     <None Include="..\test_skynet\skynet_lua\makefile" />
     <None Include="..\test_skynet\skynet_lua\skynet.lua" />
+    <None Include="..\test_skynet\skynet_lua\test_Netpack.lua" />
     <None Include="..\test_skynet\skynet_lua\testString.lua" />
+    <None Include="..\test_skynet\skynet_lua\test_upvalue.lua" />
     <None Include="..\test_skynet\skynet_module\makefile" />
     <None Include="..\test_skynet\skynet_mq\makefile" />
     <None Include="..\test_skynet\skynet_timer\makefile" />
@@ -658,10 +660,12 @@
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\main.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c" />
+    <ClCompile Include="..\test_skynet\skynet_lua\fuck.cpp" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack-test.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-seri.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-skynet.c" />
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-testupvalue.c" />
     <ClCompile Include="..\test_skynet\skynet_module\main.c" />
     <ClCompile Include="..\test_skynet\skynet_module\service_logger.c" />
     <ClCompile Include="..\test_skynet\skynet_module\skynet_module.c" />

@@ -1584,6 +1584,12 @@
     <None Include="..\ConnnectSkynet_sproto\lpeg\test.lua">
       <Filter>ConnnectSkynet_sproto\lpeg</Filter>
     </None>
+    <None Include="..\test_skynet\skynet_lua\test_Netpack.lua">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_lua\test_upvalue.lua">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2262,6 +2268,12 @@
       <Filter>ConnnectSkynet_sproto\lpeg</Filter>
     </ClCompile>
     <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack-test.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-testupvalue.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\fuck.cpp">
       <Filter>test_skynet\skynet_lua</Filter>
     </ClCompile>
   </ItemGroup>

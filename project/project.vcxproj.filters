@@ -274,6 +274,9 @@
     <Filter Include="ConnnectSkynet_sproto\lpeg">
       <UniqueIdentifier>{f9aa5cda-ac83-4877-833e-cfbdc8ef7ea5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\handlemap">
+      <UniqueIdentifier>{11485c17-25e4-4a97-9bad-fb0b679b6b7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -917,6 +920,15 @@
     </ClInclude>
     <ClInclude Include="..\ConnnectSkynet_sproto\lpeg\lpvm.h">
       <Filter>ConnnectSkynet_sproto\lpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\handlemap\handlemap.h">
+      <Filter>test_skynet\handlemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\handlemap\simplelock.h">
+      <Filter>test_skynet\handlemap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\handlemap\simplethread.h">
+      <Filter>test_skynet\handlemap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1589,6 +1601,12 @@
     </None>
     <None Include="..\test_skynet\skynet_lua\test_upvalue.lua">
       <Filter>test_skynet\skynet_lua</Filter>
+    </None>
+    <None Include="..\test_skynet\handlemap\README.md">
+      <Filter>test_skynet\handlemap</Filter>
+    </None>
+    <None Include="..\test_skynet\handlemap\Makefile">
+      <Filter>test_skynet\handlemap</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2275,6 +2293,12 @@
     </ClCompile>
     <ClCompile Include="..\test_skynet\skynet_lua\fuck.cpp">
       <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\handlemap\handlemap.c">
+      <Filter>test_skynet\handlemap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\handlemap\test.c">
+      <Filter>test_skynet\handlemap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

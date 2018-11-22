@@ -208,6 +208,9 @@
     <ClInclude Include="..\test_skynet\daemon\skynet_daemon.h" />
     <ClInclude Include="..\test_skynet\databuffer_hashid\databuffer.h" />
     <ClInclude Include="..\test_skynet\databuffer_hashid\hashid.h" />
+    <ClInclude Include="..\test_skynet\handlemap\handlemap.h" />
+    <ClInclude Include="..\test_skynet\handlemap\simplelock.h" />
+    <ClInclude Include="..\test_skynet\handlemap\simplethread.h" />
     <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
     <ClInclude Include="..\test_skynet\skynet_handle\rwlock.h" />
     <ClInclude Include="..\test_skynet\skynet_handle\skynet_handle.h" />
@@ -433,6 +436,8 @@
     <None Include="..\test_skynet\daemon\makefile" />
     <None Include="..\test_skynet\daemon\stop.sh" />
     <None Include="..\test_skynet\databuffer_hashid\makefile" />
+    <None Include="..\test_skynet\handlemap\Makefile" />
+    <None Include="..\test_skynet\handlemap\README.md" />
     <None Include="..\test_skynet\harbor\makefile" />
     <None Include="..\test_skynet\load_config\config" />
     <None Include="..\test_skynet\load_config\config.path" />
@@ -656,6 +661,8 @@
     <ClCompile Include="..\test_skynet\daemon\main.c" />
     <ClCompile Include="..\test_skynet\daemon\skynet_daemon.c" />
     <ClCompile Include="..\test_skynet\databuffer_hashid\main.c" />
+    <ClCompile Include="..\test_skynet\handlemap\handlemap.c" />
+    <ClCompile Include="..\test_skynet\handlemap\test.c" />
     <ClCompile Include="..\test_skynet\harbor\harbor.c" />
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\main.c" />

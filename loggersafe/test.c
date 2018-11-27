@@ -151,6 +151,24 @@ void shutdown(int signal)
 	}
 }
 
+void test_AlldaySeconds()
+{
+	int iIndexCount = 0;
+	for (unsigned int cbIndexHour = 0; cbIndexHour < 24; cbIndexHour++)
+	{
+		for (unsigned int cbIndexMinute = 0; cbIndexMinute < 60; cbIndexMinute++)
+		{
+			for (unsigned int cbIndexSecond = 0; cbIndexSecond < 60; cbIndexSecond++)
+			{
+				unsigned int curSecond = cbIndexHour * 3600 + cbIndexMinute * 60 + cbIndexSecond;
+				iIndexCount++;
+				LOG_DEBUG("i:%05d - %02d:%02d.%02d - sec:%d", iIndexCount,cbIndexHour, cbIndexMinute, cbIndexSecond, curSecond);
+
+			}
+		}
+	}
+}
+
 int main(int argc, const char** argv)
 {
 	printf("test logger ...\n");
@@ -176,6 +194,7 @@ int main(int argc, const char** argv)
 	//{
 	//	//LOG_DEBUG("hello world - %d.", i);
 	//}
+	test_AlldaySeconds();
 	while (g_isrun)
 	{
 		log_time_update_logger();

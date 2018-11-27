@@ -362,3 +362,25 @@ void test_diffTimeDay()
 	printf("test_diffTimeDay 4 - old_time:%llu - %s, bNewDay:%d\n", old_time, timer_get_seconds_format(old_time), bNewDay);
 
 }
+
+
+void test_AlldaySeconds()
+{
+	for (unsigned int cbIndexHour = 0; cbIndexHour < 24; cbIndexHour++)
+	{
+		for (unsigned int cbIndexMinute = 0; cbIndexMinute < 60; cbIndexMinute++)
+		{
+			for (unsigned int cbIndexSecond = 0; cbIndexSecond < 60; cbIndexSecond++)
+			{
+				unsigned int curSecond = cbIndexHour * 3600 + cbIndexMinute * 60 + cbIndexSecond;
+				printf("test_AlldaySeconds function - Hour:%02d,Minute:%02d,Second:%02d,curSecond:%d\n", cbIndexHour, cbIndexMinute, cbIndexSecond, curSecond);
+
+			}
+		}
+	}
+}
+
+/*
+
+
+*/

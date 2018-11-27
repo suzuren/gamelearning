@@ -719,6 +719,7 @@
     <Text Include="..\test_skynet\skynet_mq\read.txt" />
     <Text Include="..\test_skynet\skynet_timer\read.txt" />
     <Text Include="..\test_skynet\snlua_bootstrap\read.txt" />
+    <Text Include="..\timer\alldayseconds.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\ConnnectSkynet_sproto\lpeg\lpeg-128.gif" />

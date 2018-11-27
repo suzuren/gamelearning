@@ -2361,6 +2361,9 @@
     <Text Include="..\test_skynet\skynet_lua\read.txt">
       <Filter>test_skynet\skynet_lua</Filter>
     </Text>
+    <Text Include="..\timer\alldayseconds.txt">
+      <Filter>timer</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

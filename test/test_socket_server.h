@@ -191,6 +191,24 @@ struct socket_server *
 	return ss;
 }
 
+//test_socket_server!
+//test_socket_server 1 - int_test : 2147483647
+//test_socket_server 2 - int_test : -2147483648
+//test_socket_server 3 - int_test : 0
+//test_socket_server - SIZEOF_TCPBUFFER : 29
+//test_socket_server - SIZEOF_UDPBUFFER : 48
+//test_socket_server - reserve_id : 2147483646, alloc_id : 2147483646, type : 1, id : 2147483646, fd : -1
+//test_socket_server - reserve_id : 2147483647, alloc_id : 2147483647, type : 1, id : 2147483647, fd : -1
+//test_socket_server - reserve_id : 0, alloc_id : 0, type : 1, id : 0, fd : -1
+//test_socket_server - reserve_id : 1, alloc_id : 1, type : 1, id : 1, fd : -1
+//test_socket_server - reserve_id : 2, alloc_id : 2, type : 1, id : 2, fd : -1
+//test_socket_server - reserve_id : 3, alloc_id : 3, type : 1, id : 3, fd : -1
+//test_socket_server - reserve_id : 4, alloc_id : 4, type : 1, id : 4, fd : -1
+//test_socket_server - reserve_id : 5, alloc_id : 5, type : 1, id : 5, fd : -1
+//test_socket_server - reserve_id : 6, alloc_id : 6, type : 1, id : 6, fd : -1
+//test_socket_server - reserve_id : 7, alloc_id : 7, type : 1, id : 7, fd : -1
+
+
 void test_socket_server()
 {
 	printf("test_socket_server!\n");
@@ -203,11 +221,8 @@ void test_socket_server()
 	int_test &= 0x7fffffff;
 	printf("test_socket_server 3 - int_test:%d\n", int_test);
 
-
 	printf("test_socket_server - SIZEOF_TCPBUFFER:%ld\n", SIZEOF_TCPBUFFER);
 	printf("test_socket_server - SIZEOF_UDPBUFFER:%ld\n", SIZEOF_UDPBUFFER);
-
-
 
 	//int id = reserve_id(ss);
 	//printf("test_socket_server - id:%d\n", id);
@@ -219,10 +234,4 @@ void test_socket_server()
 		printf("test_socket_server - reserve_id:%10d,alloc_id:%10d,type:%d,id:%10d,fd:%d\n",
 			id,ss->alloc_id,s->type,s->id,s->fd);
 	}
-
-
-
-
-
-
 }

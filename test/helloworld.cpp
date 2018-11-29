@@ -21,7 +21,7 @@ int main(int argc, const char** argv)
 	//tets_memory_zero(GangCardResult);
 	//func1();
 
-	//test_socket_server();
+	test_socket_server();
 
 
 

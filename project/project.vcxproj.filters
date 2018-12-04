@@ -930,6 +930,9 @@
     <ClInclude Include="..\test_skynet\handlemap\simplethread.h">
       <Filter>test_skynet\handlemap</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\test_userright.h">
+      <Filter>test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

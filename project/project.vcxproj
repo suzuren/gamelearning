@@ -200,6 +200,7 @@
     <ClInclude Include="..\socket-server\socket_poll.h" />
     <ClInclude Include="..\socket-server\socket_server.h" />
     <ClInclude Include="..\test\test_helloworld.h" />
+    <ClInclude Include="..\test\test_userright.h" />
     <ClInclude Include="..\test_curl\curl_per.h" />
     <ClInclude Include="..\test_curl\logger.h" />
     <ClInclude Include="..\test_curl\curl_mgr.h" />

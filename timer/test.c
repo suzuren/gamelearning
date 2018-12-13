@@ -40,8 +40,9 @@ int main(int argc, const char** argv)
 
 	timer_init_info();
 	timer_test();
-	test_diffTimeDay();
-	test_AlldaySeconds();
+	//test_diffTimeDay();
+	test_diffTimeDay_2();
+	//test_AlldaySeconds();
 	unsigned long long	bms = GetMillisecond();
 
 	int iLoop = 1;

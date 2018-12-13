@@ -24,6 +24,7 @@ void timer_test();
 
 
 void test_diffTimeDay();
+void test_diffTimeDay_2();
 
 void test_AlldaySeconds();
 

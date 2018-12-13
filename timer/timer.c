@@ -380,6 +380,16 @@ void test_AlldaySeconds()
 	}
 }
 
+
+void test_diffTimeDay_2()
+{
+	unsigned long long uTime = getSysTime();
+	unsigned long long uProcessTime = 1544671775;
+
+	int diffday = diffTimeDay(uProcessTime, uTime);
+	printf("test_diffTimeDay_2 --- diffday:%d,new_time:%llu - %s\n", diffday, uProcessTime, timer_get_seconds_format(uProcessTime));
+
+}
 /*
 
 

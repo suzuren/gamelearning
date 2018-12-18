@@ -2367,6 +2367,7 @@
     <Text Include="..\timer\alldayseconds.txt">
       <Filter>timer</Filter>
     </Text>
+    <Text Include="..\server.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

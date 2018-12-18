@@ -708,6 +708,7 @@
     <Text Include="..\network_server\read.txt" />
     <Text Include="..\network_server_socket_server\read.txt" />
     <Text Include="..\redis_server\read.txt" />
+    <Text Include="..\server.txt" />
     <Text Include="..\shellcmd.txt" />
     <Text Include="..\socket-server\read.txt" />
     <Text Include="..\test_jemalloc\read.txt" />

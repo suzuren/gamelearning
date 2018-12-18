@@ -55,6 +55,15 @@ tcpdump -i lo -tt -vv -nn -X port 9998
 
 tcpdump -i any -tt -vv -nn -X port 9999
 
+查看空间大小
+df -h
+
+查看某个目录下的文件
+du -h ablitte/
+
+修改文件名或者文件夹名 file1 为 file2
+mv file1 file2
+
 ------------------------------------------------------------------------------------------------------------
 
 查询当前时间
@@ -93,127 +102,6 @@ ntpd is stopped
 Starting ntpd:                                             [  OK  ]
 [root@iZwz93ko7koxklgdtyy0kvZ release]# service ntpd status
 ntpd (pid  1166) is running...
-
-
-------------------------------------------------------------------------------------------------------------
-
-
-环境搭建：
-
-tar -xvf file.tar
-tar -xzvf file.tar.gz
-tar -jxvf file.tar.bz2
-unzip file.zip
-
-
-安装 g++
-
-gcc: yum install gcc
-g++: yum install gcc-c++
-
-
-cmake-2.8.8/Readme.txt
-$ ./bootstrap; make; make install
-
-
-hiredis-master/
-make;make install;
-
-jemalloc-3.4.1/INSTALL
-    ./configure
-    make
-    make install
-
-libiconv-1.14/README
-    $ ./configure --prefix=/usr/local
-    $ make
-    $ make install
-
-	(/usr/local/lib/libiconv.so.2)
-	在/etc/ld.so.conf中添加/usr/local/lib，再执行一下ldconfig命令
-	
-	不安装会出现如下错误
-	/usr/bin/ld: cannot find -liconv
-	collect2: error: ld returned 1 exit status
-
-
-protobuf-2.5.0/README.txt
-  $ ./configure
-  $ make
-  $ make check
-  $ make install
-
-redis-2.8.9/README
-	make
-	make install
-
-
-curl:
-
-	rpm -qa | grep curl
-	yum list | grep curl
-
-	yum install curl
-	yum install curl-devel
-
-	ln -s curl.h types.h
-
-network insatll
-
-yum install zlib-devel
-
-
-
-gdb 安装
-
-gdb -v
-
-wget http://ftp.gnu.org/gnu/gdb/gdb-7.12.tar.gz
-tar -zxvf gdb-7.12.tar.gz
-
-    cat -n README
-    15		./configure
-    16		make
-    17	
-    18	To install them (by default in /usr/local/bin, /usr/local/lib, etc),
-    19	then do:
-    20		make install
-
-
-报错：
-WARNING: 'makeinfo' is missing on your system.
-         You should only need it if you modified a '.texi' file, or
-         any other file indirectly affecting the aspect of the manual.
-         You might want to install the Texinfo package:
-         <http://www.gnu.org/software/texinfo/>
-         The spurious makeinfo call might also be the consequence of
-         using a buggy 'make' (AIX, DU, IRIX), in which case you might
-         want to install GNU make:
-         <http://www.gnu.org/software/make/>
-make[5]: *** [gdb.info] Error 127
-make[5]: Leaving directory `/data/game66_dispatch/depend/gdb-7.12/gdb/doc'
-make[4]: *** [subdir_do] Error 1
-make[4]: Leaving directory `/data/game66_dispatch/depend/gdb-7.12/gdb'
-make[3]: *** [install-only] Error 2
-make[3]: Leaving directory `/data/game66_dispatch/depend/gdb-7.12/gdb'
-make[2]: *** [install] Error 2
-make[2]: Leaving directory `/data/game66_dispatch/depend/gdb-7.12/gdb'
-make[1]: *** [install-gdb] Error 2
-make[1]: Leaving directory `/data/game66_dispatch/depend/gdb-7.12'
-make: *** [install] Error 2
-[root@iZj6chyw2b9eeun8zudeljZ gdb-7.12]# gdb -v
-GNU gdb (GDB) Red Hat Enterprise Linux (7.2-90.el6)
-Copyright (C) 2010 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-and "show warranty" for details.
-This GDB was configured as "x86_64-redhat-linux-gnu".
-For bug reporting instructions, please see:
-<http://www.gnu.org/software/gdb/bugs/>.
-
-解决方法：
-yum install texinfo -y
 
 
 ------------------------------------------------------------------------------------------------------------

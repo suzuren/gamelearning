@@ -1611,6 +1611,10 @@
     <None Include="..\test_skynet\handlemap\Makefile">
       <Filter>test_skynet\handlemap</Filter>
     </None>
+    <None Include="..\test_skynet\skynet_lua\testSocketDriver.lua">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_lua\print_r.lua" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2303,6 +2307,9 @@
     <ClCompile Include="..\test_skynet\handlemap\test.c">
       <Filter>test_skynet\handlemap</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-socket.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2368,6 +2375,9 @@
       <Filter>timer</Filter>
     </Text>
     <Text Include="..\server.txt" />
+    <Text Include="..\test_skynet\skynet_lua\lualen.txt">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

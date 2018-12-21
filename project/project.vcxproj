@@ -445,7 +445,9 @@
     <None Include="..\test_skynet\load_config\makefile" />
     <None Include="..\test_skynet\skynet_handle\makefile" />
     <None Include="..\test_skynet\skynet_lua\makefile" />
+    <None Include="..\test_skynet\skynet_lua\print_r.lua" />
     <None Include="..\test_skynet\skynet_lua\skynet.lua" />
+    <None Include="..\test_skynet\skynet_lua\testSocketDriver.lua" />
     <None Include="..\test_skynet\skynet_lua\test_Netpack.lua" />
     <None Include="..\test_skynet\skynet_lua\testString.lua" />
     <None Include="..\test_skynet\skynet_lua\test_upvalue.lua" />
@@ -673,6 +675,7 @@
     <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-seri.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-skynet.c" />
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-socket.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-testupvalue.c" />
     <ClCompile Include="..\test_skynet\skynet_module\main.c" />
     <ClCompile Include="..\test_skynet\skynet_module\service_logger.c" />
@@ -716,6 +719,7 @@
     <Text Include="..\test_skynet\databuffer_hashid\read.txt" />
     <Text Include="..\test_skynet\harbor\read.txt" />
     <Text Include="..\test_skynet\load_config\read.txt" />
+    <Text Include="..\test_skynet\skynet_lua\lualen.txt" />
     <Text Include="..\test_skynet\skynet_lua\read.txt" />
     <Text Include="..\test_skynet\skynet_module\read.txt" />
     <Text Include="..\test_skynet\skynet_mq\read.txt" />

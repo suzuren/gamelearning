@@ -277,6 +277,9 @@
     <Filter Include="test_skynet\handlemap">
       <UniqueIdentifier>{11485c17-25e4-4a97-9bad-fb0b679b6b7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cpp11datalit">
+      <UniqueIdentifier>{15f5fc18-8c7b-43e2-8d6e-fbe5680cccd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1614,7 +1617,12 @@
     <None Include="..\test_skynet\skynet_lua\testSocketDriver.lua">
       <Filter>test_skynet\skynet_lua</Filter>
     </None>
-    <None Include="..\test_skynet\skynet_lua\print_r.lua" />
+    <None Include="..\test_skynet\skynet_lua\print_r.lua">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </None>
+    <None Include="..\cpp11datalit\Makefile">
+      <Filter>cpp11datalit</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2309,6 +2317,9 @@
     </ClCompile>
     <ClCompile Include="..\test_skynet\skynet_lua\lua-socket.c">
       <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp11datalit\dataList.cpp">
+      <Filter>cpp11datalit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -280,6 +280,12 @@
     <Filter Include="cpp11datalit">
       <UniqueIdentifier>{15f5fc18-8c7b-43e2-8d6e-fbe5680cccd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cpp_template">
+      <UniqueIdentifier>{34e9f3a4-bab7-441c-a8d1-354675d048a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp_operator">
+      <UniqueIdentifier>{10b73af4-b9a9-4037-b9a9-2401fa4a7c22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -935,6 +941,9 @@
     </ClInclude>
     <ClInclude Include="..\test\test_userright.h">
       <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_operator\new_delete.h">
+      <Filter>cpp_operator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1622,6 +1631,12 @@
     </None>
     <None Include="..\cpp11datalit\Makefile">
       <Filter>cpp11datalit</Filter>
+    </None>
+    <None Include="..\cpp_template\Makefile">
+      <Filter>cpp_template</Filter>
+    </None>
+    <None Include="..\cpp_operator\Makefile">
+      <Filter>cpp_operator</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2321,6 +2336,12 @@
     <ClCompile Include="..\cpp11datalit\dataList.cpp">
       <Filter>cpp11datalit</Filter>
     </ClCompile>
+    <ClCompile Include="..\cpp_template\main.cpp">
+      <Filter>cpp_template</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp_operator\main.cpp">
+      <Filter>cpp_operator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2388,6 +2409,9 @@
     <Text Include="..\server.txt" />
     <Text Include="..\test_skynet\skynet_lua\lualen.txt">
       <Filter>test_skynet\skynet_lua</Filter>
+    </Text>
+    <Text Include="..\cpp_template\template_read.txt">
+      <Filter>cpp_template</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

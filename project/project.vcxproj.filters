@@ -945,6 +945,12 @@
     <ClInclude Include="..\cpp_operator\new_delete.h">
       <Filter>cpp_operator</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp_template\variadic_templates.h">
+      <Filter>cpp_template</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_template\serialize.hpp">
+      <Filter>cpp_template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

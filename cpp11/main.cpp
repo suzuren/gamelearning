@@ -10,6 +10,8 @@ using namespace std;
 
 #include "test_chrono_time.hpp"
 
+#include "test_enable_if.hpp"
+
 int main(int argc, const char** argv)
 {
 	printf("hello world!\n");
@@ -19,6 +21,8 @@ int main(int argc, const char** argv)
 	test_regex();
 	test_lambda();
 	test_shared();
+
+	test_enable_if();
 
 	return 0;
 }

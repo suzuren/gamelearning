@@ -966,6 +966,9 @@
     <ClInclude Include="..\cpp_serialize\serialize.hpp">
       <Filter>cpp_serialize</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp11\test_enable_if.hpp">
+      <Filter>cpp11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

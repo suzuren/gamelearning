@@ -286,6 +286,9 @@
     <Filter Include="cpp_operator">
       <UniqueIdentifier>{10b73af4-b9a9-4037-b9a9-2401fa4a7c22}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cpp_serialize">
+      <UniqueIdentifier>{00832038-fc3e-4a37-830f-d6fd124e89c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -950,6 +953,18 @@
     </ClInclude>
     <ClInclude Include="..\cpp_template\serialize.hpp">
       <Filter>cpp_template</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_serialize\buffer.hpp">
+      <Filter>cpp_serialize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_serialize\buffer_view.hpp">
+      <Filter>cpp_serialize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_serialize\buffer_writer.hpp">
+      <Filter>cpp_serialize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_serialize\serialize.hpp">
+      <Filter>cpp_serialize</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1643,6 +1658,9 @@
     </None>
     <None Include="..\cpp_operator\Makefile">
       <Filter>cpp_operator</Filter>
+    </None>
+    <None Include="..\cpp_serialize\Makefile">
+      <Filter>cpp_serialize</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2347,6 +2365,9 @@
     </ClCompile>
     <ClCompile Include="..\cpp_operator\main.cpp">
       <Filter>cpp_operator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\cpp_serialize\serianlize_example.cpp">
+      <Filter>cpp_serialize</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

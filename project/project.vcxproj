@@ -82,6 +82,10 @@
     <ClInclude Include="..\cpp_new_features\std_thread.h" />
     <ClInclude Include="..\cpp_new_features\template.h" />
     <ClInclude Include="..\cpp_operator\new_delete.h" />
+    <ClInclude Include="..\cpp_serialize\buffer.hpp" />
+    <ClInclude Include="..\cpp_serialize\buffer_view.hpp" />
+    <ClInclude Include="..\cpp_serialize\buffer_writer.hpp" />
+    <ClInclude Include="..\cpp_serialize\serialize.hpp" />
     <ClInclude Include="..\cpp_template\serialize.hpp" />
     <ClInclude Include="..\cpp_template\variadic_templates.h" />
     <ClInclude Include="..\database_server\data_table.hpp" />
@@ -283,6 +287,7 @@
     <None Include="..\cpp11\Makefile" />
     <None Include="..\cpp_new_features\Makefile" />
     <None Include="..\cpp_operator\Makefile" />
+    <None Include="..\cpp_serialize\Makefile" />
     <None Include="..\cpp_template\Makefile" />
     <None Include="..\database_server\databases.sql" />
     <None Include="..\database_server\Makefile" />
@@ -535,6 +540,7 @@
     <ClCompile Include="..\cpp11\main.cpp" />
     <ClCompile Include="..\cpp_new_features\main.cpp" />
     <ClCompile Include="..\cpp_operator\main.cpp" />
+    <ClCompile Include="..\cpp_serialize\serianlize_example.cpp" />
     <ClCompile Include="..\cpp_template\main.cpp" />
     <ClCompile Include="..\database_server\mysql_async_callback.cpp" />
     <ClCompile Include="..\database_server\mysql_mgr.cpp" />

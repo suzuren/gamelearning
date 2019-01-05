@@ -87,7 +87,9 @@
     <ClInclude Include="..\cpp_serialize\buffer_view.hpp" />
     <ClInclude Include="..\cpp_serialize\buffer_writer.hpp" />
     <ClInclude Include="..\cpp_serialize\serialize.hpp" />
+    <ClInclude Include="..\cpp_template\fibonacci_templates.h" />
     <ClInclude Include="..\cpp_template\serialize.hpp" />
+    <ClInclude Include="..\cpp_template\sfinae_templates.h" />
     <ClInclude Include="..\cpp_template\variadic_templates.h" />
     <ClInclude Include="..\database_server\data_table.hpp" />
     <ClInclude Include="..\database_server\mysql.hpp" />

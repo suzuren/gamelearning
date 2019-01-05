@@ -108,10 +108,17 @@ void  func_enable_if_t(InterT i1, InterT i2)
 	std::cout << "func test enable_if_t - " << "func_enable_if_t is_integral " << std::endl;
 }
 
-template<typename T, int i = 0>
+
+template<typename T, int i = 0> // 这个是模板参数，不是函数参数
 void func_test_flag(T t)
 {
 	std::cout << "func func_test_flag - " << "int = 0 " << std::endl;
+}
+
+template<typename T, int * i = nullptr>
+void func_test_flag(T t)
+{
+	std::cout << "func func_test_flag - " << "int * = nullptr " << std::endl;
 }
 
 
@@ -146,7 +153,9 @@ int test_enable_if()
 	func_enable_if<testEnum>(test_start, test_start);
 	func_enable_if_t<testEnum>(test_start, test_start);
 
-	func_test_flag(true);
+	//func_test_flag<bool, 0>(true); // error
+	func_test_flag<bool, 1>(false);
+	func_test_flag<bool, nullptr>(true);
 
 	return 0;
 }

@@ -969,6 +969,12 @@
     <ClInclude Include="..\cpp11\test_enable_if.hpp">
       <Filter>cpp11</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp_template\fibonacci_templates.h">
+      <Filter>cpp_template</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_template\sfinae_templates.h">
+      <Filter>cpp_template</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

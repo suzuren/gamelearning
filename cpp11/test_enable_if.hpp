@@ -108,6 +108,13 @@ void  func_enable_if_t(InterT i1, InterT i2)
 	std::cout << "func test enable_if_t - " << "func_enable_if_t is_integral " << std::endl;
 }
 
+template<typename T, int i = 0>
+void func_test_flag(T t)
+{
+	std::cout << "func func_test_flag - " << "int = 0 " << std::endl;
+}
+
+
 
 
 int test_enable_if()
@@ -139,7 +146,7 @@ int test_enable_if()
 	func_enable_if<testEnum>(test_start, test_start);
 	func_enable_if_t<testEnum>(test_start, test_start);
 
-
+	func_test_flag(true);
 
 	return 0;
 }

@@ -75,6 +75,8 @@
     <ClInclude Include="..\cpp11\ThreadPool.hpp" />
     <ClInclude Include="..\cpp11\Timer.hpp" />
     <ClInclude Include="..\cpp11\type_name.hpp" />
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\01_Structured_Binding_Declaration.h" />
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\02_stl_container.h" />
     <ClInclude Include="..\cpp_new_features\cplusplus_extern.h" />
     <ClInclude Include="..\cpp_new_features\define.h" />
     <ClInclude Include="..\cpp_new_features\enum_class.h" />
@@ -293,6 +295,7 @@
     <None Include="..\cpp_17_stl_cook_book\cmake_config\config.cmake" />
     <None Include="..\cpp_17_stl_cook_book\cmake_config\config_lib.cmake" />
     <None Include="..\cpp_17_stl_cook_book\cmake_config\macros.cmake" />
+    <None Include="..\cpp_17_stl_cook_book\code\build\rebuild.sh" />
     <None Include="..\cpp_17_stl_cook_book\test\build\rebuild.sh" />
     <None Include="..\cpp_new_features\Makefile" />
     <None Include="..\cpp_operator\Makefile" />
@@ -547,6 +550,7 @@
     <ClCompile Include="..\ConnnectSkynet_sproto\sproto\testsproto.c" />
     <ClCompile Include="..\cpp11datalit\dataList.cpp" />
     <ClCompile Include="..\cpp11\main.cpp" />
+    <ClCompile Include="..\cpp_17_stl_cook_book\code\src\main.cpp" />
     <ClCompile Include="..\cpp_17_stl_cook_book\test\src\main.cpp" />
     <ClCompile Include="..\cpp_new_features\main.cpp" />
     <ClCompile Include="..\cpp_operator\main.cpp" />
@@ -728,6 +732,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt" />
+    <Text Include="..\cpp_17_stl_cook_book\code\build\CMakeLists.txt" />
     <Text Include="..\cpp_17_stl_cook_book\test\build\CMakeLists.txt" />
     <Text Include="..\cpp_template\template_read.txt" />
     <Text Include="..\gitcmd.txt" />

@@ -304,6 +304,15 @@
     <Filter Include="cpp_17_stl_cook_book\test\src">
       <UniqueIdentifier>{a4627b9f-bf81-4d2e-bf0e-f2ec48090902}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cpp_17_stl_cook_book\code">
+      <UniqueIdentifier>{cf0b5819-8d99-4acc-9368-63ef4a2855df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp_17_stl_cook_book\code\build">
+      <UniqueIdentifier>{41ab09a7-b9bd-42bd-a81d-b47b551d20c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp_17_stl_cook_book\code\src">
+      <UniqueIdentifier>{8bb5bb0a-057e-4f5a-969a-fc4e586d94e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -989,6 +998,12 @@
     </ClInclude>
     <ClInclude Include="..\cpp_template\sfinae_templates.h">
       <Filter>cpp_template</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\01_Structured_Binding_Declaration.h">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\02_stl_container.h">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1704,6 +1719,9 @@
     <None Include="..\cpp_17_stl_cook_book\clear.sh">
       <Filter>cpp_17_stl_cook_book</Filter>
     </None>
+    <None Include="..\cpp_17_stl_cook_book\code\build\rebuild.sh">
+      <Filter>cpp_17_stl_cook_book\code\build</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2414,6 +2432,9 @@
     <ClCompile Include="..\cpp_17_stl_cook_book\test\src\main.cpp">
       <Filter>cpp_17_stl_cook_book\test\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\cpp_17_stl_cook_book\code\src\main.cpp">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2487,6 +2508,9 @@
     </Text>
     <Text Include="..\cpp_17_stl_cook_book\test\build\CMakeLists.txt">
       <Filter>cpp_17_stl_cook_book\test\build</Filter>
+    </Text>
+    <Text Include="..\cpp_17_stl_cook_book\code\build\CMakeLists.txt">
+      <Filter>cpp_17_stl_cook_book\code\build</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,11 @@ cd ./pbc
 ./clean.sh
 cd ${root_dir}
 
+
+cd ./cpp_17_stl_cook_book
+./clear.sh
+cd $root_dir
+
 clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_CPP" "helloworld" "MultiplayerBook" "inicfg"
  "test" "proxy_epoll" "referlib" "cpp11" "ThreadPool" "declare" "http" "webservice" "websocket" "candlua" "card" 
  "lua-arc4random" "lua-cjson" "lua-5.3.4-src" "luasql" "NetSelect" "NetPoll" "NetEpoll" "ConnectSkynet" "ConnnectSkynet_sproto"
@@ -33,5 +38,6 @@ do
     make clean
     cd ${root_dir}
 done
-cd $rootdir
+
+cd $root_dir
 

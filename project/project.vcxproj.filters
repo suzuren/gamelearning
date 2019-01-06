@@ -289,6 +289,21 @@
     <Filter Include="cpp_serialize">
       <UniqueIdentifier>{00832038-fc3e-4a37-830f-d6fd124e89c7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cpp_17_stl_cook_book">
+      <UniqueIdentifier>{413ed97d-649d-42e9-b293-a4f975a69cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp_17_stl_cook_book\cmake_config">
+      <UniqueIdentifier>{3c602089-8c96-4e7c-b943-5057a7d0340f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp_17_stl_cook_book\test">
+      <UniqueIdentifier>{fc86d1c5-e8fd-4428-9222-74bb87e95636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp_17_stl_cook_book\test\build">
+      <UniqueIdentifier>{c8864fec-14b3-407f-a666-6a108c3fa507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cpp_17_stl_cook_book\test\src">
+      <UniqueIdentifier>{a4627b9f-bf81-4d2e-bf0e-f2ec48090902}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1671,6 +1686,24 @@
     <None Include="..\cpp_serialize\Makefile">
       <Filter>cpp_serialize</Filter>
     </None>
+    <None Include="..\cpp_17_stl_cook_book\cmake_config\common_path.cmake">
+      <Filter>cpp_17_stl_cook_book\cmake_config</Filter>
+    </None>
+    <None Include="..\cpp_17_stl_cook_book\cmake_config\config.cmake">
+      <Filter>cpp_17_stl_cook_book\cmake_config</Filter>
+    </None>
+    <None Include="..\cpp_17_stl_cook_book\cmake_config\config_lib.cmake">
+      <Filter>cpp_17_stl_cook_book\cmake_config</Filter>
+    </None>
+    <None Include="..\cpp_17_stl_cook_book\cmake_config\macros.cmake">
+      <Filter>cpp_17_stl_cook_book\cmake_config</Filter>
+    </None>
+    <None Include="..\cpp_17_stl_cook_book\test\build\rebuild.sh">
+      <Filter>cpp_17_stl_cook_book\test\build</Filter>
+    </None>
+    <None Include="..\cpp_17_stl_cook_book\clear.sh">
+      <Filter>cpp_17_stl_cook_book</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2378,6 +2411,9 @@
     <ClCompile Include="..\cpp_serialize\serianlize_example.cpp">
       <Filter>cpp_serialize</Filter>
     </ClCompile>
+    <ClCompile Include="..\cpp_17_stl_cook_book\test\src\main.cpp">
+      <Filter>cpp_17_stl_cook_book\test\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2448,6 +2484,9 @@
     </Text>
     <Text Include="..\cpp_template\template_read.txt">
       <Filter>cpp_template</Filter>
+    </Text>
+    <Text Include="..\cpp_17_stl_cook_book\test\build\CMakeLists.txt">
+      <Filter>cpp_17_stl_cook_book\test\build</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

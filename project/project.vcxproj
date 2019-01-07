@@ -739,6 +739,7 @@
     <Text Include="..\lua-cjson\CMakeLists.txt" />
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt" />
     <Text Include="..\lua-cjson\rfc4627.txt" />
+    <Text Include="..\mysqltest.txt" />
     <Text Include="..\NetEpoll\readme.txt" />
     <Text Include="..\network_server\read.txt" />
     <Text Include="..\network_server_socket_server\read.txt" />

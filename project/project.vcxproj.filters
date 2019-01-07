@@ -2512,6 +2512,7 @@
     <Text Include="..\cpp_17_stl_cook_book\code\build\CMakeLists.txt">
       <Filter>cpp_17_stl_cook_book\code\build</Filter>
     </Text>
+    <Text Include="..\mysqltest.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

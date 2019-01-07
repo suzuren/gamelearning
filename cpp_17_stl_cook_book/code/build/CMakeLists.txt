@@ -21,4 +21,4 @@ add_link_lib( pthread )
 add_link_lib( dl )
 add_link_lib( rt )
 
-build_executable( test ./ )
+build_executable( testCpp ./ )

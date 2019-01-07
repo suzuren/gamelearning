@@ -1,7 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
+#include <string>
+#include <list>
+#include <map>
+#include <unordered_map>
 
 void erase_remove_if()
 {
@@ -84,6 +87,171 @@ void quick_remove_at(std::vector<T> &vec, typename std::vector<T>::iterator iter
 
 }
 
+template<typename ... Ts>
+auto fold_expression_sum(Ts ... ts)
+{
+	return (ts + ...);
+}
+
+template <typename R, typename ... Ts>
+auto fold_expression_matches(const R& range, Ts ... ts)
+{
+	// std::count 函数会返回范围内与第三个参数相同元素的个数
+	return (std::count(std::begin(range), std::end(range), ts) + ...);
+}
+
+//void insert_sorted(std::vector<std::string> &v, const std::string &word)
+void insert_sorted(std::vector<std::string> &v, const char * word)
+{
+	std::cout << "test_stl_container - insert_sorted - void_not " << " word:" << word << std::endl;
+	// std::lower_bound
+	// Returns an iterator pointing to the first element in the range [first, last) 
+	// that is not less than (i.e. greater or equal to) value, or last if no such element is found.
+	const auto insert_pos(std::lower_bound(std::begin(v), std::end(v),	word));
+	v.insert(insert_pos, word);
+}
+
+template <typename C, typename T>
+void insert_sorted(C &v, const T &item)
+{
+	std::cout << "test_stl_container - insert_sorted - template " << " item:" << item << std::endl;
+	
+	const auto insert_pos(std::lower_bound(std::begin(v), std::end(v), item));
+	v.insert(insert_pos, item);
+}
+
+void vector_sort()
+{
+	std::vector<std::string> vecStr{ "some", "random", "words",	"without", "order", "aaa", "yyy" };
+	bool vec_is_sorted = std::is_sorted(begin(vecStr), end(vecStr));
+	std::cout << "test_stl_container - vector_sort vec_is_sorted:" << vec_is_sorted << std::endl;
+	sort(begin(vecStr), end(vecStr));
+	vec_is_sorted = std::is_sorted(begin(vecStr), end(vecStr));
+	std::cout << "test_stl_container - vector_sort vec_is_sorted:" << vec_is_sorted << std::endl;
+
+	insert_sorted(vecStr, "foobar");
+	insert_sorted(vecStr, "zzz");
+	insert_sorted<std::vector<std::string>, std::string>(vecStr, "egd");
+	for (const auto value : vecStr)
+	{
+		std::cout << "test_stl_container - vector_sort"	<< "size:" << vecStr.size() << " value:" << value << std::endl;
+	}
+
+}
+
+struct coord
+{
+	int x;
+	int y;
+};
+bool operator==(const coord &l, const coord &r)
+{
+	return l.x == r.x && l.y == r.y;
+}
+namespace std
+{
+	template <>
+	struct hash<coord>
+	{
+		using argument_type = coord;
+		using result_type = size_t;
+		result_type operator()(const argument_type &c) const
+		{
+			return static_cast<result_type>(c.x) + static_cast<result_type>(c.y);
+		}
+	};
+}
+
+void map_insert()
+{
+	struct billionaire
+	{
+		std::string name;
+		double dollars;
+		std::string country;
+	};
+	std::list<billionaire> billionaires
+	{
+		{ "Bill Gates", 86.0, "USA" },
+		{ "Warren Buffet", 75.6, "USA" },
+		{ "Jeff Bezos", 72.8, "USA" },
+		{ "Amancio Ortega", 71.3, "Spain" },
+		{ "Mark Zuckerberg", 56.0, "USA" },
+		{ "Carlos Slim", 54.5, "Mexico" },
+		{ "Bernard Arnault", 41.5, "France" }
+	};
+	// std::pair<iterator, bool> try_emplace(const key_type& k, Args&&... args);
+	// 其函数第一个参数 k  是插入的键， args  表示这个键对应的值。如果我们成功的插入了元
+	// 素，那么函数就会返回一个迭代器，其指向新节点在表中的位置，组对中布尔变量的值被置
+	// 为true。当插入不成功，组对中的布尔变量值会置为false，并且迭代器指向与新元素冲突的位置。
+
+	std::map<std::string, std::pair<const billionaire, size_t>> mpBill;
+	for (const auto &b : billionaires)
+	{
+		auto[iterator, success] = mpBill.try_emplace(b.country, b, 1);
+		if (success == false)
+		{
+			iterator->second.second += 1;
+		}
+	}
+	for (const auto &[key, value] : mpBill)
+	{
+		const auto &[b, count] = value;
+		std::cout << b.country << " : " << count
+			<< " billionaires. Richest is "
+			<< b.name << " with " << b.dollars
+			<< " B$\n";
+	}
+
+	std::cout << "test_stl_container - map_insert ------------------------------------------------ " << std::endl;
+
+	std::map<int, std::string> race_placement{
+		{ 1, "Mario" },{ 2, "Luigi" },{ 3, "Bowser" },
+		{ 4, "Peach" },{ 5, "Yoshi" },{ 6, "Koopa" },
+		{ 7, "Toad" },{ 8, "Donkey Kong Jr." }
+	};
+	
+
+	for (const auto &[key, value] : race_placement)
+	{
+		std::cout << "test_stl_container - map_insert - key: " << key << " value: " << value << std::endl;
+	}
+
+	std::cout << "test_stl_container - map_insert ------------------------------------------------ " << std::endl;
+
+	auto iter_a(race_placement.extract(3));
+	auto iter_b(race_placement.extract(8));
+	std::swap(iter_a.key(), iter_b.key());
+
+	race_placement.insert(std::move(iter_a));
+	race_placement.insert(std::move(iter_b));
+
+	for (const auto &[key, value] : race_placement)
+	{
+		std::cout << "test_stl_container - map_insert - key: " << key << " value: " << value << std::endl;
+	}
+
+	std::cout << "test_stl_container - map_insert ------------------------------------------------ " << std::endl;
+	
+	std::unordered_map<coord, int> unorderedMp{
+		{ { 0, 0 }, 1 },
+		{ { 0, 0 }, 4 },
+		{ { 0, 1 }, 2 },
+		{ { 2, 1 }, 3 },
+		{ { 2, 8 }, 5 },
+		{ { 2, 2 }, 4 }
+	};
+
+	for (const auto &[key, value] : unorderedMp) {
+		std::cout << "{(" << key.x << ", " << key.y
+			<< "): " << value << "} ";
+	}
+	std::cout << '\n';
+
+	std::cout << "test_stl_container - unordered_map ------------------------------------------------ " << std::endl;
+
+}
+
 
 int test_stl_container()
 {
@@ -93,9 +261,26 @@ int test_stl_container()
 	//std::vector<int> vecTest{ 1, 8, 4, 10 };
 	//quick_remove_at(vecTest, 1);
 	//quick_remove_at(vecTest, std::find(std::begin(vecTest), std::end(vecTest), 4));
-	//03
+	//03 折叠表达式 fold expression
+	//int iSum{ fold_expression_sum(1, 2, 3) };
+	//std::cout << "test_stl_container - fold_expression_sum int" << " iSum: " << iSum << std::endl;
+	//std::string strSum{ fold_expression_sum(std::string("hi, "), std::string("hello "), std::string("world!")) };
+	//std::cout << "test_stl_container - fold_expression_sum str" << " strSum: " << strSum << std::endl;
 
+	//std::vector<int> vecMatches{ 1, 2, 3, 4, 5 };
+	//auto matches_a = fold_expression_matches(vecMatches, 2, 5); // return 2
+	//auto matches_b = fold_expression_matches(vecMatches, 100, 200); // return 0
+	//auto matches_c = fold_expression_matches("abcdefg", 'x', 'y', 'z'); // return 0
+	//auto matches_d = fold_expression_matches("abcdefg", 'a', 'b', 'f'); // return 3
+	//std::cout << "test_stl_container - fold_expression_matches " << "matches_a: " << matches_a
+	//	<< " matches_b: " << matches_b << " matches_c: " << matches_c << " matches_d: " << matches_d << std::endl;
+
+	//04 保持对std::vector实例的排序
+	//vector_sort();
+	//05 向std::map实例中高效并有条件的插入元素
+	map_insert();
 
 
 	return 0;
 }
+

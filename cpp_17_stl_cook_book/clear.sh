@@ -3,7 +3,7 @@
 sub_root_dir=$(cd `dirname $0`; pwd)
 echo "sub_root_dir:" ${sub_root_dir}
 
-clean_file=("./build/CMakeFiles" "./build/cmake_install.cmake" "./build/CMakeCache.txt" "./build/Makefile" "./build/test")
+clean_file=("./build/CMakeFiles" "./build/cmake_install.cmake" "./build/CMakeCache.txt" "./build/Makefile" "./build/testCpp")
 clean_dir=("./test" "./code")
 
 clean_file_len=${#clean_file[@]}

@@ -46,6 +46,7 @@ set character_set_clinet=utf8;
 set character_set_server=utf8;
 
 ------------------------------------------------------------------------------------------------------------
+ldd slotServer 
 
 find ./ -name '*.sh' | xargs chmod +x
 

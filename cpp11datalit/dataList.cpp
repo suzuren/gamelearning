@@ -148,6 +148,9 @@ int D_SQL_delete(string tableName, vector<pair<string, string>> conditions, stri
 //    return D_SQL("select", tableName, dataList, conditions, sql);
 //}
 
+
+#include "dataList.h"
+
 int main()
 {
     vector<pair<string, string>> dataList;
@@ -163,6 +166,12 @@ int main()
     cout << sql << endl;
     D_SQL_delete("test", dataList, sql);
     cout << sql << endl;
+
+	unsigned int gametype = 3;
+	unsigned int roomid = 4;
+	unsigned int udice[3] = { 0 };
+
+	DiceGameControlCard(gametype, roomid, udice);
 
     return 0;
 }

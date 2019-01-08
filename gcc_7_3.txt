@@ -1,0 +1,541 @@
+Last login: Tue Jan  8 23:42:11 2019 from 119.123.204.129
+
+Welcome to aliyun Elastic Compute Service!
+
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# yum install centos-release-scl-rh
+Loaded plugins: security
+base                                                                                                                                                                | 3.7 kB     00:00     
+epel                                                                                                                                                                | 3.2 kB     00:00     
+epel/primary                                                                                                                                                        | 3.2 MB     00:00     
+epel                                                                                                                                                                           12517/12517
+extras                                                                                                                                                              | 3.4 kB     00:00     
+extras/primary_db                                                                                                                                                   |  27 kB     00:00     
+hop5                                                                                                                                                                | 2.9 kB     00:00     
+updates                                                                                                                                                             | 3.4 kB     00:00     
+updates/primary_db                                                                                                                                                  | 2.4 MB     00:00     
+Setting up Install Process
+Resolving Dependencies
+--> Running transaction check
+---> Package centos-release-scl-rh.noarch 0:2-3.el6.centos will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+===========================================================================================================================================================================================
+ Package                                               Arch                                   Version                                         Repository                              Size
+===========================================================================================================================================================================================
+Installing:
+ centos-release-scl-rh                                 noarch                                 2-3.el6.centos                                  extras                                  12 k
+
+Transaction Summary
+===========================================================================================================================================================================================
+Install       1 Package(s)
+
+Total download size: 12 k
+Installed size: 19 k
+Is this ok [y/N]: y
+Downloading Packages:
+centos-release-scl-rh-2-3.el6.centos.noarch.rpm                                                                                                                     |  12 kB     00:00     
+Running rpm_check_debug
+Running Transaction Test
+Transaction Test Succeeded
+Running Transaction
+  Installing : centos-release-scl-rh-2-3.el6.centos.noarch                                                                                                                             1/1 
+  Verifying  : centos-release-scl-rh-2-3.el6.centos.noarch                                                                                                                             1/1 
+
+Installed:
+  centos-release-scl-rh.noarch 0:2-3.el6.centos                                                                                                                                            
+
+Complete!
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# yum install devtoolset-7-gcc devtoolset-7-gcc-c++ -y
+Loaded plugins: security
+centos-sclo-rh                                                                                                                                                      | 2.9 kB     00:00     
+centos-sclo-rh/primary_db                                                                                                                                           | 1.2 MB     00:17     
+Setting up Install Process
+Resolving Dependencies
+--> Running transaction check
+---> Package devtoolset-7-gcc.x86_64 0:7.3.1-5.13.el6 will be installed
+--> Processing Dependency: devtoolset-7-binutils >= 2.22.52.0.1 for package: devtoolset-7-gcc-7.3.1-5.13.el6.x86_64
+--> Processing Dependency: devtoolset-7-runtime for package: devtoolset-7-gcc-7.3.1-5.13.el6.x86_64
+---> Package devtoolset-7-gcc-c++.x86_64 0:7.3.1-5.13.el6 will be installed
+--> Processing Dependency: devtoolset-7-libstdc++-devel = 7.3.1-5.13.el6 for package: devtoolset-7-gcc-c++-7.3.1-5.13.el6.x86_64
+--> Running transaction check
+---> Package devtoolset-7-binutils.x86_64 0:2.28-11.el6 will be installed
+---> Package devtoolset-7-libstdc++-devel.x86_64 0:7.3.1-5.13.el6 will be installed
+---> Package devtoolset-7-runtime.x86_64 0:7.1-4.el6 will be installed
+--> Processing Dependency: scl-utils >= 20120927-11 for package: devtoolset-7-runtime-7.1-4.el6.x86_64
+--> Processing Dependency: policycoreutils-python for package: devtoolset-7-runtime-7.1-4.el6.x86_64
+--> Processing Dependency: policycoreutils-python for package: devtoolset-7-runtime-7.1-4.el6.x86_64
+--> Running transaction check
+---> Package policycoreutils-python.x86_64 0:2.0.83-30.1.el6_8 will be installed
+--> Processing Dependency: policycoreutils = 2.0.83-30.1.el6_8 for package: policycoreutils-python-2.0.83-30.1.el6_8.x86_64
+--> Processing Dependency: libsemanage-python >= 2.0.43-4 for package: policycoreutils-python-2.0.83-30.1.el6_8.x86_64
+--> Processing Dependency: audit-libs-python >= 1.4.2-1 for package: policycoreutils-python-2.0.83-30.1.el6_8.x86_64
+--> Processing Dependency: setools-libs-python for package: policycoreutils-python-2.0.83-30.1.el6_8.x86_64
+--> Processing Dependency: libselinux-python for package: policycoreutils-python-2.0.83-30.1.el6_8.x86_64
+--> Processing Dependency: libcgroup for package: policycoreutils-python-2.0.83-30.1.el6_8.x86_64
+---> Package scl-utils.x86_64 0:20120927-8.el6 will be updated
+---> Package scl-utils.x86_64 0:20120927-29.el6_9 will be an update
+--> Running transaction check
+---> Package audit-libs-python.x86_64 0:2.4.5-6.el6 will be installed
+--> Processing Dependency: audit-libs = 2.4.5-6.el6 for package: audit-libs-python-2.4.5-6.el6.x86_64
+---> Package libcgroup.x86_64 0:0.40.rc1-27.el6_10 will be installed
+---> Package libselinux-python.x86_64 0:2.0.94-7.el6 will be installed
+---> Package libsemanage-python.x86_64 0:2.0.43-5.1.el6 will be installed
+--> Processing Dependency: libsemanage = 2.0.43-5.1.el6 for package: libsemanage-python-2.0.43-5.1.el6.x86_64
+---> Package policycoreutils.x86_64 0:2.0.83-19.39.el6 will be updated
+---> Package policycoreutils.x86_64 0:2.0.83-30.1.el6_8 will be an update
+---> Package setools-libs-python.x86_64 0:3.3.7-4.el6 will be installed
+--> Processing Dependency: setools-libs = 3.3.7-4.el6 for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libsefs.so.4(VERS_4.0)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libseaudit.so.4(VERS_4.2)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libseaudit.so.4(VERS_4.1)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libqpol.so.1(VERS_1.4)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libqpol.so.1(VERS_1.3)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libqpol.so.1(VERS_1.2)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libpoldiff.so.1(VERS_1.3)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libpoldiff.so.1(VERS_1.2)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libapol.so.4(VERS_4.1)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libapol.so.4(VERS_4.0)(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libsefs.so.4()(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libseaudit.so.4()(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libqpol.so.1()(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libpoldiff.so.1()(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Processing Dependency: libapol.so.4()(64bit) for package: setools-libs-python-3.3.7-4.el6.x86_64
+--> Running transaction check
+---> Package audit-libs.x86_64 0:2.2-4.el6_5 will be updated
+--> Processing Dependency: audit-libs = 2.2-4.el6_5 for package: audit-2.2-4.el6_5.x86_64
+---> Package audit-libs.x86_64 0:2.4.5-6.el6 will be an update
+---> Package libsemanage.x86_64 0:2.0.43-4.2.el6 will be updated
+---> Package libsemanage.x86_64 0:2.0.43-5.1.el6 will be an update
+---> Package setools-libs.x86_64 0:3.3.7-4.el6 will be installed
+--> Running transaction check
+---> Package audit.x86_64 0:2.2-4.el6_5 will be updated
+---> Package audit.x86_64 0:2.4.5-6.el6 will be an update
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+===========================================================================================================================================================================================
+ Package                                                 Arch                              Version                                         Repository                                 Size
+===========================================================================================================================================================================================
+Installing:
+ devtoolset-7-gcc                                        x86_64                            7.3.1-5.13.el6                                  centos-sclo-rh                             30 M
+ devtoolset-7-gcc-c++                                    x86_64                            7.3.1-5.13.el6                                  centos-sclo-rh                             11 M
+Installing for dependencies:
+ audit-libs-python                                       x86_64                            2.4.5-6.el6                                     base                                       64 k
+ devtoolset-7-binutils                                   x86_64                            2.28-11.el6                                     centos-sclo-rh                            5.4 M
+ devtoolset-7-libstdc++-devel                            x86_64                            7.3.1-5.13.el6                                  centos-sclo-rh                            2.7 M
+ devtoolset-7-runtime                                    x86_64                            7.1-4.el6                                       centos-sclo-rh                            1.0 M
+ libcgroup                                               x86_64                            0.40.rc1-27.el6_10                              updates                                   131 k
+ libselinux-python                                       x86_64                            2.0.94-7.el6                                    base                                      203 k
+ libsemanage-python                                      x86_64                            2.0.43-5.1.el6                                  base                                       81 k
+ policycoreutils-python                                  x86_64                            2.0.83-30.1.el6_8                               base                                      437 k
+ setools-libs                                            x86_64                            3.3.7-4.el6                                     base                                      400 k
+ setools-libs-python                                     x86_64                            3.3.7-4.el6                                     base                                      222 k
+Updating for dependencies:
+ audit                                                   x86_64                            2.4.5-6.el6                                     base                                      204 k
+ audit-libs                                              x86_64                            2.4.5-6.el6                                     base                                       74 k
+ libsemanage                                             x86_64                            2.0.43-5.1.el6                                  base                                      104 k
+ policycoreutils                                         x86_64                            2.0.83-30.1.el6_8                               base                                      663 k
+ scl-utils                                               x86_64                            20120927-29.el6_9                               base                                       23 k
+
+Transaction Summary
+===========================================================================================================================================================================================
+Install      12 Package(s)
+Upgrade       5 Package(s)
+
+Total download size: 53 M
+Downloading Packages:
+(1/17): audit-2.4.5-6.el6.x86_64.rpm                                                                                                                                | 204 kB     00:00     
+(2/17): audit-libs-2.4.5-6.el6.x86_64.rpm                                                                                                                           |  74 kB     00:00     
+(3/17): audit-libs-python-2.4.5-6.el6.x86_64.rpm                                                                                                                    |  64 kB     00:00     
+(4/17): devtoolset-7-binutils-2.28-11.el6.x86_64.rpm                                                                                                                | 5.4 MB     02:28     
+(5/17): devtoolset-7-gcc-7.3.1-5.13.el6.x86_64.rpm                                                                                                                  |  30 MB     06:56     
+(6/17): devtoolset-7-gcc-c++-7.3.1-5.13.el6.x86_64.rpm                                                                                                              |  11 MB     08:14     
+(7/17): devtoolset-7-libstdc++-devel-7.3.1-5.13.el6.x86_64.rpm                                                                                                      | 2.7 MB     00:13     
+(8/17): devtoolset-7-runtime-7.1-4.el6.x86_64.rpm                                                                                                                   | 1.0 MB     00:13     
+(9/17): libcgroup-0.40.rc1-27.el6_10.x86_64.rpm                                                                                                                     | 131 kB     00:00     
+(10/17): libselinux-python-2.0.94-7.el6.x86_64.rpm                                                                                                                  | 203 kB     00:00     
+(11/17): libsemanage-2.0.43-5.1.el6.x86_64.rpm                                                                                                                      | 104 kB     00:00     
+(12/17): libsemanage-python-2.0.43-5.1.el6.x86_64.rpm                                                                                                               |  81 kB     00:00     
+(13/17): policycoreutils-2.0.83-30.1.el6_8.x86_64.rpm                                                                                                               | 663 kB     00:00     
+(14/17): policycoreutils-python-2.0.83-30.1.el6_8.x86_64.rpm                                                                                                        | 437 kB     00:00     
+(15/17): scl-utils-20120927-29.el6_9.x86_64.rpm                                                                                                                     |  23 kB     00:00     
+(16/17): setools-libs-3.3.7-4.el6.x86_64.rpm                                                                                                                        | 400 kB     00:00     
+(17/17): setools-libs-python-3.3.7-4.el6.x86_64.rpm                                                                                                                 | 222 kB     00:00     
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                       50 kB/s |  53 MB     18:10     
+warning: rpmts_HdrFromFdno: Header V4 RSA/SHA1 Signature, key ID f2ee9d55: NOKEY
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo
+Importing GPG key 0xF2EE9D55:
+ Userid : CentOS SoftwareCollections SIG (https://wiki.centos.org/SpecialInterestGroup/SCLo) <security@centos.org>
+ Package: centos-release-scl-rh-2-3.el6.centos.noarch (@extras)
+ From   : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo
+Running rpm_check_debug
+Running Transaction Test
+Transaction Test Succeeded
+Running Transaction
+  Updating   : audit-libs-2.4.5-6.el6.x86_64                                                                                                                                          1/22 
+  Updating   : libsemanage-2.0.43-5.1.el6.x86_64                                                                                                                                      2/22 
+  Installing : libsemanage-python-2.0.43-5.1.el6.x86_64                                                                                                                               3/22 
+  Updating   : policycoreutils-2.0.83-30.1.el6_8.x86_64                                                                                                                               4/22 
+  Installing : audit-libs-python-2.4.5-6.el6.x86_64                                                                                                                                   5/22 
+  Installing : libselinux-python-2.0.94-7.el6.x86_64                                                                                                                                  6/22 
+  Installing : libcgroup-0.40.rc1-27.el6_10.x86_64                                                                                                                                    7/22 
+  Installing : devtoolset-7-libstdc++-devel-7.3.1-5.13.el6.x86_64                                                                                                                     8/22 
+  Updating   : scl-utils-20120927-29.el6_9.x86_64                                                                                                                                     9/22 
+  Installing : setools-libs-3.3.7-4.el6.x86_64                                                                                                                                       10/22 
+  Installing : setools-libs-python-3.3.7-4.el6.x86_64                                                                                                                                11/22 
+  Installing : policycoreutils-python-2.0.83-30.1.el6_8.x86_64                                                                                                                       12/22 
+  Installing : devtoolset-7-runtime-7.1-4.el6.x86_64                                                                                                                                 13/22 
+  Installing : devtoolset-7-binutils-2.28-11.el6.x86_64                                                                                                                              14/22 
+  Installing : devtoolset-7-gcc-7.3.1-5.13.el6.x86_64                                                                                                                                15/22 
+  Installing : devtoolset-7-gcc-c++-7.3.1-5.13.el6.x86_64                                                                                                                            16/22 
+  Updating   : audit-2.4.5-6.el6.x86_64                                                                                                                                              17/22 
+  Cleanup    : policycoreutils-2.0.83-19.39.el6.x86_64                                                                                                                               18/22 
+  Cleanup    : audit-2.2-4.el6_5.x86_64                                                                                                                                              19/22 
+  Cleanup    : audit-libs-2.2-4.el6_5.x86_64                                                                                                                                         20/22 
+  Cleanup    : libsemanage-2.0.43-4.2.el6.x86_64                                                                                                                                     21/22 
+  Cleanup    : scl-utils-20120927-8.el6.x86_64                                                                                                                                       22/22 
+  Verifying  : audit-libs-2.4.5-6.el6.x86_64                                                                                                                                          1/22 
+  Verifying  : setools-libs-python-3.3.7-4.el6.x86_64                                                                                                                                 2/22 
+  Verifying  : devtoolset-7-binutils-2.28-11.el6.x86_64                                                                                                                               3/22 
+  Verifying  : setools-libs-3.3.7-4.el6.x86_64                                                                                                                                        4/22 
+  Verifying  : devtoolset-7-gcc-7.3.1-5.13.el6.x86_64                                                                                                                                 5/22 
+  Verifying  : scl-utils-20120927-29.el6_9.x86_64                                                                                                                                     6/22 
+  Verifying  : devtoolset-7-libstdc++-devel-7.3.1-5.13.el6.x86_64                                                                                                                     7/22 
+  Verifying  : libsemanage-python-2.0.43-5.1.el6.x86_64                                                                                                                               8/22 
+  Verifying  : audit-2.4.5-6.el6.x86_64                                                                                                                                               9/22 
+  Verifying  : libsemanage-2.0.43-5.1.el6.x86_64                                                                                                                                     10/22 
+  Verifying  : libcgroup-0.40.rc1-27.el6_10.x86_64                                                                                                                                   11/22 
+  Verifying  : devtoolset-7-gcc-c++-7.3.1-5.13.el6.x86_64                                                                                                                            12/22 
+  Verifying  : libselinux-python-2.0.94-7.el6.x86_64                                                                                                                                 13/22 
+  Verifying  : policycoreutils-2.0.83-30.1.el6_8.x86_64                                                                                                                              14/22 
+  Verifying  : policycoreutils-python-2.0.83-30.1.el6_8.x86_64                                                                                                                       15/22 
+  Verifying  : devtoolset-7-runtime-7.1-4.el6.x86_64                                                                                                                                 16/22 
+  Verifying  : audit-libs-python-2.4.5-6.el6.x86_64                                                                                                                                  17/22 
+  Verifying  : scl-utils-20120927-8.el6.x86_64                                                                                                                                       18/22 
+  Verifying  : audit-2.2-4.el6_5.x86_64                                                                                                                                              19/22 
+  Verifying  : libsemanage-2.0.43-4.2.el6.x86_64                                                                                                                                     20/22 
+  Verifying  : audit-libs-2.2-4.el6_5.x86_64                                                                                                                                         21/22 
+  Verifying  : policycoreutils-2.0.83-19.39.el6.x86_64                                                                                                                               22/22 
+
+Installed:
+  devtoolset-7-gcc.x86_64 0:7.3.1-5.13.el6                                                   devtoolset-7-gcc-c++.x86_64 0:7.3.1-5.13.el6                                                  
+
+Dependency Installed:
+  audit-libs-python.x86_64 0:2.4.5-6.el6 devtoolset-7-binutils.x86_64 0:2.28-11.el6 devtoolset-7-libstdc++-devel.x86_64 0:7.3.1-5.13.el6 devtoolset-7-runtime.x86_64 0:7.1-4.el6          
+  libcgroup.x86_64 0:0.40.rc1-27.el6_10  libselinux-python.x86_64 0:2.0.94-7.el6    libsemanage-python.x86_64 0:2.0.43-5.1.el6           policycoreutils-python.x86_64 0:2.0.83-30.1.el6_8
+  setools-libs.x86_64 0:3.3.7-4.el6      setools-libs-python.x86_64 0:3.3.7-4.el6  
+
+Dependency Updated:
+  audit.x86_64 0:2.4.5-6.el6   audit-libs.x86_64 0:2.4.5-6.el6   libsemanage.x86_64 0:2.0.43-5.1.el6   policycoreutils.x86_64 0:2.0.83-30.1.el6_8   scl-utils.x86_64 0:20120927-29.el6_9  
+
+Complete!
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# gcc -version
+gcc: error: unrecognized command line option ¡®-version¡¯
+gcc: fatal error: no input files
+compilation terminated.
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# gcc --version
+gcc (GCC) 4.8.2 20131212 (Red Hat 4.8.2-8)
+Copyright (C) 2013 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# source /opt/rh/devtoolset-7/enable
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# gcc --version
+gcc (GCC) 7.3.1 20180303 (Red Hat 7.3.1-5)
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+
+
+
+
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# cat /etc/bashrc
+# /etc/bashrc
+
+# System wide functions and aliases
+# Environment stuff goes in /etc/profile
+
+# It's NOT a good idea to change this file unless you know what you
+# are doing. It's much better to create a custom.sh shell script in
+# /etc/profile.d/ to make custom changes to your environment, as this
+# will prevent the need for merging in future updates.
+
+# are we an interactive shell?
+if [ "$PS1" ]; then
+  if [ -z "$PROMPT_COMMAND" ]; then
+    case $TERM in
+    xterm*)
+        if [ -e /etc/sysconfig/bash-prompt-xterm ]; then
+            PROMPT_COMMAND=/etc/sysconfig/bash-prompt-xterm
+        else
+            PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+        fi
+        ;;
+    screen)
+        if [ -e /etc/sysconfig/bash-prompt-screen ]; then
+            PROMPT_COMMAND=/etc/sysconfig/bash-prompt-screen
+        else
+            PROMPT_COMMAND='printf "\033]0;%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+        fi
+        ;;
+    *)
+        [ -e /etc/sysconfig/bash-prompt-default ] && PROMPT_COMMAND=/etc/sysconfig/bash-prompt-default
+        ;;
+      esac
+  fi
+  # Turn on checkwinsize
+  shopt -s checkwinsize
+  [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \W]\\$ "
+  # You might want to have e.g. tty in prompt (e.g. more virtual machines)
+  # and console windows
+  # If you want to do so, just add e.g.
+  # if [ "$PS1" ]; then
+  #   PS1="[\u@\h:\l \W]\\$ "
+  # fi
+  # to your custom modification shell script in /etc/profile.d/ directory
+fi
+
+if ! shopt -q login_shell ; then # We're not a login shell
+    # Need to redefine pathmunge, it get's undefined at the end of /etc/profile
+    pathmunge () {
+        case ":${PATH}:" in
+            *:"$1":*)
+                ;;
+            *)
+                if [ "$2" = "after" ] ; then
+                    PATH=$PATH:$1
+                else
+                    PATH=$1:$PATH
+                fi
+        esac
+    }
+
+    # By default, we want umask to get set. This sets it for non-login shell.
+    # Current threshold for system reserved uid/gids is 200
+    # You could check uidgid reservation validity in
+    # /usr/share/doc/setup-*/uidgid file
+    if [ $UID -gt 199 ] && [ "`id -gn`" = "`id -un`" ]; then
+       umask 002
+    else
+       umask 022
+    fi
+
+    # Only display echos from profile.d scripts if we are no login shell
+    # and interactive - otherwise just process them to set envvars
+    for i in /etc/profile.d/*.sh; do
+        if [ -r "$i" ]; then
+            if [ "$PS1" ]; then
+                . "$i"
+            else
+                . "$i" >/dev/null 2>&1
+            fi
+        fi
+    done
+
+    unset i
+    unset pathmunge
+fi
+# vim:ts=4:sw=4
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# echo 'source /opt/rh/devtoolset-7/enable' >> /etc/bashrc
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# cat /etc/bashrc
+# /etc/bashrc
+
+# System wide functions and aliases
+# Environment stuff goes in /etc/profile
+
+# It's NOT a good idea to change this file unless you know what you
+# are doing. It's much better to create a custom.sh shell script in
+# /etc/profile.d/ to make custom changes to your environment, as this
+# will prevent the need for merging in future updates.
+
+# are we an interactive shell?
+if [ "$PS1" ]; then
+  if [ -z "$PROMPT_COMMAND" ]; then
+    case $TERM in
+    xterm*)
+        if [ -e /etc/sysconfig/bash-prompt-xterm ]; then
+            PROMPT_COMMAND=/etc/sysconfig/bash-prompt-xterm
+        else
+            PROMPT_COMMAND='printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+        fi
+        ;;
+    screen)
+        if [ -e /etc/sysconfig/bash-prompt-screen ]; then
+            PROMPT_COMMAND=/etc/sysconfig/bash-prompt-screen
+        else
+            PROMPT_COMMAND='printf "\033]0;%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+        fi
+        ;;
+    *)
+        [ -e /etc/sysconfig/bash-prompt-default ] && PROMPT_COMMAND=/etc/sysconfig/bash-prompt-default
+        ;;
+      esac
+  fi
+  # Turn on checkwinsize
+  shopt -s checkwinsize
+  [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \W]\\$ "
+  # You might want to have e.g. tty in prompt (e.g. more virtual machines)
+  # and console windows
+  # If you want to do so, just add e.g.
+  # if [ "$PS1" ]; then
+  #   PS1="[\u@\h:\l \W]\\$ "
+  # fi
+  # to your custom modification shell script in /etc/profile.d/ directory
+fi
+
+if ! shopt -q login_shell ; then # We're not a login shell
+    # Need to redefine pathmunge, it get's undefined at the end of /etc/profile
+    pathmunge () {
+        case ":${PATH}:" in
+            *:"$1":*)
+                ;;
+            *)
+                if [ "$2" = "after" ] ; then
+                    PATH=$PATH:$1
+                else
+                    PATH=$1:$PATH
+                fi
+        esac
+    }
+
+    # By default, we want umask to get set. This sets it for non-login shell.
+    # Current threshold for system reserved uid/gids is 200
+    # You could check uidgid reservation validity in
+    # /usr/share/doc/setup-*/uidgid file
+    if [ $UID -gt 199 ] && [ "`id -gn`" = "`id -un`" ]; then
+       umask 002
+    else
+       umask 022
+    fi
+
+    # Only display echos from profile.d scripts if we are no login shell
+    # and interactive - otherwise just process them to set envvars
+    for i in /etc/profile.d/*.sh; do
+        if [ -r "$i" ]; then
+            if [ "$PS1" ]; then
+                . "$i"
+            else
+                . "$i" >/dev/null 2>&1
+            fi
+        fi
+    done
+
+    unset i
+    unset pathmunge
+fi
+# vim:ts=4:sw=4
+source /opt/rh/devtoolset-7/enable
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[root@iZwz93ko7koxklgdtyy0kvZ lobby_server]# ldd lobbyServer 
+	linux-vdso.so.1 =>  (0x00007ffc639ad000)
+	libmysqlclient.so.16 => /usr/lib64/mysql/libmysqlclient.so.16 (0x00000037d8000000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x0000003081600000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x0000003081a00000)
+	librt.so.1 => /lib64/librt.so.1 (0x0000003082200000)
+	libiconv.so.2 => /usr/local/lib/libiconv.so.2 (0x00007f34e7331000)
+	libstdc++.so.6 => /usr/lib64/libstdc++.so.6 (0x0000003082a00000)
+	libm.so.6 => /lib64/libm.so.6 (0x0000003081e00000)
+	libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x0000003083a00000)
+	libc.so.6 => /lib64/libc.so.6 (0x0000003081200000)
+	libcrypt.so.1 => /lib64/libcrypt.so.1 (0x0000003948800000)
+	libnsl.so.1 => /lib64/libnsl.so.1 (0x0000003084200000)
+	libssl.so.10 => /usr/lib64/libssl.so.10 (0x00007f34e70c3000)
+	libcrypto.so.10 => /usr/lib64/libcrypto.so.10 (0x00007f34e6cde000)
+	libz.so.1 => /usr/local/lib/libz.so.1 (0x00007f34e6ac5000)
+	/lib64/ld-linux-x86-64.so.2 (0x0000003080e00000)
+	libfreebl3.so => /usr/lib64/libfreebl3.so (0x0000003948400000)
+	libgssapi_krb5.so.2 => /lib64/libgssapi_krb5.so.2 (0x0000003086a00000)
+	libkrb5.so.3 => /lib64/libkrb5.so.3 (0x0000003085a00000)
+	libcom_err.so.2 => /lib64/libcom_err.so.2 (0x0000003083e00000)
+	libk5crypto.so.3 => /lib64/libk5crypto.so.3 (0x0000003086600000)
+	libkrb5support.so.0 => /lib64/libkrb5support.so.0 (0x0000003087200000)
+	libkeyutils.so.1 => /lib64/libkeyutils.so.1 (0x0000003086e00000)
+	libresolv.so.2 => /lib64/libresolv.so.2 (0x0000003082e00000)
+	libselinux.so.1 => /lib64/libselinux.so.1 (0x0000003082600000)
+
+
+
+[root@iZwz93ko7koxklgdtyy0kvZ lobby_server]# ldd lobbyServer 
+	linux-vdso.so.1 =>  (0x00007fffd69d3000)
+	libmysqlclient.so.16 => /usr/lib64/mysql/libmysqlclient.so.16 (0x00000037d8000000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x0000003081600000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x0000003081a00000)
+	librt.so.1 => /lib64/librt.so.1 (0x0000003082200000)
+	libiconv.so.2 => /usr/local/lib/libiconv.so.2 (0x00007f155c9bc000)
+	libm.so.6 => /lib64/libm.so.6 (0x0000003081e00000)
+	libc.so.6 => /lib64/libc.so.6 (0x0000003081200000)
+	/lib64/ld-linux-x86-64.so.2 (0x0000003080e00000)
+	libcrypt.so.1 => /lib64/libcrypt.so.1 (0x0000003948800000)
+	libnsl.so.1 => /lib64/libnsl.so.1 (0x0000003084200000)
+	libssl.so.10 => /usr/lib64/libssl.so.10 (0x00007f155c74f000)
+	libcrypto.so.10 => /usr/lib64/libcrypto.so.10 (0x00007f155c369000)
+	libz.so.1 => /usr/local/lib/libz.so.1 (0x00007f155c151000)
+	libfreebl3.so => /usr/lib64/libfreebl3.so (0x0000003948400000)
+	libgssapi_krb5.so.2 => /lib64/libgssapi_krb5.so.2 (0x0000003086a00000)
+	libkrb5.so.3 => /lib64/libkrb5.so.3 (0x0000003085a00000)
+	libcom_err.so.2 => /lib64/libcom_err.so.2 (0x0000003083e00000)
+	libk5crypto.so.3 => /lib64/libk5crypto.so.3 (0x0000003086600000)
+	libkrb5support.so.0 => /lib64/libkrb5support.so.0 (0x0000003087200000)
+	libkeyutils.so.1 => /lib64/libkeyutils.so.1 (0x0000003086e00000)
+	libresolv.so.2 => /lib64/libresolv.so.2 (0x0000003082e00000)
+	libselinux.so.1 => /lib64/libselinux.so.1 (0x0000003082600000)
+[root@iZwz93ko7koxklgdtyy0kvZ lobby_server]# 
+
+
+
+
+
+

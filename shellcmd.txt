@@ -26,6 +26,16 @@ source /etc/profile
 
 ------------------------------------------------------------------------------------------------------------
 
+给file文件重新写成 hello world
+echo 'hello world' > file.txt
+
+给file文件最后一行插入 hello world
+echo 'hello world' >> file.txt
+
+echo 'source /opt/rh/devtoolset-7/enable' >> /etc/bashrc
+
+------------------------------------------------------------------------------------------------------------
+
 cat /proc/sys/kernel/core_uses_pid
 1
 cat /proc/sys/kernel/core_pipe_limit 

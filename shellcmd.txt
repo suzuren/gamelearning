@@ -106,3 +106,101 @@ ntpd (pid  1166) is running...
 
 
 ------------------------------------------------------------------------------------------------------------
+
+1、总体内存占用的查看
+命令：free
+
+[root@forest Desktop]# free
+             total       used       free     shared    buffers     cached
+Mem:       1907580     992884     914696          0      35572     601004
+-/+ buffers/cache:     356308    1551272
+Swap:      4095992          0    4095992
+[root@forest Desktop]# 
+
+（1） free命令默认是以kb为单位显示的，可以用free -m 用Mb单位来显示。
+（2） Mem行 ：   total = used  + free    其中buffers和cached虽然计算在used内， 但其实为可用内存。
+（3） Mem下一行：used为真实已占内存，free为真实可用内存。
+（4）Swap：内存交换区的使用情况。
+
+-----------------------------------------------------
+
+2、查看内存占用前五的进程
+命令：ps auxw | head -1;ps auxw|sort -rn -k4|head -5
+
+[root@forest Desktop]# ps auxw | head -1;ps auxw|sort -rn -k4|head -5
+USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root       2888  3.0  2.5 249228 49408 tty1     Ssl+ 14:18   0:19 /usr/bin/Xorg :0 -nr -verbose -audit 4 -auth /var/run/gdm/auth-for-gdm-2WGoDb/database -nolisten tcp vt1
+mysql      2611  0.1  1.3 377056 25736 ?        Sl   14:18   0:00 /usr/libexec/mysqld --basedir=/usr --datadir=/var/lib/mysql --user=mysql --log-error=/var/log/mysqld.log --pid-file=/var/run/mysqld/mysqld.pid --socket=/var/lib/mysql/mysql.sock
+root       3464  0.0  1.1 419960 21364 ?        S    14:22   0:00 /usr/bin/gnote --panel-applet --oaf-activate-iid=OAFIID:GnoteApplet_Factory --oaf-ior-fd=22
+root       3283  0.1  1.0 324324 19596 ?        S    14:22   0:00 python /usr/share/system-config-printer/applet.py
+root       3208  0.3  1.0 535592 20512 ?        S    14:22   0:01 nautilus
+[root@forest Desktop]#
+
+内存的单位是kb，VSZ是虚拟内存的占用，RSS是真实的内存的占用。
+命令分解：
+ps auxw显示系统资源占用情况；
+head -1表示显示第一列，即标题列；
+sort -r 表示反向排序，-n表示按数字排序，-k4表示列的第4个字符。
+
+-----------------------------------------------------
+
+3、查看CPU占用前三的进程
+命令：ps auxw|head -1;ps auxw|sort -rn -k3|head -3
+
+[root@forest Desktop]# ps auxw|head -1;ps auxw|sort -rn -k3|head -3
+USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root       2888  2.8  2.5 249228 49412 tty1     Ssl+ 14:18   0:22 /usr/bin/Xorg :0 -nr -verbose -audit 4 -auth /var/run/gdm/auth-for-gdm-2WGoDb/database -nolisten tcp vt1
+root       3539  0.8  0.6 288992 13168 ?        Sl   14:28   0:01 /usr/bin/gnome-terminal -x /bin/sh -c cd '/root/Desktop' && exec $SHELL
+root       3245  0.4  0.9 307984 17980 ?        S    14:22   0:02 /usr/lib/vmware-tools/sbin64/vmtoolsd -n vmusr --blockFd 3
+[root@forest Desktop]#
+
+该命令与2相仿,只是选择的资源占用情况的第3列（即cpu），用“-k3”表示。
+
+-----------------------------------------------------
+
+4、查看系统整体的负载
+命令：top
+
+[root@forest Desktop]# top
+
+top - 14:34:59 up 17 min,  2 users,  load average: 0.03, 0.11, 0.12
+Tasks: 195 total,   1 running, 194 sleeping,   0 stopped,   0 zombie
+Cpu(s):  3.1%us,  0.8%sy,  0.0%ni, 96.0%id,  0.0%wa,  0.1%hi,  0.1%si,  0.0%st
+Mem:   1907580k total,   998692k used,   908888k free,    35776k buffers
+Swap:  4095992k total,        0k used,  4095992k free,   601676k cached
+
+   PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND                                                                                                                                 
+  2888 root      20   0  279m  52m  10m S 15.9  2.8   0:29.77 Xorg                                                                                                                                    
+  3539 root      20   0  283m  13m 9668 S  3.0  0.7   0:03.34 gnome-terminal                                                                                                                          
+    20 root      20   0     0    0    0 S  1.7  0.0   0:00.48 events/1                                                                                                                                
+    19 root      20   0     0    0    0 S  0.3  0.0   0:03.71 events/0                                                                                                                                
+    21 root      20   0     0    0    0 S  0.3  0.0   0:00.17 events/2                                                                                                                                
+  1522 root      20   0  172m 7748 4532 S  0.3  0.4   0:04.26 vmtoolsd                                                                                                                                
+     1 root      20   0 19364 1536 1228 S  0.0  0.1   0:03.75 init                                                                                                                                    
+     2 root      20   0     0    0    0 S  0.0  0.0   0:00.05 kthreadd                                                                                                                                
+     3 root      RT   0     0    0    0 S  0.0  0.0   0:00.15 migration/0                                                                                                                             
+
+（1）第一行： 系统时间  + 系统运行时间 + 几个用户 + 1/5/15分钟系统平均负载
+（2）第二行：进程总数(total) + 正在运行进程数(running) + 睡眠进程数(sleeping) + 停止的进程数(stopped)+ 僵尸进程数(zombie)
+（3）第三行：用户空间CPU占比(us) + 内核空间CPU占比(sy)+ CPU空置率(id)
+
+
+注解：
+
+PID ：进程ID
+USER ：用户名
+PR ：优先级
+NI ：负值表示高优先级，正值表示低优先级。
+VIRT ：虚拟内存
+RES ： 真实内存
+SHR ：共享内存
+S ：进程状态 D=不可中断的睡眠状态； R=运行； S=睡眠 ；T=跟踪/停止； Z=僵尸进程
+
+参数：
+top -d 2				：每隔2秒显式所有进程的资源占用情况
+top -c					：每隔5秒显式进程的资源占用情况，并显示进程的命令行参数(默认只有进程名)
+top -p 12345 -p 6789	：每隔5秒显示pid是12345和pid是6789的两个进程的资源占用情况
+top -d 2 -c -p 123456	：每隔2秒显示pid是12345的进程的资源使用情况，并显式该进程启动的命令行参数
+
+------------------------------------------------------------------------------------------------------------
+

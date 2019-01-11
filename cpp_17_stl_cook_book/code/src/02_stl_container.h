@@ -6,6 +6,15 @@
 #include <map>
 #include <unordered_map>
 
+std::string g_str_test_text = 
+"Nam quam nunc, blandit vel.\
+luctus pulv inar, hend rerit id, lorem.\
+Sed consequat, leoeget biben dum sodales, augue.\
+velit cursus sociis natoque penatibus et magnis.\
+dispart urient montes, nasc etur ridiculus maecenas tempussedip sum.\
+";
+
+
 void erase_remove_if()
 {
 	std::vector<int> vecTest{ 1, 2, 2, 3, 6 };
@@ -252,6 +261,94 @@ void map_insert()
 
 }
 
+void map_move_vector()
+{
+	std::map<std::string, size_t> words{ {"c",3},{ "a",5 },{ "k",8 },{ "h",2 },{ "b",1 } };
+	std::cout << "map_move_vector - word";
+	for (const auto &[key, value] : words)
+	{
+		std::cout << "{(" << key << "): " << value << "} ";
+	}
+	std::cout << '\n';
+
+	std::vector<std::pair<std::string, size_t>> word_counts;
+	std::move(std::begin(words), std::end(words), std::back_inserter(word_counts));
+
+	std::cout << "map_move_vector - move";
+	for (const auto &[key, value] : words)
+	{
+		std::cout << "{(" << key << "): " << value << "} ";
+	}
+	std::cout << '\n';
+
+	std::cout << "map_move_vector - init";
+	for (const auto &[key, value] : word_counts)
+	{
+		std::cout << "{(" << key << "): " << value << "} ";
+	}
+	std::cout << '\n';
+
+	std::sort(std::begin(word_counts), std::end(word_counts), [](const auto &a, const auto &b) { return a.second > b.second; });
+
+	std::cout << "map_move_vector - sort";
+	for (const auto &[key, value] : word_counts)
+	{
+		std::cout << "{(" << key << "): " << value << "} ";
+	}
+	std::cout << '\n';
+
+	//map_move_vector - word{ (a) : 5 } {(b) : 1} {(c) : 3} {(h) : 2} {(k) : 8}
+	//map_move_vector - init{ (a) : 5 } {(b) : 1} {(c) : 3} {(h) : 2} {(k) : 8}
+	//map_move_vector - sort{ (k) : 8 } {(a) : 5} {(c) : 3} {(h) : 2} {(b) : 1}
+
+}
+
+std::string filter_ws(const std::string &s)
+{
+	const char *ws{ " \r\n\t" };
+	const auto a(s.find_first_not_of(ws));
+	const auto b(s.find_last_not_of(ws));
+	if (a == std::string::npos) {
+		return{};
+	}
+	return s.substr(a, b);
+}
+
+std::multimap<size_t, std::string> get_sentence_stats(const std::string	&content)
+{
+	std::multimap<size_t, std::string> ret;
+	const auto end_it(std::end(content));
+	auto it1(std::begin(content));
+	auto it2(std::find(it1, end_it, '.'));
+	while (it1 != end_it && std::distance(it1, it2) > 0)
+	{
+		std::string s{ filter_ws({ it1, it2 }) };
+		if (s.length() > 0)
+		{
+			const auto words(std::count(std::begin(s), std::end(s), ' ') + 1);
+			ret.emplace(std::make_pair(words, std::move(s)));
+		}
+		it1 = std::next(it2, 1); // 向前移动一个元素个数
+		it2 = std::find(it1, end_it, '.');
+	}
+	return ret;
+}
+
+void test_multimap()
+{
+	std::string content = g_str_test_text;
+	auto mmp_sentence = get_sentence_stats(content);
+	for (const auto &[word_count, sentence]	: mmp_sentence)
+	{
+		std::cout << word_count << " words: " << sentence <<	".\n";
+	}
+
+	//9 words: Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lore.
+	//9 words : Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.
+	//11 words : Cum sociis natoque penatibus et magnis disparturient montes, nascetur ridiculus mu.
+	//15 words : Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sedipsu.
+
+}
 
 int test_stl_container()
 {
@@ -278,7 +375,11 @@ int test_stl_container()
 	//04 保持对std::vector实例的排序
 	//vector_sort();
 	//05 向std::map实例中高效并有条件的插入元素
-	map_insert();
+	//map_insert();
+	//06 map move vector
+	//map_move_vector();
+	//07 std::multimap
+	//test_multimap();
 
 
 	return 0;

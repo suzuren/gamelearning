@@ -16,7 +16,8 @@ set( LESS_WARNINGS 1)
 
 #set( CMAKE_BUILD_TYPE "Debug" )
 #set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb" )
-set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O0 -g -ggdb" )
+#set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O0 -g -ggdb" )
+set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O0 -g -ggdb -static-libstdc++ -static-libgcc" )
 #set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O2" )
 
 #set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O3 -Wall" )

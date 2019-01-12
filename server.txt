@@ -80,6 +80,10 @@ rpm -e --nodeps gdbm-devel-1.8.0-39.el6.x86_64
 rpm -e --nodeps gdb-7.2-90.el6.x86_64
 
 
+rpm -e --nodeps gdbm-1.8.0-36.el6.x86_64
+rpm -e --nodeps gdbm-devel-1.8.0-36.el6.x86_64
+rpm -e --nodeps gdb-7.2-60.el6_4.1.x86_64
+rpm -e --nodeps eggdbus-0.6-3.el6.x86_64
 
 
 
@@ -88,6 +92,7 @@ gdb -v
 
 下载gdb文件包
 wget http://ftp.gnu.org/gnu/gdb/gdb-7.12.tar.gz
+wget http://ftp.gnu.org/gnu/gdb/gdb-8.2.tar.gz
 
 解压
 tar -zxvf gdb-7.12.tar.gz

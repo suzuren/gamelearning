@@ -1011,6 +1011,9 @@
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\daemonize.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\04_lambda.h">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

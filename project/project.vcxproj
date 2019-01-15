@@ -78,6 +78,7 @@
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\01_Structured_Binding_Declaration.h" />
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\02_stl_container.h" />
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\03_iterator.h" />
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\04_lambda.h" />
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\daemonize.h" />
     <ClInclude Include="..\cpp_new_features\cplusplus_extern.h" />
     <ClInclude Include="..\cpp_new_features\define.h" />

@@ -54,8 +54,8 @@ void PrintVariableParamet_2(Args... args)
 	int arr[] = { (PrintParamet(args), 0)... };
 
 	//会创建一个元素值都为0的数组int arr[sizeof...(Args)]
-	//由于是逗号表达式，在创建数组的过程中会先执行逗号表达式前面的部分printarg(args)打印出参数，
-	//也就是说在构造int数组的过程中就将参数包展开了，这个数组的目的纯粹是为了在数组构造的过程展开参数包。
+	//由于是逗号表达式，在创建数组的过程中会先执行逗号表达式前面的部分 PrintParamet(args) 打印出参数，
+	//也就是说在构造 int 数组的过程中就将参数包展开了，这个数组的目的纯粹是为了在数组构造的过程展开参数包。
 	std::cout << "func PrintVariableParamet_2 - sizeof(arr):" << sizeof(arr) << ", sizeof(arr[0]) : " << sizeof(arr[0]) << std::endl;
 }
 

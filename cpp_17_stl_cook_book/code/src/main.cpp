@@ -6,6 +6,8 @@
 #include "04_lambda.h"
 #include "05_stl_basic_algorithm.h"
 #include "06_stl_advanced_algorithm.h"
+#include "07_strings_streams_regular_expressions.h"
+
 int main(int argc, const char** argv)
 {
 	std::cout << "hello world!" << std::endl;
@@ -21,7 +23,9 @@ int main(int argc, const char** argv)
 	//05
 	//test_stl_basic_algorithm();
 	//06
-	test_stl_advanced_algorithm();
+	//test_stl_advanced_algorithm();
+	//07
+	strings_streams_regular_expressions();
 
 	return 0;
 }

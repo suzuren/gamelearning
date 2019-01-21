@@ -1017,6 +1017,9 @@
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\05_stl_basic_algorithm.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\06_stl_advanced_algorithm.h">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

@@ -5,6 +5,7 @@
 #include "03_iterator.h"
 #include "04_lambda.h"
 #include "05_stl_basic_algorithm.h"
+#include "06_stl_advanced_algorithm.h"
 int main(int argc, const char** argv)
 {
 	std::cout << "hello world!" << std::endl;
@@ -18,8 +19,9 @@ int main(int argc, const char** argv)
 	//04
 	//test_lambda();
 	//05
-	test_stl_basic_algorithm();
-
+	//test_stl_basic_algorithm();
+	//06
+	test_stl_advanced_algorithm();
 
 	return 0;
 }

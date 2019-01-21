@@ -11,6 +11,9 @@
 //#include<bits/stdc++.h>
 #include <random>
 #include <sstream>
+#include <iomanip>
+#include <deque>
+#include <fstream>
 
 //--------------------------------------------------------------------------------
 
@@ -211,6 +214,128 @@ void stl_pattern_search_string()
 	//stl_pattern_search_string - match_3 - elitr
 	//stl_pattern_search_string - match_4 - elitr
 
+	//std::default_searcher  ：其会重定向到 std::search  的实现。
+	//std::boyer_moore_searcher  ：使用Boyer - Moore查找算法。
+	//std::boyer_moore_horspool_searcher  ：使用Boyer - Moore - Horspool查找算法。
+}
+
+//--------------------------------------------------------------------------------
+
+void sample_points_vector()
+{
+	std::cout << "sample_points_vector - start - \n";
+
+	const size_t data_points{ 100000 }; // vector  的的长度
+	const size_t sample_points{ 100 }; // 采样的步长
+
+	const int mean{ 10 }; //正太分布的平均值和
+	const size_t dev{ 3 }; // 标准差
+
+	std::random_device rd;
+	std::mt19937 gen{ rd() };
+	std::normal_distribution<> d{ mean, dev }; // 对应分布的随机生成器
+
+	std::vector<int> v;
+	v.reserve(data_points);
+	//std::generate_n  算法，其会将随机值，通过 back_inserter  迭代器插入 vector  中。
+	//生成函数对象包装成了 d(gen)  表达式，其能生成符合分布的随机值
+	std::generate_n(std::back_inserter(v), data_points, [&] { return d(gen); });
+
+	std::vector<int> samples;
+	v.reserve(sample_points);
+
+
+	//std::sample  算法是C++17添加的,和 std::copy  类似；元素从一个容器拷贝到另一个。 std::sample  算法只会拷贝输入中的一部
+	//分，因为采样结果只有n个元素。其在内部使用均匀分布，所以能以相同的概率选择输入范围中的每个数据点。
+	//std::sample  算法与 std::copy  的原理类似，不过其需要两个额外的参数：采样数量和随
+	//机值生成对象。前者确定输入范围，后者去确定采样点
+	std::sample(std::begin(v), std::end(v), back_inserter(samples),sample_points, std::mt19937{ std::random_device{}() });
+
+	std::map<int, size_t> hist;
+	for (int i : samples)
+	{
+		++hist[i]; 
+	}
+
+	for (const auto &[value, count] : hist)
+	{
+		std::cout << std::setw(2) << value << " " << std::string(count, '*') << '\n';
+	}
+
+	std::cout << "sample_points_vector - end - \n";
+}
+
+//--------------------------------------------------------------------------------
+
+void stl_input_permutations()
+{
+	std::vector<std::string> v{ "c","b","a"};
+	std::sort(std::begin(v), std::end(v));
+	std::cout << "stl_input_permutations - start - \n";
+	do
+	{
+		std::copy(std::begin(v), std::end(v), std::ostream_iterator<std::string>{std::cout, ", "});
+		std::cout << '\n';
+	} while (std::next_permutation(std::begin(v), std::end(v)));
+	std::cout << "stl_input_permutations - end - \n";
+	//std::next_permutation  。其会打乱
+	//已经排序的 vector  ，然后再对其进行打印。直到 next_permutation  返回false时，代
+	//表 next_permutation  完成了其操作，循环结束
+	//为了看到所有置换的可能，我们先对数组
+	//进行了排序，因为如果我们输入“c b a”到算法中，算法会立即终止，因为每个元素都以反字典序排列。
+
+	/*
+	stl_input_permutations - start - 
+	a, b, c, 
+	a, c, b, 
+	b, a, c, 
+	b, c, a, 
+	c, a, b, 
+	c, b, a, 
+	stl_input_permutations - end - 
+	*/
+}
+
+//--------------------------------------------------------------------------------
+
+
+using dict_entry = std::pair<std::string, std::string>;
+
+namespace std
+{
+	std::ostream& operator<<(std::ostream &os, const dict_entry p)
+	{
+		return os << p.first << " " << p.second;
+	}
+	std::istream& operator>>(std::istream &is, dict_entry &p)
+	{
+		return is >> p.first >> p.second;
+	}
+}
+
+template <typename IS>
+std::deque<dict_entry> from_instream(IS &&is)
+{
+	std::deque<dict_entry> d{ std::istream_iterator<dict_entry>{is},{} };
+	std::sort(std::begin(d), std::end(d));
+	return d;
+}
+
+void stl_dictionary_merge()
+{
+	//const auto dict1(from_instream(std::ifstream{"dict.txt"}));
+	//const auto dict2(from_instream(std::cin));
+
+	std::deque<dict_entry> dict1{ { "car","auto" },{ "cellphone","handy" },{ "house","haus" } };
+	std::sort(std::begin(dict1), std::end(dict1));
+
+	std::deque<dict_entry> dict2{ {"table","tisch"},{"fish","fisch"},{"dog","hund"} };
+	std::sort(std::begin(dict2), std::end(dict2));
+
+	std::cout << "stl_dictionary_merge - start - \n";
+	std::merge(std::begin(dict1), std::end(dict1), std::begin(dict2), std::end(dict2), std::ostream_iterator<dict_entry>{std::cout, "\n"});
+	std::cout << "stl_dictionary_merge - end - \n";
+
 }
 
 //--------------------------------------------------------------------------------
@@ -408,6 +533,20 @@ transforming_items_in_containers -  vs:
 	stl_pattern_search_string();
 
 	//-------------------------------------------------------------
+	//10
+	sample_points_vector();
+
+	//-------------------------------------------------------------
+	//11
+	stl_input_permutations();
+
+	//-------------------------------------------------------------
+	//12
+	stl_dictionary_merge();
+
+	//-------------------------------------------------------------
+
+
 	std::vector<std::pair<int, int>> vecType;
 	std::pair<int, int> temp{ 1 ,2 };
 	vecType.emplace_back(temp);

@@ -20,7 +20,7 @@ static auto consumer(auto &container)
 	};
 }
 
-static void print(const auto &c)
+static void print_consumer(const auto &c)
 {
 	for (auto i : c) {
 		std::cout << i << ", ";
@@ -52,11 +52,11 @@ void tets_consumer()
 	}
 
 	std::cout << "tets_consumer d - ";
-	print(d);
+	print_consumer(d);
 	std::cout << "tets_consumer l - ";
-	print(l);
+	print_consumer(l);
 	std::cout << "tets_consumer v - ";
-	print(v);
+	print_consumer(v);
 }
 
 //--------------------------------------------------------------------------------

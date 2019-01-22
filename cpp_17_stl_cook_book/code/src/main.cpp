@@ -7,6 +7,7 @@
 #include "05_stl_basic_algorithm.h"
 #include "06_stl_advanced_algorithm.h"
 #include "07_strings_streams_regular_expressions.h"
+#include "08_utils_class.h"
 
 int main(int argc, const char** argv)
 {
@@ -25,7 +26,9 @@ int main(int argc, const char** argv)
 	//06
 	//test_stl_advanced_algorithm();
 	//07
-	strings_streams_regular_expressions();
+	//strings_streams_regular_expressions(argc, argv);
+	//08
+	test_utils_class();
 
 	return 0;
 }

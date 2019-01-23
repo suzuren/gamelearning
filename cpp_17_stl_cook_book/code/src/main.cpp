@@ -28,7 +28,7 @@ int main(int argc, const char** argv)
 	//07
 	//strings_streams_regular_expressions(argc, argv);
 	//08
-	test_utils_class();
+	//test_utils_class();
 
 	return 0;
 }

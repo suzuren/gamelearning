@@ -25,7 +25,8 @@ clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_C
  "test_skynet/daemon" "test_skynet/databuffer_hashid" "test_skynet/harbor" "test_skynet/skynet_handle" "test_skynet/skynet_mq"
  "test_skynet/skynet_timer" "test_skynet/skynet_module" "test_skynet/snlua_bootstrap" "test_skynet/skynet_lua" 
  "test_skynet/handlemap" "3rd/hiredis"
- "redis_server" "chess_chinese" "chess_gobang" "chess_weiqi" "cpp11datalit" "cpp_template" "cpp_operator" "cpp_serialize")
+ "redis_server" "chess_chinese" "chess_gobang" "chess_weiqi" "cpp11datalit" "cpp_template" "cpp_operator" "cpp_serialize"
+ "area_of_interst")
 
 clean_len=${#clean_dir[@]}
 

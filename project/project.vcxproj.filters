@@ -313,6 +313,9 @@
     <Filter Include="cpp_17_stl_cook_book\code\src">
       <UniqueIdentifier>{8bb5bb0a-057e-4f5a-969a-fc4e586d94e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="area_of_interst">
+      <UniqueIdentifier>{de764fa1-3375-436e-b718-870860487e19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1025,6 +1028,15 @@
     </ClInclude>
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\08_utils_class.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\area_of_interst\quad_tree.hpp">
+      <Filter>area_of_interst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\area_of_interst\rect.hpp">
+      <Filter>area_of_interst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\area_of_interst\vec2.hpp">
+      <Filter>area_of_interst</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1743,6 +1755,9 @@
     <None Include="..\cpp_17_stl_cook_book\code\build\rebuild.sh">
       <Filter>cpp_17_stl_cook_book\code\build</Filter>
     </None>
+    <None Include="..\area_of_interst\makefile">
+      <Filter>area_of_interst</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2455,6 +2470,9 @@
     </ClCompile>
     <ClCompile Include="..\cpp_17_stl_cook_book\code\src\main.cpp">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\area_of_interst\main.cpp">
+      <Filter>area_of_interst</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

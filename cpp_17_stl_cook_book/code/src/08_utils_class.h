@@ -683,6 +683,26 @@ discrete_distribution
 
 //--------------------------------------------------------------------------------
 
+void test_random_vector()
+{
+	std::random_device rd;
+	std::mt19937 g{ rd() };
+
+	std::cout << "random_vector - " << '\n';
+
+	int loop_index = 0;
+	do
+	{
+		std::vector<int> vecRand{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+		std::shuffle(std::begin(vecRand), std::end(vecRand), g);
+		std::copy(std::begin(vecRand), std::end(vecRand), std::ostream_iterator<int>{std::cout, ", "});
+		std::cout << '\n';
+		loop_index++;
+	} while (loop_index < 10);
+}
+
+//--------------------------------------------------------------------------------
 
 int test_utils_class()
 {
@@ -718,6 +738,9 @@ int test_utils_class()
 	//08
 	//random_distro();
 
+	//--------------------------------------------------------------------------------
+	//09
+	test_random_vector();
 
 	return 0;
 }

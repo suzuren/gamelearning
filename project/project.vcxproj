@@ -24,6 +24,9 @@
     <ClInclude Include="..\3rd\templog\templ_meta.h" />
     <ClInclude Include="..\3rd\templog\tuples.h" />
     <ClInclude Include="..\3rd\templog\type_lists.h" />
+    <ClInclude Include="..\area_of_interst\quad_tree.hpp" />
+    <ClInclude Include="..\area_of_interst\rect.hpp" />
+    <ClInclude Include="..\area_of_interst\vec2.hpp" />
     <ClInclude Include="..\candlua\pbc\alloc.h" />
     <ClInclude Include="..\candlua\pbc\array.h" />
     <ClInclude Include="..\candlua\pbc\bootstrap.h" />
@@ -260,6 +263,7 @@
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf" />
     <None Include="..\3rd\templog\makefile" />
+    <None Include="..\area_of_interst\makefile" />
     <None Include="..\big_little_endian\Makefile" />
     <None Include="..\candlua\cItemBuffer.lua" />
     <None Include="..\candlua\loginServer.login.s2c.proto" />
@@ -501,6 +505,7 @@
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp" />
     <ClCompile Include="..\3rd\templog\test\test_logging.cpp" />
+    <ClCompile Include="..\area_of_interst\main.cpp" />
     <ClCompile Include="..\big_little_endian\main.c" />
     <ClCompile Include="..\candlua\lua-pbcc.c" />
     <ClCompile Include="..\candlua\lua-sui.c" />

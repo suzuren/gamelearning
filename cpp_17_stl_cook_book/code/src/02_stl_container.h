@@ -257,8 +257,23 @@ void map_insert()
 	}
 	std::cout << '\n';
 
+	std::unordered_map<int, int> test_unorderedMp{ {1,2},{1,3},{ 1,1 },{ 2,4 },{ 6,9 } };
+	for (const auto &[key, value] : test_unorderedMp)
+	{
+		std::cout << "{" << key << " : " << value << "} ";
+	}
+	std::cout << '\n';
+
+
 	std::cout << "test_stl_container - unordered_map ------------------------------------------------ " << std::endl;
 
+	/*
+test_stl_container - map_insert ------------------------------------------------ 
+{(2, 2): 4} {(2, 8): 5} {(2, 1): 3} {(0, 1): 2} {(0, 0): 1} 
+{6 : 9} {2 : 4} {1 : 2} 
+test_stl_container - unordered_map ------------------------------------------------ 
+
+	*/
 }
 
 void map_move_vector()
@@ -375,7 +390,7 @@ int test_stl_container()
 	//04 保持对std::vector实例的排序
 	//vector_sort();
 	//05 向std::map实例中高效并有条件的插入元素
-	//map_insert();
+	map_insert();
 	//06 map move vector
 	//map_move_vector();
 	//07 std::multimap

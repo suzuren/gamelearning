@@ -17,11 +17,14 @@ namespace math
 		vec2() = default;
 
 		// Constructs a new vector initialized to the specified values.
-		constexpr vec2(float _x, float _y) :x(_x), y(_y)
+		constexpr vec2(float _x, float _y)
+			:x(_x),y(_y)
 		{}
 
-		vec2(const vec2& other) :x(other.x), y(other.y)
-		{}
+		vec2(const vec2& other)
+			:x(other.x),y(other.y)
+		{
+		}
 
 		void add(const vec2& v)
 		{
@@ -42,23 +45,15 @@ namespace math
 
 			// Clamp the x value.
 			if (x < min.x)
-			{
 				x = min.x;
-			}
 			if (x > max.x)
-			{
 				x = max.x;
-			}
 
 			// Clamp the y value.
 			if (y < min.y)
-			{
 				y = min.y;
-			}
 			if (y > max.y)
-			{
 				y = max.y;
-			}
 		}
 
 		// Negates this vector.
@@ -75,16 +70,12 @@ namespace math
 			float n = x * x + y * y;
 			// Already normalized.
 			if (n == 1.0f)
-			{
 				return;
-			}
 
 			n = sqrt(n);
 			// Too close to zero.
 			if (n < std::numeric_limits<float>::min())
-			{
 				return;
-			}
 
 			n = 1.0f / n;
 			x *= n;
@@ -146,14 +137,12 @@ namespace math
 			return (x * v.x + y * v.y);
 		}
 
-		float cross(const vec2& other) const
-		{
+		float cross(const vec2& other) const {
 			return x*other.y - y*other.x;
 		};
 
 		// Calculates the projection of this over other.
-		vec2 project(const vec2& other) const
-		{
+		vec2 project(const vec2& other) const {
 			return other * (dot(other) / other.dot(other));
 		};
 
@@ -180,7 +169,7 @@ namespace math
 		{
 			return (x * x + y * y);
 		}
-
+	
 		// Get the normalized vector.
 		vec2 normalized() const
 		{
@@ -201,10 +190,7 @@ namespace math
 			vec2 a2 = normalized();
 			vec2 b2 = other.normalized();
 			float angle = atan2f(a2.cross(b2), a2.dot(b2));
-			if (fabs(angle) < std::numeric_limits<float>::epsilon())
-			{
-				return 0.f;
-			}
+			if (fabs(angle) < std::numeric_limits<float>::epsilon()) return 0.f;
 			return angle;
 		}
 
@@ -218,8 +204,7 @@ namespace math
 		// alpha == 0 ? a
 		// alpha == 1 ? b
 		//	otherwise a value between a..b
-		inline vec2 lerp(const vec2& other, float alpha) const
-		{
+		inline vec2 lerp(const vec2& other, float alpha) const {
 			return *this * (1.f - alpha) + other * alpha;
 		};
 
@@ -234,7 +219,7 @@ namespace math
 		// Returns true if the given vector is exactly equal to this vector.
 		bool equals(const vec2& target) const
 		{
-			return (fabs(this->x - target.x) < std::numeric_limits<float>::epsilon())\
+			return (fabs(this->x - target.x) < std::numeric_limits<float>::epsilon())
 				&& (fabs(this->y - target.y) < std::numeric_limits<float>::epsilon());
 		}
 
@@ -249,9 +234,8 @@ namespace math
 			float dz = v1.x * v2.y - v1.y * v2.x;
 			return atan2f(fabsf(dz) + std::numeric_limits<float>::min(), dot(v1, v2));
 		}
-
-		inline vec2 rotate(const vec2& other) const
-		{
+		
+		inline vec2 rotate(const vec2& other) const {
 			return vec2(x*other.x - y*other.y, x*other.y + y*other.x);
 		};
 
@@ -369,7 +353,7 @@ namespace math
 	constexpr vec2 VEC2_UNIT_X(1.0f, 0.f);
 	constexpr vec2 VEC2_UNIT_Y(0.0f, 1.0f);
 	constexpr vec2 VEC2_NEGATIVEINFINITY(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
-	constexpr vec2 VEC2_POSITIVEINFINITY(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+	constexpr vec2 VEC2_POSITIVEINFINITY(std::numeric_limits<float>::max(),std::numeric_limits<float>::max());
 
 	// cross product of 2 vector. A->B X C->D
 	inline float crossProduct2Vector(const vec2& A, const vec2& B, const vec2& C, const vec2& D)
@@ -377,7 +361,9 @@ namespace math
 		return (D.y - C.y) * (B.x - A.x) - (D.x - C.x) * (B.y - A.y);
 	}
 
-	inline bool isLineIntersect(const vec2& A, const vec2& B, const vec2& C, const vec2& D, float *S, float *T)
+	inline bool isLineIntersect(const vec2& A, const vec2& B,
+		const vec2& C, const vec2& D,
+		float *S, float *T)
 	{
 		// FAIL: Line undefined
 		if ((A.x == B.x && A.y == B.y) || (C.x == D.x && C.y == D.y))
@@ -398,94 +384,4 @@ namespace math
 
 		return true;
 	}
-
-	void test_vec2()
-	{
-		vec2 tempVector2_0;
-		std::cout << "test_vec2  tempVector2_0 - " << "x:" << tempVector2_0.x << "\t\t" << " y:" << tempVector2_0.y << std::endl;
-
-		vec2 tempVector2_1(3.1, 6.8);
-		std::cout << "test_vec2  tempVector2_1 - " << "x:" << tempVector2_1.x << "\t" << " y:" << tempVector2_1.y << std::endl;
-
-		vec2 tempVector2_2(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		tempVector2_2.add(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		tempVector2_0.subtract(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_0 - " << "x:" << tempVector2_0.x << "\t" << " y:" << tempVector2_0.y << std::endl;
-
-		tempVector2_2.clamp(tempVector2_0, tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		tempVector2_2.negate();
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		tempVector2_2.normalize();
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		tempVector2_2.scale(2.1f);
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		tempVector2_2.scale(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		tempVector2_2.rotate(tempVector2_1, 3.1f);
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-		auto tempVector2_3 = tempVector2_2.project(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_3 - " << "x:" << tempVector2_3.x << "\t" << " y:" << tempVector2_3.y << std::endl;
-
-		auto tempVector2_4 = tempVector2_2.mid_point(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_4 - " << "x:" << tempVector2_4.x << "\t" << " y:" << tempVector2_4.y << std::endl;
-
-		auto tempVector2_5 = tempVector2_4.lerp(tempVector2_1, 0.f);
-		std::cout << "test_vec2  tempVector2_5 - " << "x:" << tempVector2_5.x << "\t" << " y:" << tempVector2_5.y << std::endl;
-
-		tempVector2_5 = tempVector2_4.lerp(tempVector2_1, 1.f);
-		std::cout << "test_vec2  tempVector2_5 - " << "x:" << tempVector2_5.x << "\t" << " y:" << tempVector2_5.y << std::endl;
-
-		tempVector2_5 = tempVector2_4.lerp(tempVector2_1, 1.4);
-		std::cout << "test_vec2  tempVector2_5 - " << "x:" << tempVector2_5.x << "\t" << " y:" << tempVector2_5.y << std::endl;
-
-		tempVector2_5.smooth(tempVector2_1, 3.1f, 0.f);
-		std::cout << "test_vec2  tempVector2_2 - " << "x:" << tempVector2_2.x << "\t" << " y:" << tempVector2_2.y << std::endl;
-
-
-		// -----------------------------------------------------------------------------------------------------------------
-
-		std::cout << "test_vec2  tempVector2_2 - " << " iszero:" << tempVector2_2.iszero() << std::endl;
-
-		std::cout << "test_vec2  tempVector2_2 - " << " isone:" << tempVector2_2.isone() << std::endl;
-
-		auto dot_xy = tempVector2_2.dot(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "dot_xy:" << dot_xy << std::endl;
-		auto cross_xy = tempVector2_2.cross(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "cross_xy:" << cross_xy << std::endl;
-
-		auto distance_xy = tempVector2_2.distance(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "distance_xy:" << distance_xy << std::endl;
-
-		auto distance_sqrt_xy = tempVector2_2.distance_sqrt(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "distance_sqrt_xy:" << distance_sqrt_xy << std::endl;
-
-		auto length_xy = tempVector2_2.length();
-		std::cout << "test_vec2  tempVector2_2 - " << "length_xy:" << length_xy << std::endl;
-
-		auto length_sqrt_xy = tempVector2_2.length_sqrt();
-		std::cout << "test_vec2  tempVector2_2 - " << "length_sqrt_xy:" << length_sqrt_xy << std::endl;
-
-		auto angle_xy = tempVector2_2.angle();
-		std::cout << "test_vec2  tempVector2_2 - " << "angle_xy:" << angle_xy << std::endl;
-
-		auto angle_vec_xy = tempVector2_2.angle(tempVector2_1);
-		std::cout << "test_vec2  tempVector2_2 - " << "angle_vec_xy:" << angle_vec_xy << std::endl;
-
-		auto equals_xy = tempVector2_2.equals(tempVector2_2);
-		std::cout << "test_vec2  tempVector2_2 - " << "equals_xy:" << equals_xy << std::endl;
-
-
-	}
-
 }

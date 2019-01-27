@@ -21,11 +21,15 @@ namespace math
 		size() = default;
 		size(const size& other) = default;
 
-		constexpr size(float _width, float _height) :width(_width), height(_height)
-		{}
+		constexpr size(float _width, float _height)
+			:width(_width), height(_height)
+		{
+		}
 
-		explicit size(const vec2& v) :width(v.x), height(v.y)
-		{}
+		explicit size(const vec2& v)
+			:width(v.x), height(v.y)
+		{
+		}
 
 		size& operator= (const size& other)
 		{
@@ -68,7 +72,7 @@ namespace math
 
 		bool equals(const size& target) const
 		{
-			return (fabs(this->width - target.width) < std::numeric_limits<float>::epsilon())\
+			return (fabs(this->width - target.width) < std::numeric_limits<float>::epsilon())
 				&& (fabs(this->height - target.height) < std::numeric_limits<float>::epsilon());
 		}
 	};
@@ -85,8 +89,10 @@ namespace math
 
 		rect() = default;
 
-		constexpr rect(float x_, float y_, float width_, float height_) :x(x_), y(y_), width(width_), height(height_)
-		{}
+		constexpr rect(float x_, float y_, float width_, float height_)
+			:x(x_),y(y_),width(width_), height(height_)
+		{
+		}
 
 		rect(const vec2& pos, const math::size& dimension)
 		{
@@ -108,9 +114,9 @@ namespace math
 
 		bool equals(const rect& target) const
 		{
-			return (fabs(x - target.x) < std::numeric_limits<float>::epsilon())\
-				&& (fabs(y - target.y) < std::numeric_limits<float>::epsilon())\
-				&& (fabs(width - target.width) < std::numeric_limits<float>::epsilon())\
+			return (fabs(x - target.x) < std::numeric_limits<float>::epsilon())
+				&& (fabs(y - target.y) < std::numeric_limits<float>::epsilon())
+				&& (fabs(width - target.width) < std::numeric_limits<float>::epsilon())
 				&& (fabs(height - target.height) < std::numeric_limits<float>::epsilon());
 		}
 
@@ -176,7 +182,8 @@ namespace math
 
 		bool intersects_circle(const vec2& center, float radius) const
 		{
-			vec2 rectangleCenter((x + width / 2), (y + height / 2));
+			vec2 rectangleCenter((x + width / 2),
+				(y + height / 2));
 
 			float w =width / 2;
 			float h = height / 2;
@@ -189,7 +196,8 @@ namespace math
 				return false;
 			}
 
-			vec2 circleDistance(fabs(center.x - x - w), fabs(center.y - y - h));
+			vec2 circleDistance(fabs(center.x - x - w),
+				fabs(center.y -y - h));
 
 			if (circleDistance.x <= (w))
 			{

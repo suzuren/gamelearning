@@ -39,3 +39,18 @@ void func1()
 {
 	printf("hello world!\n");
 }
+
+
+void test_for()
+{
+	int iProIndex = 1;
+
+	for (; iProIndex < 15; iProIndex++)
+	{
+		printf("test_for function - iProIndex:%d\n", iProIndex);
+	}
+
+	printf("test_for function - iProIndex:%d\n", iProIndex);
+}
+
+

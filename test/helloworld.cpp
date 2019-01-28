@@ -21,9 +21,10 @@ int main(int argc, const char** argv)
 	//stGangCardResult GangCardResult;
 	//tets_memory_zero(GangCardResult);
 	//func1();
+	//test_for();
 
 	//test_socket_server();
-	testFuncUserRight();
+	//testFuncUserRight();
 
 
 	return 0;

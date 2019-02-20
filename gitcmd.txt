@@ -21,3 +21,59 @@ netstat -anp | grep skynet
 telnet 47.52.249.46 4001
 
 
+
+
+
+git 安装
+
+查看是否安装有git
+rpm -qa | grep git
+
+删除git
+rpm -e --nodeps git-1.7.1-9.el6_9.x86_64
+
+xmlto 下载地址
+https://releases.pagure.org/xmlto/
+https://releases.pagure.org/xmlto/xmlto-0.0.28.tar.bz2
+安装
+./configure
+make install
+
+asciidoc 下载地址
+https://nchc.dl.sourceforge.net/project/asciidoc/asciidoc/8.6.9/asciidoc-8.6.9.tar.gz
+安装
+./configure
+make install
+
+
+git 下载地址
+https://codeload.github.com/git/git/tar.gz/v2.2.1
+
+
+># wget https://github.com/git/git/archive/v2.2.1.tar.gz
+># tar zxvf v2.2.1.tar.gz
+># cd git-2.2.1
+># make configure
+># ./configure --prefix=/usr/local/git --with-iconv=/usr/local/libiconv
+># make all doc
+># make install install-doc install-html
+># echo "export PATH=$PATH:/usr/local/git/bin" >> /etc/bashrc
+># source /etc/bashrc
+
+
+安装出现问题：
+
+/bin/sh: line 1: xmlto: command not found
+make[1]: *** [git-add.1] Error 127
+make[1]: Leaving directory `/root/src/git/Documentation'
+make: *** [doc] Error 2
+
+
+
+4.2 安装xmlto
+yum install xmlto
+--------------------- 
+作者：墨子哲 
+来源：CSDN 
+原文：https://blog.csdn.net/bravezhe/article/details/80192188 
+版权声明：本文为博主原创文章，转载请附上博文链接！

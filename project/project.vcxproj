@@ -431,6 +431,7 @@
     <None Include="..\lua\test_table.lua" />
     <None Include="..\lua\test_timer.lua" />
     <None Include="..\lua\timer.lua" />
+    <None Include="..\lua\url.lua" />
     <None Include="..\lua\xpcall.lua" />
     <None Include="..\memorypoll\makefile" />
     <None Include="..\MultiplayerBook\Makefile" />

@@ -1758,6 +1758,9 @@
     <None Include="..\area_of_interst\makefile">
       <Filter>area_of_interst</Filter>
     </None>
+    <None Include="..\lua\url.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">

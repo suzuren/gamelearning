@@ -2477,6 +2477,9 @@
     <ClCompile Include="..\area_of_interst\main.cpp">
       <Filter>area_of_interst</Filter>
     </ClCompile>
+    <ClCompile Include="..\test\KMP_algorithm.h">
+      <Filter>test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">

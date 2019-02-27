@@ -93,12 +93,12 @@ void testFuncUserRight()
 {
 	unsigned int dwUserRight = 1;
 	bool bCanPlay = CUserRight::CanPlay(dwUserRight);
-	printf("testFuncUserRight - bCanPlay:%d - 0x%X\n", bCanPlay, dwUserRight&UR_CANNOT_PLAY);
+	printf("testFuncUserRight - bCanPlay:%d - 0x%X\n", bCanPlay, (unsigned int)(dwUserRight&UR_CANNOT_PLAY));
 	dwUserRight = 0x00000002;
-	printf("testFuncUserRight - 0x%X - 0x%X\n", dwUserRight&UR_CANNOT_PLAY, dwUserRight&UR_CANNOT_LOOKON);
+	printf("testFuncUserRight - 0x%X - 0x%X\n", (unsigned int)(dwUserRight&UR_CANNOT_PLAY), (unsigned int)(dwUserRight&UR_CANNOT_LOOKON));
 
 	dwUserRight = 0x00000003;
-	printf("testFuncUserRight -  0x%X - 0x%X\n", dwUserRight&UR_CANNOT_PLAY,dwUserRight&UR_CANNOT_LOOKON);
+	printf("testFuncUserRight -  0x%X - 0x%X\n", (unsigned int)(dwUserRight&UR_CANNOT_PLAY), (unsigned int)(dwUserRight&UR_CANNOT_LOOKON));
 
 	dwUserRight = 1;
 	dwUserRight |= 0x00000002;

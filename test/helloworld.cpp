@@ -6,6 +6,7 @@
 #include "test_helloworld.h"
 #include "test_socket_server.h"
 #include "test_userright.h"
+#include "KMP_algorithm.h"
 
 int main(int argc, const char** argv)
 {
@@ -25,7 +26,7 @@ int main(int argc, const char** argv)
 
 	//test_socket_server();
 	//testFuncUserRight();
-
+	test_KMP();
 
 	return 0;
 }

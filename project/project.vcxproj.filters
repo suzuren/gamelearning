@@ -316,6 +316,30 @@
     <Filter Include="area_of_interst">
       <UniqueIdentifier>{de764fa1-3375-436e-b718-870860487e19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="pbc">
+      <UniqueIdentifier>{4e3ca024-f587-431c-a025-c1a0627a3198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pbc\binding">
+      <UniqueIdentifier>{91f6167e-c1de-455d-a320-b3347043ff09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pbc\pbc">
+      <UniqueIdentifier>{c7869a65-ec6d-4a7d-a514-c24df885ab6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pbc\src">
+      <UniqueIdentifier>{434a401e-7542-4b7e-ba91-f2111b6881a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pbc\test">
+      <UniqueIdentifier>{12539d5f-72dc-43b8-858d-b629dc6e6c42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pbc\tool">
+      <UniqueIdentifier>{041d8ef2-dbf4-450a-af6e-39023ed5bd29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pbc\binding\lua">
+      <UniqueIdentifier>{136dc7b3-fdbc-4acb-9f55-e2742b19fdd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pbc\binding\lua53">
+      <UniqueIdentifier>{e6b6dd5d-3fb0-4475-ad91-568bd21c9e89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1037,6 +1061,42 @@
     </ClInclude>
     <ClInclude Include="..\area_of_interst\vec2.hpp">
       <Filter>area_of_interst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\test\readfile.h">
+      <Filter>pbc\test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\alloc.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\array.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\bootstrap.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\context.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\descriptor.pbc.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\map.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\pattern.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\proto.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\stringpool.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\src\varint.h">
+      <Filter>pbc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pbc\pbc.h">
+      <Filter>pbc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1761,6 +1821,75 @@
     <None Include="..\lua\url.lua">
       <Filter>lua</Filter>
     </None>
+    <None Include="..\pbc\binding\lua\build_ios.sh">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua\Makefile">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua\parser.lua">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua\protobuf.lua">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua\README.md">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua\test.lua">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua\test2.lua">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua\testparser.lua">
+      <Filter>pbc\binding\lua</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua53\build_ios.sh">
+      <Filter>pbc\binding\lua53</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua53\Makefile">
+      <Filter>pbc\binding\lua53</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua53\protobuf.lua">
+      <Filter>pbc\binding\lua53</Filter>
+    </None>
+    <None Include="..\pbc\binding\lua53\test.lua">
+      <Filter>pbc\binding\lua53</Filter>
+    </None>
+    <None Include="..\pbc\test\addressbook.proto">
+      <Filter>pbc\test</Filter>
+    </None>
+    <None Include="..\pbc\test\descriptor.proto">
+      <Filter>pbc\test</Filter>
+    </None>
+    <None Include="..\pbc\test\float.proto">
+      <Filter>pbc\test</Filter>
+    </None>
+    <None Include="..\pbc\test\Makefile">
+      <Filter>pbc\test</Filter>
+    </None>
+    <None Include="..\pbc\test\test.proto">
+      <Filter>pbc\test</Filter>
+    </None>
+    <None Include="..\pbc\pbc\pbc-Prefix.pch">
+      <Filter>pbc\pbc</Filter>
+    </None>
+    <None Include="..\pbc\Android.mk">
+      <Filter>pbc</Filter>
+    </None>
+    <None Include="..\pbc\build_ios.sh">
+      <Filter>pbc</Filter>
+    </None>
+    <None Include="..\pbc\clean.sh">
+      <Filter>pbc</Filter>
+    </None>
+    <None Include="..\pbc\Makefile">
+      <Filter>pbc</Filter>
+    </None>
+    <None Include="..\pbc\README.md">
+      <Filter>pbc</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2480,6 +2609,81 @@
     <ClCompile Include="..\test\KMP_algorithm.h">
       <Filter>test</Filter>
     </ClCompile>
+    <ClCompile Include="..\pbc\binding\lua\pbc-lua.c">
+      <Filter>pbc\binding\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\binding\lua53\pbc-lua53.c">
+      <Filter>pbc\binding\lua53</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\tool\dump.c">
+      <Filter>pbc\tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\addressbook.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\array.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\decode.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\float.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\map.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\pattern.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\pbc.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\test.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\test\varint.c">
+      <Filter>pbc\test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\alloc.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\array.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\bootstrap.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\context.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\decode.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\map.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\pattern.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\proto.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\register.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\rmessage.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\stringpool.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\varint.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pbc\src\wmessage.c">
+      <Filter>pbc\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2558,6 +2762,9 @@
       <Filter>cpp_17_stl_cook_book\code\build</Filter>
     </Text>
     <Text Include="..\mysqltest.txt" />
+    <Text Include="..\pbc\license.txt">
+      <Filter>pbc</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

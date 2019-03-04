@@ -7,7 +7,7 @@ LUA_INC := /usr/local/lua/include
 all: client pbcc.so loginServer.login.s2c.pb loginServer.login.c2s.pb
 
 clean:
-	rm -f *.o *.so *.pb client
+	rm -f *.o *.so *.pb client core.*
 	cd pbc && make clean
 
 client: client.c

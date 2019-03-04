@@ -71,6 +71,7 @@ int socket_connect(const char *ip, int port)
 	if (0 == ret)
 	{   //如果connect()返回0则连接已建立 
 		//下面恢复套接字阻塞状态 
+		int flags = 1;
 		if (fcntl(client_fd, F_SETFL, flags) < 0)
 		{
 			//错误处理 

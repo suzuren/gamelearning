@@ -8,16 +8,26 @@
 #include <stdbool.h>
 
 
-static struct pbc_wmessage * test_s2c_login_wmessage(struct pbc_env * env);
-static void test_s2c_login_rmessage(struct pbc_env *env, struct pbc_slice *slice);
-static struct pbc_wmessage * test_c2s_login_wmessage(struct pbc_env * env);
-static void test_c2s_login_rmessage(struct pbc_env *env, struct pbc_slice *slice);
-static bool CheckStorageMode();
+#include <sys/resource.h>
 
+
+struct pbc_wmessage * test_s2c_login_wmessage(struct pbc_env * env);
+void test_s2c_login_rmessage(struct pbc_env *env, struct pbc_slice *slice);
+static struct pbc_wmessage * test_c2s_login_wmessage(struct pbc_env * env);
+void test_c2s_login_rmessage(struct pbc_env *env, struct pbc_slice *slice);
+bool CheckStorageMode();
+static int test_pbc_write_read_data();
 
 
 int main(int argc, char const *argv[])
 {
+	int ret_pbc_write_read_data = test_pbc_write_read_data();
+	if (ret_pbc_write_read_data ==1)
+	{
+		return 0;
+	}
+	
+
 	int client_fd = socket_connect(IPADDRESS, PORT);
 	printf("socket_connect client_fd:%d\n", client_fd);
 
@@ -163,7 +173,7 @@ bool CheckStorageMode()
 
 
 
-static struct pbc_wmessage *
+struct pbc_wmessage *
 test_s2c_login_wmessage(struct pbc_env * env)
 {
 	struct pbc_wmessage* w_msg = pbc_wmessage_new(env, "loginServer.login.s2c.Login");
@@ -189,7 +199,7 @@ test_s2c_login_wmessage(struct pbc_env * env)
 	return w_msg;
 }
 
-static void
+void
 test_s2c_login_rmessage(struct pbc_env *env, struct pbc_slice *slice)
 {
 	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, "loginServer.login.s2c.Login", slice);
@@ -245,7 +255,7 @@ test_c2s_login_wmessage(struct pbc_env * env)
 	return w_msg;
 }
 
-static void
+void
 test_c2s_login_rmessage(struct pbc_env *env, struct pbc_slice *slice)
 {
 	struct pbc_rmessage * r_msg = pbc_rmessage_new(env, "loginServer.login.c2s.Login", slice);
@@ -268,3 +278,187 @@ test_c2s_login_rmessage(struct pbc_env *env, struct pbc_slice *slice)
 		psession, pnickName, pmachineID, kindID, scoreTag, appID, pappChannel, pappVersion);
 
 }
+
+
+
+int GenCoreDumpFile(size_t size)
+{
+	struct rlimit flimit;
+	flimit.rlim_cur = size;
+	flimit.rlim_max = size;
+	if (setrlimit(RLIMIT_CORE, &flimit) != 0)
+	{
+		return errno;
+	}
+	return 0;
+}
+
+static void dump(uint8_t *buffer, int sz)
+{
+	int i, j;
+	for (i = 0; i<sz; i++)
+	{
+		printf("%02X ", buffer[i]);
+		if (i % 16 == 15)
+		{
+			for (j = 0; j <16; j++)
+			{
+				char c = buffer[i / 16 * 16 + j];
+				if (c >= 32 && c<127)
+				{
+					printf("%c", c);
+				}
+				else
+				{
+					printf(".");
+				}
+			}
+			printf("\n");
+		}
+	}
+
+	printf("\n");
+}
+
+static int test_pbc_write_read_data()
+{
+	GenCoreDumpFile((uint32_t)(1024UL * 1024 * 1024 * 2));
+
+	const char * file_path = "loginServer.login.s2c.pb";
+	const char * type_name = "loginServer.login.s2c.Login";
+
+	struct pbc_slice slice_write;
+	read_file(file_path, &slice_write);
+	if (slice_write.buffer == NULL)
+	{
+		printf("file_path:%s, read_file error\n", file_path);
+		return 0;
+	}
+	struct pbc_env * env_write = pbc_new();
+	if (env_write == NULL)
+	{
+		printf("file_path:%s, pbc_new error\n", file_path);
+		return 0;
+	}
+	int ret_write = pbc_register(env_write, &slice_write);
+	if (ret_write)
+	{
+		printf("file_path:%s, pbc_register Error : %s\n", file_path, pbc_error(env_write));
+		return 0;
+	}
+	free(slice_write.buffer);
+
+	struct pbc_wmessage * w_msg = pbc_wmessage_new(env_write, type_name);
+	if (w_msg == NULL)
+	{
+		printf("file_path:%s, pbc_wmessage_new error\n", file_path);
+		return 0;
+	}
+
+	pbc_wmessage_string(w_msg, "code", "RC_OK", strlen("RC_OK"));
+	pbc_wmessage_string(w_msg, "msg", "success", strlen("success"));
+
+	struct pbc_wmessage * pwrite_data = pbc_wmessage_message(w_msg, "data");
+	pbc_wmessage_integer(pwrite_data, "userID", 10003, 0);
+	pbc_wmessage_integer(pwrite_data, "gameID", 10008, 0);
+	pbc_wmessage_integer(pwrite_data, "faceID", 10009, 0);
+	pbc_wmessage_integer(pwrite_data, "gender", 10011, 0);
+	pbc_wmessage_string(pwrite_data, "nickName", "alice", strlen("alice"));
+	pbc_wmessage_integer(pwrite_data, "isRegister", 1, 0);
+	pbc_wmessage_integer(pwrite_data, "memberOrder", 8, 0);
+	pbc_wmessage_string(pwrite_data, "signature", "hello_world", strlen("hello_world"));
+	pbc_wmessage_string(pwrite_data, "platformFace", "http_forest_url", strlen("http_forest_url"));
+	pbc_wmessage_integer(pwrite_data, "isChangeNickName", 0, 0);
+	pbc_wmessage_buffer(w_msg, &slice_write);
+
+	//-------------------------------------------------------
+
+	char read_buffer[65535] = { 0 };
+	int read_lenght = 0;
+	
+	read_lenght = slice_write.len;
+	memcpy(read_buffer, slice_write.buffer, read_lenght);
+
+	pbc_wmessage_delete(w_msg);
+	pbc_delete(env_write);
+
+	//-------------------------------------------------------
+
+	
+	struct pbc_slice slice_read;
+	read_file(file_path, &slice_read);
+	if (slice_read.buffer == NULL)
+	{
+		printf("read_file - file_path:%s,error\n", file_path);
+		return 0;
+	}
+	struct pbc_env * env_read = pbc_new();
+	if (env_read == NULL)
+	{
+		printf("pbc_new - file_path:%s,error\n", file_path);
+		return 0;
+	}
+	int ret_read = pbc_register(env_read, &slice_read);
+	if (ret_read)
+	{
+		printf("pbc_register - file_path:%s,error:%s\n", file_path, pbc_error(env_read));
+		return 0;
+	}
+	
+	free(slice_read.buffer);
+	slice_read.buffer = read_buffer;
+	slice_read.len = read_lenght;
+	struct pbc_rmessage * r_msg = pbc_rmessage_new(env_read, type_name, &slice_read);
+	if (r_msg == NULL)
+	{
+		printf("pbc_rmessage_new - file_path:%s,error:%s\n", file_path, pbc_error(env_read));
+		return 0;
+	}
+
+	const char *  pread_code = pbc_rmessage_string(r_msg, "code", 0, NULL);
+	const char *  pread_msg = pbc_rmessage_string(r_msg, "msg", 0, NULL);
+
+	printf("             pread_code : %s\n", pread_code);
+	printf("              pread_msg : %s\n", pread_msg);
+
+	//int iread_size_data = pbc_rmessage_size(r_msg, "data");
+	//for (int index = 0; index < iread_size_data; index++)
+	//{
+	//	const char *  pread_data = pbc_rmessage_message(r_msg, "data", index);
+	//	int iread_userID = pbc_rmessage_integer(pread_data, "userID", index, NULL);
+	//}
+
+	struct pbc_rmessage *  pread_data = pbc_rmessage_message(r_msg, "data", 0);
+	int iread_userID = pbc_rmessage_integer(pread_data, "userID", 0, NULL);
+	int iread_gameID = pbc_rmessage_integer(pread_data, "gameID", 0, NULL);
+	int iread_faceID = pbc_rmessage_integer(pread_data, "faceID", 0, NULL);
+	int iread_gender = pbc_rmessage_integer(pread_data, "gender", 0, NULL);
+	const char *  pread_nickName = pbc_rmessage_string(pread_data, "nickName", 0, NULL);
+	int iread_isRegister = pbc_rmessage_integer(pread_data, "isRegister", 0, NULL);
+	int iread_memberOrder = pbc_rmessage_integer(pread_data, "memberOrder", 0, NULL);
+	const char *  pread_signature = pbc_rmessage_string(pread_data, "signature", 0, NULL);
+	const char *  pread_platformFace = pbc_rmessage_string(pread_data, "platformFace", 0, NULL);
+	int iread_isChangeNickName = pbc_rmessage_integer(pread_data, "isChangeNickName", 0, NULL);
+
+	printf("           iread_userID : %d\n", iread_userID);
+	printf("           iread_gameID : %d\n", iread_gameID);
+	printf("           iread_faceID : %d\n", iread_faceID);
+	printf("           iread_gender : %d\n", iread_gender);
+	printf("         pread_nickName : %s\n", pread_nickName);
+	printf("       iread_isRegister : %d\n", iread_isRegister);
+	printf("      iread_memberOrder : %d\n", iread_memberOrder);
+	printf("        pread_signature : %s\n", pread_signature);
+	printf("     pread_platformFace : %s\n", pread_platformFace);
+	printf(" iread_isChangeNickName : %d\n", iread_isChangeNickName);
+
+	dump(slice_read.buffer, slice_read.len);
+
+
+	pbc_rmessage_delete(r_msg);
+	pbc_delete(env_read);
+	
+	return 1;
+}
+
+
+

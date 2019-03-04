@@ -382,6 +382,9 @@ static int test_pbc_write_read_data()
 	pbc_wmessage_delete(w_msg);
 	pbc_delete(env_write);
 
+	printf("            read_lenght : %d\n", read_lenght);
+
+
 	//-------------------------------------------------------
 
 	

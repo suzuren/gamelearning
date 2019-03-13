@@ -1098,6 +1098,9 @@
     <ClInclude Include="..\pbc\pbc.h">
       <Filter>pbc</Filter>
     </ClInclude>
+    <ClInclude Include="..\test\test_stl_func.h">
+      <Filter>test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

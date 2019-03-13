@@ -68,8 +68,11 @@ ldd slotServer
 find ./ -name '*.sh' | xargs chmod +x
 
 netstat -anp | grep 9799
+netstat -anp | grep 9998
 
 tcpdump -i lo -tt -vv -nn -X port 9998
+tcpdump -i lo -tt -vv -nn -X port 32930
+tcpdump -i eth0 -tt -vv -nn -X port 32930
 
 tcpdump -i any -tt -vv -nn -X port 9999
 

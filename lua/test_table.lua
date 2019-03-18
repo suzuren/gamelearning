@@ -45,5 +45,36 @@ printr(_invalidGunHash)
 print("invalidGunHash 3 ------------------------------------------------------")
 cmd_ReleaseUserData(3)
 printr(_invalidGunHash)
+print("invalidGunHash end ------------------------------------------------------")
 
 
+
+print("testRemoveTable 0 ------------------------------------------------------")
+
+local testRemoveTable = {1, 2, 3, 4, 5, 6}
+printr(testRemoveTable)
+print("testRemoveTable 2 ------------------------------------------------------")
+
+table.remove(testRemoveTable, 1)
+printr(testRemoveTable)
+
+print("testRemoveTable 3 ------------------------------------------------------")
+
+table.remove(testRemoveTable)
+printr(testRemoveTable)
+
+print("testRemoveTable 4 ------------------------------------------------------")
+
+table.remove(testRemoveTable,#testRemoveTable)
+printr(testRemoveTable)
+
+print("testRemoveTable end ------------------------------------------------------")
+
+
+local _serverSignature
+local isPullingStarted = _serverSignature~=nil
+
+print("isPullingStarted - ",isPullingStarted)
+print("_serverSignature - ",_serverSignature)
+
+print("isPullingStarted end ------------------------------------------------------")

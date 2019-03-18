@@ -69,6 +69,7 @@
     <ClInclude Include="..\ConnnectSkynet_sproto\select.h" />
     <ClInclude Include="..\ConnnectSkynet_sproto\sproto\msvcint.h" />
     <ClInclude Include="..\ConnnectSkynet_sproto\sproto\sproto.h" />
+    <ClInclude Include="..\coroutine\coroutine.h" />
     <ClInclude Include="..\cpp11\shared.hpp" />
     <ClInclude Include="..\cpp11\SyncQueue.hpp" />
     <ClInclude Include="..\cpp11\test_chrono_time.hpp" />
@@ -312,6 +313,9 @@
     <None Include="..\ConnnectSkynet_sproto\sproto\test.lua" />
     <None Include="..\ConnnectSkynet_sproto\sproto\testall.lua" />
     <None Include="..\ConnnectSkynet_sproto\sproto\testrpc.lua" />
+    <None Include="..\coroutine\LICENSE" />
+    <None Include="..\coroutine\Makefile" />
+    <None Include="..\coroutine\README.md" />
     <None Include="..\cpp11datalit\Makefile" />
     <None Include="..\cpp11\Makefile" />
     <None Include="..\cpp_17_stl_cook_book\clear.sh" />
@@ -597,6 +601,8 @@
     <ClCompile Include="..\ConnnectSkynet_sproto\sproto\lsproto.c" />
     <ClCompile Include="..\ConnnectSkynet_sproto\sproto\sproto.c" />
     <ClCompile Include="..\ConnnectSkynet_sproto\sproto\testsproto.c" />
+    <ClCompile Include="..\coroutine\coroutine.c" />
+    <ClCompile Include="..\coroutine\main.c" />
     <ClCompile Include="..\cpp11datalit\dataList.cpp" />
     <ClCompile Include="..\cpp11\main.cpp" />
     <ClCompile Include="..\cpp_17_stl_cook_book\code\src\main.cpp" />

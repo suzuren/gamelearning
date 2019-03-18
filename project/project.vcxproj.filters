@@ -340,6 +340,9 @@
     <Filter Include="pbc\binding\lua53">
       <UniqueIdentifier>{e6b6dd5d-3fb0-4475-ad91-568bd21c9e89}</UniqueIdentifier>
     </Filter>
+    <Filter Include="coroutine">
+      <UniqueIdentifier>{00c71748-a983-4969-a800-0f3c034f004f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1100,6 +1103,9 @@
     </ClInclude>
     <ClInclude Include="..\test\test_stl_func.h">
       <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\coroutine\coroutine.h">
+      <Filter>coroutine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1892,6 +1898,15 @@
     </None>
     <None Include="..\pbc\README.md">
       <Filter>pbc</Filter>
+    </None>
+    <None Include="..\coroutine\LICENSE">
+      <Filter>coroutine</Filter>
+    </None>
+    <None Include="..\coroutine\Makefile">
+      <Filter>coroutine</Filter>
+    </None>
+    <None Include="..\coroutine\README.md">
+      <Filter>coroutine</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2686,6 +2701,12 @@
     </ClCompile>
     <ClCompile Include="..\pbc\src\wmessage.c">
       <Filter>pbc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\coroutine\coroutine.c">
+      <Filter>coroutine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\coroutine\main.c">
+      <Filter>coroutine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

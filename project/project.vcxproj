@@ -357,6 +357,7 @@
     <None Include="..\lua-5.3.4-src\Makefile" />
     <None Include="..\lua-5.3.4-src\README" />
     <None Include="..\lua-5.3.4-src\src\Makefile" />
+    <None Include="..\lua-arc4random\lua_and_arc4_test_rand.lua" />
     <None Include="..\lua-arc4random\Makefile" />
     <None Include="..\lua-arc4random\Makefile.mess" />
     <None Include="..\lua-arc4random\README.md" />

@@ -1908,6 +1908,9 @@
     <None Include="..\coroutine\README.md">
       <Filter>coroutine</Filter>
     </None>
+    <None Include="..\lua-arc4random\lua_and_arc4_test_rand.lua">
+      <Filter>lua-arc4random</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">

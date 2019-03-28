@@ -63,4 +63,6 @@ gccÉý¼¶µ½7.2
 yum install devtoolset-7-gcc devtoolset-7-gcc-c++ -y
 source /opt/rh/devtoolset-7/enable
 
+echo 'source /opt/rh/devtoolset-7/enable' >> /etc/bashrc
+
 /---------------------------------------------------------------------------------------------------

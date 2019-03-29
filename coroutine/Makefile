@@ -4,4 +4,4 @@ main : main.c coroutine.c
 	gcc -g -Wall -o $@ $^
 
 clean :
-	rm main
+	rm -f main *.o *.so

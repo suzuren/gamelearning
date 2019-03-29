@@ -1911,6 +1911,7 @@
     <None Include="..\lua-arc4random\lua_and_arc4_test_rand.lua">
       <Filter>lua-arc4random</Filter>
     </None>
+    <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2792,6 +2793,7 @@
     <Text Include="..\pbc\license.txt">
       <Filter>pbc</Filter>
     </Text>
+    <Text Include="..\gcc_7_3.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

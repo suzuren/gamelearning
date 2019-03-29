@@ -497,6 +497,7 @@
     <None Include="..\proxy_epoll\stop_proxy.sh" />
     <None Include="..\proxy_epoll\subproxy\start_proxy.sh" />
     <None Include="..\proxy_epoll\subproxy\stop_proxy.sh" />
+    <None Include="..\README.md" />
     <None Include="..\redis_server\makefile" />
     <None Include="..\referlib\Makefile" />
     <None Include="..\referlib\start_server.sh" />
@@ -817,6 +818,7 @@
     <Text Include="..\cpp_17_stl_cook_book\code\build\CMakeLists.txt" />
     <Text Include="..\cpp_17_stl_cook_book\test\build\CMakeLists.txt" />
     <Text Include="..\cpp_template\template_read.txt" />
+    <Text Include="..\gcc_7_3.txt" />
     <Text Include="..\gitcmd.txt" />
     <Text Include="..\lua-cjson\CMakeLists.txt" />
     <Text Include="..\lua-cjson\devel\json_parser_outline.txt" />

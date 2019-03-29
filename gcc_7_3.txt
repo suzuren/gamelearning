@@ -1,3 +1,18 @@
+
+
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# yum install centos-release-scl-rh
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# yum install devtoolset-7-gcc devtoolset-7-gcc-c++ -y
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# source /opt/rh/devtoolset-7/enable
+[root@iZwz93ko7koxklgdtyy0kvZ ~]# echo 'source /opt/rh/devtoolset-7/enable' >> /etc/bashrc
+
+
+
+
+
+
+
+
+
 Last login: Tue Jan  8 23:42:11 2019 from 119.123.204.129
 
 Welcome to aliyun Elastic Compute Service!
@@ -533,9 +548,4 @@ source /opt/rh/devtoolset-7/enable
 	libresolv.so.2 => /lib64/libresolv.so.2 (0x0000003082e00000)
 	libselinux.so.1 => /lib64/libselinux.so.1 (0x0000003082600000)
 [root@iZwz93ko7koxklgdtyy0kvZ lobby_server]# 
-
-
-
-
-
 

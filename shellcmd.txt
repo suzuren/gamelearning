@@ -4,6 +4,7 @@
 添加系统路径
 export PATH=$PATH:/usr/local/lib
 export PATH=$PATH:/usr/local/cmake/bin
+export PATH=$PATH:/usr/lib64/mysql
 source /etc/profile
 查看系统路径
 echo $PATH

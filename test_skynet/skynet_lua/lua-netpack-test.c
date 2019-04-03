@@ -90,8 +90,9 @@ lclear(lua_State *L) {
 	if (q->head > q->tail) {
 		q->tail += q->cap;
 	}
-	for (i=q->head;i<q->tail;i++) {
-		struct netpack *np = &q->queue[i % q->cap];
+	for (i=q->head;i<q->tail;i++)
+	{
+		struct netpack *np = &q->queue[i % q->cap]; // 因为是循环队列，所以需要模队列的容量，才能取正确的下标
 		skynet_free(np->buffer);
 	}
 	q->head = q->tail = 0;
@@ -101,6 +102,11 @@ lclear(lua_State *L) {
 
 // HASHSIZE -> 4096
 // oxfff ->4095 -> 24λ
+
+// int [-2^31 , 2^31-1] -> [-2147483648，2147483647]
+//       0x7fffffff = ‭2147483647‬ = ‭01111111 11111111 11111111 11111111‬
+//                         >> 24 = ‭00000000 00000000 00000000 01111111 = 0x7F	 = 127		取高 8  位
+//                         >> 12 = 00000000 0000‭‭0111 11111111 11111111 = 0x‭7FFFF‬ = ‭524287‬	取高 20 位
 
 static inline int
 hash_fd(int fd) {
@@ -117,22 +123,26 @@ static struct uncomplete *
 find_uncomplete(struct queue *q, int fd) {
 	if (q == NULL)
 		return NULL;
-	int h = hash_fd(fd);
+	int h = hash_fd(fd); // 取出这个 fd 的 哈希值
 	struct uncomplete * uc = q->hash[h];
 	if (uc == NULL)
 		return NULL;
-	if (uc->pack.id == fd) {
-		q->hash[h] = uc->next;
+	if (uc->pack.id == fd) // 如果这个节点的 fd 就是是要找的 fd， 则返回这个节点地址，
+							// 否则计入下面循环，遍历这个链表找到这个fd的节点进行返回
+	{
+		q->hash[h] = uc->next; // 把这个不完整的数据包节点取下来，返回该节点的地址
 		return uc;
 	}
 	struct uncomplete * last = uc;
-	while (last->next) {
+	while (last->next) // 如果还有下一个节点 继续找，是否存在有未接收完成数据的 fd
+	{
 		uc = last->next;
-		if (uc->pack.id == fd) {
-			last->next = uc->next;
-			return uc;
+		if (uc->pack.id == fd) // 找到该 fd
+		{
+			last->next = uc->next; // 把存有不完整数据的该 fd 节点取下来
+			return uc; // 返回该节点的地址
 		}
-		last = uc;
+		last = uc; // 查找下一个节点
 	}
 	return NULL;
 }
@@ -149,7 +159,8 @@ get_queue(lua_State *L) {
 		for (i=0;i<HASHSIZE;i++) {
 			q->hash[i] = NULL;
 		}
-		//lua_replace(L, 1);
+		//lua_replace(L, 1); // 把栈顶元素放置到给定位置而不移动其它元素 
+							// （因此覆盖了那个位置处的值），然后将栈顶元素弹出。
 	}
 	return q;
 }
@@ -157,15 +168,16 @@ get_queue(lua_State *L) {
 static void
 expand_queue(lua_State *L, struct queue *q) {
 	struct queue *nq; // = lua_newuserdata(L, sizeof(struct queue) + q->cap * sizeof(struct netpack));
-	nq->cap = q->cap + QUEUESIZE;
-	nq->head = 0;
-	nq->tail = q->cap;
-	memcpy(nq->hash, q->hash, sizeof(nq->hash));
-	memset(q->hash, 0, sizeof(q->hash));
+	nq->cap = q->cap + QUEUESIZE; // 按照 1024 的数量增加存网络数据包的队列
+	nq->head = 0;	// 刚开始的时候，头部从 0 下标开始
+	nq->tail = q->cap; // 尾部在 cap 容量最大处，因为只有在 cap 容量存完之后，才会开始扩增队列
+	memcpy(nq->hash, q->hash, sizeof(nq->hash)); // 把前一个已经满的队列的 hash 数组拷贝到新创建的队列里面
+	memset(q->hash, 0, sizeof(q->hash)); //全部清空数值，在这里不能释放资源，因为在新创建的队列里面还需要这些内存资源
 	int i;
-	for (i=0;i<q->cap;i++) {
-		int idx = (q->head + i) % q->cap;
-		nq->queue[i] = q->queue[idx];
+	for (i=0;i<q->cap;i++)
+	{
+		int idx = (q->head + i) % q->cap; // 因为是循环队列，所以需要 模 队列的容量，才能取到正确的下标
+		nq->queue[i] = q->queue[idx]; // 按照之前的规则 全部重新放进新的队列里面
 	}
 	q->head = q->tail = 0;
 	//lua_replace(L,1);
@@ -179,14 +191,15 @@ push_data(lua_State *L, int fd, void *buffer, int size, int clone) {
 		buffer = tmp;
 	}
 	struct queue *q = get_queue(L);
-	struct netpack *np = &q->queue[q->tail];
-	if (++q->tail >= q->cap)
+	struct netpack *np = &q->queue[q->tail]; // 取下尾部指向的元素地址，此时这个元素还没存网络数据包
+	if (++q->tail >= q->cap) // ++tail 重新指向下一个没有存数据的元素，如果 tail > cap 容量，则循环存储
 		q->tail -= q->cap;
 	np->id = fd;
 	np->buffer = buffer;
 	np->size = size;
-	if (q->head == q->tail) {
-		expand_queue(L, q);
+	if (q->head == q->tail) // 存放数据的循环队列满了
+	{
+		expand_queue(L, q); // 加大容量
 	}
 }
 
@@ -214,7 +227,7 @@ push_more(lua_State *L, int fd, uint8_t *buffer, int size) {
 	if (size == 1) {
 		struct uncomplete * uc = save_uncomplete(L, fd);
 		uc->read = -1;
-		uc->header = *buffer;
+		uc->header = *buffer; // 先保存进 int 整型，接下来在 filter_data_ 函数里有新的数据进来的时候直接左移八位就可以
 		return;
 	}
 	int pack_size = read_size(buffer);
@@ -252,13 +265,15 @@ static int
 filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 	struct queue *q; // = lua_touserdata(L, 1);
 	struct uncomplete * uc = find_uncomplete(q, fd);
-	if (uc) {
+	if (uc) // 这个 fd 之前有接收过部分数据
+	{
 		// fill uncomplete
-		if (uc->read < 0) {
+		if (uc->read < 0) // 之前只接收过一个字节的数据
+		{
 			// read size
 			assert(uc->read == -1);
 			int pack_size = *buffer;
-			pack_size |= uc->header << 8 ;
+			pack_size |= uc->header << 8 ; // push_more 函数里面 已经把这个字节的数值赋值给 header
 			++buffer;
 			--size;
 			uc->pack.size = pack_size;
@@ -266,21 +281,27 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 			uc->read = 0;
 		}
 		int need = uc->pack.size - uc->read;
-		if (size < need) {
+		if (size < need) // 加上这个包还是没有完整
+		{
 			memcpy(uc->pack.buffer + uc->read, buffer, size);
 			uc->read += size;
 			int h = hash_fd(fd);
 			uc->next = q->hash[h];
-			q->hash[h] = uc;
+			q->hash[h] = uc; // 把这个没接收完整数据包的节点重新挂接到链表里面
 			return 1;
 		}
-		memcpy(uc->pack.buffer + uc->read, buffer, need);
+		memcpy(uc->pack.buffer + uc->read, buffer, need); // 可以把这个包接收完整 拷贝进这个不完整的节点让他变成完整的节点
 		buffer += need;
 		size -= need;
-		if (size == 0) {
-			//lua_pushvalue(L, lua_upvalueindex(TYPE_DATA));
+		if (size == 0)
+		{
+			//lua_pushvalue(L, lua_upvalueindex(TYPE_DATA)); // 把栈上给定索引处的元素作一个副本压栈。
 			//lua_pushinteger(L, fd);
-			//lua_pushlightuserdata(L, uc->pack.buffer);
+			//lua_pushlightuserdata(L, uc->pack.buffer); // 把一个轻量用户数据压栈。
+														//用户数据是保留在 Lua 中的 C 值。 轻量用户数据 表示一个指针 void*。
+														//它是一个像数字一样的值： 你不需要专门创建它，它也没有独立的元表，
+														//而且也不会被收集（因为从来不需要创建）。 只要表示的 C 地址相同，
+														//两个轻量用户数据就相等。
 			//lua_pushinteger(L, uc->pack.size);
 			skynet_free(uc);
 			return 5;
@@ -291,8 +312,11 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 		push_more(L, fd, buffer, size);
 		//lua_pushvalue(L, lua_upvalueindex(TYPE_MORE));
 		return 2;
-	} else {
-		if (size == 1) {
+	}
+	else
+	{
+		if (size == 1)
+		{
 			struct uncomplete * uc = save_uncomplete(L, fd);
 			uc->read = -1;
 			uc->header = *buffer;
@@ -302,7 +326,8 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 		buffer+=2;
 		size-=2;
 
-		if (size < pack_size) {
+		if (size < pack_size)
+		{
 			struct uncomplete * uc = save_uncomplete(L, fd);
 			uc->read = size;
 			uc->pack.size = pack_size;
@@ -310,7 +335,8 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 			memcpy(uc->pack.buffer, buffer, size);
 			return 1;
 		}
-		if (size == pack_size) {
+		if (size == pack_size)
+		{
 			// just one package
 			//lua_pushvalue(L, lua_upvalueindex(TYPE_DATA));
 			//lua_pushinteger(L, fd);

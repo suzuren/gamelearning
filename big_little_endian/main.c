@@ -40,7 +40,7 @@ void BigLittleStorage()
 	//unsigned short pack_size = 65535;
 	unsigned short pack_size = 6553;
 	// 按照大端存进buffer
-	buffer[0] = (pack_size >> 8) & 0xff; // 把高位的字节移动地位字节，移动 8 位，也就是移动了 1 字节，与 0xff 相与，保证只取一字节数值
+	buffer[0] = (pack_size >> 8) & 0xff; // 把高位的字节移动低位字节，移动 8 位，也就是移动了 1 字节，与 0xff 相与，保证只取一字节数值
 	buffer[1] = pack_size & 0xff; // 与 0xff 相与，保证只取一字节数值，并且取的是最低字节的数值
 	printf("big storage - pack_size:%d,>>8:%d - &0xff:%d,,buffer:%d,%d\n", pack_size, (pack_size >> 8),(pack_size & 0xff),buffer[0],buffer[1]);
 

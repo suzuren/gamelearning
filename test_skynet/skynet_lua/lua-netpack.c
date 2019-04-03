@@ -1,9 +1,5 @@
 #define LUA_LIB
 
-//#include "skynet_malloc.h"
-//
-//#include "skynet_socket.h"
-
 #define SKYNET_SOCKET_TYPE_DATA 1
 #define SKYNET_SOCKET_TYPE_CONNECT 2
 #define SKYNET_SOCKET_TYPE_CLOSE 3
@@ -12,12 +8,19 @@
 #define SKYNET_SOCKET_TYPE_UDP 6
 #define SKYNET_SOCKET_TYPE_WARNING 7
 
+#define skynet_malloc malloc
+#define skynet_free   free
+
 struct skynet_socket_message {
 	int type;
 	int id;
 	int ud;
 	char * buffer;
 };
+
+//#include "skynet_malloc.h"
+
+//#include "skynet_socket.h"
 
 #include <lua.h>
 #include <lauxlib.h>
@@ -26,9 +29,7 @@ struct skynet_socket_message {
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define skynet_malloc malloc
-#define skynet_free   free
+#include <time.h>
 
 #define QUEUESIZE 1024
 #define HASHSIZE 4096
@@ -296,6 +297,8 @@ filter_data_(lua_State *L, int fd, uint8_t * buffer, int size) {
 		buffer+=2;
 		size-=2;
 
+		printf("filter_data_ - func size:%d,pack_size:%d\n", size, pack_size);
+
 		if (size < pack_size) {
 			struct uncomplete * uc = save_uncomplete(L, fd);
 			uc->read = size;
@@ -329,6 +332,7 @@ filter_data(lua_State *L, int fd, uint8_t * buffer, int size) {
 	int ret = filter_data_(L, fd, buffer, size);
 	// buffer is the data of socket message, it malloc at socket_server.c : function forward_message .
 	// it should be free before return,
+	//printf("filter_data - func buffer:%p\n", buffer);
 	skynet_free(buffer);
 	return ret;
 }
@@ -364,7 +368,23 @@ lfilter(lua_State *L) {
 		size = -1;
 	}
 
+	//printf("lfilter func 1 - lua_gettop(L):%d\n", lua_gettop(L));
+	//for (int index = lua_gettop(L); index > 0; --index)
+	//{
+	//	int type = lua_type(L, index);
+	//	printf("lfilter func - index:%d, lua_type(L,index):%d,\tlua_typename(L, type):%s,\tlua_tostring(L, index):%s\n",
+	//		index, type, lua_typename(L, type), lua_tostring(L, index));
+	//}
+
 	lua_settop(L, 1);
+
+	//printf("lfilter func 2 - lua_gettop(L):%d\n", lua_gettop(L));
+	//for (int index = lua_gettop(L); index > 0; --index)
+	//{
+	//	int type = lua_type(L, index);
+	//	printf("lfilter func - index:%d, lua_type(L,index):%d,\tlua_typename(L, type):%s,\tlua_tostring(L, index):%s\n",
+	//		index, type, lua_typename(L, type), lua_tostring(L, index));
+	//}
 
 	switch(message->type) {
 	case SKYNET_SOCKET_TYPE_DATA:
@@ -377,7 +397,8 @@ lfilter(lua_State *L) {
 	case SKYNET_SOCKET_TYPE_CLOSE:
 		// no more data in fd (message->id)
 		close_uncomplete(L, message->id);
-		lua_pushvalue(L, lua_upvalueindex(TYPE_CLOSE));
+		lua_pushvalue(L, lua_upvalueindex(TYPE_CLOSE)); // lua_pushvalue 把栈上给定索引处的元素作一个副本压栈.
+														// lua_upvalueindex 返回当前运行的函数的第 i 个上值的伪索引。
 		lua_pushinteger(L, message->id);
 		return 3;
 	case SKYNET_SOCKET_TYPE_ACCEPT:
@@ -482,6 +503,44 @@ ltostring(lua_State *L) {
 	return 1;
 }
 
+
+// --------------------------------------------------------
+
+static int
+lnewdata(lua_State *L)
+{
+	struct skynet_socket_message * message = skynet_malloc(sizeof(struct skynet_socket_message));
+	memset(message, 0, sizeof(*message));
+	message->type = SKYNET_SOCKET_TYPE_DATA;
+	message->id = luaL_checkinteger(L, 1);
+
+	srand(time(0));
+	int data_size = rand() % 0xFFFF;
+	unsigned char * buffer = skynet_malloc(data_size + 2);
+	memset(buffer, 0, sizeof(*buffer));
+
+	//printf("lnewdata func buffer:%p\n", buffer);
+
+	int pack_size = data_size;
+	if (pack_size < 0x7FFF)
+	{
+		pack_size += 1024;
+	}
+	write_size(buffer, pack_size);
+
+	message->ud = data_size + 2;
+	message->buffer = (char *)buffer;
+
+	lua_pushlightuserdata(L, message);
+	lua_pushinteger(L, data_size);
+
+	return 2;
+}
+
+// --------------------------------------------------------
+
+
+
 LUAMOD_API int
 luaopen_skynet_netpack(lua_State *L) {
 	luaL_checkversion(L);
@@ -490,6 +549,8 @@ luaopen_skynet_netpack(lua_State *L) {
 		{ "pack", lpack },
 		{ "clear", lclear },
 		{ "tostring", ltostring },
+		{ "newdata", lnewdata },
+		
 		{ NULL, NULL },
 	};
 	luaL_newlib(L,l);
@@ -504,6 +565,13 @@ luaopen_skynet_netpack(lua_State *L) {
 
 	lua_pushcclosure(L, lfilter, 6);
 	lua_setfield(L, -2, "filter");
+
+	// lua_pushcclosure 把一个新的 C 闭包压栈。
+	// 当创建了一个 C 函数后， 你可以给它关联一些值， 这就是在创建一个 C 闭包； 接下来无论函数何时被调用，
+	// 这些值都可以被这个函数访问到。 为了将一些值关联到一个 C 函数上， 
+	// 首先这些值需要先被压入堆栈（如果有多个值，第一个先压）。 
+	// 接下来调用 lua_pushcclosure 来创建出闭包并把这个 C 函数压到栈上。
+	// 参数 n 告之函数有多少个值需要关联到函数上。 lua_pushcclosure 也会把这些值从栈上弹出。
 
 	return 1;
 }

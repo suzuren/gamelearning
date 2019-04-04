@@ -18,6 +18,55 @@
 #define HANDLE_MASK 0xffffff
 #define HANDLE_REMOTE_SHIFT 24
 
+
+/*
+
+// 高八位是 harbor id 使用? 低 24位 是 handle index 使用 ，无符号整形表示
+?HANDLE_MASK = 0xffffff == 0000000 11111111 11111111 11111111??
+
+所以 s->harbor = (uint32_t) (harbor & 0xff) << HANDLE_REMOTE_SHIFT;
+
+最新的代码 handle id 算法 
+if (handle > HANDLE_MASK)
+{
+	// 0 is reserved
+	handle = 1;
+}
+
+handle |= s->harbor;
+
+所以handle 是 根据 1 开始 最高为 0xffffff 高八位是表示 harbor
+
+老代码的handleid 算法 
+uint32_t handle = (i+s->handle_index) & HANDLE_MASK;
+直接使用掩码 去除高八位 那时候没有循环
+
+
+在这个 组播服务中
+multicastd.lua
+
+local harbor_id = skynet.harbor(skynet.self())
+local channel_id = harbor_id
+-- new LOCAL channel , The low 8bit is the same with harbor_id
+
+
+static int mc_nextid(lua_State *L)
+{
+	uint32_t id = (uint32_t)luaL_checkinteger(L, 1);
+	id += 256;
+	lua_pushinteger(L, (uint32_t)id);
+
+	return 1;
+}
+
+
+所以说 新的 channel id 频道id的低八位都是 harbor_id，每次加 256 = ?0001 00000000?
+256的低八位都是0，所以不会改变 harbor_id
+
+
+*/
+
+
 struct skynet_context;
 
 typedef int(*skynet_cb)(struct skynet_context * context, void *ud, int type, int session, uint32_t source, const void * msg, size_t sz);

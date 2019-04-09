@@ -1,3 +1,50 @@
+https://blog.codingnow.com/2013/08/full_userdata_gc.html
+
+/*
+
+需求是这样的：skynet 提供了一个用 C 编写的异步 socket 库，所有 socket 请求都是通过一个消息队列分发
+回来的。我希望封装成 Lua 版的 api 时可以去掉这些。我需要给每个 socket 对象绑定一个数据队列，一旦有
+socket 数据发进来就串在队列上，然后再逐个解析。
+
+在 https://github.com/cloudwu/skynet/blob/master/lualib-src/lua-socket.c 里我定义了这样的数据结构：
+
+struct buffer_node {
+char * msg;
+int sz;
+struct buffer_node *next;
+};
+
+struct socket_buffer {
+int size;
+int offset;
+struct buffer_node *head;
+struct buffer_node *tail;
+};
+
+需要封装的是 struct socket_buffer 结构，它里面引用了一个链表 struct buffer_node 。每组 socket 数据会
+以 struct buffer_node 的形式从底层产生，被挂接到 struct socket_buffer 的链表中。在运行过程中，随着程
+序运行，处理过的 socket 数据又会被释放。
+
+我干脆一次申请了大块内存保存多个 struct buffer_node ，暂时用不到的内存，把它们串成一个 freelist 放在
+lua 的一张表中，不到 lua vm 关闭前不释放。而所有需要传入 struct socket_buffer 的地方，都再传一个存放
+有 freelist 的 lua table 负责管理新创建以及需要销毁的 struct buffer_node 。
+
+如此，封装 struct buffer_node 和 struct socket_buffer 成为 lua 的 userdata 就都不需要 gc 元方法了。
+
+当然，这个方法仅仅只是保证最终没有内存泄露，socket_buffer 依旧需要一个显式的关闭操作。这个道理跟 socket fd
+需要显式关闭而不能等 GC 再关闭一样。
+
+这个技巧还可以用于树结构的管理。就不具体展开了。
+
+总结：把碎片结构放到一个 userdata 构成的 freelist 池中，然后从 userdata 里引用池内的结构。这样就可以
+避免给每个 userdata 指定 GC 方法来释放其中的链表或树节点。
+
+把所有内存都交给 lua 去管理（这里提到的内存分配都是利用的 lua_newuserdata ，它是被 lua 管理起来的）对
+GC 也更加友好。Lua 可以更清楚的了解你的程序用掉了多少内存以合理调配 GC 的进度。
+
+*/
+
+
 #define LUA_LIB
 
 #include "skynet_malloc.h"

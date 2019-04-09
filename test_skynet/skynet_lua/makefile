@@ -13,7 +13,7 @@ testNetpack : lua-netpack-test.c
 testupvalue.so : lua-testupvalue.c
 	gcc -Wall -O2 -shared -o testupvalue.so lua-testupvalue.c -fPIC -I$(LUA_INC)  -lm
 
-socketdriver.so : lua-socket.c
+socketdriver.so : lua-socket-test.c
 	gcc -g -O2 -Wall -lrt -I$(LUA_INC) -fPIC --shared $^ -o $@
 
 clean :

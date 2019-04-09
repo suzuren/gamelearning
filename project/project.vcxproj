@@ -787,6 +787,7 @@
     <ClCompile Include="..\test_skynet\skynet_lua\lua-netpack.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-seri.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-skynet.c" />
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-socket-test.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-socket.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\lua-testupvalue.c" />
     <ClCompile Include="..\test_skynet\skynet_module\main.c" />

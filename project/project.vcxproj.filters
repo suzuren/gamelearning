@@ -2604,9 +2604,6 @@
     <ClCompile Include="..\test_skynet\handlemap\test.c">
       <Filter>test_skynet\handlemap</Filter>
     </ClCompile>
-    <ClCompile Include="..\test_skynet\skynet_lua\lua-socket.c">
-      <Filter>test_skynet\skynet_lua</Filter>
-    </ClCompile>
     <ClCompile Include="..\cpp11datalit\dataList.cpp">
       <Filter>cpp11datalit</Filter>
     </ClCompile>
@@ -2711,6 +2708,12 @@
     </ClCompile>
     <ClCompile Include="..\coroutine\main.c">
       <Filter>coroutine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-socket-test.c">
+      <Filter>test_skynet\skynet_lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_lua\lua-socket.c">
+      <Filter>test_skynet\skynet_lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

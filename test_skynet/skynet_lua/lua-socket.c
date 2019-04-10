@@ -1,6 +1,7 @@
-https://blog.codingnow.com/2013/08/full_userdata_gc.html
 
 /*
+https://blog.codingnow.com/2013/08/full_userdata_gc.html
+https://blog.codingnow.com/2012/02/ring_buffer.html
 
 需求是这样的：skynet 提供了一个用 C 编写的异步 socket 库，所有 socket 请求都是通过一个消息队列分发
 回来的。我希望封装成 Lua 版的 api 时可以去掉这些。我需要给每个 socket 对象绑定一个数据队列，一旦有
@@ -16,7 +17,7 @@ struct buffer_node *next;
 
 struct socket_buffer {
 int size;
-int offset;
+int offset; //  offset 域, 记录未处理的数据块头部偏移。
 struct buffer_node *head;
 struct buffer_node *tail;
 };
@@ -81,10 +82,13 @@ struct socket_buffer {
 	struct buffer_node *tail;
 };
 
+// 释放 freepool 空闲池的消息内存地址
 static int
 lfreepool(lua_State *L) {
 	struct buffer_node * pool = lua_touserdata(L, 1);
-	int sz = lua_rawlen(L,1) / sizeof(*pool);
+	// lua_rawlen 返回给定索引处值的固有“长度”,对于用户数据，它指为该用户数据分配的内存块的大小
+	// 在这里是通过 lua_newuserdata 申请的空间，所以为用户数据，表示分配的内存块大小,除以每个节点的大小后得到节点的个数
+	int sz = lua_rawlen(L,1) / sizeof(*pool);	
 	int i;
 	for (i=0;i<sz;i++) {
 		struct buffer_node *node = &pool[i];
@@ -96,21 +100,43 @@ lfreepool(lua_State *L) {
 	return 0;
 }
 
+ /*
+ 
+ 分配 sz 大小空闲池数组
+
+  |<---------------------------------------------------- sz ---------------------------------------------------->|
+ ┏━━━━━━┯━━━━━━┯━━━━━━┯━━━━━━┯━━━━━━┯━━━━━━┯━━━━━━┯━━━━━━┓
+ ┃buffer_node │            │	           │            │	           │    	     │	           │     ...    ┃
+ ┗━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┷━━━━━━┛
+
+ */
+
 static int
-lnewpool(lua_State *L, int sz) {
+lnewpool(lua_State *L, int sz)
+{
+	// 分配一块指定大小的内存块， 把内存块地址作为一个完全用户数据压栈， 并返回这个地址。 此时 pool 地址在栈顶
 	struct buffer_node * pool = lua_newuserdata(L, sizeof(struct buffer_node) * sz);
 	int i;
-	for (i=0;i<sz;i++) {
+	for (i=0;i<sz;i++)
+	{
 		pool[i].msg = NULL;
 		pool[i].sz = 0;
 		pool[i].next = &pool[i+1];
 	}
 	pool[sz-1].next = NULL;
-	if (luaL_newmetatable(L, "buffer_pool")) {
-		lua_pushcfunction(L, lfreepool);
+	// int luaL_newmetatable (lua_State *L, const char *tname);
+	// 如果注册表中已存在键 tname，返回 0 。
+	// 为用户数据的元表创建一张新表。 向这张表加入 __name = tname 键值对， 并将 [tname] = new table 添加到注册表中， 返回 1 。
+	// 给 pool 设置一个原表，原表就是注册表key为 "buffer_pool" 指向的表，这个表的内容是 ["__gc"]=lfreepool
+	if (luaL_newmetatable(L, "buffer_pool"))
+	{
+		// 将一个 C 函数压栈。 这个函数接收一个 C 函数指针， 并将一个类型为 function 的 Lua 值压栈。
+		// 当这个栈顶的值被调用时，将触发对应的 C 函数。注册到 Lua 中的任何函数都必须遵循正确的协议来接收参数和返回值
+		lua_pushcfunction(L, lfreepool); // #define lua_pushcfunction(L,f)  lua_pushcclosure(L,f,0)
 		lua_setfield(L, -2, "__gc");
 	}
-	lua_setmetatable(L, -2);
+	lua_setmetatable(L, -2); // 把一张表弹出栈，并将其设为给定索引处的值的元表。 也就是把上面注册的表设置为 pool 的元表
+	// 这个函数把当前栈顶的表设置为 -2 就是 pool 的元表, 然后把 "buffer_pool" 踢出， pool 地址这个时候就是在栈顶
 	return 1;
 }
 
@@ -142,8 +168,15 @@ lnewbuffer(lua_State *L) {
 	lpushbbuffer will get a free struct buffer_node from table pool, and then put the msg/size in it.
 	lpopbuffer return the struct buffer_node back to table pool (By calling return_free_node).
  */
+
+// 在 socket.lua 文件中这个函数是这样子调用
+// local sz = driver.push(s.buffer, buffer_pool, data, size)
+// 其中 local buffer_pool = {}	-- store all message buffer object
+// 在定义这个 buffer_pool 的时候就是为 LUA_TTABLE 类型
+
 static int
-lpushbuffer(lua_State *L) {
+lpushbuffer(lua_State *L)
+{
 	struct socket_buffer *sb = lua_touserdata(L,1);
 	if (sb == NULL) {
 		return luaL_error(L, "need buffer object at param 1");
@@ -155,33 +188,52 @@ lpushbuffer(lua_State *L) {
 	int pool_index = 2;
 	luaL_checktype(L,pool_index,LUA_TTABLE);
 	int sz = luaL_checkinteger(L,4);
-	lua_rawgeti(L,pool_index,1);
+	lua_rawgeti(L,pool_index,1); // 把 buffer_pool[1] 的值压栈， 这里的 buffer_pool 是指给定索引 pool_index 处的表。
 	struct buffer_node * free_node = lua_touserdata(L,-1);	// sb poolt msg size free_node
-	lua_pop(L,1);
-	if (free_node == NULL) {
-		int tsz = lua_rawlen(L,pool_index);
+	lua_pop(L,1); // 从栈中弹出 1 个元素
+	if (free_node == NULL)
+	{
+		int tsz = lua_rawlen(L,pool_index); // 返回lua中定义的那个 buffer_pool 表的长度
 		if (tsz == 0)
+		{
 			tsz++;
+		}
 		int size = 8;
-		if (tsz <= LARGE_PAGE_NODE-3) {
-			size <<= tsz;
-		} else {
+		if (tsz <= LARGE_PAGE_NODE-3)
+		{
+			// 当第一次的时候，buffer_pool 表的长度为 0，所以 tsz++ 之后 tsz 等于 1，所以第一个 size = 8 << 1 = 8 * 2^1 = 16,
+			// 正如上面注释所说的 The size of first chunk ([2]) is 16 struct buffer_node,
+			// size 的最大值 size = 8 << LARGE_PAGE_NODE-3 = 8 << 9 = 8 * 2^9 = 8 * 512 = 4096
+			// 正如上面注释所说的 The largest size of chunk is LARGE_PAGE_NODE (4096) 也就是 2^LARGE_PAGE_NODE = 2^12 = 4096
+			size <<= tsz;  
+		}
+		else
+		{
 			size <<= LARGE_PAGE_NODE-3;
 		}
-		lnewpool(L, size);	
+		lnewpool(L, size); // 生成一个大小为 szie 新的空闲连续数组
 		free_node = lua_touserdata(L,-1);
+		// 等价于 buffer_pool[tsz+1] = v ， 这里的 buffer_pool 是指给定索引处的表， 而 v 是栈顶的值。
+		// 此时栈顶的值也就是lnewpool里面生成的空闲数组里面的首地址
 		lua_rawseti(L, pool_index, tsz+1);
 	}
-	lua_pushlightuserdata(L, free_node->next);	
-	lua_rawseti(L, pool_index, 1);	// sb poolt msg size
+	lua_pushlightuserdata(L, free_node->next);
+	
+	// 把空闲的第一个节点放到
+	lua_rawseti(L, pool_index, 1);	// sb poolt msg size // buffer_pool[1] = free_node->next;
 	free_node->msg = msg;
 	free_node->sz = sz;
 	free_node->next = NULL;
 
-	if (sb->head == NULL) {
+	if (sb->head == NULL)
+	{
+		// struct socket_buffer *sb 为空，存第一个数据
 		assert(sb->tail == NULL);
 		sb->head = sb->tail = free_node;
-	} else {
+	}
+	else
+	{
+		// 把新加入的节点放到尾指针
 		sb->tail->next = free_node;
 		sb->tail = free_node;
 	}
@@ -193,33 +245,39 @@ lpushbuffer(lua_State *L) {
 }
 
 static void
-return_free_node(lua_State *L, int pool, struct socket_buffer *sb) {
+return_free_node(lua_State *L, int pool, struct socket_buffer *sb)
+{
 	struct buffer_node *free_node = sb->head;
 	sb->offset = 0;
 	sb->head = free_node->next;
-	if (sb->head == NULL) {
+	if (sb->head == NULL)
+	{
 		sb->tail = NULL;
 	}
-	lua_rawgeti(L,pool,1);
-	free_node->next = lua_touserdata(L,-1);
-	lua_pop(L,1);
+	lua_rawgeti(L,pool,1); // 取 pool 索引处的表也就是 buffer_pool 表，把buffer_pool[1] 的值压栈，此时栈顶为 buffer_pool[1] 的值
+	free_node->next = lua_touserdata(L,-1); // 也就是 free_node->next = buffer_pool[1]，把这个空闲节点放到socket_buffer的链表头部
+	lua_pop(L,1); // 把 buffer_pool[1] 弹出栈
 	skynet_free(free_node->msg);
 	free_node->msg = NULL;
-
 	free_node->sz = 0;
 	lua_pushlightuserdata(L, free_node);
 	lua_rawseti(L, pool, 1);
 }
 
+// pop_lstring(L,sb,sz,0);
+
 static void
-pop_lstring(lua_State *L, struct socket_buffer *sb, int sz, int skip) {
+pop_lstring(lua_State *L, struct socket_buffer *sb, int sz, int skip)
+{
 	struct buffer_node * current = sb->head;
-	if (sz < current->sz - sb->offset) {
+	if (sz < current->sz - sb->offset)
+	{
 		lua_pushlstring(L, current->msg + sb->offset, sz-skip);
 		sb->offset+=sz;
 		return;
 	}
-	if (sz == current->sz - sb->offset) {
+	if (sz == current->sz - sb->offset)
+	{
 		lua_pushlstring(L, current->msg + sb->offset, sz-skip);
 		return_free_node(L,2,sb);
 		return;
@@ -227,26 +285,33 @@ pop_lstring(lua_State *L, struct socket_buffer *sb, int sz, int skip) {
 
 	luaL_Buffer b;
 	luaL_buffinit(L, &b);
-	for (;;) {
+	for (;;)
+	{
 		int bytes = current->sz - sb->offset;
-		if (bytes >= sz) {
-			if (sz > skip) {
+		if (bytes >= sz)
+		{
+			if (sz > skip)
+			{
 				luaL_addlstring(&b, current->msg + sb->offset, sz - skip);
 			} 
 			sb->offset += sz;
-			if (bytes == sz) {
+			if (bytes == sz)
+			{
 				return_free_node(L,2,sb);
 			}
 			break;
 		}
 		int real_sz = sz - skip;
-		if (real_sz > 0) {
+		if (real_sz > 0)
+		{
 			luaL_addlstring(&b, current->msg + sb->offset, (real_sz < bytes) ? real_sz : bytes);
 		}
 		return_free_node(L,2,sb);
 		sz-=bytes;
-		if (sz==0)
+		if (sz == 0)
+		{
 			break;
+		}
 		current = sb->head;
 		assert(current);
 	}
@@ -254,15 +319,18 @@ pop_lstring(lua_State *L, struct socket_buffer *sb, int sz, int skip) {
 }
 
 static int
-lheader(lua_State *L) {
+lheader(lua_State *L)
+{
 	size_t len;
 	const uint8_t * s = (const uint8_t *)luaL_checklstring(L, 1, &len);
-	if (len > 4 || len < 1) {
+	if (len > 4 || len < 1)
+	{
 		return luaL_error(L, "Invalid read %s", s);
 	}
 	int i;
 	size_t sz = 0;
-	for (i=0;i<(int)len;i++) {
+	for (i=0;i<(int)len;i++)
+	{
 		sz <<= 8;
 		sz |= s[i];
 	}
@@ -277,22 +345,29 @@ lheader(lua_State *L) {
 	table pool
 	integer sz 
  */
+// 这个函数在 lua-socket.c 里面是这样子调用	local ret = driver.pop(s.buffer, buffer_pool, sz)
+// 
+
 static int
-lpopbuffer(lua_State *L) {
+lpopbuffer(lua_State *L)
+{
 	struct socket_buffer * sb = lua_touserdata(L, 1);
-	if (sb == NULL) {
+	if (sb == NULL)
+	{
 		return luaL_error(L, "Need buffer object at param 1");
 	}
 	luaL_checktype(L,2,LUA_TTABLE);
 	int sz = luaL_checkinteger(L,3);
-	if (sb->size < sz || sz == 0) {
+	if (sb->size < sz || sz == 0)
+	{
 		lua_pushnil(L);
-	} else {
+	}
+	else
+	{
 		pop_lstring(L,sb,sz,0);
 		sb->size -= sz;
 	}
 	lua_pushinteger(L, sb->size);
-
 	return 2;
 }
 
@@ -301,16 +376,20 @@ lpopbuffer(lua_State *L) {
 	table pool
  */
 static int
-lclearbuffer(lua_State *L) {
+lclearbuffer(lua_State *L)
+{
 	struct socket_buffer * sb = lua_touserdata(L, 1);
-	if (sb == NULL) {
-		if (lua_isnil(L, 1)) {
+	if (sb == NULL)
+	{
+		if (lua_isnil(L, 1))
+		{
 			return 0;
 		}
 		return luaL_error(L, "Need buffer object at param 1");
 	}
 	luaL_checktype(L,2,LUA_TTABLE);
-	while(sb->head) {
+	while(sb->head)
+	{
 		return_free_node(L,2,sb);
 	}
 	sb->size = 0;

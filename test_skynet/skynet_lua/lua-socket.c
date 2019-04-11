@@ -244,24 +244,30 @@ lpushbuffer(lua_State *L)
 	return 1;
 }
 
+
+
 static void
 return_free_node(lua_State *L, int pool, struct socket_buffer *sb)
 {
-	struct buffer_node *free_node = sb->head;
+	struct buffer_node *free_node = sb->head; // 头部的第一个节点需要释放
 	sb->offset = 0;
 	sb->head = free_node->next;
-	if (sb->head == NULL)
+	if (sb->head == NULL)// 检查已经释放到最后一个节点了，后面已经没有节点了 说明socket_buffer已经为空
 	{
-		sb->tail = NULL;
+		sb->tail = NULL;// 尾指针也要指向空
 	}
-	lua_rawgeti(L,pool,1); // 取 pool 索引处的表也就是 buffer_pool 表，把buffer_pool[1] 的值压栈，此时栈顶为 buffer_pool[1] 的值
-	free_node->next = lua_touserdata(L,-1); // 也就是 free_node->next = buffer_pool[1]，把这个空闲节点放到socket_buffer的链表头部
+	lua_rawgeti(L,pool,1); // 取 pool 索引处的表也就是 buffer_pool 表，操作为 buffer_pool[1] = 栈顶值，如果是在pop_lstring和 lreadall 函数调用 此时栈顶为 socket_buffer表的节点， 如果是在 lclearbuffer函数调用 此时栈顶为 buffer_pool表
+	free_node->next = lua_touserdata(L,-1); // 也就是 free_node->next = buffer_pool[1]，把这个空闲节点放到buffer_pool空闲链表头部
 	lua_pop(L,1); // 把 buffer_pool[1] 弹出栈
 	skynet_free(free_node->msg);
 	free_node->msg = NULL;
 	free_node->sz = 0;
 	lua_pushlightuserdata(L, free_node);
 	lua_rawseti(L, pool, 1);
+
+	//取 pool 索引处的表也就是 buffer_pool 表，把 buffer_pool[1]赋值为 此时的栈顶 free_node，
+	//也就是 buffer_pool[1] = free_node，这个时候 buffer_pool 表保存了刚刚释放的空闲节点 free_node
+
 }
 
 // pop_lstring(L,sb,sz,0);
@@ -278,7 +284,8 @@ pop_lstring(lua_State *L, struct socket_buffer *sb, int sz, int skip)
 	}
 	if (sz == current->sz - sb->offset)
 	{
-		lua_pushlstring(L, current->msg + sb->offset, sz-skip);
+		lua_pushlstring(L, current->msg + sb->offset, sz-skip); // 从这个socket_buffer 的buffer_node节点开始是空闲节点
+																// 给接下来的 return_free_node 挂接释放后的空闲节点
 		return_free_node(L,2,sb);
 		return;
 	}
@@ -375,6 +382,7 @@ lpopbuffer(lua_State *L)
 	userdata send_buffer
 	table pool
  */
+
 static int
 lclearbuffer(lua_State *L)
 {
@@ -387,7 +395,14 @@ lclearbuffer(lua_State *L)
 		}
 		return luaL_error(L, "Need buffer object at param 1");
 	}
+
+	// 从这个socket_buffer 的buffer_node节点开始是空闲节点
+	// 给接下来的 return_free_node 挂接释放后的空闲节点
+
 	luaL_checktype(L,2,LUA_TTABLE);
+
+	//driver.clear(s.buffer, buffer_pool)
+	// 进这个函数的时候当前的栈顶是 buffer_pool
 	while(sb->head)
 	{
 		return_free_node(L,2,sb);

@@ -343,6 +343,9 @@
     <Filter Include="coroutine">
       <UniqueIdentifier>{00c71748-a983-4969-a800-0f3c034f004f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tencent_libco">
+      <UniqueIdentifier>{3a47a587-880d-4d34-93ff-c8f046719aac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1109,6 +1112,24 @@
     </ClInclude>
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\09_gen_rand_number.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tencent_libco\co_closure.h">
+      <Filter>tencent_libco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tencent_libco\co_epoll.h">
+      <Filter>tencent_libco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tencent_libco\co_routine.h">
+      <Filter>tencent_libco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tencent_libco\co_routine_inner.h">
+      <Filter>tencent_libco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tencent_libco\co_routine_specific.h">
+      <Filter>tencent_libco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\tencent_libco\coctx.h">
+      <Filter>tencent_libco</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1915,6 +1936,18 @@
       <Filter>lua-arc4random</Filter>
     </None>
     <None Include="..\README.md" />
+    <None Include="..\tencent_libco\co.mk">
+      <Filter>tencent_libco</Filter>
+    </None>
+    <None Include="..\tencent_libco\coctx_swap.S">
+      <Filter>tencent_libco</Filter>
+    </None>
+    <None Include="..\tencent_libco\Makefile">
+      <Filter>tencent_libco</Filter>
+    </None>
+    <None Include="..\tencent_libco\README.md">
+      <Filter>tencent_libco</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\templog\imp\logging.cpp">
@@ -2718,6 +2751,45 @@
     <ClCompile Include="..\test_skynet\skynet_lua\lua-socket.c">
       <Filter>test_skynet\skynet_lua</Filter>
     </ClCompile>
+    <ClCompile Include="..\tencent_libco\co_epoll.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\co_hook_sys_call.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\co_routine.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\coctx.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_closure.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_cond.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_copystack.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_echocli.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_echosvr.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_poll.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_setenv.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_specific.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\tencent_libco\example_thread.cpp">
+      <Filter>tencent_libco</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2800,6 +2872,12 @@
       <Filter>pbc</Filter>
     </Text>
     <Text Include="..\gcc_7_3.txt" />
+    <Text Include="..\tencent_libco\CMakeLists.txt">
+      <Filter>tencent_libco</Filter>
+    </Text>
+    <Text Include="..\tencent_libco\LICENSE.txt">
+      <Filter>tencent_libco</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\lua-5.3.4-src\doc\logo.gif">

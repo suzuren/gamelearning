@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -f CMakeCache.txt
+rm -rf CMakeFiles CMakeCache.txt cmake_install.cmake Makefile
 
 cmake ./
 while getopts rR opt

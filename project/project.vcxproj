@@ -88,7 +88,9 @@
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\07_strings_streams_regular_expressions.h" />
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\08_utils_class.h" />
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\09_gen_rand_number.h" />
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\10_file_process.h" />
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\daemonize.h" />
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\Utf8ToGbk.h" />
     <ClInclude Include="..\cpp_new_features\cplusplus_extern.h" />
     <ClInclude Include="..\cpp_new_features\define.h" />
     <ClInclude Include="..\cpp_new_features\enum_class.h" />

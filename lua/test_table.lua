@@ -1,5 +1,4 @@
 
-
 local printr = require "print_r"
 
 local _invalidGunHash = {}
@@ -78,3 +77,51 @@ print("isPullingStarted - ",isPullingStarted)
 print("_serverSignature - ",_serverSignature)
 
 print("isPullingStarted end ------------------------------------------------------")
+
+
+print("tabelsize sta ------------------------------------------------------")
+
+local t = {[1]=1,[9]=3,["6"]=0,[2]=5};
+print(#t) -- 2
+
+local t = {[1]=1,[8]=2,["7"]=2,[0]=5};
+print(#t) -- 1
+
+local t = {[2]=1,[5]=2,["8"]=3,[5]=5};
+print(#t) -- 0
+
+function count(tab)
+  local n = 0;
+  for _, v in pairs(ht) do
+    n = n + 1;
+  end
+  return n;
+end
+
+local dbs_st = {
+    tk_biz = {
+      host     = "rm-xxxx",
+      user     = "xxxx",
+      password = "xxxx",
+      port     = 3306,
+      database = "xxxx",
+      timeout  = 30
+    }
+  }
+print(#dbs_st) -- 0
+print(#dbs_st.tk_biz) -- 0
+
+local n = 0;
+for _, v in pairs(dbs_st) do
+	n = n + 1;
+end
+print(n) -- 1
+
+local n = 0;
+for _, v in pairs(dbs_st.tk_biz) do
+	n = n + 1;
+end
+print(n) -- 6
+
+
+print("tabelsize end ------------------------------------------------------")

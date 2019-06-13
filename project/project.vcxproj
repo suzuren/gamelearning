@@ -620,6 +620,7 @@
     <ClCompile Include="..\coroutine\main.c" />
     <ClCompile Include="..\cpp11datalit\dataList.cpp" />
     <ClCompile Include="..\cpp11\main.cpp" />
+    <ClCompile Include="..\cpp_17_stl_cook_book\code\src\11_c_func.h" />
     <ClCompile Include="..\cpp_17_stl_cook_book\code\src\main.cpp" />
     <ClCompile Include="..\cpp_17_stl_cook_book\test\src\main.cpp" />
     <ClCompile Include="..\cpp_new_features\main.cpp" />

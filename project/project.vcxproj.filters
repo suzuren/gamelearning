@@ -2796,6 +2796,9 @@
     <ClCompile Include="..\tencent_libco\example_thread.cpp">
       <Filter>tencent_libco</Filter>
     </ClCompile>
+    <ClCompile Include="..\cpp_17_stl_cook_book\code\src\11_c_func.h">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">

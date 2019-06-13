@@ -9,7 +9,8 @@
 //#include "07_strings_streams_regular_expressions.h"
 //#include "08_utils_class.h"
 //#include "09_gen_rand_number.h"
-#include "10_file_process.h"
+//#include "10_file_process.h"
+#include "11_c_func.h"
 
 int main(int argc, const char** argv)
 {
@@ -34,7 +35,10 @@ int main(int argc, const char** argv)
 	//09
 	//test_gen_rand_number();
 	//10
-	test_file_process();
+	//test_file_process();
+	//----------------
+	//11
+	test_c_func();
 
 	return 0;
 }

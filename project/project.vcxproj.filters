@@ -1137,6 +1137,12 @@
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\Utf8ToGbk.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\12_slot_card_func.h">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\cpp_17_stl_cook_book\code\src\13_attribute_func.h">
+      <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">

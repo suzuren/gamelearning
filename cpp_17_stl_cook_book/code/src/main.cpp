@@ -10,7 +10,9 @@
 //#include "08_utils_class.h"
 //#include "09_gen_rand_number.h"
 //#include "10_file_process.h"
-#include "11_c_func.h"
+//#include "11_c_func.h"
+//#include "12_slot_card_func.h"
+//#include "13_attribute_func.h"
 
 int main(int argc, const char** argv)
 {
@@ -38,7 +40,11 @@ int main(int argc, const char** argv)
 	//test_file_process();
 	//----------------
 	//11
-	test_c_func();
+	//test_c_func();
+	//12
+	//test_slot_card_func();
+	//13
+	//test_attribute_func();
 
 	return 0;
 }

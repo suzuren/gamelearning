@@ -1,0 +1,73 @@
+
+
+https://github.com/openssl/openssl.git
+
+-----------------------------------------------------------------------------------
+
+http://www.ruanyifeng.com/blog/2014/09/illustration-ssl.html
+
+一、SSL协议的握手过程
+
+握手阶段分成五步。
+
+第一步，爱丽丝给出协议版本号、一个客户端生成的随机数（Client random），以及客户端支持的加密方法。
+
+第二步，鲍勃确认双方使用的加密方法，并给出数字证书、以及一个服务器生成的随机数（Server random）。
+
+第三步，爱丽丝确认数字证书有效，然后生成一个新的随机数（Premaster secret），并使用数字证书中的公钥，加密这个随机数，发给鲍勃。
+
+第四步，鲍勃使用自己的私钥，获取爱丽丝发来的随机数（即Premaster secret）。
+
+第五步，爱丽丝和鲍勃根据约定的加密方法，使用前面的三个随机数，生成"对话密钥"（session key），用来加密接下来的整个对话过程。
+
+二、私钥的作用
+握手阶段有三点需要注意。
+
+（1）生成对话密钥一共需要三个随机数。
+
+（2）握手之后的对话使用"对话密钥"加密（对称加密），服务器的公钥和私钥只用于加密和解密"对话密钥"（非对称加密），无其他作用。
+
+（3）服务器公钥放在服务器的数字证书之中。
+
+从上面第二点可知，整个对话过程中（握手阶段和其后的对话），服务器的公钥和私钥只需要用到一次。这就是CloudFlare能够提供Keyless服务的根本原因。
+
+-----------------------------------------------------------------------------------
+
+
+https client
+
+local fd = socket.connect(hostname, port, timeout)
+
+
+local SSLCTX_CLIENT = nil
+local function gen_interface(protocol, fd)
+	if protocol == "http" then
+		return {
+			init = nil,
+			close = nil,
+			read = socket.readfunc(fd),
+			write = socket.writefunc(fd),
+			readall = function ()
+				return socket.readall(fd)
+			end,
+		}
+	elseif protocol == "https" then
+		local tls = require "http.tlshelper"
+		SSLCTX_CLIENT = SSLCTX_CLIENT or tls.newctx()
+		local tls_ctx = tls.newtls("client", SSLCTX_CLIENT)
+		return {
+			init = tls.init_requestfunc(fd, tls_ctx),
+			close = tls.closefunc(tls_ctx),
+			read = tls.readfunc(fd, tls_ctx),
+			write = tls.writefunc(fd, tls_ctx),
+			readall = tls.readallfunc(fd, tls_ctx),
+		}
+	else
+		error(string.format("Invalid protocol: %s", protocol))
+	end
+end
+
+
+
+
+-----------------------------------------------------------------------------------

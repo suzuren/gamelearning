@@ -260,6 +260,7 @@
     <ClInclude Include="..\test_skynet\handlemap\simplelock.h" />
     <ClInclude Include="..\test_skynet\handlemap\simplethread.h" />
     <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
+    <ClInclude Include="..\test_skynet\openssl_tls\tls.h" />
     <ClInclude Include="..\test_skynet\skynet_handle\rwlock.h" />
     <ClInclude Include="..\test_skynet\skynet_handle\skynet_handle.h" />
     <ClInclude Include="..\test_skynet\skynet_lua\lua-seri.h" />
@@ -535,6 +536,8 @@
     <None Include="..\test_skynet\load_config\config" />
     <None Include="..\test_skynet\load_config\config.path" />
     <None Include="..\test_skynet\load_config\makefile" />
+    <None Include="..\test_skynet\openssl_tls\makefile" />
+    <None Include="..\test_skynet\openssl_tls\tlshelper.lua" />
     <None Include="..\test_skynet\skynet_handle\makefile" />
     <None Include="..\test_skynet\skynet_lua\makefile" />
     <None Include="..\test_skynet\skynet_lua\print_r.lua" />
@@ -809,6 +812,8 @@
     <ClCompile Include="..\test_skynet\handlemap\test.c" />
     <ClCompile Include="..\test_skynet\harbor\harbor.c" />
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
+    <ClCompile Include="..\test_skynet\openssl_tls\ltls.c" />
+    <ClCompile Include="..\test_skynet\openssl_tls\tls.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\main.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c" />
     <ClCompile Include="..\test_skynet\skynet_lua\fuck.cpp" />
@@ -869,6 +874,7 @@
     <Text Include="..\test_skynet\databuffer_hashid\read.txt" />
     <Text Include="..\test_skynet\harbor\read.txt" />
     <Text Include="..\test_skynet\load_config\read.txt" />
+    <Text Include="..\test_skynet\openssl_tls\read.txt" />
     <Text Include="..\test_skynet\skynet_lua\lualen.txt" />
     <Text Include="..\test_skynet\skynet_lua\read.txt" />
     <Text Include="..\test_skynet\skynet_module\read.txt" />

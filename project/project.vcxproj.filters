@@ -346,6 +346,9 @@
     <Filter Include="tencent_libco">
       <UniqueIdentifier>{3a47a587-880d-4d34-93ff-c8f046719aac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\openssl_tls">
+      <UniqueIdentifier>{a32e8a32-4c02-42d8-9ea8-e06e2bd73905}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1142,6 +1145,9 @@
     </ClInclude>
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\13_attribute_func.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\tls.h">
+      <Filter>test_skynet\openssl_tls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1959,6 +1965,12 @@
     </None>
     <None Include="..\tencent_libco\README.md">
       <Filter>tencent_libco</Filter>
+    </None>
+    <None Include="..\test_skynet\openssl_tls\makefile">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </None>
+    <None Include="..\test_skynet\openssl_tls\tlshelper.lua">
+      <Filter>test_skynet\openssl_tls</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2805,6 +2817,12 @@
     <ClCompile Include="..\cpp_17_stl_cook_book\code\src\11_c_func.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\openssl_tls\ltls.c">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\openssl_tls\tls.c">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2892,6 +2910,9 @@
     </Text>
     <Text Include="..\tencent_libco\LICENSE.txt">
       <Filter>tencent_libco</Filter>
+    </Text>
+    <Text Include="..\test_skynet\openssl_tls\read.txt">
+      <Filter>test_skynet\openssl_tls</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

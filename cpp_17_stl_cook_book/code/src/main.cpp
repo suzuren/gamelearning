@@ -46,5 +46,14 @@ int main(int argc, const char** argv)
 	//13
 	//test_attribute_func();
 
+	//const double db = 1.618033988749895;
+	//double tmp = db;
+	//std::cout << db;
+	//printf("\n");
+	//std::cout << tmp;
+	//printf("\n");
+	//std::cout << (tmp == 1.61803398874989);
+	//printf("\n");
+
 	return 0;
 }

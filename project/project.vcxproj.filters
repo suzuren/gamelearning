@@ -1146,7 +1146,31 @@
     <ClInclude Include="..\cpp_17_stl_cook_book\code\src\13_attribute_func.h">
       <Filter>cpp_17_stl_cook_book\code\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\test_skynet\openssl_tls\tls.h">
+    <ClInclude Include="..\test_skynet\openssl_tls\libtls.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\socket_epoll.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\socket_info.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\socket_kqueue.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\socket_poll.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\socket_server.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\spinlock.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\http_module.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\kmp_algorithm.h">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1969,7 +1993,10 @@
     <None Include="..\test_skynet\openssl_tls\makefile">
       <Filter>test_skynet\openssl_tls</Filter>
     </None>
-    <None Include="..\test_skynet\openssl_tls\tlshelper.lua">
+    <None Include="..\test_skynet\openssl_tls\libtlshelper.lua">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </None>
+    <None Include="..\test_skynet\openssl_tls\pare_http.lua">
       <Filter>test_skynet\openssl_tls</Filter>
     </None>
   </ItemGroup>
@@ -2820,7 +2847,16 @@
     <ClCompile Include="..\test_skynet\openssl_tls\ltls.c">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClCompile>
-    <ClCompile Include="..\test_skynet\openssl_tls\tls.c">
+    <ClCompile Include="..\test_skynet\openssl_tls\libtls.c">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\openssl_tls\socket_server.c">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\openssl_tls\http_module.c">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\openssl_tls\main.c">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClCompile>
   </ItemGroup>

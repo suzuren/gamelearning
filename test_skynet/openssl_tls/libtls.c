@@ -8,6 +8,8 @@
 #include <openssl/conf.h>
 #include <openssl/engine.h>
 
+#include "libtls.h"
+
 #define skynet_malloc malloc
 #define skynet_free free
 
@@ -26,7 +28,7 @@ struct ssl_ctx {
     SSL_CTX* ctx;
 };
 
-static void
+void
 _init_bio(struct tls_context* tls_p, struct ssl_ctx* ctx_p) {
     tls_p->ssl = SSL_new(ctx_p->ctx);
     if(!tls_p->ssl) {
@@ -48,48 +50,107 @@ _init_bio(struct tls_context* tls_p, struct ssl_ctx* ctx_p) {
 }
 
 
-static void
+void
 _init_client_context(struct tls_context* tls_p, struct ssl_ctx* ctx_p) {
     tls_p->is_server = false;
     _init_bio(tls_p, ctx_p);
     SSL_set_connect_state(tls_p->ssl);
 }
 
-static void
+void
 _init_server_context(struct tls_context* tls_p, struct ssl_ctx* ctx_p) {
     tls_p->is_server = true;
     _init_bio(tls_p, ctx_p);
     SSL_set_accept_state(tls_p->ssl);
 }
 
-static struct tls_context *
-_check_context(void * parm) {
+struct tls_context *
+	_check_context(void * parm) {
 	struct tls_context* tls_p = (struct tls_context*)parm;
-    if(!tls_p) {
+	if (!tls_p) {
 		fprintf(stderr, "need tls context.\n");
-    }
-    if(tls_p->is_close) {
+	}
+	if (tls_p->is_close) {
 		fprintf(stderr, "context is closed.\n");
-    }
-    return tls_p;
+	}
+	return tls_p;
 }
 
-static struct ssl_ctx *
-_check_sslctx(void * parm) {
-    struct ssl_ctx* ctx_p = (struct ssl_ctx*)parm;
-    if(!ctx_p) {
+struct ssl_ctx *
+	_check_sslctx(void * parm) {
+	struct ssl_ctx* ctx_p = (struct ssl_ctx*)parm;
+	if (!ctx_p) {
 		fprintf(stderr, "need sslctx.\n");
-    }
-    return ctx_p;
+	}
+	return ctx_p;
 }
 
-static int
+int
+_bio_read(struct tls_context* tls_p)
+{
+	char outbuff[4096];
+	int all_read = 0;
+	int read = 0;
+	int pending = BIO_ctrl_pending(tls_p->out_bio);
+	if (pending >0)
+	{
+		//luaL_Buffer b;
+		//luaL_buffinit(L, &b);
+		while (pending > 0)
+		{
+			read = BIO_read(tls_p->out_bio, outbuff, sizeof(outbuff));
+			if (read <= 0)
+			{
+				fprintf(stderr, "BIO_read error:%d.\n", read);
+			}
+			else if (read <= sizeof(outbuff))
+			{
+				all_read += read;
+				//luaL_addlstring(&b, (const char*)outbuff, read);
+			}
+			else
+			{
+				fprintf(stderr, "invalid BIO_read:%d.\n", read);
+			}
+			pending = BIO_ctrl_pending(tls_p->out_bio);
+		}
+		if (all_read>0)
+		{
+			//luaL_pushresult(&b);
+		}
+	}
+	return all_read;
+}
+
+
+void
+_bio_write(struct tls_context* tls_p, const char* s, size_t len) {
+	char* p = (char*)s;
+	size_t sz = len;
+	while (sz > 0) {
+		int written = BIO_write(tls_p->in_bio, p, sz);
+		if (written <= 0) {
+			fprintf(stderr, "BIO_write error:%d.\n", written);
+		}
+		else if (written <= sz) {
+			p += written;
+			sz -= written;
+		}
+		else {
+			fprintf(stderr, "invalid BIO_write:%d.\n", written);
+		}
+	}
+}
+
+
+
+int
 _ltls_context_finished(struct tls_context* tls_p) {
     int b = SSL_is_init_finished(tls_p->ssl);
     return b;
 }
 
-static int
+int
 _ltls_context_close(struct tls_context* tls_p) {
     if(!tls_p->is_close) {
         SSL_free(tls_p->ssl);
@@ -101,63 +162,8 @@ _ltls_context_close(struct tls_context* tls_p) {
     return 0;
 }
 
-static int
-_bio_read(struct tls_context* tls_p)
-{
-    char outbuff[4096];
-    int all_read = 0;
-    int read = 0;
-    int pending = BIO_ctrl_pending(tls_p->out_bio);
-    if(pending >0)
-	{
-        //luaL_Buffer b;
-        //luaL_buffinit(L, &b);
-        while(pending > 0)
-		{
-            read = BIO_read(tls_p->out_bio, outbuff, sizeof(outbuff));
-            if(read <= 0)
-			{
-				fprintf(stderr, "BIO_read error:%d.\n", read);
-            }
-			else if(read <= sizeof(outbuff))
-			{
-                all_read += read;
-                //luaL_addlstring(&b, (const char*)outbuff, read);
-            }
-			else
-			{
-				fprintf(stderr, "invalid BIO_read:%d.\n", read);
-            }
-            pending = BIO_ctrl_pending(tls_p->out_bio);
-        }
-        if(all_read>0)
-		{
-            //luaL_pushresult(&b);
-        }
-    }
-    return all_read;
-}
 
-
-static void
-_bio_write(struct tls_context* tls_p, const char* s, size_t len) {
-    char* p = (char*)s;
-    size_t sz = len;
-    while(sz > 0) {
-        int written = BIO_write(tls_p->in_bio, p, sz);
-        if(written <= 0) {
-			fprintf(stderr, "BIO_write error:%d.\n", written);
-        }else if (written <= sz) {
-            p += written;
-            sz -= written;
-        }else {
-			fprintf(stderr, "invalid BIO_write:%d.\n", written);
-        }
-    }
-}
-
-
-static int
+int
 _ltls_context_handshake(struct tls_context* tls_parm, size_t slen, const char* exchange) {
 
 	struct tls_context* tls_p = _check_context(tls_parm);
@@ -202,7 +208,7 @@ _ltls_context_handshake(struct tls_context* tls_parm, size_t slen, const char* e
 }
 
 
-static int
+int
 _ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encrypted_data) {
 	
 	struct tls_context* tls_p = _check_context(tls_parm);
@@ -236,7 +242,7 @@ _ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encryp
 }
 
 
-static int
+int
 _ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted_data) {
 
 	struct tls_context* tls_p = _check_context(tls_parm);
@@ -262,7 +268,7 @@ _ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted
 }
 
 
-static int
+int
 _lctx_gc(struct ssl_ctx* ctx_parm) {
     struct ssl_ctx* ctx_p = _check_sslctx(ctx_parm);
     if(ctx_p->ctx) {
@@ -272,7 +278,7 @@ _lctx_gc(struct ssl_ctx* ctx_parm) {
     return 0;
 }
 
-static int
+int
 _lctx_cert(struct ssl_ctx* ctx_parm, const char* certfile, const char* key) {
     struct ssl_ctx* ctx_p = _check_sslctx(ctx_parm);
     if(!certfile) {
@@ -297,7 +303,7 @@ _lctx_cert(struct ssl_ctx* ctx_parm, const char* certfile, const char* key) {
     return 0;
 }
 
-static int
+int
 _lctx_ciphers(struct ssl_ctx* ctx_parm, const char* ciphers) {
     struct ssl_ctx* ctx_p = _check_sslctx(ctx_parm);
     if(!ciphers) {
@@ -311,7 +317,7 @@ _lctx_ciphers(struct ssl_ctx* ctx_parm, const char* ciphers) {
 }
 
 
-static int
+int
 lnew_ctx() {
     struct ssl_ctx* ctx_p = (struct ssl_ctx*)skynet_malloc(sizeof(*ctx_p));
     ctx_p->ctx = SSL_CTX_new(SSLv23_method());
@@ -322,7 +328,7 @@ lnew_ctx() {
 }
 
 
-static int
+int
 lnew_tls(const char* method_parm, struct ssl_ctx* ctx_parm) {
     struct tls_context* tls_p = (struct tls_context*)skynet_malloc(sizeof(*tls_p));
     tls_p->is_close = false;
@@ -360,7 +366,7 @@ void __attribute__((destructor)) ltls_destory(void) {
         CONF_modules_unload(1);
         ERR_free_strings();
         EVP_cleanup();
-        sk_SSL_COMP_free(SSL_COMP_get_compression_methods());
+        //sk_SSL_COMP_free(SSL_COMP_get_compression_methods());
         CRYPTO_cleanup_all_ex_data();
     }
 }

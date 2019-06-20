@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#include "kmp_algorithm.h"
+#include "support_algorithm.h"
 #include "socket_server.h"
 #include "http_module.h"
 
@@ -170,8 +170,7 @@ int check_protocol(char* host,char** protocol,char** domain_name, char** ip,int*
 	unsigned int index = 0;
 	unsigned int last_colon_index = 0;
 	static char buffer_ip[32] = { 0 };
-	char buffer_port[32] = { 0 };
-	// 47.94.250.154:38018
+	char buffer_port[16] = { 0 };
 	for (; index < domain_len; index++)
 	{
 		char ch = (*(pdomain + index));
@@ -187,22 +186,26 @@ int check_protocol(char* host,char** protocol,char** domain_name, char** ip,int*
 	}
 	if (is_ip_port && last_colon_index != 0)
 	{
-		for (unsigned int idx = 0; idx < last_colon_index; idx++)
+		for (unsigned int idx = 0; idx < last_colon_index && idx < 32; idx++)
 		{
 			char ch = (*(pdomain + idx));
-			printf("idx:%d,%c\n", idx, ch);
+			//printf("idx:%d,%c\n", idx, ch);
 			buffer_ip[idx] = ch;
 		}
-		for (unsigned int idx = last_colon_index + 1; idx < domain_len; idx++)
+		int port_len = 0;
+		for (unsigned int idx = last_colon_index + 1; idx < domain_len && port_len < 16; idx++)
 		{
 			char ch = (*(pdomain + idx));
-			printf("port - idx:%d,%c\n", idx, ch);
-			buffer_port[idx] = ch;
+			//printf("port - idx:%d,%c\n", idx, ch);
+			buffer_port[port_len++] = ch;
 		}
-		printf("domain_len:%d, colon_index:%d, pdomain:%s, ip:%s, port:%s\n", domain_len, last_colon_index, pdomain, buffer_ip, buffer_port);
-
+		//printf("domain_len:%d, colon_index:%d, pdomain:%s, ip:%s, port:%s\n", domain_len, last_colon_index, pdomain, buffer_ip, buffer_port);
 		*ip = buffer_ip;
-
+		int port_ret = atoi_parser(port, buffer_port, port_len);
+		if (!port_ret)
+		{
+			return 0;
+		}		
 	}
 	else
 	{
@@ -224,11 +227,8 @@ void httpc_request(char * method, char *  host, char *  uri, char * recvheader, 
 	check_protocol(host, &protocol, &domain_name, &ip, &port);
 	printf("protocol:%s-, domain_name:%s-,ip:%s,port:%d\n",protocol, domain_name, ip, port);
 
-
-
 	//struct socket_server * ss = socket_server_create(test_systime());
 	//int c = socket_server_connect(ss, 100, "127.0.0.1", 80);
-
 }
 
 void test_http_module()

@@ -261,7 +261,7 @@
     <ClInclude Include="..\test_skynet\handlemap\simplethread.h" />
     <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\http_module.h" />
-    <ClInclude Include="..\test_skynet\openssl_tls\kmp_algorithm.h" />
+    <ClInclude Include="..\test_skynet\openssl_tls\support_algorithm.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\libtls.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\socket_epoll.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\socket_info.h" />

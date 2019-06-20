@@ -1170,7 +1170,7 @@
     <ClInclude Include="..\test_skynet\openssl_tls\http_module.h">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClInclude>
-    <ClInclude Include="..\test_skynet\openssl_tls\kmp_algorithm.h">
+    <ClInclude Include="..\test_skynet\openssl_tls\support_algorithm.h">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClInclude>
   </ItemGroup>

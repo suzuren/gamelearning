@@ -261,6 +261,8 @@
     <ClInclude Include="..\test_skynet\handlemap\simplethread.h" />
     <ClInclude Include="..\test_skynet\load_config\spinlock.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\http_module.h" />
+    <ClInclude Include="..\test_skynet\openssl_tls\http_socket.h" />
+    <ClInclude Include="..\test_skynet\openssl_tls\skynet_malloc.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\support_algorithm.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\libtls.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\socket_epoll.h" />
@@ -822,6 +824,7 @@
     <ClCompile Include="..\test_skynet\harbor\harbor.c" />
     <ClCompile Include="..\test_skynet\load_config\loadConfig.c" />
     <ClCompile Include="..\test_skynet\openssl_tls\http_module.c" />
+    <ClCompile Include="..\test_skynet\openssl_tls\http_socket.c" />
     <ClCompile Include="..\test_skynet\openssl_tls\ltls.c" />
     <ClCompile Include="..\test_skynet\openssl_tls\libtls.c" />
     <ClCompile Include="..\test_skynet\openssl_tls\main.c" />

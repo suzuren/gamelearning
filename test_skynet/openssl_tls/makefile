@@ -1,7 +1,7 @@
 
 LUA_INC := /usr/local/lua/include
 
-all: ltls.so libtls.so libsocket_server.so libhttp_module.so testHttpModule
+all: ltls.so libtls.so libsocket_server.so libhttp_socket.so libhttp_module.so testHttpModule
 
 #TLS_MODULE=ltls tls
 TLS_LIB=/root/code/openssl/
@@ -19,11 +19,14 @@ libtls.so : libtls.c
 libsocket_server.so : socket_server.c
 	gcc $(CFLAGS) $(SHARED) $^ -o $@
 
-libhttp_module.so : http_module.c
+libhttp_socket.so : http_socket.c
 	gcc $(CFLAGS) $(SHARED) $^ -o $@ -L. -ltls -lsocket_server
 
+libhttp_module.so : http_module.c
+	gcc $(CFLAGS) $(SHARED) $^ -o $@ -L. -ltls -lsocket_server -lsocket_server -lhttp_socket
+
 testHttpModule : main.c
-	gcc -g -Wall $^ -o $@ -L. -lrt -lpthread -ltls -lsocket_server -lhttp_module
+	gcc -g -Wall $^ -o $@ -L. -lrt -lpthread -ltls -lsocket_server -lhttp_socket -lhttp_module
 
 clean:
 	rm -f *.so core.* testHttpModule

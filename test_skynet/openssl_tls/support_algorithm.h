@@ -1,6 +1,9 @@
 #ifndef __KMP_ALGORITHM__
 #define __KMP_ALGORITHM__
 
+#include <string.h>
+
+
 void kmp_get_next(char *T, int next[])
 {
 	int i = 1, j = 0;

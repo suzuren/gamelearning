@@ -1,3 +1,7 @@
+
+#include "libtls.h"
+#include "skynet_malloc.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -7,12 +11,6 @@
 #include <openssl/ssl.h>
 #include <openssl/conf.h>
 #include <openssl/engine.h>
-
-#include "libtls.h"
-
-#define skynet_malloc malloc
-#define skynet_free free
-
 
 static bool TLS_IS_INIT = false;
 
@@ -86,8 +84,9 @@ struct ssl_ctx *
 }
 
 int
-_bio_read(struct tls_context* tls_p)
+_bio_read(struct tls_context* tls_p,char ** out_read)
 {
+	*out_read = "";
 	char outbuff[4096];
 	int all_read = 0;
 	int read = 0;
@@ -96,6 +95,8 @@ _bio_read(struct tls_context* tls_p)
 	{
 		//luaL_Buffer b;
 		//luaL_buffinit(L, &b);
+		char * preadbuff = NULL;
+		size_t readsize = 0;
 		while (pending > 0)
 		{
 			read = BIO_read(tls_p->out_bio, outbuff, sizeof(outbuff));
@@ -107,6 +108,7 @@ _bio_read(struct tls_context* tls_p)
 			{
 				all_read += read;
 				//luaL_addlstring(&b, (const char*)outbuff, read);
+				preadbuff = skynet_copymem(preadbuff, readsize, outbuff, read);
 			}
 			else
 			{
@@ -117,6 +119,7 @@ _bio_read(struct tls_context* tls_p)
 		if (all_read>0)
 		{
 			//luaL_pushresult(&b);
+			*out_read = preadbuff;
 		}
 	}
 	return all_read;
@@ -164,8 +167,9 @@ _ltls_context_close(struct tls_context* tls_p) {
 
 
 int
-_ltls_context_handshake(struct tls_context* tls_parm, size_t slen, const char* exchange) {
+_ltls_context_handshake(struct tls_context* tls_parm, size_t slen, const char* exchange, char ** out_read) {
 
+	*out_read = NULL;
 	struct tls_context* tls_p = _check_context(tls_parm);
 
     // check handshake is finished
@@ -191,10 +195,10 @@ _ltls_context_handshake(struct tls_context* tls_parm, size_t slen, const char* e
             int err = SSL_get_error(tls_p->ssl, ret);
             if(err == SSL_ERROR_WANT_READ || err == SSL_ERROR_WANT_WRITE)
 			{
-                int all_read = _bio_read(tls_p);
+                int all_read = _bio_read(tls_p, out_read);
                 if(all_read>0)
 				{
-                    return 1;
+                    return all_read;
                 }
             } else {
 				fprintf(stderr, "SSL_do_handshake error:%d ret:%d.\n", err, ret);
@@ -259,8 +263,8 @@ _ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted
 			fprintf(stderr, "invalid SSL_write:%d.\n", written);
         }
     }
-
-    int all_read = _bio_read(tls_p);
+	char * out_read;
+    int all_read = _bio_read(tls_p, &out_read);
     if(all_read <= 0) {
         //lua_pushstring(L, "");
     }
@@ -317,18 +321,18 @@ _lctx_ciphers(struct ssl_ctx* ctx_parm, const char* ciphers) {
 }
 
 
-int
+struct ssl_ctx*
 lnew_ctx() {
     struct ssl_ctx* ctx_p = (struct ssl_ctx*)skynet_malloc(sizeof(*ctx_p));
     ctx_p->ctx = SSL_CTX_new(SSLv23_method());
     if(!ctx_p->ctx) {
 		fprintf(stderr, "SSL_CTX_new client faild.\n");
     }
-    return 1;
+    return ctx_p;
 }
 
 
-int
+struct tls_context*
 lnew_tls(const char* method_parm, struct ssl_ctx* ctx_parm) {
     struct tls_context* tls_p = (struct tls_context*)skynet_malloc(sizeof(*tls_p));
     tls_p->is_close = false;
@@ -345,7 +349,7 @@ lnew_tls(const char* method_parm, struct ssl_ctx* ctx_parm) {
     } else {
 		fprintf(stderr, "invalid method:%s e.g[server, client].\n", method);
     }
-    return 1;
+    return tls_p;
 }
 
 

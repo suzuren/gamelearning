@@ -5,8 +5,9 @@
 #include <stdint.h>
 #include "socket_info.h"
 
-#define skynet_malloc malloc
-#define skynet_free free
+//#define skynet_malloc malloc
+//#define skynet_free free
+#include "skynet_malloc.h"
 
 
 #define SOCKET_DATA 0

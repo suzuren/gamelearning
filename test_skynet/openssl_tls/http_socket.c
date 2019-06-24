@@ -1,8 +1,10 @@
 
+#include "skynet_mq.h"
 #include "support_algorithm.h"
 #include "socket_server.h"
 #include "http_module.h"
 #include "libtls.h"
+#include "http_socket.h"
 
 #include <pthread.h>
 #include <stdio.h>
@@ -47,6 +49,51 @@ http_socket_free() {
 	SOCKET_SERVER = NULL;
 }
 
+// mainloop thread
+static void
+forward_message(int type, bool padding, struct socket_message * result) {
+	struct skynet_socket_message *sm;
+	size_t sz = sizeof(*sm);
+	if (padding) {
+		if (result->data) {
+			size_t msg_sz = strlen(result->data);
+			if (msg_sz > 128) {
+				msg_sz = 128;
+			}
+			sz += msg_sz;
+		}
+		else {
+			result->data = "";
+		}
+	}
+	sm = (struct skynet_socket_message *)skynet_malloc(sz);
+	sm->type = type;
+	sm->id = result->id;
+	sm->ud = result->ud;
+	if (padding) {
+		sm->buffer = NULL;
+		memcpy(sm + 1, result->data, sz - sizeof(*sm));
+	}
+	else {
+		sm->buffer = result->data;
+	}
+
+	struct skynet_message message;
+	message.source = 0;
+	message.session = 0;
+	message.data = sm;
+	// type 编码到了 size 参数的高 8 位, 单个消息包限制长度在 16 M （24 bit)内
+	message.sz = sz | ((size_t)PTYPE_SOCKET << MESSAGE_TYPE_SHIFT);
+
+	//if (skynet_context_push((uint32_t)result->opaque, &message)) {
+	if (http_mq_push(&message)) {
+		// todo: report somewhere to close socket
+		// don't call skynet_socket_close here (It will block mainloop)
+		skynet_free(sm->buffer);
+		skynet_free(sm);
+	}
+}
+
 int
 http_socket_poll() {
 	struct socket_server *ss = SOCKET_SERVER;
@@ -64,7 +111,8 @@ http_socket_poll() {
 	case SOCKET_DATA:
 	{
 		printf("message(%lu) [id=%d] size=%d\n", result.opaque, result.id, result.ud);
-		free(result.data);
+		//skynet_free(result.data);
+		forward_message(SKYNET_SOCKET_TYPE_DATA, false, &result);
 	}break;
 	case SOCKET_CLOSE:
 	{
@@ -285,11 +333,31 @@ static struct tls_context* TLS_P = NULL;
 
 size_t http_read_func(char** out_read)
 {
+	sleep(2);
 	*out_read = NULL;
-	return 1;
+	struct skynet_message msg;
+	int ret = http_mq_pop(&msg);
+	int type = msg.sz >> MESSAGE_TYPE_SHIFT;
+	//size_t sz = msg.sz & MESSAGE_TYPE_MASK;
+	size_t readlen = 0;
+	//if(ret == 0)
+	//{
+	//	printf("ret:%d,type:%d,sz:%ld\n", ret, type, sz);
+	//}
+	if (!ret && type == PTYPE_SOCKET)
+	{
+		struct skynet_socket_message * sm = msg.data;
+		if (sm->type == SKYNET_SOCKET_TYPE_DATA)
+		{
+			readlen = sm->ud;
+			*out_read = sm->buffer;
+			skynet_free(sm);
+		}
+	}
+	return readlen;
 }
 
-int http_init_interface(char* protocol, int fd)
+int http_init_interface(int fd,char* protocol)
 {
 	if (strcmp(protocol, "http") == 0)
 	{
@@ -316,21 +384,159 @@ int http_init_interface(char* protocol, int fd)
 	char* out_read;
 	int all_read = tls_context_handshake(TLS_P, 0, NULL, &out_read);
 	http_socket_send(fd, out_read, all_read);
-	printf("all_read:%d\n", all_read);
+	//printf("all_read:%d\n", all_read);
 	//printf("out_read:%s-\n", out_read);
+	//http_socket_send发送之后会自动释放
+	//if (out_read != NULL)
+	//{
+	//	skynet_free(out_read);
+	//}
 	while (!tls_context_finished(TLS_P))
 	{
 		char* exchange;
 		size_t slen = http_read_func(&exchange);
+		//if (slen > 0)
+		//{
+		//	printf("slen:%ld\n", slen);
+		//	printf("exchange:%s-\n", exchange);
+		//}
 		all_read = tls_context_handshake(TLS_P, slen, exchange, &out_read);
+		if (exchange != NULL)
+		{
+			skynet_free(exchange);
+		}
 		if (all_read>0)
 		{
 			http_socket_send(fd, out_read, all_read);
+			//http_socket_send发送之后会自动释放
+			//if (out_read != NULL)
+			//{
+			//	skynet_free(out_read);
+			//}
 		}
 	}
+	printf("tls_context_finished\n");
+
 	return 1;
 }
 
+void http_socket_tls_write(int fd, void *buffer, int sz)
+{
+	char* out_read;
+	int read_size = tls_context_write(TLS_P, sz, buffer, &out_read);
+	//http_socket_send发送之后会自动释放
+	http_socket_send(fd, out_read, read_size);
+	//if (out_read != NULL)
+	//{
+	//	skynet_free(out_read);
+	//}
+}
+
+int http_socket_tls_read(int fd, char ** recvbuffer)
+{
+	char* encrypted_data;
+	size_t encrypted_data_size = http_read_func(&encrypted_data);
+	char* out_read;
+	int read_size = tls_context_read(TLS_P, encrypted_data_size, encrypted_data, &out_read);
+	*recvbuffer = out_read;
+	return read_size;
+}
+
+int http_socket_request(int fd, char* method, char* host, char* uri, char* recvheader, char* header, char* content)
+{
+	char header_content[1024] = { 0 };
+	sprintf(header_content, "host:%s\r\n", host);
+	char request_header[2048] = { 0 };
+	sprintf(request_header, "%s %s HTTP/1.1\r\n%scontent-length:0\r\n\r\n", method, uri, header_content);
+	int header_size = (int)strlen(request_header);
+	http_socket_tls_write(fd, request_header, header_size);
+	printf("header_size:%d\n", header_size);
+	printf("request_header:%s-\n", request_header);
+
+	char * recvbuffer;
+	int read_size = http_socket_tls_read(fd, &recvbuffer);
+	printf("read_size:%d\n", read_size);
+	printf("recvbuffer:%s-\n", recvbuffer);
+	if (recvbuffer != NULL)
+	{
+		skynet_free(recvbuffer);
+	}
+
+	return 1;
+}
+
+//local function request(interface, method, host, url, recvheader, header, content)
+//local read = interface.read
+//local write = interface.write
+//local header_content = ""
+//if header then
+//if not header.host then
+//header.host = host
+//end
+//for k, v in pairs(header) do
+//header_content = string.format("%s%s:%s\r\n", header_content, k, v)
+//end
+//else
+//header_content = string.format("host:%s\r\n", host)
+//end
+//
+//if content then
+//local data = string.format("%s %s HTTP/1.1\r\n%scontent-length:%d\r\n\r\n", method, url, header_content, #content)
+//write(data)
+//write(content)
+//else
+//local request_header = string.format("%s %s HTTP/1.1\r\n%scontent-length:0\r\n\r\n", method, url, header_content)
+//write(request_header)
+//end
+//
+//local tmpline = {}
+//local body = internal.recvheader(read, tmpline, "")
+//if not body then
+//error(socket.socket_error)
+//end
+//
+//local statusline = tmpline[1]
+//local code, info = statusline:match "HTTP/[%d%.]+%s+([%d]+)%s+(.*)$"
+//code = assert(tonumber(code))
+//
+//local header = internal.parseheader(tmpline, 2, recvheader or {})
+//if not header then
+//error("Invalid HTTP response header")
+//end
+//
+//local length = header["content-length"]
+//if length then
+//length = tonumber(length)
+//end
+//local mode = header["transfer-encoding"]
+//if mode then
+//if mode ~= "identity" and mode ~= "chunked" then
+//error("Unsupport transfer-encoding")
+//end
+//end
+//
+//if mode == "chunked" then
+//body, header = internal.recvchunkedbody(read, nil, header, body)
+//if not body then
+//error("Invalid response body")
+//end
+//else
+//--identity mode
+//if length then
+//if #body >= length then
+//body = body:sub(1, length)
+//else
+//local padding = read(length - #body)
+//body = body ..padding
+//end
+//else
+//--no content - length, read all
+//body = body .. interface.readall()
+//end
+//end
+//
+//return code, body
+//end
 
 
 static void *

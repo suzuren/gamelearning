@@ -42,8 +42,8 @@ void _bio_write(struct tls_context* tls_p, const char* s, size_t len);
 int _ltls_context_finished(struct tls_context* tls_p);
 int _ltls_context_close(struct tls_context* tls_p);
 int _ltls_context_handshake(struct tls_context* tls_parm, size_t slen, const char* exchange, char** out_read);
-int _ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encrypted_data);
-int _ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted_data);
+int _ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encrypted_data, char** out_read);
+int _ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted_data, char ** out_read);
 
 int _lctx_gc(struct ssl_ctx* ctx_parm);
 int _lctx_cert(struct ssl_ctx* ctx_parm, const char* certfile, const char* key);

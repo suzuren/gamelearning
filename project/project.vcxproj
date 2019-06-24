@@ -263,6 +263,7 @@
     <ClInclude Include="..\test_skynet\openssl_tls\http_module.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\http_socket.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\skynet_malloc.h" />
+    <ClInclude Include="..\test_skynet\openssl_tls\skynet_mq.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\support_algorithm.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\libtls.h" />
     <ClInclude Include="..\test_skynet\openssl_tls\socket_epoll.h" />
@@ -828,6 +829,7 @@
     <ClCompile Include="..\test_skynet\openssl_tls\ltls.c" />
     <ClCompile Include="..\test_skynet\openssl_tls\libtls.c" />
     <ClCompile Include="..\test_skynet\openssl_tls\main.c" />
+    <ClCompile Include="..\test_skynet\openssl_tls\skynet_mq.c" />
     <ClCompile Include="..\test_skynet\openssl_tls\socket_server.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\main.c" />
     <ClCompile Include="..\test_skynet\skynet_handle\skynet_handle.c" />

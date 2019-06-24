@@ -1,7 +1,7 @@
 
 LUA_INC := /usr/local/lua/include
 
-all: ltls.so libtls.so libsocket_server.so libhttp_socket.so libhttp_module.so testHttpModule
+all: ltls.so libtls.so libsocket_server.so libskynet_mq.so libhttp_socket.so libhttp_module.so testHttpModule
 
 #TLS_MODULE=ltls tls
 TLS_LIB=/root/code/openssl/
@@ -19,14 +19,17 @@ libtls.so : libtls.c
 libsocket_server.so : socket_server.c
 	gcc $(CFLAGS) $(SHARED) $^ -o $@
 
+libskynet_mq.so : skynet_mq.c
+	gcc $(CFLAGS) $(SHARED) $^ -o $@
+
 libhttp_socket.so : http_socket.c
-	gcc $(CFLAGS) $(SHARED) $^ -o $@ -L. -ltls -lsocket_server
+	gcc $(CFLAGS) $(SHARED) $^ -o $@ -L. -ltls -lsocket_server -lskynet_mq
 
 libhttp_module.so : http_module.c
-	gcc $(CFLAGS) $(SHARED) $^ -o $@ -L. -ltls -lsocket_server -lsocket_server -lhttp_socket
+	gcc $(CFLAGS) $(SHARED) $^ -o $@ -L. -ltls -lsocket_server -lskynet_mq -lhttp_socket
 
 testHttpModule : main.c
-	gcc -g -Wall $^ -o $@ -L. -lrt -lpthread -ltls -lsocket_server -lhttp_socket -lhttp_module
+	gcc -g -Wall $^ -o $@ -L. -lrt -lpthread -ltls -lsocket_server -lskynet_mq -lhttp_socket -lhttp_module
 
 clean:
 	rm -f *.so core.* testHttpModule

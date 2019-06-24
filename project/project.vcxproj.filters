@@ -1179,6 +1179,9 @@
     <ClInclude Include="..\test_skynet\openssl_tls\skynet_malloc.h">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\openssl_tls\skynet_mq.h">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -2866,6 +2869,9 @@
       <Filter>test_skynet\openssl_tls</Filter>
     </ClCompile>
     <ClCompile Include="..\test_skynet\openssl_tls\http_socket.c">
+      <Filter>test_skynet\openssl_tls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\openssl_tls\skynet_mq.c">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClCompile>
   </ItemGroup>

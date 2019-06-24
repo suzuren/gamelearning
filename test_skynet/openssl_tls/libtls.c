@@ -109,6 +109,7 @@ _bio_read(struct tls_context* tls_p,char ** out_read)
 				all_read += read;
 				//luaL_addlstring(&b, (const char*)outbuff, read);
 				preadbuff = skynet_copymem(preadbuff, readsize, outbuff, read);
+				readsize += read;
 			}
 			else
 			{
@@ -213,7 +214,7 @@ _ltls_context_handshake(struct tls_context* tls_parm, size_t slen, const char* e
 
 
 int
-_ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encrypted_data) {
+_ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encrypted_data, char** out_read) {
 	
 	struct tls_context* tls_p = _check_context(tls_parm);
 
@@ -226,6 +227,8 @@ _ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encryp
     int read = 0;
     //luaL_Buffer b;
     //luaL_buffinit(L, &b);
+	char * preadbuff = NULL;
+	size_t readsize = 0;
 
     do {
         read = SSL_read(tls_p->ssl, outbuff, sizeof(outbuff));
@@ -237,17 +240,21 @@ _ltls_context_read(struct tls_context* tls_parm, size_t slen, const char* encryp
 			fprintf(stderr, "SSL_read error:%d.\n", err);
         }else if(read <= sizeof(outbuff)) {
             //luaL_addlstring(&b, outbuff, read);
+			preadbuff = skynet_copymem(preadbuff, readsize, outbuff, read);
+			readsize += read;
+
         }else {
 			fprintf(stderr, "invalid SSL_read:%d.\n", read);
         }
     }while(true);
     //luaL_pushresult(&b);
-    return 1;
+	*out_read = preadbuff;
+    return readsize;
 }
 
 
 int
-_ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted_data) {
+_ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted_data,char ** out_read) {
 
 	struct tls_context* tls_p = _check_context(tls_parm);
 
@@ -263,12 +270,12 @@ _ltls_context_write(struct tls_context* tls_parm, size_t slen, char* unencrypted
 			fprintf(stderr, "invalid SSL_write:%d.\n", written);
         }
     }
-	char * out_read;
-    int all_read = _bio_read(tls_p, &out_read);
+    int all_read = _bio_read(tls_p, out_read);
     if(all_read <= 0) {
         //lua_pushstring(L, "");
+		return 0;
     }
-    return 1;
+    return all_read;
 }
 
 

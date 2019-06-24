@@ -349,6 +349,9 @@
     <Filter Include="test_skynet\openssl_tls">
       <UniqueIdentifier>{a32e8a32-4c02-42d8-9ea8-e06e2bd73905}</UniqueIdentifier>
     </Filter>
+    <Filter Include="test_skynet\skynet_socket">
+      <UniqueIdentifier>{da546f06-0906-49d3-9bee-f3bdc9ccfb99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\templog\config.h">
@@ -1182,6 +1185,33 @@
     <ClInclude Include="..\test_skynet\openssl_tls\skynet_mq.h">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\atomic.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_epoll.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_info.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_kqueue.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_poll.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_server.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\spinlock.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_malloc.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_mq.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -2007,6 +2037,9 @@
     </None>
     <None Include="..\test_skynet\openssl_tls\pare_http.lua">
       <Filter>test_skynet\openssl_tls</Filter>
+    </None>
+    <None Include="..\test_skynet\skynet_socket\makefile">
+      <Filter>test_skynet\skynet_socket</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -2874,6 +2907,15 @@
     <ClCompile Include="..\test_skynet\openssl_tls\skynet_mq.c">
       <Filter>test_skynet\openssl_tls</Filter>
     </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_socket\socket_server.c">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_socket\main.c">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_mq.c">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\cpp11\gcc install.txt">
@@ -2964,6 +3006,9 @@
     </Text>
     <Text Include="..\test_skynet\openssl_tls\read.txt">
       <Filter>test_skynet\openssl_tls</Filter>
+    </Text>
+    <Text Include="..\test_skynet\skynet_socket\read.txt">
+      <Filter>test_skynet\skynet_socket</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>

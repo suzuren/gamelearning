@@ -280,6 +280,15 @@
     <ClInclude Include="..\test_skynet\skynet_module\spinlock.h" />
     <ClInclude Include="..\test_skynet\skynet_mq\skynet_mq.h" />
     <ClInclude Include="..\test_skynet\skynet_mq\spinlock.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\atomic.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_malloc.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_mq.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_epoll.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_info.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_kqueue.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_poll.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\socket_server.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\spinlock.h" />
     <ClInclude Include="..\test_skynet\skynet_timer\skynet_timer.h" />
     <ClInclude Include="..\test_skynet\skynet_timer\spinlock.h" />
     <ClInclude Include="..\test_skynet\snlua_bootstrap\xxx_test.h" />
@@ -560,6 +569,7 @@
     <None Include="..\test_skynet\skynet_lua\test_upvalue.lua" />
     <None Include="..\test_skynet\skynet_module\makefile" />
     <None Include="..\test_skynet\skynet_mq\makefile" />
+    <None Include="..\test_skynet\skynet_socket\makefile" />
     <None Include="..\test_skynet\skynet_timer\makefile" />
     <None Include="..\test_skynet\snlua_bootstrap\loader.lua" />
     <None Include="..\test_skynet\snlua_bootstrap\makefile" />
@@ -846,6 +856,9 @@
     <ClCompile Include="..\test_skynet\skynet_module\skynet_module.c" />
     <ClCompile Include="..\test_skynet\skynet_mq\main.c" />
     <ClCompile Include="..\test_skynet\skynet_mq\skynet_mq.c" />
+    <ClCompile Include="..\test_skynet\skynet_socket\main.c" />
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_mq.c" />
+    <ClCompile Include="..\test_skynet\skynet_socket\socket_server.c" />
     <ClCompile Include="..\test_skynet\skynet_timer\main.c" />
     <ClCompile Include="..\test_skynet\skynet_timer\skynet_timer.c" />
     <ClCompile Include="..\test_skynet\snlua_bootstrap\main.c" />
@@ -896,6 +909,7 @@
     <Text Include="..\test_skynet\skynet_lua\read.txt" />
     <Text Include="..\test_skynet\skynet_module\read.txt" />
     <Text Include="..\test_skynet\skynet_mq\read.txt" />
+    <Text Include="..\test_skynet\skynet_socket\read.txt" />
     <Text Include="..\test_skynet\skynet_timer\read.txt" />
     <Text Include="..\test_skynet\snlua_bootstrap\read.txt" />
     <Text Include="..\timer\alldayseconds.txt" />

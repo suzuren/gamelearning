@@ -19,15 +19,17 @@ g++: yum install gcc-c++
 cmake-2.8.8/Readme.txt
 $ ./bootstrap; make; make install
 
-
+unzip hiredis-master.zip
 hiredis-master/
 make;make install;
 
+tar -xjvf jemalloc-3.4.1.tar.bz2
 jemalloc-3.4.1/INSTALL
     ./configure
     make
     make install
 
+tar -zxvf libiconv-1.14.tar.gz
 libiconv-1.14/README
     $ ./configure --prefix=/usr/local
     $ make
@@ -40,13 +42,14 @@ libiconv-1.14/README
 	/usr/bin/ld: cannot find -liconv
 	collect2: error: ld returned 1 exit status
 
-
+tar -xjvf protobuf-2.5.0.tar.bz2
 protobuf-2.5.0/README.txt
   $ ./configure
   $ make
   $ make check
   $ make install
 
+tar -zxvf redis-2.8.9.tar.gz
 redis-2.8.9/README
 	make
 	make install

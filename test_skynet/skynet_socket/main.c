@@ -1,3 +1,6 @@
+
+#include "example_test.h"
+
 #include <stdio.h>
 #include <sys/resource.h>
 #include <errno.h>
@@ -18,5 +21,8 @@ int
 main(int argc, char *argv[]) {
 	GenCoreDumpFile((unsigned int)(1024UL * 1024 * 1024 * 2));
 	printf("hello world.\n");
+
+	test_skynet_mq();
+
 
 }

@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h> 
+#include <stdint.h>
 
 #define skynet_malloc malloc
 #define skynet_free free
@@ -22,5 +23,8 @@ void * skynet_copymem(void *des_ptr, size_t des_size, void *src_buff, size_t src
 	memcpy(newptr + des_size, src_buff, src_size);
 	return newptr;
 }
+
+uint64_t skynet_now(void);
+
 
 #endif

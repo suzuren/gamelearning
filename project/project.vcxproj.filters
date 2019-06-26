@@ -1215,6 +1215,15 @@
     <ClInclude Include="..\test_skynet\skynet_socket\example_test.h">
       <Filter>test_skynet\skynet_socket</Filter>
     </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_socket.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_timer.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_context.h">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\templog\doxygen.conf">
@@ -2917,6 +2926,15 @@
       <Filter>test_skynet\skynet_socket</Filter>
     </ClCompile>
     <ClCompile Include="..\test_skynet\skynet_socket\skynet_mq.c">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_socket.c">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_timer.c">
+      <Filter>test_skynet\skynet_socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_context.c">
       <Filter>test_skynet\skynet_socket</Filter>
     </ClCompile>
   </ItemGroup>

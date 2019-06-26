@@ -22,7 +22,9 @@ main(int argc, char *argv[]) {
 	GenCoreDumpFile((unsigned int)(1024UL * 1024 * 1024 * 2));
 	printf("hello world.\n");
 
-	test_skynet_mq();
+	//test_skynet_mq();
 
+	//test_skynet_timer();
 
+	test_skynet_socket();
 }

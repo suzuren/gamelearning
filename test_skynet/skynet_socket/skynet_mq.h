@@ -19,6 +19,8 @@ struct message_queue;
 
 void skynet_globalmq_push(struct message_queue * queue);
 struct message_queue * skynet_globalmq_pop(void);
+// find message queue by handle
+struct message_queue * skynet_globalmq_find(uint32_t handle);
 
 struct message_queue * skynet_mq_create(uint32_t handle);
 void skynet_mq_mark_release(struct message_queue *q);

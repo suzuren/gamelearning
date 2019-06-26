@@ -3,6 +3,15 @@
 
 #include "skynet_malloc.h"
 #include "skynet_mq.h"
+#include "socket_server.h"
+#include "skynet_context.h"
+#include "skynet_timer.h"
+#include "skynet_socket.h"
+
+#include <pthread.h>
+#include <signal.h>
+#include <unistd.h>
+
 
 #define PTYPE_TEXT 0
 #define PTYPE_RESPONSE 1
@@ -44,6 +53,8 @@ drop_message(struct skynet_message *msg, void *ud) {
 
 void test_skynet_mq()
 {
+	printf("test_skynet_mq.\n");
+
 	// 初始化全局消息队列
 	skynet_mq_init();
 
@@ -188,6 +199,200 @@ void test_skynet_mq()
 		}
 	}	
 }
+
+void test_skynet_timer()
+{
+	printf("test_skynet_timer.\n");
+
+	skynet_context_init();
+	skynet_timeout(HANDLE_TIME, 0, 33);
+	skynet_timeout(HANDLE_TIME, 0, 37);
+	struct message_queue * q = NULL;
+	for (;;)
+	{
+		q = skynet_context_message_dispatch(q);
+		if (q == NULL)
+		{
+			break;
+		}
+	}
+
+	for (;;)
+	{
+		struct message_queue * q = skynet_globalmq_pop();
+		if (!q)break;
+		skynet_mq_mark_release(q);
+		uint32_t handle = skynet_mq_handle(q);
+		struct drop_t d = { handle };
+		skynet_mq_release(q, drop_message, &d);
+	}
+}
+
+
+static volatile int SIG = 0;
+
+static void
+handle_hup(int signal) {
+	if (signal == SIGHUP) {
+		SIG = 1;
+	}
+}
+
+static void
+signal_hup() {
+	// make log file reopen
+
+	struct skynet_message smsg;
+	smsg.source = 0;
+	smsg.session = 0;
+	smsg.data = NULL;
+	smsg.sz = (size_t)PTYPE_SYSTEM << MESSAGE_TYPE_SHIFT;
+	//uint32_t logger = skynet_handle_findname("logger");
+	//if (logger) {
+	//	skynet_context_push(logger, &smsg);
+	//}
+}
+
+struct monitor {
+	int count;
+	//struct skynet_monitor ** m;
+	pthread_cond_t cond;
+	pthread_mutex_t mutex;
+	int sleep;
+	int quit;
+};
+
+static void
+create_thread(pthread_t *thread, void *(*start_routine) (void *), void *arg) {
+	if (pthread_create(thread, NULL, start_routine, arg)) {
+		fprintf(stderr, "Create thread failed");
+		exit(1);
+	}
+}
+
+int
+skynet_context_total() {
+	return 1;
+}
+
+#define CHECK_ABORT if (skynet_context_total()==0) break;
+
+
+static void *
+thread_socket(void *p) {
+	//struct monitor * m = p;
+	//skynet_initthread(THREAD_SOCKET);
+	for (;;) {
+		int r = skynet_socket_poll();
+		if (r == 0)
+			break;
+		if (r<0) {
+			CHECK_ABORT
+			continue;
+		}
+		//wakeup(m, 0);
+	}
+	return NULL;
+}
+
+static void *
+thread_timer(void *p) {
+	struct monitor * m = p;
+	//skynet_initthread(THREAD_TIMER);
+	for (;;) {
+		skynet_updatetime();
+		skynet_socket_updatetime();
+		CHECK_ABORT
+		//wakeup(m, m->count - 1);
+		usleep(2500);
+		if (SIG) {
+			signal_hup();
+			SIG = 0;
+		}
+	}
+	// wakeup socket thread
+	skynet_socket_exit();
+	// wakeup all worker thread
+	pthread_mutex_lock(&m->mutex);
+	m->quit = 1;
+	pthread_cond_broadcast(&m->cond);
+	pthread_mutex_unlock(&m->mutex);
+	return NULL;
+}
+
+
+static void *
+thread_worker(void *p) {
+	struct monitor *m = p;
+
+	//struct worker_parm *wp = p;
+	//int id = wp->id;
+	//int weight = wp->weight;
+	//struct monitor *m = wp->m;
+	//struct skynet_monitor *sm = m->m[id];
+	//skynet_initthread(THREAD_WORKER);
+	struct message_queue * q = NULL;
+	while (!m->quit) {
+		q = skynet_context_message_dispatch(q);
+		if (q == NULL) {
+			if (pthread_mutex_lock(&m->mutex) == 0) {
+				++m->sleep;
+				// "spurious wakeup" is harmless,
+				// because skynet_context_message_dispatch() can be call at any time.
+				if (!m->quit)
+					pthread_cond_wait(&m->cond, &m->mutex);
+				--m->sleep;
+				if (pthread_mutex_unlock(&m->mutex)) {
+					fprintf(stderr, "unlock mutex error");
+					exit(1);
+				}
+			}
+		}
+	}
+	return NULL;
+}
+
+
+void test_skynet_socket()
+{
+	printf("test_skynet_socket.\n");
+
+	struct sigaction sa;
+	sa.sa_handler = &handle_hup;
+	sa.sa_flags = SA_RESTART;
+	sigfillset(&sa.sa_mask);
+	sigaction(SIGHUP, &sa, NULL);
+
+
+	skynet_context_init();
+	skynet_socket_init();
+
+	int thread = 3;
+	struct monitor *m = skynet_malloc(sizeof(*m));
+	memset(m, 0, sizeof(*m));
+	m->count = thread;
+	m->sleep = 0;
+
+	pthread_t pid[thread];
+
+	create_thread(&pid[0], thread_worker, m);
+	create_thread(&pid[1], thread_timer, m);
+	create_thread(&pid[2], thread_socket, m);
+
+	//int skynet_socket_listen(uint32_t handle, const char *host, int port, int backlog);
+
+	for (;;)
+	{
+
+	}
+
+	for (int i = 0; i<thread; i++) {
+		pthread_join(pid[i], NULL);
+	}
+	skynet_socket_free();
+}
+
+
 
 
 #endif

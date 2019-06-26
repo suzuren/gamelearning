@@ -73,6 +73,27 @@ skynet_globalmq_pop() {
 	return mq;
 }
 
+struct message_queue *
+skynet_globalmq_find(uint32_t handle) {
+
+	struct global_queue *q = Q;
+
+	SPIN_LOCK(q)
+	struct message_queue *mq = q->head;
+	while(mq)
+	{
+		if (mq && mq->handle == handle)
+		{
+			break;
+		}
+		mq = mq->next;
+	}
+	SPIN_UNLOCK(q)
+
+	return mq;
+}
+
+
 struct message_queue * 
 skynet_mq_create(uint32_t handle) {
 	struct message_queue *q = skynet_malloc(sizeof(*q));

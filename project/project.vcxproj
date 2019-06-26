@@ -281,8 +281,11 @@
     <ClInclude Include="..\test_skynet\skynet_mq\skynet_mq.h" />
     <ClInclude Include="..\test_skynet\skynet_mq\spinlock.h" />
     <ClInclude Include="..\test_skynet\skynet_socket\atomic.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_context.h" />
     <ClInclude Include="..\test_skynet\skynet_socket\skynet_malloc.h" />
     <ClInclude Include="..\test_skynet\skynet_socket\skynet_mq.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_socket.h" />
+    <ClInclude Include="..\test_skynet\skynet_socket\skynet_timer.h" />
     <ClInclude Include="..\test_skynet\skynet_socket\socket_epoll.h" />
     <ClInclude Include="..\test_skynet\skynet_socket\socket_info.h" />
     <ClInclude Include="..\test_skynet\skynet_socket\socket_kqueue.h" />
@@ -858,7 +861,10 @@
     <ClCompile Include="..\test_skynet\skynet_mq\main.c" />
     <ClCompile Include="..\test_skynet\skynet_mq\skynet_mq.c" />
     <ClCompile Include="..\test_skynet\skynet_socket\main.c" />
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_context.c" />
     <ClCompile Include="..\test_skynet\skynet_socket\skynet_mq.c" />
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_socket.c" />
+    <ClCompile Include="..\test_skynet\skynet_socket\skynet_timer.c" />
     <ClCompile Include="..\test_skynet\skynet_socket\socket_server.c" />
     <ClCompile Include="..\test_skynet\skynet_timer\main.c" />
     <ClCompile Include="..\test_skynet\skynet_timer\skynet_timer.c" />

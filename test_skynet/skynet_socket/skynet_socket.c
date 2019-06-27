@@ -84,6 +84,7 @@ skynet_socket_poll() {
 	struct socket_message result;
 	int more = 1;
 	int type = socket_server_poll(ss, &result, &more);
+	printf("skynet_socket_poll - type:%d,opaque:%ld, [id=%d] ud=%d,result:%s\n", type, result.opaque, result.id, result.ud, (char*)result.data);
 	switch (type) {
 	case SOCKET_EXIT:
 		return 0;
@@ -104,6 +105,7 @@ skynet_socket_poll() {
 		break;
 	case SOCKET_UDP:
 		forward_message(SKYNET_SOCKET_TYPE_UDP, false, &result);
+		//printf("skynet_socket_poll - type:%d,opaque:%ld, [id=%d] ud=%d,result:%s\n", type, result.opaque, result.id, result.ud, (char*)result.data);
 		break;
 	case SOCKET_WARNING:
 		forward_message(SKYNET_SOCKET_TYPE_WARNING, false, &result);

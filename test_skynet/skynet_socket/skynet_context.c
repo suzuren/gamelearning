@@ -3,6 +3,7 @@
 #include "skynet_timer.h"
 #include "skynet_mq.h"
 #include "skynet_context.h"
+#include "skynet_socket.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -35,7 +36,9 @@ skynet_callback(uint32_t handle, int type, int session, uint32_t source, const v
 	}
 	else if (handle == HANDLE_SOCKET)
 	{
-		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,msg:%s,sz:%ld\n", handle, type, session, source, (char *)msg, sz);
+		struct skynet_socket_message *sm =(struct skynet_socket_message *)msg;
+		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d\n",
+			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud);
 	}
 	else
 	{
@@ -44,25 +47,51 @@ skynet_callback(uint32_t handle, int type, int session, uint32_t source, const v
 	return 0;
 }
 
+struct skynet_context {
+	struct message_queue *queue;
+	uint64_t cpu_cost;	// in microsec
+	uint64_t cpu_start;	// in microsec
+	uint32_t handle;
+};
+
+static struct skynet_context ctx_time;
+static struct skynet_context ctx_sock;
+
 void skynet_context_init()
 {
 	skynet_mq_init();
 	skynet_timer_init();
-	struct message_queue * queue_time = skynet_mq_create(HANDLE_TIME);
-	skynet_globalmq_push(queue_time);
-	struct message_queue * queue_socket = skynet_mq_create(HANDLE_SOCKET);
-	skynet_globalmq_push(queue_socket);
+	ctx_time.handle = HANDLE_TIME;
+	ctx_time.queue = skynet_mq_create(ctx_time.handle);
+	skynet_globalmq_push(ctx_time.queue);
+
+	ctx_sock.handle = HANDLE_SOCKET;
+	ctx_sock.queue = skynet_mq_create(ctx_sock.handle);
+	skynet_globalmq_push(ctx_sock.queue);
+
+	printf("init - handle:%d,queue:%p\n", ctx_time.handle, ctx_time.queue);
+	printf("init - handle:%d,queue:%p\n", ctx_sock.handle, ctx_sock.queue);
 }
 
 
 int skynet_context_push(uint32_t handle, struct skynet_message *message) {
-	struct message_queue * queue = skynet_globalmq_find(handle);
+	//struct message_queue * queue = skynet_globalmq_find(handle);
 	//printf("push - handle:%d,queue:%p\n", handle,queue);
-	if (queue == NULL) {
+	//if (queue == NULL) {
+	//	return -1;
+	//}
+	if (handle == HANDLE_TIME)
+	{
+		skynet_mq_push(ctx_time.queue, message);
+	}
+	else if (handle == HANDLE_SOCKET)
+	{
+		skynet_mq_push(ctx_sock.queue, message);
+	}
+	else
+	{
 		return -1;
 	}
-	skynet_mq_push(queue, message);
-
 	return 0;
 }
 
@@ -116,7 +145,7 @@ skynet_context_message_dispatch(struct message_queue *q) {
 
 	uint32_t handle = skynet_mq_handle(q);
 
-	//printf("disp - handle:%d,queue:%p\n", handle, q);
+	//printf("disp 2 - handle:%d,queue:%p\n", handle, q);
 
 	int i, n = 1;
 	struct skynet_message msg;

@@ -242,11 +242,11 @@ static void
 signal_hup() {
 	// make log file reopen
 
-	struct skynet_message smsg;
-	smsg.source = 0;
-	smsg.session = 0;
-	smsg.data = NULL;
-	smsg.sz = (size_t)PTYPE_SYSTEM << MESSAGE_TYPE_SHIFT;
+	//struct skynet_message smsg;
+	//smsg.source = 0;
+	//smsg.session = 0;
+	//smsg.data = NULL;
+	//smsg.sz = (size_t)PTYPE_SYSTEM << MESSAGE_TYPE_SHIFT;
 	//uint32_t logger = skynet_handle_findname("logger");
 	//if (logger) {
 	//	skynet_context_push(logger, &smsg);
@@ -282,16 +282,19 @@ static void *
 thread_socket(void *p) {
 	//struct monitor * m = p;
 	//skynet_initthread(THREAD_SOCKET);
+	printf("test thread_socket.\n");
 	for (;;) {
 		int r = skynet_socket_poll();
-		if (r == 0)
-			break;
+		//if (r == 0)
+		//	break;
 		if (r<0) {
-			CHECK_ABORT
+			//CHECK_ABORT
 			continue;
 		}
 		//wakeup(m, 0);
 	}
+	printf("test thread_socket exit.\n");
+
 	return NULL;
 }
 
@@ -334,19 +337,20 @@ thread_worker(void *p) {
 	struct message_queue * q = NULL;
 	while (!m->quit) {
 		q = skynet_context_message_dispatch(q);
+		usleep(2500);
 		if (q == NULL) {
-			if (pthread_mutex_lock(&m->mutex) == 0) {
-				++m->sleep;
-				// "spurious wakeup" is harmless,
-				// because skynet_context_message_dispatch() can be call at any time.
-				if (!m->quit)
-					pthread_cond_wait(&m->cond, &m->mutex);
-				--m->sleep;
-				if (pthread_mutex_unlock(&m->mutex)) {
-					fprintf(stderr, "unlock mutex error");
-					exit(1);
-				}
-			}
+			//if (pthread_mutex_lock(&m->mutex) == 0) {
+			//	++m->sleep;
+			//	// "spurious wakeup" is harmless,
+			//	// because skynet_context_message_dispatch() can be call at any time.
+			//	if (!m->quit)
+			//		pthread_cond_wait(&m->cond, &m->mutex);
+			//	--m->sleep;
+			//	if (pthread_mutex_unlock(&m->mutex)) {
+			//		fprintf(stderr, "unlock mutex error");
+			//		exit(1);
+			//	}
+			//}
 		}
 	}
 	return NULL;
@@ -381,9 +385,35 @@ void test_skynet_socket()
 
 	//int skynet_socket_listen(uint32_t handle, const char *host, int port, int backlog);
 
+	int id_udp_server = skynet_socket_udp(HANDLE_SOCKET, "0.0.0.0", 8900);
+
+	int ret_connect = skynet_socket_udp_connect(HANDLE_SOCKET, id_udp_server, "127.0.0.1", 8900);
+
+	printf("skynet_socket_udp - id_udp_server:%d,ret_connect:%d\n", id_udp_server, ret_connect);
+
+	//struct skynet_socket_message sm;
+	//sm.type = 1;
+	//sm.type = id_udp_server;
+	//sm.ud = 8900;
+	//sm.buffer = "127.0.0.1";
+	//int address_size;
+	//const char * udp_send_address = skynet_socket_udp_address(&sm, &address_size);
+
+
 	for (;;)
 	{
+		char * temp_buffer = "helloworld\0";
+		int udp_send_sz = (int)strlen(temp_buffer) + 1;
+		char * udp_send_buffer = skynet_malloc(udp_send_sz);
+		memcpy(udp_send_buffer, temp_buffer, udp_send_sz);
 
+		//int ret_send = skynet_socket_udp_send(HANDLE_SOCKET, id_udp_server, udp_send_address, udp_send_buffer, udp_send_sz);
+		int ret_send = skynet_socket_send(HANDLE_SOCKET, id_udp_server, udp_send_buffer, udp_send_sz);
+
+		printf("skynet_socket_udp id_udp - ret_send:%d,udp_send_sz:%d\n", ret_send, udp_send_sz);
+
+		// wait for 2 seconds
+		usleep(2000000);
 	}
 
 	for (int i = 0; i<thread; i++) {

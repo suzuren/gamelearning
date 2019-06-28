@@ -1,4 +1,4 @@
-
+#include "socket_server.h"
 #include "skynet_malloc.h"
 #include "skynet_timer.h"
 #include "skynet_mq.h"
@@ -28,6 +28,8 @@
 
 #endif
 
+static 	int server_index = 0;
+
 int
 skynet_callback(uint32_t handle, int type, int session, uint32_t source, const void * msg, size_t sz) {
 	if (handle == HANDLE_TIME)
@@ -39,6 +41,54 @@ skynet_callback(uint32_t handle, int type, int session, uint32_t source, const v
 		struct skynet_socket_message *sm =(struct skynet_socket_message *)msg;
 		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d\n",
 			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud);
+	}
+	else if (handle == HANDLE_SOCKET_UDP_SERVER || handle == HANDLE_SOCKET_UDP_CLIENT)
+	{
+		struct skynet_socket_message *sm = (struct skynet_socket_message *)msg;
+		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d\n",
+			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud);
+		if (handle == HANDLE_SOCKET_UDP_SERVER && server_index == 0)
+		{
+			int address_size;
+			const char * udp_send_address = skynet_socket_udp_address(sm, &address_size);
+
+			char temp_buffer[512] = { 0 };
+			sprintf(temp_buffer, "server_helloworld_%03d", server_index++);
+			int udp_send_sz = (int)strlen(temp_buffer) + 1;
+			char * udp_send_buffer = skynet_malloc(udp_send_sz);
+			memcpy(udp_send_buffer, temp_buffer, udp_send_sz);
+
+			int ret_send = skynet_socket_udp_send(HANDLE_SOCKET_UDP_CLIENT, sm->id, udp_send_address, udp_send_buffer, udp_send_sz);
+
+			printf("skynet_socket_udp_send - address_size:%d,ret_send:%d,udp_send_sz:%d\n", address_size, ret_send, udp_send_sz);
+
+		}
+		skynet_free(sm->buffer);
+		//skynet_free(sm);
+	}
+	else if (handle == HANDLE_SOCKET_TCP_SERVER)
+	{
+		char * static_data = NULL;
+		if (type == SOCKET_OPEN || type == SOCKET_ERR || type == SOCKET_ACCEPT)
+		{
+			static_data = (char *)(msg + sizeof(struct skynet_socket_message));
+		}
+		struct skynet_socket_message *sm = (struct skynet_socket_message *)msg;
+		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d,static_data:%s\n",
+			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud, static_data);
+
+	}
+	else if (handle == HANDLE_SOCKET_TCP_CLIENT)
+	{
+		char * static_data = NULL;
+		if (type == SOCKET_OPEN || type == SOCKET_ERR || type == SOCKET_ACCEPT)
+		{
+			static_data = (char *)(msg + sizeof(struct skynet_socket_message));
+		}
+		struct skynet_socket_message *sm = (struct skynet_socket_message *)msg;
+		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d,static_data:%s\n",
+			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud, static_data);
+
 	}
 	else
 	{
@@ -56,11 +106,16 @@ struct skynet_context {
 
 static struct skynet_context ctx_time;
 static struct skynet_context ctx_sock;
+static struct skynet_context ctx_sock_udp_s;
+static struct skynet_context ctx_sock_udp_c;
+static struct skynet_context ctx_sock_tcp_s;
+static struct skynet_context ctx_sock_tcp_c;
 
 void skynet_context_init()
 {
 	skynet_mq_init();
 	skynet_timer_init();
+
 	ctx_time.handle = HANDLE_TIME;
 	ctx_time.queue = skynet_mq_create(ctx_time.handle);
 	skynet_globalmq_push(ctx_time.queue);
@@ -69,8 +124,24 @@ void skynet_context_init()
 	ctx_sock.queue = skynet_mq_create(ctx_sock.handle);
 	skynet_globalmq_push(ctx_sock.queue);
 
-	printf("init - handle:%d,queue:%p\n", ctx_time.handle, ctx_time.queue);
-	printf("init - handle:%d,queue:%p\n", ctx_sock.handle, ctx_sock.queue);
+	ctx_sock_udp_s.handle = HANDLE_SOCKET_UDP_SERVER;
+	ctx_sock_udp_s.queue = skynet_mq_create(ctx_sock_udp_s.handle);
+	skynet_globalmq_push(ctx_sock_udp_s.queue);
+
+	ctx_sock_udp_c.handle = HANDLE_SOCKET_UDP_CLIENT;
+	ctx_sock_udp_c.queue = skynet_mq_create(ctx_sock_udp_c.handle);
+	skynet_globalmq_push(ctx_sock_udp_c.queue);
+
+	ctx_sock_tcp_s.handle = HANDLE_SOCKET_TCP_SERVER;
+	ctx_sock_tcp_s.queue = skynet_mq_create(ctx_sock_tcp_s.handle);
+	skynet_globalmq_push(ctx_sock_tcp_s.queue);
+
+	ctx_sock_tcp_c.handle = HANDLE_SOCKET_TCP_CLIENT;
+	ctx_sock_tcp_c.queue = skynet_mq_create(ctx_sock_tcp_c.handle);
+	skynet_globalmq_push(ctx_sock_tcp_c.queue);
+
+	//printf("init - handle:%d,queue:%p\n", ctx_time.handle, ctx_time.queue);
+	//printf("init - handle:%d,queue:%p\n", ctx_sock.handle, ctx_sock.queue);
 }
 
 
@@ -87,6 +158,22 @@ int skynet_context_push(uint32_t handle, struct skynet_message *message) {
 	else if (handle == HANDLE_SOCKET)
 	{
 		skynet_mq_push(ctx_sock.queue, message);
+	}
+	else if (handle == HANDLE_SOCKET_UDP_SERVER)
+	{
+		skynet_mq_push(ctx_sock_udp_s.queue, message);
+	}
+	else if (handle == HANDLE_SOCKET_UDP_CLIENT)
+	{
+		skynet_mq_push(ctx_sock_udp_c.queue, message);
+	}
+	else if (handle == HANDLE_SOCKET_TCP_SERVER)
+	{
+		skynet_mq_push(ctx_sock_tcp_s.queue, message);
+	}
+	else if (handle == HANDLE_SOCKET_TCP_CLIENT)
+	{
+		skynet_mq_push(ctx_sock_tcp_c.queue, message);
 	}
 	else
 	{
@@ -123,7 +210,7 @@ dispatch_message(uint32_t handle, struct skynet_message *msg) {
 		double t_cpu_cost = (double)cpu_cost / 1000000.0;
 		sprintf(result_cpu_cost, "%lf", t_cpu_cost);
 
-		printf("cpu_start:%s,cpu_cost:%s\n", result_cpu_start, result_cpu_cost);
+		//printf("cpu_start:%s,cpu_cost:%s\n", result_cpu_start, result_cpu_cost);
 	}
 	else {
 		reserve_msg = skynet_callback(handle, type, msg->session, msg->source, msg->data, sz);

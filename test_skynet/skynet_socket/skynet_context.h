@@ -24,8 +24,14 @@
 
 
 // handle do not define 0
-#define HANDLE_TIME		1
-#define HANDLE_SOCKET	2
+#define HANDLE_TIME					1
+#define HANDLE_SOCKET				2
+
+#define HANDLE_SOCKET_UDP_SERVER	3
+#define HANDLE_SOCKET_UDP_CLIENT	4
+
+#define HANDLE_SOCKET_TCP_SERVER	5
+#define HANDLE_SOCKET_TCP_CLIENT	6
 
 struct skynet_message;
 struct message_queue;

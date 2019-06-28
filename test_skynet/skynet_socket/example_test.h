@@ -385,9 +385,9 @@ void test_skynet_socket()
 
 	//int skynet_socket_listen(uint32_t handle, const char *host, int port, int backlog);
 
-	int id_udp_server = skynet_socket_udp(HANDLE_SOCKET, "0.0.0.0", 8900);
+	int id_udp_server = skynet_socket_udp(HANDLE_SOCKET_UDP_SERVER, "0.0.0.0", 8900);
 
-	int ret_connect = skynet_socket_udp_connect(HANDLE_SOCKET, id_udp_server, "127.0.0.1", 8900);
+	int ret_connect = skynet_socket_udp_connect(HANDLE_SOCKET_UDP_CLIENT, id_udp_server, "127.0.0.1", 8900);
 
 	printf("skynet_socket_udp - id_udp_server:%d,ret_connect:%d\n", id_udp_server, ret_connect);
 
@@ -399,24 +399,59 @@ void test_skynet_socket()
 	//int address_size;
 	//const char * udp_send_address = skynet_socket_udp_address(&sm, &address_size);
 
-
+	int client_index = 0;
 	for (;;)
 	{
-		char * temp_buffer = "helloworld\0";
+		char temp_buffer[512] = { 0 };
+		sprintf(temp_buffer, "client_helloworld_%03d", client_index++);
+		//char * temp_buffer = "client_helloworld\0";
 		int udp_send_sz = (int)strlen(temp_buffer) + 1;
 		char * udp_send_buffer = skynet_malloc(udp_send_sz);
 		memcpy(udp_send_buffer, temp_buffer, udp_send_sz);
 
 		//int ret_send = skynet_socket_udp_send(HANDLE_SOCKET, id_udp_server, udp_send_address, udp_send_buffer, udp_send_sz);
-		int ret_send = skynet_socket_send(HANDLE_SOCKET, id_udp_server, udp_send_buffer, udp_send_sz);
+		int ret_send = skynet_socket_send(HANDLE_SOCKET_UDP_CLIENT, id_udp_server, udp_send_buffer, udp_send_sz);
 
 		printf("skynet_socket_udp id_udp - ret_send:%d,udp_send_sz:%d\n", ret_send, udp_send_sz);
 
 		// wait for 2 seconds
 		usleep(2000000);
+		break;
 	}
 
-	for (int i = 0; i<thread; i++) {
+	int listen_id = skynet_socket_listen(HANDLE_SOCKET_TCP_SERVER, "0.0.0.0", 8901, 128);
+	skynet_socket_start(HANDLE_SOCKET_TCP_SERVER, listen_id);
+	// 将一个外部的句柄 绑定到底层的 epoll 中
+	int bind_id = 1;// skynet_socket_bind(HANDLE_SOCKET_TCP_SERVER, listen_id);
+
+	int connect_id = skynet_socket_connect(HANDLE_SOCKET_TCP_CLIENT, "0.0.0.0", 8901);
+
+	printf("listen_id:%d, binding stdin bind_id:%d,connect_id:%d\n", listen_id, bind_id, connect_id);
+
+	int client_index_tcp = 0;
+	for (;;)
+	{
+		char temp_buffer[512] = { 0 };
+		sprintf(temp_buffer, "tcp_client_helloworld_%03d", client_index_tcp++);
+		int tcp_send_sz = (int)strlen(temp_buffer) + 1;
+		char * tcp_send_buffer = skynet_malloc(tcp_send_sz);
+		memcpy(tcp_send_buffer, temp_buffer, tcp_send_sz);
+		int ret_send = 1;// skynet_socket_send(HANDLE_SOCKET_TCP_CLIENT, connect_id, tcp_send_buffer, tcp_send_sz);
+
+		printf("skynet_socket_tcp  - ret_send:%d,tcp_send_sz:%d\n", ret_send, tcp_send_sz);
+
+		// wait for 2 seconds
+		usleep(2000000);
+		break;
+	}
+
+
+	for (;;)
+	{
+		usleep(2000000);
+	}
+
+	for (int i = 0; i < thread; i++) {
 		pthread_join(pid[i], NULL);
 	}
 	skynet_socket_free();

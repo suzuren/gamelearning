@@ -28,10 +28,15 @@
 
 #endif
 
-static 	int server_index = 0;
+static 	int udp_server_index = 0;
+
+static 	int tcp_server_index = 0;
 
 int
 skynet_callback(uint32_t handle, int type, int session, uint32_t source, const void * msg, size_t sz) {
+	
+	printf("------------------------------------\n");
+
 	if (handle == HANDLE_TIME)
 	{
 		printf("callback timer  - handle:%d,type:%d,session:%d,source:%d,msg:%s,sz:%ld\n", handle, type, session, source, (char *)msg, sz);
@@ -47,13 +52,13 @@ skynet_callback(uint32_t handle, int type, int session, uint32_t source, const v
 		struct skynet_socket_message *sm = (struct skynet_socket_message *)msg;
 		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d\n",
 			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud);
-		if (handle == HANDLE_SOCKET_UDP_SERVER && server_index == 0)
+		if (handle == HANDLE_SOCKET_UDP_SERVER && udp_server_index == 0)
 		{
 			int address_size;
 			const char * udp_send_address = skynet_socket_udp_address(sm, &address_size);
 
 			char temp_buffer[512] = { 0 };
-			sprintf(temp_buffer, "server_helloworld_%03d", server_index++);
+			sprintf(temp_buffer, "udp_server_helloworld_%03d", udp_server_index++);
 			int udp_send_sz = (int)strlen(temp_buffer) + 1;
 			char * udp_send_buffer = skynet_malloc(udp_send_sz);
 			memcpy(udp_send_buffer, temp_buffer, udp_send_sz);
@@ -68,24 +73,39 @@ skynet_callback(uint32_t handle, int type, int session, uint32_t source, const v
 	}
 	else if (handle == HANDLE_SOCKET_TCP_SERVER)
 	{
-		char * static_data = NULL;
-		if (type == SOCKET_OPEN || type == SOCKET_ERR || type == SOCKET_ACCEPT)
-		{
-			static_data = (char *)(msg + sizeof(struct skynet_socket_message));
-		}
 		struct skynet_socket_message *sm = (struct skynet_socket_message *)msg;
-		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d,static_data:%s\n",
-			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud, static_data);
+		char static_data[128] = { 0 };
+		if (sm->type == SKYNET_SOCKET_TYPE_CONNECT || sm->type == SKYNET_SOCKET_TYPE_ERROR || sm->type == SKYNET_SOCKET_TYPE_ACCEPT)
+		{
+			memcpy(static_data, msg + sizeof(struct skynet_socket_message), sz - sizeof(struct skynet_socket_message));
+		}
+		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,tcp_server_index:%d,id:%d,ud:%d,static_data:%s\n",
+			handle, type, session, source, sz, sm->buffer, sm->type, tcp_server_index, sm->id, sm->ud, static_data);
+		if (sm->type == SKYNET_SOCKET_TYPE_ACCEPT)
+		{
+			// 把服务端接受连接的fd加入epoll管理，这样客户端发送数据的时候，这个fd就会能收到数据并且接受
+			skynet_socket_start(HANDLE_SOCKET_TCP_SERVER, sm->ud);
+		}
+		else if (sm->type == SKYNET_SOCKET_TYPE_DATA && tcp_server_index == 0)
+		{
+			char temp_buffer[512] = { 0 };
+			sprintf(temp_buffer, "tcp_server_helloworld_%03d", tcp_server_index++);
+			int tcp_send_sz = (int)strlen(temp_buffer) + 1;
+			char * tcp_send_buffer = skynet_malloc(tcp_send_sz);
+			memcpy(tcp_send_buffer, temp_buffer, tcp_send_sz);
+			int ret_send = skynet_socket_send(HANDLE_SOCKET_TCP_SERVER, sm->id, tcp_send_buffer, tcp_send_sz);
 
+			printf("callback skynet_socket_tcp  - ret_send:%d,tcp_send_sz:%d\n", ret_send, tcp_send_sz);
+		}
 	}
 	else if (handle == HANDLE_SOCKET_TCP_CLIENT)
 	{
-		char * static_data = NULL;
-		if (type == SOCKET_OPEN || type == SOCKET_ERR || type == SOCKET_ACCEPT)
-		{
-			static_data = (char *)(msg + sizeof(struct skynet_socket_message));
-		}
+		char static_data[128] = { 0 };
 		struct skynet_socket_message *sm = (struct skynet_socket_message *)msg;
+		if (sm->type == SKYNET_SOCKET_TYPE_CONNECT || sm->type == SKYNET_SOCKET_TYPE_ERROR || sm->type == SKYNET_SOCKET_TYPE_ACCEPT)
+		{
+			memcpy(static_data, msg + sizeof(struct skynet_socket_message), sz - sizeof(struct skynet_socket_message));
+		}
 		printf("callback socker - handle:%d,type:%d,session:%d,source:%d,sz:%ld,buffer:%s,type:%d,id:%d,ud:%d,static_data:%s\n",
 			handle, type, session, source, sz, sm->buffer, sm->type, sm->id, sm->ud, static_data);
 

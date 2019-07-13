@@ -28,11 +28,15 @@ CentOS 作为企业级服务器操作系统被广泛使用，其中使用C++开发服务器应用又是常见的，
 
 （2）wget -O /etc/yum.repos.d/slc6-devtoolset.repo http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo
 
+yum -y install centos-release-scl-rh centos-release-scl
+
 （3）yum install devtoolset-2-toolchain
 
-     yum install devtoolset-2-gcc  devtoolset-2-gcc-c++
+	yum install devtoolset-2-gcc  devtoolset-2-gcc-c++
 
 （4）source /opt/rh/devtoolset-2/enable
+
+echo 'source /opt/rh/devtoolset-2/enable' >> /etc/bashrc
 
 
 /---------------------------------------------------------------------------------------------------
@@ -63,6 +67,17 @@ gcc升级到7.2
 yum install devtoolset-7-gcc devtoolset-7-gcc-c++ -y
 source /opt/rh/devtoolset-7/enable
 
+yum install devtoolset-9-gcc devtoolset-9-gcc-c++ -y
+
 echo 'source /opt/rh/devtoolset-7/enable' >> /etc/bashrc
+
+/---------------------------------------------------------------------------------------------------
+
+https://gcc.gnu.org/
+https://ftp.gnu.org/gnu/gcc/
+https://ftp.gnu.org/gnu/gcc/gcc-9.1.0/
+https://ftp.gnu.org/gnu/gcc/gcc-9.1.0/gcc-9.1.0.tar.gz
+
+
 
 /---------------------------------------------------------------------------------------------------

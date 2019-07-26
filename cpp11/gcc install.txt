@@ -73,6 +73,17 @@ echo 'source /opt/rh/devtoolset-7/enable' >> /etc/bashrc
 
 /---------------------------------------------------------------------------------------------------
 
+yum -y install centos-release-scl-rh centos-release-scl
+
+yum install devtoolset-8-gcc devtoolset-8-gcc-c++ -y
+
+source /opt/rh/devtoolset-8/enable
+
+echo 'source /opt/rh/devtoolset-8/enable' >> /etc/bashrc
+
+
+/---------------------------------------------------------------------------------------------------
+
 https://gcc.gnu.org/
 https://ftp.gnu.org/gnu/gcc/
 https://ftp.gnu.org/gnu/gcc/gcc-9.1.0/

@@ -2,6 +2,8 @@
 #include "majiang_logic.h"
 
 #include <stdio.h>
+#include <vector>
+
 //扑克转换
 BYTE SwitchToCardData(BYTE cbCardIndex)
 {
@@ -63,7 +65,7 @@ BYTE    GetAIOutCard_1(uint16 chairID)
 BYTE    GetAIOutCard_2(uint16 chairID)
 {
 	//                     0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 
-	BYTE cbCardIndex = { 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 2, 3, 1, 0 };
+	BYTE cbCardIndex[] = { 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 2, 3, 1, 0 };
 	for (int i = 0; i<27; i++)
 	{
 		if (cbCardIndex[i] == 1)
@@ -98,10 +100,10 @@ BYTE    GetAIOutCard_2(uint16 chairID)
 }
 
 
-BYTE    CGameMaJiangTable::GetAIOutCard(uint16 chairID)
+BYTE    GetAIOutCard_3(uint16 chairID)
 {
 	//                   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 
-	BYTE cbCardIndex = { 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 2, 3, 1, 0 };
+	BYTE cbCardIndex[] = { 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 2, 3, 1, 0 };
 
 	BYTE outCard = 0xff;
 	//有风打风
@@ -195,7 +197,6 @@ BYTE    CGameMaJiangTable::GetAIOutCard(uint16 chairID)
 		}
 	}
 
-	vector vecFengCardCount;
 
 	for (int i = 27; i<27 + 7; i++)
 	{
@@ -224,7 +225,7 @@ BYTE    CGameMaJiangTable::GetAIOutCard(uint16 chairID)
 	{
 		for (uint8 j = 0; j<MAX_INDEX; ++j) {
 			if (cbCardIndex[j] > 0) {
-				outCard = m_gameLogic.SwitchToCardData(j);
+				outCard = SwitchToCardData(j);
 			}
 		}
 	}

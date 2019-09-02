@@ -111,6 +111,9 @@ FLUSH   PRIVILEGES;
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'game123456' WITH GRANT OPTION;
 FLUSH   PRIVILEGES;
 
+GRANT ALL PRIVILEGES ON *.* TO 'test'@'%' IDENTIFIED BY 'game123456' WITH GRANT OPTION;
+FLUSH   PRIVILEGES;
+
 -------------------------------------------------------------------------------------------------------------
 
 

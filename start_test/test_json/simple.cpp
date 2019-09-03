@@ -177,7 +177,7 @@ void WriteRecord_GameStart()
 		//ss_chairid.str("");
 		//ss_chairid << "chairid_" << i;
 		char arrCh[32] = { 0 };
-		sprrintf(arrCh"chairid_%d",i);
+		sprintf(arrCh,"chairid_%d",i);
 		//valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard, docOperate_allocator);
 		valueAllHandCard.AddMember(arrCh, valueHandCard, docOperate_allocator);
 	}

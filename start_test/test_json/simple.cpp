@@ -35,7 +35,8 @@ typedef struct tagGameBlingLog_t
 
 Game_BlingLog						m_tagBlingLog;				// 牌局日志
 int m_iGameStepIndex = 0;
-
+int   m_cbPlayerCount = 4;
+ 
 struct TCPGStruct
 {
 	BYTE  cbType;					//吃碰杠类型
@@ -76,7 +77,7 @@ void WriteRecord_GetAllUserHandCard(rapidjson::Value & valueAllHandCard)
 {
 	//生成一个分配器
 	rapidjson::Document::AllocatorType& docOperate_allocator = m_tagBlingLog.docOperate.GetAllocator();
-	for (BYTE i = 0; i < m_GameData.m_cbPlayerCount; i++)
+	for (BYTE i = 0; i < m_cbPlayerCount; i++)
 	{
 
 		rapidjson::Value valueHandCard(rapidjson::Type::kArrayType);
@@ -145,7 +146,7 @@ void WriteRecord_GetAllUserCPGData(rapidjson::Value &valueAllCPGData)
 	valueName.SetString(strName.data(), strName.size(), docOperate_allocator);
 	valueStep.AddMember("step_name", valueName, docOperate_allocator);
 
-	for (int i = 0; i < m_GameData.m_cbPlayerCount; ++i)
+	for (int i = 0; i < m_cbPlayerCount; ++i)
 	{
 		rapidjson::Value valueUserCPGData(rapidjson::Type::kObjectType);
 		WriteRecord_GetUserCPGData(i, valueUserCPGData);
@@ -179,7 +180,6 @@ void WriteRecord_GameStart()
 	ss_game_step << "game_step_" << m_iGameStepIndex++;
 	m_tagBlingLog.docOperate.AddMember(rapidjson::Value::StringRefType(ss_game_step.str().data()), valueGameStepIndex, docOperate_allocator);
 
-	BlingPrintOperate();
 }
 
 

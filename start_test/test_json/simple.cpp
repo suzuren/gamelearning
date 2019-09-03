@@ -34,7 +34,7 @@ typedef struct tagGameBlingLog_t
 }Game_BlingLog;
 
 Game_BlingLog						m_tagBlingLog;				// ≈∆æ÷»’÷æ
-
+int m_iGameStepIndex = 0;
 
 struct TCPGStruct
 {

@@ -98,7 +98,7 @@ void WriteRecord_GetUserCPGData(BYTE cbChairID, rapidjson::Value& valueUserCPGDa
 	rapidjson::Document::AllocatorType& docOperate_allocator = m_tagBlingLog.docOperate.GetAllocator();
 
 	TCPGStruct tagCPGData[MAX_ACTION_COUNT];
-	int iCPGCount = m_GameData.CopyCPGData(cbChairID, tagCPGData);
+	int iCPGCount MAX_ACTION_COUNT;// = m_GameData.CopyCPGData(cbChairID, tagCPGData);
 
 	for (int j = 0; j < iCPGCount; j++)
 	{
@@ -120,7 +120,7 @@ void WriteRecord_GetUserCPGData(BYTE cbChairID, rapidjson::Value& valueUserCPGDa
 		for (int k = 0; k < MAX_GANG_COUNT; k++)
 		{
 			BYTE cbCardData = tagCPGData[j].cbData[k];
-			if (cbCardData != INVALID_VALUE)
+			//if (cbCardData != INVALID_VALUE)
 			{
 				valueCPGData.PushBack(cbCardData, docOperate_allocator);
 			}

@@ -172,11 +172,14 @@ void WriteRecord_GameStart()
 		rapidjson::Value valueHandCard(rapidjson::Type::kArrayType);
 		WriteRecord_GetUserHandCard(i, valueHandCard);
 
-		std::stringstream ss_chairid;
-		ss_chairid.clear();
-		ss_chairid.str("");
-		ss_chairid << "chairid_" << i;
-		valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard, docOperate_allocator);
+		//std::stringstream ss_chairid;
+		//ss_chairid.clear();
+		//ss_chairid.str("");
+		//ss_chairid << "chairid_" << i;
+		char arrCh[32] = { 0 };
+		sprrintf(arrCh"chairid_%d",i);
+		//valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard, docOperate_allocator);
+		valueAllHandCard.AddMember(arrCh, valueHandCard, docOperate_allocator);
 	}
 
 	rapidjson::Value valueAllCPGData(rapidjson::Type::kObjectType);

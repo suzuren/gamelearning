@@ -178,8 +178,9 @@ void WriteRecord_GameStart()
 		//ss_chairid << "chairid_" << i;
 		char arrCh[32] = { 0 };
 		sprintf(arrCh,"chairid_%d",i);
+		char * pch = arrCh;
 		//valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard, docOperate_allocator);
-		valueAllHandCard.AddMember(arrCh, valueHandCard, docOperate_allocator);
+		valueAllHandCard.AddMember(pch, valueHandCard, docOperate_allocator);
 	}
 
 	rapidjson::Value valueAllCPGData(rapidjson::Type::kObjectType);

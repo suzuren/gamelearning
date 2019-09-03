@@ -164,7 +164,20 @@ void WriteRecord_GameStart()
 	rapidjson::Document::AllocatorType& docOperate_allocator = m_tagBlingLog.docOperate.GetAllocator();
 
 	rapidjson::Value valueAllHandCard(rapidjson::Type::kObjectType);
-	WriteRecord_GetAllUserHandCard(valueAllHandCard);
+	//WriteRecord_GetAllUserHandCard(valueAllHandCard);
+
+	for (BYTE i = 0; i < m_cbPlayerCount; i++)
+	{
+
+		rapidjson::Value valueHandCard(rapidjson::Type::kArrayType);
+		WriteRecord_GetUserHandCard(i, valueHandCard);
+
+		std::stringstream ss_chairid;
+		ss_chairid.clear();
+		ss_chairid.str("");
+		ss_chairid << "chairid_" << i;
+		valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard, docOperate_allocator);
+	}
 
 	rapidjson::Value valueAllCPGData(rapidjson::Type::kObjectType);
 	WriteRecord_GetAllUserCPGData(valueAllCPGData);
@@ -172,7 +185,7 @@ void WriteRecord_GameStart()
 	rapidjson::Value valueGameStepIndex(rapidjson::Type::kObjectType);
 
 	valueGameStepIndex.AddMember("hand_card", valueAllHandCard, docOperate_allocator);
-	valueGameStepIndex.AddMember("cpg_card", valueAllCPGData, docOperate_allocator);
+	//valueGameStepIndex.AddMember("cpg_card", valueAllCPGData, docOperate_allocator);
 
 	std::stringstream ss_game_step;
 	ss_game_step.clear();

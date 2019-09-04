@@ -87,7 +87,7 @@ void WriteRecord_GetAllUserHandCard(rapidjson::Value & valueAllHandCard)
 		ss_chairid.clear();
 		ss_chairid.str("");
 		ss_chairid << "chairid_" << i;
-		valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard, docOperate_allocator);
+		valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard.Move(), docOperate_allocator);
 	}
 }
 
@@ -164,38 +164,22 @@ void WriteRecord_GameStart()
 	rapidjson::Document::AllocatorType& docOperate_allocator = m_tagBlingLog.docOperate.GetAllocator();
 
 	rapidjson::Value valueAllHandCard(rapidjson::Type::kObjectType);
-	//WriteRecord_GetAllUserHandCard(valueAllHandCard);
+	WriteRecord_GetAllUserHandCard(valueAllHandCard);
 
-	for (BYTE i = 0; i < m_cbPlayerCount; i++)
-	{
-
-		rapidjson::Value valueHandCard(rapidjson::Type::kArrayType);
-		WriteRecord_GetUserHandCard(i, valueHandCard);
-
-		//std::stringstream ss_chairid;
-		//ss_chairid.clear();
-		//ss_chairid.str("");
-		//ss_chairid << "chairid_" << i;
-		char arrCh[32] = { 0 };
-		sprintf(arrCh,"chairid_%d",i);
-		char * pch = arrCh;
-		//valueAllHandCard.AddMember(rapidjson::Value::StringRefType(ss_chairid.str().data()), valueHandCard, docOperate_allocator);
-		valueAllHandCard.AddMember(pch, valueHandCard, docOperate_allocator);
-	}
 
 	rapidjson::Value valueAllCPGData(rapidjson::Type::kObjectType);
 	WriteRecord_GetAllUserCPGData(valueAllCPGData);
 
 	rapidjson::Value valueGameStepIndex(rapidjson::Type::kObjectType);
 
-	valueGameStepIndex.AddMember("hand_card", valueAllHandCard, docOperate_allocator);
+	valueGameStepIndex.AddMember("hand_card", valueAllHandCard.Move(), docOperate_allocator);
 	//valueGameStepIndex.AddMember("cpg_card", valueAllCPGData, docOperate_allocator);
 
 	std::stringstream ss_game_step;
 	ss_game_step.clear();
 	ss_game_step.str("");
 	ss_game_step << "game_step_" << m_iGameStepIndex++;
-	m_tagBlingLog.docOperate.AddMember(rapidjson::Value::StringRefType(ss_game_step.str().data()), valueGameStepIndex, docOperate_allocator);
+	m_tagBlingLog.docOperate.AddMember(rapidjson::Value::StringRefType(ss_game_step.str().data()), valueGameStepIndex.Move(), docOperate_allocator);
 
 }
 

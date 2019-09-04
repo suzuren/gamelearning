@@ -50,6 +50,8 @@ void GetAllUserInfo(rapidjson::Value& valueAllUserInfo)
 
 int test_json()
 {
+	docUserInfo.SetObject();
+
 	rapidjson::Value valueAllUserInfo(rapidjson::Type::kObjectType);
 	GetAllUserInfo(valueAllUserInfo);
 

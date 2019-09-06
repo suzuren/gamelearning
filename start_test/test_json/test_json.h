@@ -98,7 +98,8 @@ void test_value_set_int64()
 	
 	for (long long i=9; i<19; i++)
 	{
-		value_arr_int64.PushBack(i, allocator);
+		rapidjson::Value value_temp_int64(i);
+		value_arr_int64.PushBack(value_temp_int64, allocator);
 	}
 
 	rapidjson::StringBuffer buffer_arr_int64;

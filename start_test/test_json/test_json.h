@@ -82,5 +82,11 @@ int test_json()
 	return 0;
 }
 
+void test_value_set_int64()
+{
+	long long lValue = 100000;
+	rapidjson::Value value_int64;// (rapidjson::Type::kNumberType);
+	value_int64.SetInt64(lValue);
 
+}
 

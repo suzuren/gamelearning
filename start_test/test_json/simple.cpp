@@ -14,7 +14,9 @@
 int main(int argc, char const *argv[])
 {
 
-	test_json();
+	//test_json();
+	test_value_set_int64();
+
 
 	return 0;
 }

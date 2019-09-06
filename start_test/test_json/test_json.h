@@ -92,19 +92,5 @@ void test_value_set_int64()
 	rapidjson::Writer<rapidjson::StringBuffer> writer_int64(buffer_int64);
 	value_int64.Accept(writer_int64);
 	std::cout << buffer_int64.GetString() << std::endl;
-
-	rapidjson::Value  value_arr_int64(rapidjson::Type::kArrayType);
-	rapidjson::Value::AllocatorType& allocator = value_arr_int64.GetAllocator();
-	
-	for (long long i=9; i<19; i++)
-	{
-		rapidjson::Value value_temp_int64(i);
-		value_arr_int64.PushBack(value_temp_int64, allocator);
-	}
-
-	rapidjson::StringBuffer buffer_arr_int64;
-	rapidjson::Writer<rapidjson::StringBuffer> writer_arr_int64(buffer_int64);
-	value_arr_int64.Accept(writer_arr_int64);
-	std::cout << buffer_arr_int64.GetString() << std::endl;
 }
 

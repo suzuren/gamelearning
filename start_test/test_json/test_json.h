@@ -88,9 +88,20 @@ void test_value_set_int64()
 	rapidjson::Value value_int64(rapidjson::Type::kNumberType);
 	value_int64.SetInt64(lValue);
 
-	rapidjson::StringBuffer buffer;
-	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-	value_int64.Accept(writer);
-	std::cout << buffer.GetString() << std::endl;
+	rapidjson::StringBuffer buffer_int64;
+	rapidjson::Writer<rapidjson::StringBuffer> writer_int64(buffer_int64);
+	value_int64.Accept(writer_int64);
+	std::cout << buffer_int64.GetString() << std::endl;
+
+	rapidjson::Value  value_arr_int64(rapidjson::Type::kArrayType);
+	for (long long i=9; i<19; i++)
+	{
+		value_arr_int64.PushBack(i);
+	}
+
+	rapidjson::StringBuffer buffer_arr_int64;
+	rapidjson::Writer<rapidjson::StringBuffer> writer_arr_int64(buffer_int64);
+	value_arr_int64.Accept(writer_arr_int64);
+	std::cout << buffer_arr_int64.GetString() << std::endl;
 }
 

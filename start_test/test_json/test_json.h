@@ -186,6 +186,12 @@ typedef struct tagTingCardTips_t
 
 void test_TingCardTips()
 {
+	rapidjson::Document		docOperate;
+	docOperate.SetObject();
+
+	rapidjson::Document::AllocatorType& docOperate_allocator = docOperate.GetAllocator();
+
+
 	tagTingCardTips TingCardTips[MAX_HAND_CARD_AMOUNT];								//听牌提示
 
 	// 听牌提示
@@ -249,9 +255,11 @@ void test_TingCardTips()
 		valueCPGNotify_gang_data.AddMember(value_ting_card_tips_index, valueCPGNotify_ting_card_tips_index, docOperate_allocator);
 	}
 
+	docOperate.AddMember("value_game_step", valueCPGNotify_ting_card_tips, docOperate_allocator);
+
 	rapidjson::StringBuffer buffer;
 	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-	valueCPGNotify_ting_card_tips.Accept(writer);
+	docOperate.Accept(writer);
 	std::cout << buffer.GetString() << std::endl;
 }
 

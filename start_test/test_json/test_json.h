@@ -95,6 +95,12 @@ void test_value_set_int64()
 }
 
 
+typedef unsigned char		BYTE;
+typedef long long			int64;
+typedef unsigned long long	uint64;
+
+#define MAX_HU_CARD_TYPE_AMOUNT	66	//胡牌类型
+
 
 
 #define	INVALID_VALUE		(0xFF)				//无效数值
@@ -121,6 +127,34 @@ void test_value_set_int64()
 #define MAX_ACTION_COUNT		5				//吃碰杠数
 #define MAX_EDGE_COUNT			4				//码成四边
 #define MAX_LAYER_COUNT			2				//每墩两层
+
+// 胡牌提示
+typedef struct tagHuCardTips_t
+{
+	BYTE	cbHuCard;
+	BYTE	cbArrHuType[MAX_HU_CARD_TYPE_AMOUNT];										//胡牌类型
+	int64	lArrHuScore[MAX_HU_CARD_TYPE_AMOUNT];										//胡牌分数
+	tagHuCardTips_t()
+	{
+		Init();
+	}
+	void Init()
+	{
+		cbHuCard = INVALID_VALUE;
+		memset(cbArrHuType, INVALID_VALUE, sizeof(cbArrHuType));
+		memset(lArrHuScore, 0, sizeof(lArrHuScore));
+	}
+	void operator=(const struct tagHuCardTips_t& info)
+	{
+		cbHuCard = info.cbHuCard;
+		for (int i = 0; i < MAX_HU_CARD_TYPE_AMOUNT; i++)
+		{
+			cbArrHuType[i] = info.cbArrHuType[i];
+			lArrHuScore[i] = info.lArrHuScore[i];
+		}
+	}
+}tagHuCardTips;
+
 
 // 听牌提示
 typedef struct tagTingCardTips_t

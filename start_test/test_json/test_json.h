@@ -252,7 +252,7 @@ void test_TingCardTips()
 		ss_ting_card_tips_index << "ting_card_tips_index_" << i;
 		rapidjson::Value value_ting_card_tips_index(rapidjson::Type::kStringType);
 		value_ting_card_tips_index.SetString(ss_ting_card_tips_index.str().data(), ss_ting_card_tips_index.str().size(), docOperate_allocator);
-		valueCPGNotify_gang_data.AddMember(value_ting_card_tips_index, valueCPGNotify_ting_card_tips_index, docOperate_allocator);
+		valueCPGNotify_ting_card_tips.AddMember(value_ting_card_tips_index, valueCPGNotify_ting_card_tips_index, docOperate_allocator);
 	}
 
 	docOperate.AddMember("value_game_step", valueCPGNotify_ting_card_tips, docOperate_allocator);

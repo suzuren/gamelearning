@@ -247,7 +247,7 @@ void test_TingCardTips()
 			//}
 
 			std::stringstream ss_hu_card_tips_index;
-			ss_hu_card_tips_index << "hu_card_tips_index_" << i;
+			ss_hu_card_tips_index << "hu_card_tips_index_" << j;
 			rapidjson::Value value_hu_card_tips_index(rapidjson::Type::kStringType);
 			value_hu_card_tips_index.SetString(ss_hu_card_tips_index.str().data(), ss_hu_card_tips_index.str().size(), docOperate_allocator);
 

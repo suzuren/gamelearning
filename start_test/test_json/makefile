@@ -1,11 +1,11 @@
 
 
 TARGET := test
-CC := g++ -Wall
-CPPFLAGS := -DNDEBUG
-CFLAGS :=
-CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++17
-LDFLAGS := -lpthread -lrt -lm
+CC := g++ -Wall -g
+CPPFLAGS := -DNDEBUG -g
+CFLAGS := -g
+CXXFLAGS := -Wall -D_FILE_OFFSET_BITS=64 -std=c++17 -g
+LDFLAGS := -lpthread -lrt -lm -g
 CPP_SOURCES := $(wildcard *.cpp)
 
 C_SOURCES := $(wildcard *.c)

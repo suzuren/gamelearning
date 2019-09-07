@@ -219,33 +219,39 @@ void test_TingCardTips()
 			//	break;
 			//}
 			//else
-			{
-				rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card(rapidjson::Type::kNumberType);
-				valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card.SetInt(tempHuCardTips.cbHuCard);
-				valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_card", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card, docOperate_allocator);
+			//{
+			rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card(rapidjson::Type::kNumberType);
+			valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card.SetInt(tempHuCardTips.cbHuCard);
+			valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_card", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card, docOperate_allocator);
 
-				rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type(rapidjson::Type::kArrayType);
-				rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score(rapidjson::Type::kArrayType);
-				for (int k = 0; k < MAX_HU_CARD_TYPE_AMOUNT; k++)
+			rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type(rapidjson::Type::kArrayType);
+			rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score(rapidjson::Type::kArrayType);
+			for (int k = 0; k < MAX_HU_CARD_TYPE_AMOUNT; k++)
+			{
+				BYTE cbHuType = tempHuCardTips.cbArrHuType[k];
+				int64_t lHuScore = tempHuCardTips.lArrHuScore[k];
+				//if (cbHuType == INVALID_VALUE)
+				//{
+				//	break;
+				//}
+				//else
 				{
-					BYTE cbHuType = tempHuCardTips.cbArrHuType[k];
-					int64_t lHuScore = tempHuCardTips.lArrHuScore[k];
-					//if (cbHuType == INVALID_VALUE)
-					//{
-					//	break;
-					//}
-					//else
-					{
-						rapidjson::Value value_hu_score_int64(rapidjson::Type::kNumberType);
-						value_hu_score_int64.SetInt64(lHuScore);
-						valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type.PushBack(cbHuType, docOperate_allocator);
-						valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score.PushBack(value_hu_score_int64, docOperate_allocator);
-					}
+					rapidjson::Value value_hu_score_int64(rapidjson::Type::kNumberType);
+					value_hu_score_int64.SetInt64(lHuScore);
+					valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type.PushBack(cbHuType, docOperate_allocator);
+					valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score.PushBack(value_hu_score_int64, docOperate_allocator);
 				}
-				valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_type", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type, docOperate_allocator);
-				valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_score", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score, docOperate_allocator);
 			}
-			valueCPGNotify_ting_card_tips_index.AddMember("hu_card_tips", valueCPGNotify_ting_card_tips_index_hu_card_tips, docOperate_allocator);
+			valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_type", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type, docOperate_allocator);
+			valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_score", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score, docOperate_allocator);
+			//}
+
+			std::stringstream ss_hu_card_tips_index;
+			ss_hu_card_tips_index << "hu_card_tips_index_" << i;
+			rapidjson::Value value_hu_card_tips_index(rapidjson::Type::kStringType);
+			value_hu_card_tips_index.SetString(ss_hu_card_tips_index.str().data(), ss_hu_card_tips_index.str().size(), docOperate_allocator);
+
+			valueCPGNotify_ting_card_tips_index.AddMember(value_hu_card_tips_index, valueCPGNotify_ting_card_tips_index_hu_card_tips, docOperate_allocator);
 		}
 
 		std::stringstream ss_ting_card_tips_index;

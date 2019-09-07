@@ -196,7 +196,7 @@ void test_TingCardTips()
 
 	// Ã˝≈∆Ã· æ
 	rapidjson::Value valueCPGNotify_ting_card_tips(rapidjson::Type::kObjectType);
-	for (int i = 0; i < MAX_HAND_CARD_AMOUNT; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		tagTingCardTips& tempTingCardTips = TingCardTips[i];
 
@@ -204,11 +204,12 @@ void test_TingCardTips()
 
 		rapidjson::Value valueCPGNotify_ting_card_tips_index_out_card(rapidjson::Type::kNumberType);
 		valueCPGNotify_ting_card_tips_index_out_card.SetInt(tempTingCardTips.cbOutCard);
+
 		valueCPGNotify_ting_card_tips_index.AddMember("out_card", valueCPGNotify_ting_card_tips_index_out_card, docOperate_allocator);
 
 		rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips(rapidjson::Type::kObjectType);
 
-		for (int j = 0; j < MAX_SINGLE_CARD_COUNT; j++)
+		for (int j = 0; j < 2; j++)
 		{
 			tagHuCardTips& tempHuCardTips = tempTingCardTips.HuCardTips[j];
 
@@ -218,7 +219,7 @@ void test_TingCardTips()
 
 			rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type(rapidjson::Type::kArrayType);
 			rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score(rapidjson::Type::kArrayType);
-			for (int k = 0; k < MAX_HU_CARD_TYPE_AMOUNT; k++)
+			for (int k = 0; k < 2; k++)
 			{
 				BYTE cbHuType = tempHuCardTips.cbArrHuType[k];
 				int64_t lHuScore = tempHuCardTips.lArrHuScore[k];

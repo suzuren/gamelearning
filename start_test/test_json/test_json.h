@@ -208,6 +208,9 @@ void test_TingCardTips()
 		rapidjson::Value value_out_card_index(rapidjson::Type::kStringType);
 		value_out_card_index.SetString(ss_out_card_index.str().data(), ss_out_card_index.str().size(), docOperate_allocator);
 
+		rapidjson::Value valueCPGNotify_ting_card_tips_index_out_card(rapidjson::Type::kNumberType);
+		valueCPGNotify_ting_card_tips_index_out_card.SetInt(tempTingCardTips.cbOutCard);
+
 		valueCPGNotify_ting_card_tips_index.AddMember(value_out_card_index, valueCPGNotify_ting_card_tips_index_out_card, docOperate_allocator);
 
 		rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips(rapidjson::Type::kObjectType);

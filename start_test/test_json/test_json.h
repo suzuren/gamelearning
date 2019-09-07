@@ -94,3 +94,131 @@ void test_value_set_int64()
 	std::cout << buffer_int64.GetString() << std::endl;
 }
 
+
+
+
+#define	INVALID_VALUE		(0xFF)				//无效数值
+#define ZEOR_VALUE			(0)					//0值
+
+#define GAME_PLAY_COUNT			4				//游戏人数
+
+//各种牌的数量
+// 麻将牌数 万(9x4) + 条(9x4) + 饼(9x4) + 风(7x4) + 花(8x4) + 财神(4x4) = 184
+#define MAX_MEN_CARD_COUNT		184				// 最大麻将牌数量 目前 BYTE 类型表示，最多为255
+
+// 麻将单牌数 万(9) + 条(9) + 饼(9) + 风(7) + 花(8) + 财神(4) = 46
+#define MAX_SINGLE_CARD_COUNT	46
+
+
+#define MAX_HAND_CARD_AMOUNT	14				//最大手牌张数
+#define MAX_OUT_CARD_AMOUNT		160				//出牌张数
+#define MAX_FLOWER_CARD_AMOUNT	8				//花牌张数
+#define MAX_MEN_CARD_AMOUNT		68				//牌墙张数(各自在门前码成17墩牌)
+#define MAX_OPERATE_CARD_COUNT	4				//最大操作牌数量
+#define MAX_CHI_COUNT			3				//吃牌最大数
+#define MAX_PENG_COUNT			3				//碰牌最大数
+#define MAX_GANG_COUNT			4				//杠牌最大数
+#define MAX_ACTION_COUNT		5				//吃碰杠数
+#define MAX_EDGE_COUNT			4				//码成四边
+#define MAX_LAYER_COUNT			2				//每墩两层
+
+// 听牌提示
+typedef struct tagTingCardTips_t
+{
+	BYTE cbOutCard;
+	tagHuCardTips HuCardTips[MAX_SINGLE_CARD_COUNT];
+	tagTingCardTips_t()
+	{
+		Init();
+	}
+	void Init()
+	{
+		cbOutCard = INVALID_VALUE;
+		for (int i = 0; i < MAX_HAND_CARD_AMOUNT; i++)
+		{
+			HuCardTips[i].Init();
+		}
+	}
+	void operator=(const struct tagTingCardTips_t& info)
+	{
+		cbOutCard = info.cbOutCard;
+		for (int i = 0; i < MAX_SINGLE_CARD_COUNT; i++)
+		{
+			HuCardTips[i] = info.HuCardTips[i];
+		}
+	}
+}tagTingCardTips;
+
+
+void test_TingCardTips()
+{
+	tagTingCardTips TingCardTips[MAX_HAND_CARD_AMOUNT];								//听牌提示
+
+	// 听牌提示
+	rapidjson::Value valueCPGNotify_ting_card_tips(rapidjson::Type::kObjectType);
+	for (int i = 0; i < MAX_HAND_CARD_AMOUNT; i++)
+	{
+		tagTingCardTips& tempTingCardTips = TingCardTips[i];
+		//if (tempTingCardTips.cbOutCard == INVALID_VALUE)
+		//{
+		//	break;
+		//}
+		rapidjson::Value valueCPGNotify_ting_card_tips_index(rapidjson::Type::kObjectType);
+
+		rapidjson::Value valueCPGNotify_ting_card_tips_index_out_card(rapidjson::Type::kNumberType);
+		valueCPGNotify_ting_card_tips_index_out_card.SetInt(tempTingCardTips.cbOutCard);
+		valueCPGNotify_ting_card_tips_index.AddMember("out_card", valueCPGNotify_ting_card_tips_index_out_card, docOperate_allocator);
+
+		rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips(rapidjson::Type::kObjectType);
+
+		for (int j = 0; j < MAX_SINGLE_CARD_COUNT; j++)
+		{
+			tagHuCardTips& tempHuCardTips = tempTingCardTips.HuCardTips[j];
+			//if (tempHuCardTips.cbHuCard == INVALID_VALUE)
+			//{
+			//	break;
+			//}
+			//else
+			{
+				rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card(rapidjson::Type::kNumberType);
+				valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card.SetInt(tempHuCardTips.cbHuCard);
+				valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_card", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card, docOperate_allocator);
+
+				rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type(rapidjson::Type::kArrayType);
+				rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score(rapidjson::Type::kArrayType);
+				for (int k = 0; k < MAX_HU_CARD_TYPE_AMOUNT; k++)
+				{
+					BYTE cbHuType = tempHuCardTips.cbArrHuType[k];
+					int64_t lHuScore = tempHuCardTips.lArrHuScore[k];
+					//if (cbHuType == INVALID_VALUE)
+					//{
+					//	break;
+					//}
+					//else
+					{
+						rapidjson::Value value_hu_score_int64(rapidjson::Type::kNumberType);
+						value_hu_score_int64.SetInt64(lHuScore);
+						valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type.PushBack(cbHuType, docOperate_allocator);
+						valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score.PushBack(value_hu_score_int64, docOperate_allocator);
+					}
+				}
+				valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_type", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_type, docOperate_allocator);
+				valueCPGNotify_ting_card_tips_index_hu_card_tips.AddMember("hu_score", valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_score, docOperate_allocator);
+			}
+			valueCPGNotify_ting_card_tips_index.AddMember("hu_card_tips", valueCPGNotify_ting_card_tips_index_hu_card_tips, docOperate_allocator);
+		}
+
+		std::stringstream ss_ting_card_tips_index;
+		ss_ting_card_tips_index << "ting_card_tips_index_" << i;
+		rapidjson::Value value_ting_card_tips_index(rapidjson::Type::kStringType);
+		value_ting_card_tips_index.SetString(ss_ting_card_tips_index.str().data(), ss_ting_card_tips_index.str().size(), docOperate_allocator);
+		valueCPGNotify_gang_data.AddMember(value_ting_card_tips_index, valueCPGNotify_ting_card_tips_index, docOperate_allocator);
+	}
+
+	rapidjson::StringBuffer buffer;
+	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+	valueCPGNotify_ting_card_tips.Accept(writer);
+	std::cout << buffer.GetString() << std::endl;
+}
+
+

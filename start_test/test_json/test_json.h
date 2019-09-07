@@ -199,10 +199,10 @@ void test_TingCardTips()
 	for (int i = 0; i < MAX_HAND_CARD_AMOUNT; i++)
 	{
 		tagTingCardTips& tempTingCardTips = TingCardTips[i];
-		//if (tempTingCardTips.cbOutCard == INVALID_VALUE)
-		//{
-		//	break;
-		//}
+		if (tempTingCardTips.cbOutCard == INVALID_VALUE)
+		{
+			break;
+		}
 		rapidjson::Value valueCPGNotify_ting_card_tips_index(rapidjson::Type::kObjectType);
 
 		rapidjson::Value valueCPGNotify_ting_card_tips_index_out_card(rapidjson::Type::kNumberType);
@@ -214,11 +214,11 @@ void test_TingCardTips()
 		for (int j = 0; j < MAX_SINGLE_CARD_COUNT; j++)
 		{
 			tagHuCardTips& tempHuCardTips = tempTingCardTips.HuCardTips[j];
-			//if (tempHuCardTips.cbHuCard == INVALID_VALUE)
-			//{
-			//	break;
-			//}
-			//else
+			if (tempHuCardTips.cbHuCard == INVALID_VALUE)
+			{
+				break;
+			}
+			else
 			{
 				rapidjson::Value valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card(rapidjson::Type::kNumberType);
 				valueCPGNotify_ting_card_tips_index_hu_card_tips_hu_card.SetInt(tempHuCardTips.cbHuCard);
@@ -230,11 +230,11 @@ void test_TingCardTips()
 				{
 					BYTE cbHuType = tempHuCardTips.cbArrHuType[k];
 					int64_t lHuScore = tempHuCardTips.lArrHuScore[k];
-					//if (cbHuType == INVALID_VALUE)
-					//{
-					//	break;
-					//}
-					//else
+					if (cbHuType == INVALID_VALUE)
+					{
+						break;
+					}
+					else
 					{
 						rapidjson::Value value_hu_score_int64(rapidjson::Type::kNumberType);
 						value_hu_score_int64.SetInt64(lHuScore);

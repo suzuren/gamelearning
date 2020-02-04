@@ -4,7 +4,7 @@ root_dir=$(cd `dirname $0`; pwd)
 
 echo ""
 echo `pwd`
-rm -rf ./project/Debug/ ./project/x64/ ./project/.vs ./project/project.opensdf ./project/project.sdf ./project/project.VC.db
+rm -rf ./project/Debug/ ./project/x64/ ./project/.vs ./project/project.opensdf ./project/project.sdf ./project/project.VC.db .vs
 
 cd ./pbc
 ./clean.sh
@@ -14,6 +14,11 @@ cd ${root_dir}
 cd ./cpp_17_stl_cook_book
 ./clear.sh
 cd $root_dir
+
+cd ./http_libevent
+./clear.sh
+cd $root_dir
+
 
 clean_dir=("./3rd/templog/" "GeneralHashFunctions_-_C" "GeneralHashFunctions_-_CPP" "helloworld" "MultiplayerBook" "inicfg"
  "test" "proxy_epoll" "referlib" "cpp11" "ThreadPool" "declare" "http" "webservice" "websocket" "candlua" "card" 

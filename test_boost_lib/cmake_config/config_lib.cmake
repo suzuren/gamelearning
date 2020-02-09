@@ -17,24 +17,17 @@ set( LESS_WARNINGS 1)
 #set( CMAKE_BUILD_TYPE "Debug" )
 #set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb" )
 set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O0 -g -ggdb" )
-#set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O0 -g -ggdb -static-libstdc++ -static-libgcc" )
-#set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O2" )
+#set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O3")
 
-#set( CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -O3 -Wall" )
 
 # setting build macro
 # add_definitions( -D_BUILD_DIRECTIVE = '"${CMAKE_BUILD_TYPE}"' )
 add_definitions( -fno-delete-null-pointer-checks )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_CXX_FLAGS "-std=c++17 ${CMAKE_CXX_FLAGS}")
-	message(STATUS "optional:-std=c++17")
-endif(CMAKE_COMPILER_IS_GNUCXX)
-
 # package overloads - Linux
-#if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
-#	set( JEMALLOC_LIBRARY "jemalloc" )
-#endif()
+if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
+	set( JEMALLOC_LIBRARY "jemalloc" )
+endif()
 
 # set default configuration directory
 if ( NOT CONF_DIR )

@@ -8,6 +8,7 @@
 #include "test_userright.h"
 #include "KMP_algorithm.h"
 #include "test_stl_func.h"
+#include "test_class.h"
 
 int main(int argc, const char** argv)
 {
@@ -28,7 +29,8 @@ int main(int argc, const char** argv)
 	//test_socket_server();
 	//testFuncUserRight();
 	//test_KMP();
-	test_stl_function();
-
+	//test_stl_function();
+	
+	test_class();
 	return 0;
 }

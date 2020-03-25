@@ -1,9 +1,10 @@
 
 //#include "land_logic.h"
 //#include "show_hand_logic.h"
-#include "rand_table.h"
+//#include "rand_table.h"
 //#include "majiang_logic.h"
 //#include "card_mahjong.h"
+#include "paohuzi_logic.h"
 
 //const BYTE    CLandLogic::m_cbCardData[FULL_POKER_COUNT] =
 //{
@@ -29,6 +30,7 @@ int main(int argc, const char** argv)
 
 	//test_card_mahjong();
 
+	game_paohuzi::TestActionChiCard();
 
 	return 0;
 }

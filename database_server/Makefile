@@ -2,6 +2,9 @@
 MYSQL_INC = /usr/include/mysql
 MYSQL_LIB = /usr/lib64/mysql
 
+MYSQL_INC = /www/server/mysql/include/
+MYSQL_LIB = /www/server/mysql/lib/
+
 TARGET := dbServer
 CC := g++ -Wall
 CPPFLAGS := -DNDEBUG

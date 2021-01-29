@@ -28,6 +28,16 @@ void daemonize()
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
+
+	//signal(SIGINT, SIG_IGN);
+	//signal(SIGHUP, SIG_IGN);
+	//signal(SIGQUIT, SIG_IGN);
+	//signal(SIGPIPE, SIG_IGN);
+	//signal(SIGTTOU, SIG_IGN);
+	//signal(SIGTTIN, SIG_IGN);
+	//signal(SIGCHLD, SIG_IGN);
+	//signal(SIGTERM, SIG_IGN);
+
 	umask(0);
 	if ((pid = fork()) < 0)
 	{
